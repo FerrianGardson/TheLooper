@@ -20,8 +20,53 @@ fetch("WoWChatLog.txt")
       });
       chatlog.appendChild(chapter);
     }
+    makeItOhuenno(); // Здесь начинается магия
   })
   .catch((error) => console.error(error));
+
+function makeItOhuenno() {
+  console.log("Запускаю допфункции");
+  removeTimestamps();
+  cleanText();
+  // mergePlayerReplies();
+  playersList();
+  // colorizePlayers();
+
+  // Кнопки DM и OOC
+
+  function toggleVisibility(className) {
+    const elements = document.getElementsByClassName(className);
+    for (const element of elements) {
+      if (element.style.display === "none") {
+        element.style.display = "block";
+      } else {
+        element.style.display = "none";
+      }
+    }
+
+    const button = document.querySelector(`button[data-target="${className}"]`);
+    if (elements[0].style.display === "none") {
+      button.textContent = `Show ${className.toUpperCase()}`;
+    } else {
+      button.textContent = `Show/hide ${className.toUpperCase()}`;
+    }
+  }
+
+  // Сокрытие главы под заголовком
+
+  const dateElements = document.querySelectorAll(".date");
+
+  dateElements.forEach((dateElement) => {
+    dateElement.onclick = toggleContent;
+  });
+
+  function toggleContent(event) {
+    const content = event.target.parentElement.querySelector(".content");
+    content.classList.toggle("hidden");
+  }
+}
+
+// Разделение на главы
 
 function divideChapters(text) {
   const logLines = text.trim().split("\n");
@@ -57,18 +102,7 @@ function divideChapters(text) {
   return chapters;
 }
 
-// Автоматические скрипты при загрузке страницы
-
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    console.log("Запускаю допфункции");
-    removeTimestamps();
-    cleanText();
-    // mergePlayerReplies();
-    playersList();
-    // colorizePlayers();
-  }, 1000);
-});
+// Удаление таймштампов
 
 function removeTimestamps() {
   var chatlog = document.getElementById("chatlog");
@@ -79,12 +113,12 @@ function removeTimestamps() {
   );
 }
 
+// Чистка от мусора
+
 function cleanText() {
   var chatlog = document.getElementById("chatlog");
   var chatlogHTML = chatlog.innerHTML;
 
-
-  
   chatlogHTML = chatlogHTML.replace(
     /(<p class="logline">(\d|\(|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Вы|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ шеп|\W+ создает:|Вы шеп|Вы выполн|Вы получ|Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Вы|Смена|\(d+d|&?dd|Разыгрываются).+\n<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
     ""
@@ -92,7 +126,7 @@ function cleanText() {
 
   chatlogHTML = chatlogHTML.replace(
     /\[(Рейд|Группа|Гильдия)\]\s(.+): /gm,
-    "<p class='ooc'>\[ООС] $2: "
+    "<p class='ooc'>[ООС] $2: "
   ); // Неигровые сообщения
 
   chatlogHTML = chatlogHTML.replace(
@@ -100,26 +134,20 @@ function cleanText() {
     "<p class='dm'>[ДМ]:"
   ); // Неигровые сообщения
 
-
   chatlogHTML = chatlogHTML.replace(
     /<p class="logline">(.+)\s(\d|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает|предлагает вам).+\n<\/p>/gm,
     ""
   ); // Неролевые действия
-
 
   chatlogHTML = chatlogHTML.replace(
     /<p.+>\[Объявление рейду](.+):(.+)\n<\/p>/gm,
     '<p class="dm">$2</p>'
   ); // Говорит:, дефисы, а также облачает реплику в классы
 
-
-
   chatlogHTML = chatlogHTML.replace(
     /<p class="logline">(.+) кричит:\s?[—–-]?\s?(.+)\n<\/p>/gm,
     '<p class="logline yell"><span class="player">$1</span> <span class="speech">$2</span></p>'
   ); // Крик, дефисы, а также облачает реплику в классы
-
-
 
   chatlogHTML = chatlogHTML.replace(
     /<p class="logline">(.+) говорит:\s?[—–-]?\s?(.+)\n<\/p>/gm,
@@ -128,7 +156,10 @@ function cleanText() {
 
   chatlogHTML = chatlogHTML.replace(/\|\d\-\d\((.+)\)\./gm, "$1"); // Кривые падежи в стандартных эмоутах
 
-  chatlogHTML = chatlogHTML.replace(/([—–-]\s(.+?)\s[—–-])/gm, "<span class='emote'>— $2 —</span>"); 
+  chatlogHTML = chatlogHTML.replace(
+    /([—–-]\s(.+?)\s[—–-])/gm,
+    "<span class='emote'>— $2 —</span>"
+  );
 
   // chatlogHTML = chatlogHTML.replace(/<p( class="logline"|)><\/p>/gm, ""); // Пустые абзацы
 
@@ -136,42 +167,42 @@ function cleanText() {
 
   chatlog.innerHTML = chatlogHTML; // Завершающая строка, не потри случайно
 
-// Удаляем пустые абзацы
+  // Удаляем пустые абзацы
 
-  const paragraphs = document.getElementsByTagName('p');
+  const paragraphs = document.getElementsByTagName("p");
 
   for (let i = paragraphs.length - 1; i >= 0; i--) {
-    if (paragraphs[i].textContent.trim() === '') {
+    if (paragraphs[i].textContent.trim() === "") {
       paragraphs[i].remove();
     }
   }
 
-    // Скрываем DM и OOC по умолчанию
-    const oocElements = document.getElementsByClassName("ooc");
-    const dmElements = document.getElementsByClassName("dm");
-    for (const element of oocElements) {
-      element.style.display = "none";
-    }
-    for (const element of dmElements) {
-      element.style.display = "none";
-    }
+  // Скрываем DM и OOC по умолчанию
+  const oocElements = document.getElementsByClassName("ooc");
+  const dmElements = document.getElementsByClassName("dm");
+  for (const element of oocElements) {
+    element.style.display = "none";
+  }
+  for (const element of dmElements) {
+    element.style.display = "none";
+  }
 
-    const dateElements = document.querySelectorAll('.date');
+  const dateElements = document.querySelectorAll(".date");
 
-    dateElements.forEach(dateElement => {
-      dateElement.onclick = toggleContent;
-    });
+  dateElements.forEach((dateElement) => {
+    dateElement.onclick = toggleContent;
+  });
 
-    const contentElements = document.querySelectorAll('.content');
+  const contentElements = document.querySelectorAll(".content");
 
-contentElements.forEach(contentElement => {
-  contentElement.classList.add('hidden');
-});
-
+  contentElements.forEach((contentElement) => {
+    contentElement.classList.add("hidden");
+  });
 
   return console.log("Текст вычищен, дополнительные скрипты применены");
-
 }
+
+// Склейка чатбоксов
 
 function mergePlayerReplies() {
   // Получаем элемент content из DOM-дерева
@@ -256,22 +287,22 @@ function playersList() {
   let players = [];
 
   // Находим все .chapter на странице
-  let chapters = document.querySelectorAll('.chapter');
+  let chapters = document.querySelectorAll(".chapter");
 
   // Для каждого .chapter
-  chapters.forEach(chapter => {
+  chapters.forEach((chapter) => {
     // Находим .date внутри .chapter
-    let date = chapter.querySelector('.date');
+    let date = chapter.querySelector(".date");
 
     // Создаем новый список ul для игроков
-    let playerList = document.createElement('ul');
-    playerList.classList.add('players');
+    let playerList = document.createElement("ul");
+    playerList.classList.add("players");
 
     // Находим все имена игроков внутри .chapter
-    let playerNames = chapter.querySelectorAll('.player');
+    let playerNames = chapter.querySelectorAll(".player");
 
     // Для каждого имени игрока
-    playerNames.forEach(name => {
+    playerNames.forEach((name) => {
       // Получаем текст имени
       let playerName = name.textContent.trim();
 
@@ -281,7 +312,7 @@ function playersList() {
         players.push(playerName);
 
         // Создаем новый элемент списка li для имени игрока
-        let playerItem = document.createElement('li');
+        let playerItem = document.createElement("li");
 
         // Устанавливаем текст элемента списка равным имени игрока
         playerItem.textContent = playerName;
@@ -297,38 +328,4 @@ function playersList() {
       date.parentNode.insertBefore(playerList, date.nextSibling);
     }
   });
-}
-
-
-// Кнопки DM и OOC
-
-function toggleVisibility(className) {
-  const elements = document.getElementsByClassName(className);
-  for (const element of elements) {
-    if (element.style.display === "none") {
-      element.style.display = "block";
-    } else {
-      element.style.display = "none";
-    }
-  }
-
-  const button = document.querySelector(`button[data-target="${className}"]`);
-  if (elements[0].style.display === "none") {
-    button.textContent = `Show ${className.toUpperCase()}`;
-  } else {
-    button.textContent = `Show/hide ${className.toUpperCase()}`;
-  }
-}
-
-// Сокрытие главы под заголовком
-
-const dateElements = document.querySelectorAll('.date');
-
-dateElements.forEach(dateElement => {
-  dateElement.onclick = toggleContent;
-});
-
-function toggleContent(event) {
-  const content = event.target.parentElement.querySelector('.content');
-  content.classList.toggle('hidden');
 }
