@@ -28,29 +28,9 @@ function makeItOhuenno() {
   console.log("Запускаю допфункции");
   removeTimestamps();
   cleanText();
-  // mergePlayerReplies();
   playersList();
+  // mergePlayerReplies();
   // colorizePlayers();
-
-  // Кнопки DM и OOC
-
-  function toggleVisibility(className) {
-    const elements = document.getElementsByClassName(className);
-    for (const element of elements) {
-      if (element.style.display === "none") {
-        element.style.display = "block";
-      } else {
-        element.style.display = "none";
-      }
-    }
-
-    const button = document.querySelector(`button[data-target="${className}"]`);
-    if (elements[0].style.display === "none") {
-      button.textContent = `Show ${className.toUpperCase()}`;
-    } else {
-      button.textContent = `Show/hide ${className.toUpperCase()}`;
-    }
-  }
 
   // Сокрытие главы под заголовком
 
@@ -64,6 +44,36 @@ function makeItOhuenno() {
     const content = event.target.parentElement.querySelector(".content");
     content.classList.toggle("hidden");
   }
+
+  // Удаляем пустые абзацы
+
+  const paragraphs = document.getElementsByTagName("p");
+
+  for (let i = paragraphs.length - 1; i >= 0; i--) {
+    if (paragraphs[i].textContent.trim() === "") {
+      paragraphs[i].remove();
+    }
+  }
+
+  // Скрываем DM и OOC по умолчанию
+  const oocElements = document.getElementsByClassName("ooc");
+  const dmElements = document.getElementsByClassName("dm");
+  for (const element of oocElements) {
+    element.style.display = "none";
+  }
+  for (const element of dmElements) {
+    element.style.display = "none";
+  }
+
+  dateElements.forEach((dateElement) => {
+    dateElement.onclick = toggleContent;
+  });
+
+  const contentElements = document.querySelectorAll(".content");
+
+  contentElements.forEach((contentElement) => {
+    contentElement.classList.add("hidden");
+  });
 }
 
 // Разделение на главы
@@ -166,40 +176,6 @@ function cleanText() {
   // chatlogHTML = chatlogHTML.replace(/<p( class="logline"|)><\/p>/gm, ""); // Пустые абзацы
 
   chatlog.innerHTML = chatlogHTML; // Завершающая строка, не потри случайно
-
-  // Удаляем пустые абзацы
-
-  const paragraphs = document.getElementsByTagName("p");
-
-  for (let i = paragraphs.length - 1; i >= 0; i--) {
-    if (paragraphs[i].textContent.trim() === "") {
-      paragraphs[i].remove();
-    }
-  }
-
-  // Скрываем DM и OOC по умолчанию
-  const oocElements = document.getElementsByClassName("ooc");
-  const dmElements = document.getElementsByClassName("dm");
-  for (const element of oocElements) {
-    element.style.display = "none";
-  }
-  for (const element of dmElements) {
-    element.style.display = "none";
-  }
-
-  const dateElements = document.querySelectorAll(".date");
-
-  dateElements.forEach((dateElement) => {
-    dateElement.onclick = toggleContent;
-  });
-
-  const contentElements = document.querySelectorAll(".content");
-
-  contentElements.forEach((contentElement) => {
-    contentElement.classList.add("hidden");
-  });
-
-  return console.log("Текст вычищен, дополнительные скрипты применены");
 }
 
 // Склейка чатбоксов
@@ -328,4 +304,24 @@ function playersList() {
       date.parentNode.insertBefore(playerList, date.nextSibling);
     }
   });
+}
+
+// Кнопки DM и OOC
+
+function toggleVisibility(className) {
+  const elements = document.getElementsByClassName(className);
+  for (const element of elements) {
+    if (element.style.display === "none") {
+      element.style.display = "block";
+    } else {
+      element.style.display = "none";
+    }
+  }
+
+  const button = document.querySelector(`button[data-target="${className}"]`);
+  if (elements[0].style.display === "none") {
+    button.textContent = `Show ${className.toUpperCase()}`;
+  } else {
+    button.textContent = `Show/hide ${className.toUpperCase()}`;
+  }
 }
