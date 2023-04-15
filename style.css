@@ -1,0 +1,380 @@
+/* Нормализация стилей для повышения совместимости между браузерами */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Правильный порядок для пользовательских элементов */
+html {
+  font-size: 16px;
+}
+
+/* Стили для body */
+body {
+  font-family: sans-serif;
+  font-size: 1em;
+  line-height: 1.5;
+  color: #333;
+  background-color: #fff;
+}
+
+#chatlog {
+  /* white-space: pre-line; */
+  max-width: 1300px;
+  background: #00000052;
+  padding: 4em;
+  margin: auto;
+}
+p,
+.emote {
+  color: orange;
+}
+.player {
+  font-weight: bold;
+}
+.speech {
+  color: #ffffff;
+}
+
+button, .date:hover {
+  cursor: pointer;
+}
+
+.date:hover {color:orange;}
+
+body {
+  background: url(https://media.discordapp.net/attachments/1095798939418116276/1095807195368652830/image.png)
+    no-repeat #1a0c01 top right fixed;
+  font-family: "Roboto Light", sans-serif;
+  font-size: 18px;
+  color: white;
+}
+
+h2 {
+  font-family: "Roboto Black";
+  font-size: 3em;
+}
+
+h2:not(:first-of-type) {
+  margin-top: 6em;
+}
+
+p.logline.yell {
+  color: red;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+p.ooc {
+  color: #ffffff6e;
+}
+
+button {
+  font-family: roboto light, arial;
+  background: #0000005e;
+  color: white;
+  padding: 1em;
+  /* border-radius: 2em; */
+  border: 1px solid white;
+  margin-left: 8px;
+}
+button:hover {
+  background: linear-gradient(45deg, white, #ffffff52);
+  color: black;
+}
+
+div#buttons {
+  position: fixed;
+  /* margin-left: 8px; */
+  top: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  /* width: 248px; */
+}
+
+.yell,
+.yell * {
+  text-transform: uppercase;
+  color: red !important;
+  font-weight: bold;
+}
+
+.chapter:not(:first-child) {
+  margin-top: 7em;
+}
+
+p.dm {
+  color: #ff5e00;
+  font-weight: bold;
+}
+
+button {
+  height: 2.5em; /* высота кнопки в em */
+  width: 50%; /* ширина кнопки в % */
+  font-size: 1em; /* размер шрифта в em */
+  padding: 0.5em 1em; /* внутренние отступы в em */
+  border-radius: 0.5em; /* радиус скругления углов в em */
+}
+
+.players {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.players li {
+  margin-right: 4px;
+}
+
+ul.players {margin-bottom: 0.5em;}
+
+.chapter li:not(:last-child)::after {
+content: ",";
+}
+
+.content.hidden {
+  display: block;
+  max-height: 190px;
+  overflow: hidden;
+   /* задаем градиентный фон */
+  opacity: 21%;
+};
+
+h2.date:hover {
+  color: orange;
+}
+
+span.player::after {
+  content: ":";
+}
+
+.chapter li:last-child::after {content: ".";}
+
+.chapter li:first-child::before {content: "Участники: ";}
+
+.hidden {
+  display: none;
+}
+
+.content.hidden {
+  display: block;
+  max-height: 190px;
+  overflow: hidden;
+  opacity: 20%;
+};
+
+h2.date:hover {
+  color: orange;
+}
+
+/* Нормализация стилей для повышения совместимости между браузерами */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Правильный порядок для пользовательских элементов */
+html {
+  font-size: 16px;
+}
+
+/* Стили для body */
+body {
+  font-family: sans-serif;
+  font-size: 1em;
+  line-height: 1.5;
+  color: #333;
+  background-color: #fff;
+}
+
+#chatlog {
+  /* white-space: pre-line; */
+  max-width: 1300px;
+  background: #00000052;
+  padding: 4em;
+  margin: auto;
+}
+p,
+.emote {
+  color: orange;
+}
+.player {
+  font-weight: bold;
+}
+.speech {
+  color: #ffffff;
+}
+
+.date:hover {
+  cursor: pointer;
+}
+
+body {
+  background: url(https://media.discordapp.net/attachments/1095798939418116276/1095807195368652830/image.png)
+    no-repeat #1a0c01 top right fixed;
+  font-family: "Roboto Light", sans-serif;
+  font-size: 18px;
+  color: white;
+}
+
+h2 {
+  font-family: "Roboto Black";
+  font-size: 3em;
+  width: fit-content;
+}
+
+h2:not(:first-of-type) {
+  margin-top: 6em;
+}
+
+p.logline.yell {
+  color: red;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+p.ooc {
+  color: #ffffff6e;
+}
+
+button {
+  font-family: roboto light, arial;
+  background: #0000005e;
+  color: #ffffff75;
+  padding: 1em;
+  /* border-radius: 2em; */
+  border: 1px solid #ffffff42;
+  margin-left: 8px;
+}
+button:hover {
+  background: linear-gradient(45deg, #ffbf00, #3e2b00);
+  /* background: orange; */
+  color: black;
+  border: 0;
+  font-weight: 600;
+  /* opacity: 100%; */
+}
+
+div#buttons {
+  position: sticky;
+  margin-left: 60%;
+  top: 24px;
+  /* right: 330px; */
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  /* padding-left: 49%; */
+  z-index: 1;
+}
+
+.yell,
+.yell * {
+  text-transform: uppercase;
+  color: red !important;
+  font-weight: bold;
+}
+
+.chapter {
+  top: -70px;
+  position: relative;
+}
+
+p.dm {
+  color: #ff5e00;
+  font-weight: bold;
+}
+
+button {
+  height: 2.5em; /* высота кнопки в em */
+  width: 50%; /* ширина кнопки в % */
+  font-size: 1em; /* размер шрифта в em */
+  padding: 0.5em 1em; /* внутренние отступы в em */
+  border-radius: 0.5em; /* радиус скругления углов в em */
+}
+
+.players {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.players li {
+  margin-right: 4px;
+}
+
+.chapter:nth-child(2) {
+    margin-top: 0;
+}
+
+ul.players {margin-bottom: 0.5em;}
+
+.chapter li:not(:last-child)::after {
+content: ",";
+}
+
+.content.hidden {
+  display: block;
+  max-height: 190px;
+  overflow: hidden;
+   /* задаем градиентный фон */
+  opacity: 21%;
+};
+
+h2.date:hover {
+  color: orange;
+}
+
+span.player::after {
+  content: ":";
+}
+
+.chapter li:last-child::after {content: ".";}
+
+.chapter li:first-child::before {content: "Участники: ";}
+
+.hidden {
+  display: none;
+}
+
+.content.hidden {
+  display: block;
+  max-height: 190px;
+  overflow: hidden;
+  opacity: 20%;
+};
+
+h2.date:hover {
+  color: orange;
+}
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3), /* iPhone X и XS */
+       only screen and (min-device-width: 414px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 2), /* iPhone XR и XS Max */
+       only screen and (min-device-width: 360px) and (max-device-width: 740px) and (-webkit-min-device-pixel-ratio: 3), /* Samsung Galaxy S10 и S10+ */
+       only screen and (min-device-width: 412px) and (max-device-width: 732px) and (-webkit-min-device-pixel-ratio: 3), /* Google Pixel 3 и 3 XL */
+       only screen and (min-device-width: 360px) and (max-device-width: 760px) and (-webkit-min-device-pixel-ratio: 4), /* Samsung Galaxy S20 и S20+ */
+       only screen and (min-device-width: 412px) and (max-device-width: 869px) and (-webkit-min-device-pixel-ratio: 3), /* Google Pixel 4 и 4 XL */
+       only screen and (min-device-width: 360px) and (max-device-width: 740px) and (-webkit-min-device-pixel-ratio: 4), /* Samsung Galaxy S21 и S21+ */
+       only screen and (min-device-width: 414px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 3) /* iPhone 11 Pro и 11 Pro Max */ {
+  /* ваши стили для флагманских смартфонов */
+  button {font-size: 36px;}
+}
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3), /* iPhone X и XS */
+       only screen and (min-device-width: 414px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 2), /* iPhone XR и XS Max */
+       only screen and (min-device-width: 360px) and (max-device-width: 740px) and (-webkit-min-device-pixel-ratio: 3), /* Samsung Galaxy S10 и S10+ */
+       only screen and (min-device-width: 412px) and (max-device-width: 732px) and (-webkit-min-device-pixel-ratio: 3), /* Google Pixel 3 и 3 XL */
+       only screen and (min-device-width: 360px) and (max-device-width: 760px) and (-webkit-min-device-pixel-ratio: 4), /* Samsung Galaxy S20 и S20+ */
+       only screen and (min-device-width: 412px) and (max-device-width: 869px) and (-webkit-min-device-pixel-ratio: 3), /* Google Pixel 4 и 4 XL */
+       only screen and (min-device-width: 360px) and (max-device-width: 740px) and (-webkit-min-device-pixel-ratio: 4), /* Samsung Galaxy S21 и S21+ */
+       only screen and (min-device-width: 414px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 3) /* iPhone 11 Pro и 11 Pro Max */ {
+  /* ваши стили для флагманских смартфонов */
+  button {font-size: 36px;}
+}
