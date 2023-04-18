@@ -8,16 +8,16 @@
   </head>
   <body>
     <div id="buttons">
+      <button id="demo-button">Демо</button>
       <form>
-        <label for="file-input">Выберите файл</label>
+        <label for="file-input">Загрузить лог</label>
         <input type="file" id="file-input" />
         <!-- <button type="submit">Загрузить</button> -->
-      </form>      
-      <button onclick="toggleVisibility('ooc')">OOC</button>
+      </form>
       <button onclick="toggleVisibility('dm')">DM</button>
+      <button onclick="toggleVisibility('ooc')">OOC</button>
     </div>
-    <div id="chatlog">
-    </div>
+    <div id="chatlog"></div>
     <div class="footer"></div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script.js"></script>

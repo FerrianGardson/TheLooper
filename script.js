@@ -2,6 +2,7 @@
 
 const fileInput = document.getElementById("file-input");
 const chatlog = document.getElementById("chatlog");
+const demoButton = document.getElementById("demo-button"); // Получаем кнопку «Демо»
 
 fileInput.addEventListener("change", (event) => {
   const file = event.target.files[0];
@@ -34,7 +35,32 @@ fileInput.addEventListener("change", (event) => {
   };
 });
 
-
+// Обработчик события для кнопки «Демо»
+demoButton.addEventListener("click", () => {
+  const text = fetch("WoWChatLog.txt").then(response => response.text());
+  text.then((result) => {
+    const chapters = divideChapters(result);
+    chatlog.innerHTML = ""; // Очистим чат перед добавлением новых сообщений
+    for (const chapterTitle in chapters) {
+      const chapter = document.createElement("div");
+      chapter.classList.add("chapter");
+      const chapterHeader = document.createElement("h2");
+      chapterHeader.classList.add("date");
+      chapterHeader.textContent = chapterTitle;
+      chapter.appendChild(chapterHeader);
+      const chapterContent = document.createElement("div");
+      chapterContent.classList.add("content");
+      chapter.appendChild(chapterContent);
+      chapters[chapterTitle].forEach((line) => {
+        const paragraph = document.createElement("p");
+        paragraph.textContent = line;
+        chapterContent.appendChild(paragraph);
+      });
+      chatlog.appendChild(chapter);
+    }
+    makeItOhuenno();
+  });
+});
 
 
 // ОБРАБОТКА
@@ -195,7 +221,7 @@ function cleanText() {
   var chatlogHTML = chatlog.innerHTML;
 
   chatlogHTML = chatlogHTML.replace(
-    /(<p class="logline">(&\?+|\d|\(|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Вы|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ шеп|\W+ создает:|Вы шеп|Вы выполн|Вы получ|Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Вы|Смена|\(d+d|&?dd|Разыгрываются).+\n<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
+    /(<p class="logline">(no|&\?+|\d|\(|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Вы|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ шеп|\W+ создает:|Вы шеп|Вы выполн|Вы получ|Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Вы|Смена|\(d+d|&?dd|Разыгрываются).+\n<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
     ""
   ); // Неигровые сообщения
 
