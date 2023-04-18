@@ -25,6 +25,7 @@ fetch("WoWChatLog.txt")
   .catch((error) => console.error(error));
 
 
+
 function makeItOhuenno() {
   console.log("Запускаю допфункции");
   removeTimestamps();
