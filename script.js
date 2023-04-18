@@ -2,6 +2,7 @@ fetch("WoWChatLog.txt")
   .then((response) => response.text())
   .then((text) => {
     const chapters = divideChapters(text);
+    console.log(chapters)
     const chatlog = document.getElementById("chatlog");
     for (const chapterTitle in chapters) {
       const chapter = document.createElement("div");
