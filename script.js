@@ -1,9 +1,18 @@
-fetch("WoWChatLog.txt")
-  .then((response) => response.text())
-  .then((text) => {
+// ПРЕДЗАГРУЖЕННЫЙ И ЗАЛИТЫЙ ФАЙЛ
+
+const fileInput = document.getElementById("file-input");
+const chatlog = document.getElementById("chatlog");
+
+fileInput.addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.readAsText(file);
+  reader.onload = () => {
+    const text = reader.result;
+    console.log("Loaded text:", text);
     const chapters = divideChapters(text);
-    console.log(chapters)
-    const chatlog = document.getElementById("chatlog");
+    console.log("Divided into chapters:", chapters);
+    chatlog.innerHTML = ""; // Очистим чат перед добавлением новых сообщений
     for (const chapterTitle in chapters) {
       const chapter = document.createElement("div");
       chapter.classList.add("chapter");
@@ -21,11 +30,14 @@ fetch("WoWChatLog.txt")
       });
       chatlog.appendChild(chapter);
     }
-    makeItOhuenno(); // Перенесли вызов функции сюда
-  })
-  .catch((error) => console.error(error));
+    makeItOhuenno();
+  };
+});
 
 
+
+
+// ОБРАБОТКА
 
 function makeItOhuenno() {
   console.log("Запускаю допфункции");
@@ -183,7 +195,7 @@ function cleanText() {
   var chatlogHTML = chatlog.innerHTML;
 
   chatlogHTML = chatlogHTML.replace(
-    /(<p class="logline">(\d|\(|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Вы|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ шеп|\W+ создает:|Вы шеп|Вы выполн|Вы получ|Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Вы|Смена|\(d+d|&?dd|Разыгрываются).+\n<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
+    /(<p class="logline">(&\?+|\d|\(|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Вы|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ шеп|\W+ создает:|Вы шеп|Вы выполн|Вы получ|Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Вы|Смена|\(d+d|&?dd|Разыгрываются).+\n<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
     ""
   ); // Неигровые сообщения
 
@@ -332,6 +344,14 @@ function playersList() {
 }
 
 function colorizePlayers() {
+
+console.log("Удаление пустых игроков")
+
+  const playerList = document.querySelector("ul.players"); // получаем список игроков
+  const emptyPlayers = [...playerList.querySelectorAll("li")].filter((li) => !li.textContent.trim()); // фильтруем пустые элементы li
+  emptyPlayers.forEach((li) => li.remove()); // удаляем каждый из найденных пустых элементов li
+  
+
   console.log("Раскраска ников");
   const playerColors = {};
   const playerSpans = document.querySelectorAll(".player");

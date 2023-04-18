@@ -7,11 +7,16 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   <body>
+    <div id="buttons">
+      <form>
+        <label for="file-input">Выберите файл</label>
+        <input type="file" id="file-input" />
+        <!-- <button type="submit">Загрузить</button> -->
+      </form>      
+      <button onclick="toggleVisibility('ooc')">OOC</button>
+      <button onclick="toggleVisibility('dm')">DM</button>
+    </div>
     <div id="chatlog">
-      <div id="buttons">
-        <button onclick="toggleVisibility('ooc')">OOC</button>
-        <button onclick="toggleVisibility('dm')">DM</button>
-      </div>
     </div>
     <div class="footer"></div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -248,20 +248,20 @@ p.ooc {
   color: #ffffff6e;
 }
 
-button {
+button, label {
   font-family: roboto light, arial;
   background: #0000005e;
   color: #ffffff75;
   padding: 1em;
-  /* border-radius: 2em; */
+  border-radius: 2em;
   border: 1px solid #ffffff42;
   margin-left: 8px;
 }
-button:hover {
+button:hover, label:hover {
   background: linear-gradient(45deg, #ffbf00, #3e2b00);
   /* background: orange; */
   color: black;
-  border: 0;
+  /* border: 2px solid white; */
   font-weight: 600;
   /* opacity: 100%; */
 }
@@ -295,12 +295,13 @@ p.dm {
   font-weight: bold;
 }
 
-button {
+button, label {
   height: 2.5em; /* высота кнопки в em */
-  width: 50%; /* ширина кнопки в % */
+  width: fit-content; /* ширина кнопки в % */
   font-size: 1em; /* размер шрифта в em */
   padding: 0.5em 1em; /* внутренние отступы в em */
-  border-radius: 0.5em; /* радиус скругления углов в em */
+  /* border-radius: 0.5em; */ /* радиус скругления углов в em */
+  cursor: pointer;
 }
 
 .players {
@@ -387,6 +388,45 @@ span.player::after {
   transition: height 0.3s ease;
 }
 
+form {
+  display: flex;
+}
+
+/* Скрываем стандартный input для загрузки файла */
+input[type="file"] {
+  display: none;
+}
+
+/* Стилизуем лейбл для input */
+label {
+  /* display: inline-block; */
+  /* padding: 10px 20px; */
+  /* font-size: 16px; */
+  /* font-weight: bold; */
+  /* color: #fff; */
+  /* background-color: #3498db; */
+  /* cursor: pointer; */
+  /* border-radius: 5px; */
+}
+
+/* Стилизуем кнопку */
+button[type="submit"] {
+  /* display: inline-block; */
+  /* padding: 10px 20px; */
+  /* font-size: 16px; */
+  /* font-weight: bold; */
+  /* color: #fff; */
+  /* background-color: #3498db; */
+  /* cursor: pointer; */
+  /* border: none; */
+  /* border-radius: 5px; */
+  /* margin-left: 20px; */
+}
+
+/* При наведении на лейбл меняем цвет фона */
+label:hover {
+  /* background-color: #2980b9; */
+}
 
 
 @media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3), /* iPhone X и XS */
