@@ -20,9 +20,10 @@ fetch("WoWChatLog.txt")
       });
       chatlog.appendChild(chapter);
     }
-    makeItOhuenno(); // Здесь начинается магия
+    makeItOhuenno(); // Перенесли вызов функции сюда
   })
   .catch((error) => console.error(error));
+
 
 function makeItOhuenno() {
   console.log("Запускаю допфункции");
