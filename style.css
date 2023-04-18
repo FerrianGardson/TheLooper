@@ -41,7 +41,7 @@ button, .date:hover {
   cursor: pointer;
 }
 
-.date:hover {color:orange;}
+.date:hover {/* color:orange; */}
 
 body {
   background: url(https://media.discordapp.net/attachments/1095798939418116276/1095807195368652830/image.png)
@@ -155,7 +155,12 @@ span.player::after {
 
 .chapter li:last-child::after {content: ".";}
 
-.chapter li:first-child::before {content: "Участники: ";}
+/* .chapter li:first-child::before {content: "Участники: ";} */
+
+.chapter.collapsed {
+  max-height: 200px;
+  overflow: hidden;
+}
 
 .hidden {
   display: none;
@@ -212,7 +217,7 @@ p,
 }
 
 .date:hover {
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 body {
@@ -338,7 +343,7 @@ span.player::after {
 
 .chapter li:last-child::after {content: ".";}
 
-.chapter li:first-child::before {content: "Участники: ";}
+/* .chapter li:first-child::before {content: "Участники: ";} */
 
 .hidden {
   display: none;
@@ -351,9 +356,38 @@ span.player::after {
   opacity: 20%;
 };
 
-h2.date:hover {
-  color: orange;
+.chapter.collapsed {
+    max-height: 200px;
+    overflow: hidden;
 }
+
+.chapter.collapsed *:not(:hover) {
+    color:#ffffff59!important;
+}
+
+.chapter.collapsed > H2.date {
+    color: #ffffff!important;
+}
+
+.chapter.collapsed > H2.date:hover {
+  color: orange!important;
+  cursor: pointer;
+}
+
+
+.chapter.collapsed {
+  height: 200px;
+  overflow: hidden;
+  transition: height 0.3s ease;
+}
+
+.chapter.expanded {
+  height: fit-content;
+  overflow: hidden;
+  transition: height 0.3s ease;
+}
+
+
 
 @media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3), /* iPhone X и XS */
        only screen and (min-device-width: 414px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 2), /* iPhone XR и XS Max */

@@ -29,21 +29,8 @@ function makeItOhuenno() {
   removeTimestamps();
   cleanText();
   playersList();
+  colorizePlayers();
   // mergePlayerReplies();
-  // colorizePlayers();
-
-  // Сокрытие главы под заголовком
-
-  const dateElements = document.querySelectorAll(".date");
-
-  dateElements.forEach((dateElement) => {
-    dateElement.onclick = toggleContent;
-  });
-
-  function toggleContent(event) {
-    const content = event.target.parentElement.querySelector(".content");
-    content.classList.toggle("hidden");
-  }
 
   // Удаляем пустые абзацы
 
@@ -56,8 +43,8 @@ function makeItOhuenno() {
   }
 
   // Скрываем DM и OOC по умолчанию
-  const oocElements = document.getElementsByClassName("ooc");
-  const dmElements = document.getElementsByClassName("dm");
+  const oocElements = document.getElementsByClassName("logline ooc");
+  const dmElements = document.getElementsByClassName("logline dm");
   for (const element of oocElements) {
     element.style.display = "none";
   }
@@ -65,20 +52,81 @@ function makeItOhuenno() {
     element.style.display = "none";
   }
 
-  dateElements.forEach((dateElement) => {
-    dateElement.onclick = toggleContent;
-  });
+// Сворачивание
 
-  const contentElements = document.querySelectorAll(".content");
+const chapterElements = document.querySelectorAll(".chapter");
 
-  contentElements.forEach((contentElement) => {
-    contentElement.classList.add("hidden");
-  });
+chapterElements.forEach((chapterElement, index) => {
+  if (index === 0) {
+    chapterElement.classList.add("expanded");
+  } else {
+    chapterElement.classList.add("collapsed");
+  }
+});
+
+
+function toggleContent(event) {
+  const chapter = event.target.closest(".chapter");
+  const content = chapter.querySelector(".content");
+
+  if (chapter.classList.contains("collapsed")) {
+    chapter.classList.remove("collapsed");
+    chapter.classList.add("expanded");
+    content.style.maxHeight = content.scrollHeight + "px";
+  } else {
+    chapter.classList.remove("expanded");
+    chapter.classList.add("collapsed");
+    content.style.maxHeight = null;
+  }
 }
+
+const dates = document.querySelectorAll(".date");
+
+dates.forEach(date => {
+  date.addEventListener("click", toggleContent);
+});
+
+
+/* // Разворачиваем первую главу
+
+console.log("Разворачиваю первую главу")
+
+window.addEventListener('DOMContentLoaded', function() {
+  const firstChapter = document.querySelector('.chapter');
+  firstChapter.classList.remove('collapsed');
+  firstChapter.classList.add('expanded');
+});
+
+console.log("Развернул первую главу") */
+
+// Объединение чатбоксов
+
+$(document).ready(function() {
+    var prevPlayer = "";
+    var prevSpeech = "";
+    $(".logline").each(function() {
+        var currentPlayer = $(this).find(".player").text();
+        var currentSpeech = $(this).find(".speech").text();
+        if (currentPlayer == prevPlayer) {
+            $(this).prev().find(".speech").append(" " + currentSpeech);
+            $(this).remove();
+        } else {
+            prevPlayer = currentPlayer;
+            prevSpeech = currentSpeech;
+        }
+    });
+});
+
+}
+
+// ДАЛЬШЕ ИДУТ ОПРЕДЕЛЕНИЯ
+// ДАЛЬШЕ ИДУТ ОПРЕДЕЛЕНИЯ
+// ДАЛЬШЕ ИДУТ ОПРЕДЕЛЕНИЯ
 
 // Разделение на главы
 
 function divideChapters(text) {
+  console.log("Разделение на главы");
   const logLines = text.trim().split("\n");
   const chapters = {};
   logLines.forEach((line) => {
@@ -115,6 +163,7 @@ function divideChapters(text) {
 // Удаление таймштампов
 
 function removeTimestamps() {
+  console.log("Удаление таймштампов");
   var chatlog = document.getElementById("chatlog");
   var chatlogHTML = chatlog.innerHTML;
   chatlog.innerHTML = chatlogHTML.replace(
@@ -126,6 +175,7 @@ function removeTimestamps() {
 // Чистка от мусора
 
 function cleanText() {
+  console.log("Чистка от мусора");
   var chatlog = document.getElementById("chatlog");
   var chatlogHTML = chatlog.innerHTML;
 
@@ -180,7 +230,7 @@ function cleanText() {
 
 // Склейка чатбоксов
 
-function mergePlayerReplies() {
+/* function mergePlayerReplies() {
   // Получаем элемент content из DOM-дерева
   const content = document.getElementsByClassName("content")[0];
   // Объявляем переменные для хранения информации о предыдущем игроке и его высказывании
@@ -221,44 +271,14 @@ function mergePlayerReplies() {
   }
   // Выводим в консоль информацию о завершении слияния
   console.log("Merge complete.");
-}
+} */
 
 // Раскраска ников
-
-function colorizePlayers() {
-  const playerColors = {};
-  const playerSpans = document.querySelectorAll(".player");
-  const colors = [
-    "#43c59eff",
-    "#5398beff",
-    "#f18f01ff",
-    "#4f4789ff",
-    "#dd403aff",
-    "#00AC48",
-    "#0A74EC",
-    "#6420FF",
-    "#677799",
-    "#AE5EFF",
-    "#E6451B",
-    "#FF9A02",
-    "#FFD914",
-  ];
-
-  for (let i = 0; i < playerSpans.length; i++) {
-    const playerName = playerSpans[i].textContent.trim().slice(1, -2);
-    if (!playerColors[playerName]) {
-      const color = colors[i % colors.length]; // получаем цвет из массива цветов, с повторением при необходимости
-      playerColors[playerName] = color;
-    }
-    playerSpans[i].style.color = playerColors[playerName];
-  }
-  console.log("Ники раскрашены");
-  return;
-}
 
 // Список игроков
 
 function playersList() {
+  console.log("Список игроков");
   // Создаем пустой массив для хранения имен игроков
   let players = [];
 
@@ -292,6 +312,7 @@ function playersList() {
 
         // Устанавливаем текст элемента списка равным имени игрока
         playerItem.textContent = playerName;
+        playerItem.className = "player";
 
         // Добавляем элемент списка в список игроков
         playerList.appendChild(playerItem);
@@ -303,7 +324,40 @@ function playersList() {
       // Добавляем список игроков под .date
       date.parentNode.insertBefore(playerList, date.nextSibling);
     }
+    players = [];
   });
+}
+
+function colorizePlayers() {
+  console.log("Раскраска ников");
+  const playerColors = {};
+  const playerSpans = document.querySelectorAll(".player");
+  const colors = [
+    "#43c59eff",
+    "#5398beff",
+    "#f18f01ff",
+    "#4f4789ff",
+    "#dd403aff",
+    "#00AC48",
+    "#0A74EC",
+    "#6420FF",
+    "#677799",
+    "#AE5EFF",
+    "#E6451B",
+    "#FF9A02",
+    "#FFD914",
+  ];
+
+  for (let i = 0; i < playerSpans.length; i++) {
+    const playerName = playerSpans[i].textContent.trim().slice(1, -2);
+    if (!playerColors[playerName]) {
+      const color = colors[i % colors.length]; // получаем цвет из массива цветов, с повторением при необходимости
+      playerColors[playerName] = color;
+    }
+    playerSpans[i].style.color = playerColors[playerName];
+  }
+  console.log("Ники раскрашены");
+  return;
 }
 
 // Кнопки DM и OOC
