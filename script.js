@@ -71,6 +71,7 @@ function formatLog() {
   cleanText();
   playersList();
   colorizePlayers();
+  replaceSymbols();
   // mergePlayerReplies();
 
   // Удаляем пустые абзацы
@@ -416,6 +417,26 @@ function playersList() {
   });
 }
 
+// Точки и запятые
+
+function replaceSymbols() {
+  const ulElements = document.querySelectorAll("ul.players");
+
+  ulElements.forEach((ulElement) => {
+    const players = ulElement.querySelectorAll(".player");
+
+    players.forEach((player, index) => {
+      const text = player.textContent.trim();
+      let updatedText = text.replace(":", ",");
+      
+      if (index === players.length - 1) {
+        updatedText = updatedText.replace(",", ".");
+      }
+      
+      player.textContent = updatedText;
+    });
+  });
+}
 
 // Кнопки DM и OOC
 
