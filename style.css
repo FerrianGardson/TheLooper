@@ -31,8 +31,6 @@ button,
 .date:hover {
   cursor: pointer;
 }
-.date:hover {
-}
 body {
   background: url("https://media.discordapp.net/attachments/1095798939418116276/1095807195368652830/image.png")
     right top no-repeat fixed rgb(26, 12, 1);
@@ -122,8 +120,6 @@ ul.players {
 /* .chapter li:last-child::after {
   content: ".";
 } */
-.chapter.collapsed {
-}
 .hidden {
   display: none;
 }
@@ -148,8 +144,7 @@ body {
   font-size: 1em;
   line-height: 1.5;
 }
-#chatlog {
-}
+
 p,
 .emote {
   color: orange;
@@ -160,8 +155,7 @@ p,
 .speech {
   color: rgb(255, 255, 255);
 }
-.date:hover {
-}
+
 body {
   background: url("https://media.discordapp.net/attachments/1095798939418116276/1095807195368652830/image.png")
     right top no-repeat fixed rgb(26, 12, 1);
@@ -201,16 +195,14 @@ label:hover {
   color: black;
   font-weight: 600;
 }
-div#buttons {
-}
+
 .yell,
 .yell * {
   color: red !important;
   font-weight: bold;
   text-transform: uppercase;
 }
-.chapter {
-}
+
 p.dm {
   color: rgb(255, 94, 0);
   font-weight: bold;
@@ -233,8 +225,7 @@ label {
 .players li {
   margin-right: 4px;
 }
-.chapter:nth-child(2) {
-}
+
 ul.players {
   margin-bottom: 0.5em;
 }
@@ -288,11 +279,18 @@ form {
 input[type="file"] {
   display: none;
 }
-label {
-}
-button[type="submit"] {
-}
-label:hover {
+
+
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3),
+  only screen and (min-device-width: 414px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 2),
+  only screen and (min-device-width: 360px) and (max-device-width: 740px) and (-webkit-min-device-pixel-ratio: 3),
+  only screen and (min-device-width: 412px) and (max-device-width: 732px) and (-webkit-min-device-pixel-ratio: 3),
+  only screen and (min-device-width: 360px) and (max-device-width: 760px) and (-webkit-min-device-pixel-ratio: 4),
+  only screen and (min-device-width: 412px) and (max-device-width: 869px) and (-webkit-min-device-pixel-ratio: 3),
+  only screen and (min-device-width: 360px) and (max-device-width: 740px) and (-webkit-min-device-pixel-ratio: 4),
+  only screen and (min-device-width: 414px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 3) {
+
 }
 @media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3),
   only screen and (min-device-width: 414px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 2),
@@ -302,17 +300,5 @@ label:hover {
   only screen and (min-device-width: 412px) and (max-device-width: 869px) and (-webkit-min-device-pixel-ratio: 3),
   only screen and (min-device-width: 360px) and (max-device-width: 740px) and (-webkit-min-device-pixel-ratio: 4),
   only screen and (min-device-width: 414px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 3) {
-  button {
-  }
-}
-@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3),
-  only screen and (min-device-width: 414px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 2),
-  only screen and (min-device-width: 360px) and (max-device-width: 740px) and (-webkit-min-device-pixel-ratio: 3),
-  only screen and (min-device-width: 412px) and (max-device-width: 732px) and (-webkit-min-device-pixel-ratio: 3),
-  only screen and (min-device-width: 360px) and (max-device-width: 760px) and (-webkit-min-device-pixel-ratio: 4),
-  only screen and (min-device-width: 412px) and (max-device-width: 869px) and (-webkit-min-device-pixel-ratio: 3),
-  only screen and (min-device-width: 360px) and (max-device-width: 740px) and (-webkit-min-device-pixel-ratio: 4),
-  only screen and (min-device-width: 414px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 3) {
-  button {
-  }
+
 }
