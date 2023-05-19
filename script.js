@@ -31,7 +31,7 @@ fileInput.addEventListener("change", (event) => {
       });
       chatlog.appendChild(chapter);
     }
-    makeItOhuenno();
+    formatLog();
   };
 });
 
@@ -58,14 +58,14 @@ demoButton.addEventListener("click", () => {
       });
       chatlog.appendChild(chapter);
     }
-    makeItOhuenno();
+    formatLog();
   });
 });
 
 
 // ОБРАБОТКА
 
-function makeItOhuenno() {
+function formatLog() {
   console.log("Запускаю допфункции");
   removeTimestamps();
   cleanText();
@@ -143,26 +143,22 @@ console.log("Развернул первую главу") */
 // Объединение чатбоксов
 
 $(document).ready(function() {
-    var prevPlayer = "";
-    var prevSpeech = "";
-    $(".logline").each(function() {
-        var currentPlayer = $(this).find(".player").text();
-        var currentSpeech = $(this).find(".speech").text();
-        if (currentPlayer == prevPlayer) {
-            $(this).prev().find(".speech").append(" " + currentSpeech);
-            $(this).remove();
-        } else {
-            prevPlayer = currentPlayer;
-            prevSpeech = currentSpeech;
-        }
-    });
+  var prevPlayer = "";
+  var prevSpeech = "";
+  $(".logline").each(function() {
+      var currentPlayer = $(this).find(".player").text();
+      var currentSpeech = $(this).find(".speech").text();
+      if (currentPlayer == prevPlayer) {
+          $(this).prev().find(".speech").append(" " + currentSpeech);
+          $(this).remove();
+      } else {
+          prevPlayer = currentPlayer;
+          prevSpeech = currentSpeech;
+      }
+  });
 });
 
 }
-
-// ДАЛЬШЕ ИДУТ ОПРЕДЕЛЕНИЯ
-// ДАЛЬШЕ ИДУТ ОПРЕДЕЛЕНИЯ
-// ДАЛЬШЕ ИДУТ ОПРЕДЕЛЕНИЯ
 
 // Разделение на главы
 
@@ -258,8 +254,8 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/\|\d\-\d\((.+)\)\./gm, "$1"); // Кривые падежи в стандартных эмоутах
 
   chatlogHTML = chatlogHTML.replace(
-    /([—–-]\s(.+?)\s[—–-])/gm,
-    "<span class='emote'>— $2 —</span>"
+    /([,.!?]?\s?[—–-]\s(.+?)\s[—–-])/gm,
+    "<span class='emote'> — $2 — </span>"
   );
 
   // chatlogHTML = chatlogHTML.replace(/<p( class="logline"|)><\/p>/gm, ""); // Пустые абзацы
@@ -316,6 +312,49 @@ function cleanText() {
 
 // Раскраска ников
 
+function colorizePlayers() {
+
+console.log("Удаление пустых игроков")
+
+  const playerList = document.querySelector("ul.players"); // получаем список игроков
+  const emptyPlayers = [...playerList.querySelectorAll("li")].filter((li) => !li.textContent.trim()); // фильтруем пустые элементы li
+  emptyPlayers.forEach((li) => li.remove()); // удаляем каждый из найденных пустых элементов li
+  
+
+  console.log("Раскраска ников");
+  const playerColors = {};
+  const playerSpans = document.querySelectorAll(".player");
+  const colors = [
+    "#43c59eff",
+    "#5398beff",
+    "#f18f01ff",
+    "#4f4789ff",
+    "#dd403aff",
+    "#00AC48",
+    "#0A74EC",
+    "#6420FF",
+    "#677799",
+    "#AE5EFF",
+    "#E6451B",
+    "#FF9A02",
+    "#FFD914",
+  ];
+  
+  for (let i = 0; i < playerSpans.length; i++) {
+    const playerName = playerSpans[i].textContent.trim();
+    if (!playerColors[playerName]) {
+      const color = colors[i % colors.length];
+      playerColors[playerName] = color;
+    }
+    playerSpans[i].style.color = playerColors[playerName];
+    playerSpans[i].textContent += ":";
+  }
+  
+  console.log("Ники раскрашены");
+  
+  return;
+}
+
 // Список игроков
 
 function playersList() {
@@ -367,46 +406,6 @@ function playersList() {
     }
     players = [];
   });
-}
-
-function colorizePlayers() {
-
-console.log("Удаление пустых игроков")
-
-  const playerList = document.querySelector("ul.players"); // получаем список игроков
-  const emptyPlayers = [...playerList.querySelectorAll("li")].filter((li) => !li.textContent.trim()); // фильтруем пустые элементы li
-  emptyPlayers.forEach((li) => li.remove()); // удаляем каждый из найденных пустых элементов li
-  
-
-  console.log("Раскраска ников");
-  const playerColors = {};
-  const playerSpans = document.querySelectorAll(".player");
-  const colors = [
-    "#43c59eff",
-    "#5398beff",
-    "#f18f01ff",
-    "#4f4789ff",
-    "#dd403aff",
-    "#00AC48",
-    "#0A74EC",
-    "#6420FF",
-    "#677799",
-    "#AE5EFF",
-    "#E6451B",
-    "#FF9A02",
-    "#FFD914",
-  ];
-
-  for (let i = 0; i < playerSpans.length; i++) {
-    const playerName = playerSpans[i].textContent.trim().slice(1, -2);
-    if (!playerColors[playerName]) {
-      const color = colors[i % colors.length]; // получаем цвет из массива цветов, с повторением при необходимости
-      playerColors[playerName] = color;
-    }
-    playerSpans[i].style.color = playerColors[playerName];
-  }
-  console.log("Ники раскрашены");
-  return;
 }
 
 // Кнопки DM и OOC

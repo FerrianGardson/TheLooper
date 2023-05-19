@@ -107,21 +107,21 @@ button {
 ul.players {
   margin-bottom: 0.5em;
 }
-.chapter li:not(:last-child)::after {
+/* .chapter li:not(:last-child)::after {
   content: ",";
-}
+} */
 .content.hidden {
   display: block;
   max-height: 190px;
   opacity: 0.21;
   overflow: hidden;
 }
-span.player::after {
+/* span.player::after {
   content: ":";
-}
-.chapter li:last-child::after {
+} */
+/* .chapter li:last-child::after {
   content: ".";
-}
+} */
 .chapter.collapsed {
 }
 .hidden {
@@ -238,21 +238,21 @@ label {
 ul.players {
   margin-bottom: 0.5em;
 }
-.chapter li:not(:last-child)::after {
+/* .chapter li:not(:last-child)::after {
   content: ",";
-}
+} */
 .content.hidden {
   display: block;
   max-height: 190px;
   opacity: 0.21;
   overflow: hidden;
 }
-span.player::after {
+/* span.player::after {
   content: ":";
-}
-.chapter li:last-child::after {
+} */
+/* .chapter li:last-child::after {
   content: ".";
-}
+} */
 .hidden {
   display: none;
 }
