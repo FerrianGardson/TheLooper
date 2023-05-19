@@ -378,7 +378,7 @@ function playersList() {
     let playerNames = chapter.querySelectorAll(".player");
 
     // Для каждого имени игрока
-    playerNames.forEach((name) => {
+    playerNames.forEach((name, index) => {
       // Получаем текст имени
       let playerName = name.textContent.trim();
 
@@ -396,6 +396,14 @@ function playersList() {
 
         // Добавляем элемент списка в список игроков
         playerList.appendChild(playerItem);
+
+        // Заменяем окончание ":" на запятую для всех ников, кроме последнего
+        if (index < playerNames.length - 1) {
+          playerItem.textContent = playerName.replace(":", ",");
+        } else {
+          // Заменяем окончание ":" на точку для последнего ника
+          playerItem.textContent = playerName.replace(":", ".");
+        }
       }
     });
 
@@ -407,6 +415,7 @@ function playersList() {
     players = [];
   });
 }
+
 
 // Кнопки DM и OOC
 
