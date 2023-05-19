@@ -72,8 +72,7 @@ function formatLog() {
   playersList();
   colorizePlayers();
   replaceSymbols();
-  // mergePlayerReplies();
-
+  
   // Удаляем пустые абзацы
 
   const paragraphs = document.getElementsByTagName("p");
@@ -159,7 +158,30 @@ $(document).ready(function() {
   });
 });
 
+
+// Раскраска эмоутов от третьего лица
+
+function replaceEmotesWithDelay() {
+  setTimeout(function() {
+    replaceEmotes();
+  }, 100); // Задержка в миллисекундах (в данном примере - 1 секунда)
 }
+
+function replaceEmotes() {
+  document.body.innerHTML = document.body.innerHTML.replace(/([,?!])\s?[—–-]\s?(.+[.!?])/gm, '$1 <span class="emote">– $2</span>');
+}
+
+replaceEmotesWithDelay();
+
+
+/* replaceEmotes() */
+
+console.log("Конец обработки");
+
+}
+
+
+// ФУНКЦИИ
 
 // Разделение на главы
 
@@ -248,16 +270,11 @@ function cleanText() {
   ); // Крик, дефисы, а также облачает реплику в классы
 
   chatlogHTML = chatlogHTML.replace(
-    /<p class="logline">(.+) говорит:\s?[—–-]?\s?(.+)\n<\/p>/gm,
+    /<p class="logline">(.+)\sговорит:\s*[—–-]?\s*(.+)\n<\/p>/gm,
     '<p class="logline"><span class="player">$1</span> <span class="speech">$2</span></p>'
   ); // Речь, дефисы, а также облачает реплику в классы
 
   chatlogHTML = chatlogHTML.replace(/\|\d\-\d\((.+)\)\./gm, "$1"); // Кривые падежи в стандартных эмоутах
-
-  chatlogHTML = chatlogHTML.replace(
-    /([,.!?]?\s?[—–-]\s(.+?)\s[—–-])/gm,
-    "<span class='emote'> — $2 — </span>"
-  );
 
   // chatlogHTML = chatlogHTML.replace(/<p( class="logline"|)><\/p>/gm, ""); // Пустые абзацы
 
