@@ -1,69 +1,61 @@
-// ПРЕДЗАГРУЖЕННЫЙ И ЗАЛИТЫЙ ФАЙЛ
+// Загрузка файла или клик по «Демо»
 
 const fileInput = document.getElementById("file-input");
 const chatlog = document.getElementById("chatlog");
-const demoButton = document.getElementById("demo-button"); // Получаем кнопку «Демо»
+const demoButton = document.getElementById("demo-button");
 
-fileInput.addEventListener("change", (event) => {
+fileInput.addEventListener("change", handleFileInput);
+demoButton.addEventListener("click", handleDemoButtonClick);
+
+// Функции
+
+async function handleFileInput(event) {
   const file = event.target.files[0];
-  const reader = new FileReader();
-  reader.readAsText(file);
-  reader.onload = () => {
-    const text = reader.result;
-    console.log("Loaded text:", text);
-    const chapters = divideChapters(text);
-    console.log("Divided into chapters:", chapters);
-    chatlog.innerHTML = ""; // Очистим чат перед добавлением новых сообщений
-    for (const chapterTitle in chapters) {
-      const chapter = document.createElement("div");
-      chapter.classList.add("chapter");
-      const chapterHeader = document.createElement("h2");
-      chapterHeader.classList.add("date");
-      chapterHeader.textContent = chapterTitle;
-      chapter.appendChild(chapterHeader);
-      const chapterContent = document.createElement("div");
-      chapterContent.classList.add("content");
-      chapter.appendChild(chapterContent);
-      chapters[chapterTitle].forEach((line) => {
-        const paragraph = document.createElement("p");
-        paragraph.textContent = line;
-        chapterContent.appendChild(paragraph);
-      });
-      chatlog.appendChild(chapter);
-    }
-    formatLog();
-  };
-});
+  const text = await file.text();
+  renderChatLog(text);
+}
 
-// Обработчик события для кнопки «Демо»
-demoButton.addEventListener("click", () => {
-  const text = fetch("WoWChatLog.txt").then(response => response.text());
-  text.then((result) => {
-    const chapters = divideChapters(result);
-    chatlog.innerHTML = ""; // Очистим чат перед добавлением новых сообщений
-    for (const chapterTitle in chapters) {
-      const chapter = document.createElement("div");
-      chapter.classList.add("chapter");
-      const chapterHeader = document.createElement("h2");
-      chapterHeader.classList.add("date");
-      chapterHeader.textContent = chapterTitle;
-      chapter.appendChild(chapterHeader);
-      const chapterContent = document.createElement("div");
-      chapterContent.classList.add("content");
-      chapter.appendChild(chapterContent);
-      chapters[chapterTitle].forEach((line) => {
-        const paragraph = document.createElement("p");
-        paragraph.textContent = line;
-        chapterContent.appendChild(paragraph);
-      });
-      chatlog.appendChild(chapter);
-    }
-    formatLog();
+async function handleDemoButtonClick() {
+  const response = await fetch("WoWChatLog.txt");
+  const text = await response.text();
+  renderChatLog(text);
+}
+
+function renderChatLog(text) {
+  const chapters = divideChapters(text);
+  chatlog.innerHTML = "";
+
+  for (const [chapterTitle, chapterLines] of Object.entries(chapters)) {
+    const chapter = createChapterElement(chapterTitle, chapterLines);
+    chatlog.appendChild(chapter);
+  }
+
+  formatLog();
+}
+
+function createChapterElement(chapterTitle, chapterLines) {
+  const chapter = document.createElement("div");
+  chapter.classList.add("chapter");
+
+  const chapterHeader = document.createElement("h2");
+  chapterHeader.classList.add("date");
+  chapterHeader.textContent = chapterTitle;
+  chapter.appendChild(chapterHeader);
+
+  const chapterContent = document.createElement("div");
+  chapterContent.classList.add("content");
+  chapter.appendChild(chapterContent);
+
+  chapterLines.forEach((line) => {
+    const paragraph = document.createElement("p");
+    paragraph.textContent = line;
+    chapterContent.appendChild(paragraph);
   });
-});
 
+  return chapter;
+}
 
-// ОБРАБОТКА
+// НАЧАЛО ГЛАВНОЙ ФУНКЦИИ ОБРАБОТКИ
 
 function formatLog() {
   console.log("Запускаю допфункции");
@@ -71,7 +63,6 @@ function formatLog() {
   cleanText();
   playersList();
   colorizePlayers();
-  // mergePlayerReplies();
 
   // Удаляем пустые абзацы
 
@@ -93,124 +84,114 @@ function formatLog() {
     element.style.display = "none";
   }
 
-// Сворачивание
+  // Сворачивание
 
-const chapterElements = document.querySelectorAll(".chapter");
+  const chapterElements = document.querySelectorAll(".chapter");
 
-chapterElements.forEach((chapterElement, index) => {
-  if (index === 0) {
-    chapterElement.classList.add("expanded");
-  } else {
-    chapterElement.classList.add("collapsed");
+  chapterElements.forEach((chapterElement, index) => {
+    if (index === 0) {
+      chapterElement.classList.add("expanded");
+    } else {
+      chapterElement.classList.add("collapsed");
+    }
+  });
+
+  function toggleContent(event) {
+    const chapter = event.target.closest(".chapter");
+    const content = chapter.querySelector(".content");
+
+    if (chapter.classList.contains("collapsed")) {
+      chapter.classList.remove("collapsed");
+      chapter.classList.add("expanded");
+      content.style.maxHeight = content.scrollHeight + "px";
+    } else {
+      chapter.classList.remove("expanded");
+      chapter.classList.add("collapsed");
+      content.style.maxHeight = null;
+    }
   }
-});
 
+  const dates = document.querySelectorAll(".date");
 
-function toggleContent(event) {
-  const chapter = event.target.closest(".chapter");
-  const content = chapter.querySelector(".content");
+  dates.forEach((date) => {
+    date.addEventListener("click", toggleContent);
+  });
 
-  if (chapter.classList.contains("collapsed")) {
-    chapter.classList.remove("collapsed");
-    chapter.classList.add("expanded");
-    content.style.maxHeight = content.scrollHeight + "px";
-  } else {
-    chapter.classList.remove("expanded");
-    chapter.classList.add("collapsed");
-    content.style.maxHeight = null;
-  }
-}
+  // Объединение чатбоксов
 
-const dates = document.querySelectorAll(".date");
-
-dates.forEach(date => {
-  date.addEventListener("click", toggleContent);
-});
-
-
-/* // Разворачиваем первую главу
-
-console.log("Разворачиваю первую главу")
-
-window.addEventListener('DOMContentLoaded', function() {
-  const firstChapter = document.querySelector('.chapter');
-  firstChapter.classList.remove('collapsed');
-  firstChapter.classList.add('expanded');
-});
-
-console.log("Развернул первую главу") */
-
-// Объединение чатбоксов
-
-$(document).ready(function() {
-    var prevPlayer = "";
-    var prevSpeech = "";
-    $(".logline").each(function() {
-        var currentPlayer = $(this).find(".player").text();
-        var currentSpeech = $(this).find(".speech").text();
-        if (currentPlayer == prevPlayer) {
-            $(this).prev().find(".speech").append(" " + currentSpeech);
-            $(this).remove();
-        } else {
-            prevPlayer = currentPlayer;
-            prevSpeech = currentSpeech;
-        }
-    });
-});
-
-// Список игроков
-
-function addCommaOrDot() {
-  // Находим все элементы с классом "players"
-  const playersContainers = document.querySelectorAll('.players');
-
-  // Проходимся по каждому элементу с классом "players"
-  playersContainers.forEach(container => {
-    // Находим элементы с классом "player" внутри текущего контейнера
-    const players = container.querySelectorAll('.player');
-
-    // Проходимся по каждому элементу
-    players.forEach((player, index) => {
-      // Добавляем запятую, если это не последний элемент
-      if (index < players.length - 1) {
-        player.textContent += ',';
+  $(document).ready(function () {
+    var currentPlayer = "";
+    var currentSpeech = "";
+    $(".logline").each(function () {
+      var player = $(this).find(".player").text().trim();
+      var speech = $(this).find(".speech").text().trim();
+      
+      if (player === currentPlayer) {
+        currentSpeech += " " + speech;
+        $(this).prev().find(".speech").text(currentSpeech);
+        $(this).remove();
       } else {
-        // Или добавляем точку, если это последний элемент
-        player.textContent += '.';
+        currentPlayer = player;
+        currentSpeech = speech;
       }
     });
   });
-}
+  
+  
+  
+  
 
-// Вызываем функцию addCommaOrDot()
-addCommaOrDot();
+  // Список игроков
 
-function addColonToEnd() {
-  // Находим все элементы с классом "logline"
-  const loglines = document.querySelectorAll('.logline');
+  function addCommaOrDot() {
+    // Находим все элементы с классом "players"
+    const playersContainers = document.querySelectorAll(".players");
 
-  // Проходимся по каждому элементу с классом "logline"
-  loglines.forEach(logline => {
-    // Находим элементы с классом "player" внутри текущего элемента
-    const players = logline.querySelectorAll('.player');
+    // Проходимся по каждому элементу с классом "players"
+    playersContainers.forEach((container) => {
+      // Находим элементы с классом "player" внутри текущего контейнера
+      const players = container.querySelectorAll(".player");
 
-    // Проходимся по каждому элементу
-    players.forEach(player => {
-      // Добавляем двоеточие в конце текста элемента
-      player.textContent += ':';
+      // Проходимся по каждому элементу
+      players.forEach((player, index) => {
+        // Добавляем запятую, если это не последний элемент
+        if (index < players.length - 1) {
+          player.textContent += ",";
+        } else {
+          // Или добавляем точку, если это последний элемент
+          player.textContent += ".";
+        }
+      });
     });
-  });
+  }
+
+  addCommaOrDot();
+
+  // Двоеточие после ников
+
+  function addColonToEnd() {
+    // Находим все элементы с классом "logline"
+    const loglines = document.querySelectorAll(".logline");
+
+    // Проходимся по каждому элементу с классом "logline"
+    loglines.forEach((logline) => {
+      // Находим элементы с классом "player" внутри текущего элемента
+      const players = logline.querySelectorAll(".player");
+
+      // Проходимся по каждому элементу
+      players.forEach((player) => {
+        // Добавляем двоеточие в конце текста элемента
+        player.textContent += ":";
+      });
+    });
+  }
+
+  addColonToEnd();
+
+
+
+  // КОНЕЦ ГЛАВНОЙ ФУНКЦИИ ОБРАБОТКИ
 }
-
-// Вызываем функцию addColonToEnd()
-addColonToEnd();
-
-
-}
-
-// ДАЛЬШЕ ИДУТ ОПРЕДЕЛЕНИЯ
-// ДАЛЬШЕ ИДУТ ОПРЕДЕЛЕНИЯ
-// ДАЛЬШЕ ИДУТ ОПРЕДЕЛЕНИЯ
 
 // Разделение на главы
 
@@ -253,13 +234,15 @@ function divideChapters(text) {
 
 function removeTimestamps() {
   console.log("Удаление таймштампов");
-  var chatlog = document.getElementById("chatlog");
-  var chatlogHTML = chatlog.innerHTML;
-  chatlog.innerHTML = chatlogHTML.replace(
+  const chatlog = document.getElementById("chatlog");
+  const chatlogHTML = chatlog.innerHTML;
+  const cleanedHTML = chatlogHTML.replace(
     /\d{1,2}\/\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}\.\d{1,3}\s+/g,
     '<p class="logline">'
   );
+  chatlog.innerHTML = cleanedHTML;
 }
+
 
 // Чистка от мусора
 
@@ -305,64 +288,8 @@ function cleanText() {
 
   chatlogHTML = chatlogHTML.replace(/\|\d\-\d\((.+)\)\./gm, "$1"); // Кривые падежи в стандартных эмоутах
 
-/*   chatlogHTML = chatlogHTML.replace(
-    /(\s[—–-]\s(.+?)\s[—–-]\s)/gm,
-    "<span class='emote'> — $2 — </span>"
-  ); */
-
-  // chatlogHTML = chatlogHTML.replace(/<p( class="logline"|)><\/p>/gm, ""); // Пустые абзацы
-
-  // chatlogHTML = chatlogHTML.replace(/<p( class="logline"|)><\/p>/gm, ""); // Пустые абзацы
-
   chatlog.innerHTML = chatlogHTML; // Завершающая строка, не потри случайно
 }
-
-// Склейка чатбоксов
-
-/* function mergePlayerReplies() {
-  // Получаем элемент content из DOM-дерева
-  const content = document.getElementsByClassName("content")[0];
-  // Объявляем переменные для хранения информации о предыдущем игроке и его высказывании
-  let lastPlayer = null;
-  let lastSpeech = null;
-  // Проходимся в цикле по всем дочерним элементам content
-  for (let i = 0; i < content.children.length; i++) {
-    // Получаем текущий дочерний элемент
-    const child = content.children[i];
-    // Проверяем, является ли дочерний элемент сообщением игрока (имеет ли класс "logline")
-    const isReplica = child.classList.contains("logline");
-    // Если элемент является сообщением игрока, получаем имя игрока
-    const player = isReplica
-      ? child.querySelector(".player").textContent
-      : null;
-
-    // Выводим в консоль информацию о текущем элементе
-    console.log(
-      `Checking replica ${i}: isReplica = ${isReplica}, player = ${player}`
-    );
-
-    // Если текущий элемент является сообщением игрока, и имя игрока совпадает с предыдущим игроком
-    if (isReplica && player === lastPlayer) {
-      // Выводим в консоль информацию о слиянии текущего элемента
-      console.log(`Merging replica ${i}...`);
-      // Удаляем текущий элемент из DOM-дерева
-      child.remove();
-      // Добавляем текст текущего элемента к тексту предыдущего элемента
-      lastSpeech.textContent +=
-        " " + child.querySelector(".speech").textContent;
-    } else {
-      // Выводим в консоль информацию о том, что текущий элемент не был объединен
-      console.log(`Not merging replica ${i}...`);
-      // Запоминаем имя игрока и его высказывание в качестве последних
-      lastPlayer = player;
-      lastSpeech = isReplica ? child.querySelector(".speech") : null;
-    }
-  }
-  // Выводим в консоль информацию о завершении слияния
-  console.log("Merge complete.");
-} */
-
-// Раскраска ников
 
 // Список игроков
 
@@ -391,25 +318,32 @@ function playersList() {
       // Получаем текст имени
       let playerName = name.textContent.trim();
 
-      // Если имя игрока еще не было добавлено в список
-      if (!players.includes(playerName)) {
-        // Добавляем имя игрока в список имен
-        players.push(playerName);
+      // Получаем стиль цвета игрока
+      let playerColor = getComputedStyle(name).color;
 
-        // Создаем новый элемент списка li для имени игрока
-        let playerItem = document.createElement("li");
+      // Если имя игрока не является пустым
+      if (playerName !== "") {
+        // Если имя игрока еще не было добавлено в список
+        if (!players.includes(playerName)) {
+          // Добавляем имя игрока в список имен
+          players.push(playerName);
 
-        // Устанавливаем текст элемента списка равным имени игрока
-        playerItem.textContent = playerName;
-        playerItem.className = "player";
+          // Создаем новый элемент списка li для имени игрока
+          let playerItem = document.createElement("li");
 
-        // Добавляем элемент списка в список игроков
-        playerList.appendChild(playerItem);
+          // Устанавливаем текст элемента списка равным имени игрока
+          playerItem.textContent = playerName;
+          playerItem.className = "player";
+          playerItem.style.color = playerColor; // Устанавливаем стиль цвета игрока
+
+          // Добавляем элемент списка в список игроков
+          playerList.appendChild(playerItem);
+        }
       }
     });
 
     // Если были найдены имена игроков внутри .chapter
-    if (playerNames.length > 0) {
+    if (playerList.childElementCount > 0) {
       // Добавляем список игроков под .date
       date.parentNode.insertBefore(playerList, date.nextSibling);
     }
@@ -417,15 +351,16 @@ function playersList() {
   });
 }
 
+
+// Раскраска ников
+
 function colorizePlayers() {
-
-console.log("Удаление пустых игроков")
-
+  console.log("Удаление пустых игроков");
   const playerList = document.querySelector("ul.players"); // получаем список игроков
-  const emptyPlayers = [...playerList.querySelectorAll("li")].filter((li) => !li.textContent.trim()); // фильтруем пустые элементы li
+  const emptyPlayers = [...playerList.querySelectorAll("li")].filter(
+    (li) => !li.textContent.trim()
+  ); // фильтруем пустые элементы li
   emptyPlayers.forEach((li) => li.remove()); // удаляем каждый из найденных пустых элементов li
-  
-
   console.log("Раскраска ников");
   const playerColors = {};
   const playerSpans = document.querySelectorAll(".player");
@@ -444,7 +379,6 @@ console.log("Удаление пустых игроков")
     "#FF9A02",
     "#FFD914",
   ];
-
   for (let i = 0; i < playerSpans.length; i++) {
     const playerName = playerSpans[i].textContent.trim().slice(1, -2);
     if (!playerColors[playerName]) {
@@ -468,7 +402,6 @@ function toggleVisibility(className) {
       element.style.display = "none";
     }
   }
-
   const button = document.querySelector(`button[data-target="${className}"]`);
   if (elements[0].style.display === "none") {
     button.textContent = `Show ${className.toUpperCase()}`;
@@ -476,5 +409,3 @@ function toggleVisibility(className) {
     button.textContent = `Show/hide ${className.toUpperCase()}`;
   }
 }
-
-

@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../Noblegarden/Logs"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "The-Looper"
+	}
+}
