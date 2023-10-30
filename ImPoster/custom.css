@@ -1,0 +1,177 @@
+.wp-block.default.article.post.no-margin {
+    border: 0;
+    background: #000000c7;
+}
+
+section.slice.slice-md.animate-hover-slide-3.bg-base-img.content.fr-view {
+    padding: 0;
+    background: 0;
+}
+
+.slice.slice-md.animate-hover-slide-3.bg-base-img.content.fr-view > div > .container.auto {
+    padding: 0;
+}
+
+.content {
+    color: white;
+    font-size: 18px;
+    padding: 48px;
+}
+
+.meta-info, .meta-info * {
+    color: white!important;
+}
+
+.player {
+    font-weight: bold;
+}
+
+.intro p {
+    color: white!important;
+    font-size: 18px!important;
+    font-style: italic!important;
+}
+
+.intro {
+    box-shadow: white 0px 0 10px 0px;
+    border-radius: 8px;
+    padding: 42px;
+}
+
+.content p {
+    background: none!important;
+}
+
+.wp-block.default.article.post.no-margin {
+    padding: 36px;
+}
+
+.col-sm-10 {
+    padding-left: 0;
+}
+
+span.likes.likes-entity {
+    position: relative;
+    right: 20px;}
+
+span.badge.like-num {
+    font-size: 25px!important;
+    padding: 0.5em!important;
+    border-radius: 1em;
+    color: white;
+    position: relative;
+    top: 11px;
+    left: 8px;
+    background: #ffffff6e!important;}
+
+a.make_minus *, a.make_plus * {
+    color: #ffffff80!important;
+    font-size: 40px!important;
+    position: relative;
+    top: 21px;
+    right: -9px;
+    }
+
+h2.article-title {
+    color: white!important;
+    font-size: 2em!important;
+    margin-bottom: 1em!important;
+}
+
+.intro {
+    margin-bottom: 2em;
+}
+img.fr-fic.fr-dib {
+    width: 100%!important;
+    height: auto;
+    margin: 1em 0!important;
+}
+
+h2.block-title {
+    display: none;
+}
+
+.wp-block.default.no-border.binded-chars > div {
+    display: flex;
+    gap: 1em;
+    /* width: 100%; */
+    /* height: 280px; */
+    /* justify-content: space-evenly; */
+}
+.players > li {
+    display: flex;
+    flex-direction: column;
+}
+
+.post ul {
+    display: flex;
+}
+
+h2 {
+    margin-top: 1em!important;
+}
+.post * {
+    background: none!important;
+}
+
+.ribbon-left.red {
+    background: red!important;
+}
+
+h2.article-title {
+    font-family: roboto black;
+    font-size: 3em!important;
+    line-height: 1em!important;
+}
+
+.chapter > .content {
+    padding: 0!important;
+}
+
+.chapter > ul.players {
+    margin-bottom: 1em;
+}
+
+.chapter > ul.players > .player {
+    margin-right: 0.5em;
+}
+
+p.logline {
+    color: orange;
+}
+
+span.speech {
+    color: white;
+}
+
+.post p img {
+    margin: 1em 0!important;
+}
+
+span.player {
+    font-weight: 600;
+}
+
+.chapter.expanded {
+    overflow: hidden;
+}
+
+.intro {
+    background: #00000073!important;
+}
+
+h2.article-title {
+    font-size: 2.7em!important;
+}
+
+.content {
+    max-height: fit-content!important;
+}
+
+.binded-chars > .wp-block-body {
+    padding: 0!important;
+}
+
+.col-sm-10 {
+    margin-top: 13em;
+}

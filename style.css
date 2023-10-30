@@ -17,10 +17,7 @@ body {
   background: rgba(0, 0, 0, 0.32);
   padding: 4em;
 }
-p,
-.emote {
-  color: orange;
-}
+
 .player {
   font-weight: bold;
 }
@@ -50,9 +47,7 @@ p.logline.yell {
   font-weight: bold;
   text-transform: uppercase;
 }
-p.ooc {
-  color: rgba(255, 255, 255, 0.43);
-}
+
 button {
   background: rgba(0, 0, 0, 0.37);
   border: 1px solid white;
@@ -145,8 +140,7 @@ body {
   line-height: 1.5;
 }
 
-p,
-.emote {
+p.emote {
   color: orange;
 }
 .player {
@@ -171,13 +165,8 @@ h2 {
 h2:not(:first-of-type) {
   margin-top: 6em;
 }
-p.logline.yell {
-  color: red;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-p.ooc {
-  color: rgba(255, 255, 255, 0.43);
+p.ooc, .p.ooc * {
+  color: rgba(255, 255, 255, 0.43)!important;
 }
 button,
 label {
@@ -280,25 +269,13 @@ input[type="file"] {
   display: none;
 }
 
-
-
-@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3),
-  only screen and (min-device-width: 414px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 2),
-  only screen and (min-device-width: 360px) and (max-device-width: 740px) and (-webkit-min-device-pixel-ratio: 3),
-  only screen and (min-device-width: 412px) and (max-device-width: 732px) and (-webkit-min-device-pixel-ratio: 3),
-  only screen and (min-device-width: 360px) and (max-device-width: 760px) and (-webkit-min-device-pixel-ratio: 4),
-  only screen and (min-device-width: 412px) and (max-device-width: 869px) and (-webkit-min-device-pixel-ratio: 3),
-  only screen and (min-device-width: 360px) and (max-device-width: 740px) and (-webkit-min-device-pixel-ratio: 4),
-  only screen and (min-device-width: 414px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 3) {
-
+p.logline.announcment * {
+    font-weight: bold;
+    color: #ff6a00!important;
 }
-@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3),
-  only screen and (min-device-width: 414px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 2),
-  only screen and (min-device-width: 360px) and (max-device-width: 740px) and (-webkit-min-device-pixel-ratio: 3),
-  only screen and (min-device-width: 412px) and (max-device-width: 732px) and (-webkit-min-device-pixel-ratio: 3),
-  only screen and (min-device-width: 360px) and (max-device-width: 760px) and (-webkit-min-device-pixel-ratio: 4),
-  only screen and (min-device-width: 412px) and (max-device-width: 869px) and (-webkit-min-device-pixel-ratio: 3),
-  only screen and (min-device-width: 360px) and (max-device-width: 740px) and (-webkit-min-device-pixel-ratio: 4),
-  only screen and (min-device-width: 414px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 3) {
 
+span.player {}
+
+p.logline.announcment > span.player {
+    display: none;
 }

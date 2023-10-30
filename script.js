@@ -55,143 +55,7 @@ function createChapterElement(chapterTitle, chapterLines) {
   return chapter;
 }
 
-// НАЧАЛО ГЛАВНОЙ ФУНКЦИИ ОБРАБОТКИ
-
-function formatLog() {
-  console.log("Запускаю допфункции");
-  removeTimestamps();
-  cleanText();
-  playersList();
-  colorizePlayers();
-
-  // Удаляем пустые абзацы
-
-  const paragraphs = document.getElementsByTagName("p");
-
-  for (let i = paragraphs.length - 1; i >= 0; i--) {
-    if (paragraphs[i].textContent.trim() === "") {
-      paragraphs[i].remove();
-    }
-  }
-
-  // Скрываем DM и OOC по умолчанию
-  const oocElements = document.getElementsByClassName("logline ooc");
-  const dmElements = document.getElementsByClassName("logline dm");
-  for (const element of oocElements) {
-    element.style.display = "none";
-  }
-  for (const element of dmElements) {
-    element.style.display = "none";
-  }
-
-  // Сворачивание
-
-  const chapterElements = document.querySelectorAll(".chapter");
-
-  chapterElements.forEach((chapterElement, index) => {
-    if (index === 0) {
-      chapterElement.classList.add("expanded");
-    } else {
-      chapterElement.classList.add("collapsed");
-    }
-  });
-
-  function toggleContent(event) {
-    const chapter = event.target.closest(".chapter");
-    const content = chapter.querySelector(".content");
-
-    if (chapter.classList.contains("collapsed")) {
-      chapter.classList.remove("collapsed");
-      chapter.classList.add("expanded");
-      content.style.maxHeight = content.scrollHeight + "px";
-    } else {
-      chapter.classList.remove("expanded");
-      chapter.classList.add("collapsed");
-      content.style.maxHeight = null;
-    }
-  }
-
-  const dates = document.querySelectorAll(".date");
-
-  dates.forEach((date) => {
-    date.addEventListener("click", toggleContent);
-  });
-
-  // Объединение чатбоксов
-
-  $(document).ready(function () {
-    var currentPlayer = "";
-    var currentSpeech = "";
-    $(".logline").each(function () {
-      var player = $(this).find(".player").text().trim();
-      var speech = $(this).find(".speech").text().trim();
-      
-      if (player === currentPlayer) {
-        currentSpeech += " " + speech;
-        $(this).prev().find(".speech").text(currentSpeech);
-        $(this).remove();
-      } else {
-        currentPlayer = player;
-        currentSpeech = speech;
-      }
-    });
-  });
-  
-  
-  
-  
-
-  // Список игроков
-
-  function addCommaOrDot() {
-    // Находим все элементы с классом "players"
-    const playersContainers = document.querySelectorAll(".players");
-
-    // Проходимся по каждому элементу с классом "players"
-    playersContainers.forEach((container) => {
-      // Находим элементы с классом "player" внутри текущего контейнера
-      const players = container.querySelectorAll(".player");
-
-      // Проходимся по каждому элементу
-      players.forEach((player, index) => {
-        // Добавляем запятую, если это не последний элемент
-        if (index < players.length - 1) {
-          player.textContent += ",";
-        } else {
-          // Или добавляем точку, если это последний элемент
-          player.textContent += ".";
-        }
-      });
-    });
-  }
-
-  addCommaOrDot();
-
-  // Двоеточие после ников
-
-  function addColonToEnd() {
-    // Находим все элементы с классом "logline"
-    const loglines = document.querySelectorAll(".logline");
-
-    // Проходимся по каждому элементу с классом "logline"
-    loglines.forEach((logline) => {
-      // Находим элементы с классом "player" внутри текущего элемента
-      const players = logline.querySelectorAll(".player");
-
-      // Проходимся по каждому элементу
-      players.forEach((player) => {
-        // Добавляем двоеточие в конце текста элемента
-        player.textContent += ":";
-      });
-    });
-  }
-
-  addColonToEnd();
-
-
-
-  // КОНЕЦ ГЛАВНОЙ ФУНКЦИИ ОБРАБОТКИ
-}
+// ФУНКЦИИ
 
 // Разделение на главы
 
@@ -243,52 +107,165 @@ function removeTimestamps() {
   chatlog.innerHTML = cleanedHTML;
 }
 
+// Список игроков
+
+function addCommaOrDot() {
+  /*      */
+  // Находим все элементы с классом "players"
+  const playersContainers = document.querySelectorAll(".players");
+
+  // Проходимся по каждому элементу с классом "players"
+  playersContainers.forEach((container) => {
+    // Находим элементы с классом "player" внутри текущего контейнера
+    const players = container.querySelectorAll(".player");
+
+    // Проходимся по каждому элементу
+    players.forEach((player, index) => {
+      // Добавляем запятую, если это не последний элемент
+      if (index < players.length - 1) {
+        player.textContent += ",";
+      } else {
+        // Или добавляем точку, если это последний элемент
+        player.textContent += ".";
+      }
+    });
+  });
+}
+
+// Двоеточие после ников
+
+function addColonToEnd() {
+  // Находим все элементы с классом "logline"
+  const loglines = document.querySelectorAll(".logline");
+
+  // Проходимся по каждому элементу с классом "logline"
+  loglines.forEach((logline) => {
+    // Находим элементы с классом "player" внутри текущего элемента
+    const players = logline.querySelectorAll(".player");
+
+    // Проходимся по каждому элементу
+    players.forEach((player) => {
+      // Добавляем двоеточие в конце текста элемента
+      player.textContent += ":";
+    });
+  });
+}
 
 // Чистка от мусора
 
 function cleanText() {
   console.log("Чистка от мусора");
-  var chatlog = document.getElementById("chatlog");
-  var chatlogHTML = chatlog.innerHTML;
 
-  chatlogHTML = chatlogHTML.replace(
-    /(<p class="logline">(no|&\?+|\d|\(|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Вы|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ шеп|\W+ создает:|Вы шеп|Вы выполн|Вы получ|Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Вы|Смена|\(d+d|&?dd|Разыгрываются).+\n<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
-    ""
-  ); // Неигровые сообщения
+  // Определение
 
-  chatlogHTML = chatlogHTML.replace(
-    /\[(Рейд|Группа|Гильдия)\]\s(.+): /gm,
-    "<p class='ooc'>[ООС] $2: "
-  ); // Неигровые сообщения
+  let chatlogHTML = document.getElementById("chatlog").innerHTML;
+
+  chatlogHTML = chatlogHTML.replace(/\|\d\-\d\((.+)\)/gm, "$1"); // Кривые падежи в стандартных эмоутах
+
+  document.getElementById("chatlog").innerHTML = chatlogHTML;
 
   chatlogHTML = chatlogHTML.replace(
     /<p.+>\[Лидер (рейда|группы)\].+:/gm,
-    "<p class='dm'>[ДМ]:"
-  ); // Неигровые сообщения
-
-  chatlogHTML = chatlogHTML.replace(
-    /<p class="logline">(.+)\s(\d|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает|предлагает вам).+\n<\/p>/gm,
-    ""
-  ); // Неролевые действия
+    "<p class='logline dm'>[ДМ]:"
+  );
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
   chatlogHTML = chatlogHTML.replace(
     /<p.+>\[Объявление рейду](.+):(.+)\n<\/p>/gm,
-    '<p class="dm">$2</p>'
-  ); // Говорит:, дефисы, а также облачает реплику в классы
+    "<p class='logline announcment'><span class='player'>$1</span><span class='speech'>$2</span></p>"
+  ); // Ролевые объявления
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+
+  chatlogHTML = chatlogHTML.replace(
+    /(<p class="logline"><\/p>|<p><\/p>|item.+blp\n.|  \n)/gm,
+    ""
+  ); // Пустые абзацы
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+
+  chatlogHTML = chatlogHTML.replace(
+    /(<p class="logline">(%s заслужил достижение|Порог|Бой|Поверженные|Участники|Победители|Liquid|\[СЕРВЕР\]|Map|X:|grid|GroundZ|ZoneX|no|&\?+|\d|\(|Так как вы бездействовали|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ шеп|\W+ создает:|Вы |Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Смена|\(d+d|&?dd|Разыгрываются).+(\n|)<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
+    ""
+  ); // ООС-сообщение
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+  document.getElementById("chatlog").innerHTML = chatlogHTML;
+  chatlogHTML = chatlogHTML.replace(
+    /<p class="logline">(.+)\s(пытается помешать побегу|проваливает попытку побега|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает|предлагает вам).*(\n|)<\/p>/gm,
+    ""
+  ); // Игрок %ООС-действие%
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+
+  document.getElementById("chatlog").innerHTML = chatlogHTML;
+  chatlogHTML = chatlogHTML.replace(
+    /<p class="logline">((?:(?!говорит:|кричит).)*)\n<\/p>/gm,
+    '<p class="emote">$1</p>'
+  ); // Эмоуты
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+
+  chatlogHTML = chatlogHTML.replace(
+    /<p class="emote">(\W+?)\s(.+?)<\/p>/gm,
+    '<p class="emote"><span class="player">$1 </span><span class="emote">$2</span></p>\n'
+  ); // Авторы эмоутов
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+
+  chatlogHTML = chatlogHTML.replace(
+    /<p class="logline">(.+?)\sговорит:\s?[—–-]?\s?(.+)\n<\/p>/gm,
+    "<p class='logline'><span class='player'>$1</span> <span class='speech'>$2</span></p>"
+  ); // Речь, дефисы, а также облачает реплику в классы
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
   chatlogHTML = chatlogHTML.replace(
     /<p class="logline">(.+) кричит:\s?[—–-]?\s?(.+)\n<\/p>/gm,
-    '<p class="logline yell"><span class="player">$1</span> <span class="speech">$2</span></p>'
+    "<p class='logline yell'><span class='player'>$1</span> <span class='speech'>$2</span></p>"
   ); // Крик, дефисы, а также облачает реплику в классы
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
+  chatlogHTML = chatlogHTML.replace(/.*Результат:.*\n?/gm, "");
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
   chatlogHTML = chatlogHTML.replace(
-    /<p class="logline">(.+) говорит:\s?[—–-]?\s?(.+)\n<\/p>/gm,
-    '<p class="logline"><span class="player">$1</span> <span class="speech">$2</span></p>'
-  ); // Речь, дефисы, а также облачает реплику в классы
+    /\[(Рейд|Группа|Гильдия)\]\s(.+): /gm,
+    "<p class='ooc'>[ООС] $2: "
+  );
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+}
 
-  chatlogHTML = chatlogHTML.replace(/\|\d\-\d\((.+)\)\./gm, "$1"); // Кривые падежи в стандартных эмоутах
+// Объединение чатбоксов
 
-  chatlog.innerHTML = chatlogHTML; // Завершающая строка, не потри случайно
+function combineChatboxes() {
+  var currentPlayer = "";
+  var currentSpeech = "";
+  $("p.logline:has(span.player)").each(function () {
+    var player = $(this).find("span.player").text().trim();
+    var speech = $(this).find("span.speech").text().trim();
+    
+    if (player === currentPlayer) {
+      currentSpeech += " " + speech;
+      $(this).prev().find("span.speech").text(currentSpeech);
+      debugger;
+      $(this).remove();
+    } else {
+      currentPlayer = player;
+      currentSpeech = speech;
+    }
+  });
+}
+
+
+function combineEmotes() {
+  var currentPlayer = "";
+  var currentEmote = "";
+  $("p.emote:has(span.player)").each(function () {
+    var player = $(this).find("span.player").text().trim();
+    var emote = $(this).find("span.emote").text().trim();
+
+    if (player === currentPlayer) {
+      currentEmote += " " + emote;
+      $(this).prev().find("span.emote").append(emote);
+      $(this).remove();
+    } else {
+      currentPlayer = player;
+      currentEmote = emote;
+    }
+  });
 }
 
 // Список игроков
@@ -351,7 +328,6 @@ function playersList() {
   });
 }
 
-
 // Раскраска ников
 
 function colorizePlayers() {
@@ -388,7 +364,7 @@ function colorizePlayers() {
     playerSpans[i].style.color = playerColors[playerName];
   }
   console.log("Ники раскрашены");
-  return;
+  /*   return; */
 }
 
 // Кнопки DM и OOC
@@ -408,4 +384,62 @@ function toggleVisibility(className) {
   } else {
     button.textContent = `Show/hide ${className.toUpperCase()}`;
   }
+}
+
+// ГЛАВНАЯ ФУНКЦИЯ
+
+function formatLog() {
+  let chatlogHTML = document.getElementById("chatlog").innerHTML;
+  console.log("Запускаю допфункции");
+  removeTimestamps();
+  cleanText();
+  combineEmotes();
+  combineChatboxes();
+  playersList();
+  colorizePlayers();
+  addCommaOrDot();
+  addColonToEnd();
+
+  // Скрываем DM и OOC по умолчанию
+  const oocElements = document.getElementsByClassName("logline ooc");
+  const dmElements = document.getElementsByClassName("logline dm");
+  for (const element of oocElements) {
+    element.style.display = "none";
+  }
+  for (const element of dmElements) {
+    element.style.display = "none";
+  }
+
+  // Сворачивание
+
+  const chapterElements = document.querySelectorAll(".chapter");
+
+  chapterElements.forEach((chapterElement, index) => {
+    if (index === 0) {
+      chapterElement.classList.add("expanded");
+    } else {
+      chapterElement.classList.add("collapsed");
+    }
+  });
+
+  function toggleContent(event) {
+    const chapter = event.target.closest(".chapter");
+    const content = chapter.querySelector(".content");
+
+    if (chapter.classList.contains("collapsed")) {
+      chapter.classList.remove("collapsed");
+      chapter.classList.add("expanded");
+      content.style.maxHeight = content.scrollHeight + "px";
+    } else {
+      chapter.classList.remove("expanded");
+      chapter.classList.add("collapsed");
+      content.style.maxHeight = null;
+    }
+  }
+
+  const dates = document.querySelectorAll(".date");
+
+  dates.forEach((date) => {
+    date.addEventListener("click", toggleContent);
+  });
 }
