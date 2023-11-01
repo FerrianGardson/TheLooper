@@ -237,30 +237,45 @@ function cleanText() {
 // Объединение чатбоксов
 
 function combineChatboxes() {
+  console.log("Combining chatboxes...");
+
   var currentPlayer = "";
   var currentSpeech = "";
-  var currentParagraph = null;
 
-  $("p.logline").each(function () {
-    var playerElement = $(this).find("span.player");
+  var elements = $("p.logline");
+  var length = elements.length;
+
+  for (var i = 0; i < length; i++) {
+    var element = elements[i];
+
+    var playerElement = $(element).find("span.player");
     if (playerElement.length > 0) {
       var player = playerElement.text().trim();
-      var speechElement = $(this).find("span.speech");
+      var speechElement = $(element).find("span.speech");
       var speech = speechElement.text().trim();
 
       if (player === currentPlayer) {
         currentSpeech += " " + speech;
-        if (currentParagraph) {
-          currentParagraph.find("span.speech").text(currentSpeech);
-        }
-        $(this).remove();
+        speechElement.text(currentSpeech); // Обновляем содержимое текущего элемента
+        console.log("Merged with previous logline. Player: " + currentPlayer + ", Speech: " + currentSpeech);
+        $(element).prev().remove(); // Удаляем предыдущий элемент
+/*         $(element).remove(); // Удаляем текущий элемент */
       } else {
         currentPlayer = player;
         currentSpeech = speech;
-        currentParagraph = $(this);
+        console.log("New player, starting new logline. Player: " + currentPlayer + ", Speech: " + currentSpeech);
       }
     }
-  });
+
+    var nextElement = $(element).next();
+    if (nextElement.hasClass("emote") || i === length - 1) {
+      currentPlayer = "";
+      currentSpeech = "";
+      console.log("Next element is an emote, exiting loop.");
+    }
+  }
+
+  console.log("Chatbox combination complete.");
 }
 
 
@@ -434,6 +449,7 @@ function formatLog() {
 /*   combineChatboxes(); */
   wrapThirdSpeechInEmote();
   applyImportant();
+  addRecordClassToMIALoglines();
   
 
   // Скрываем DM и OOC по умолчанию
@@ -532,5 +548,27 @@ function removeNonImportantParagraphs() {
   const paragraphs = document.querySelectorAll('p:not(.important)');
   paragraphs.forEach(paragraph => {
     paragraph.remove();
+  });
+}
+
+function removeImportantClass() {
+  var containers = document.querySelectorAll('.collapsed');
+
+  containers.forEach(function(container) {
+    var elements = container.querySelectorAll('p.important');
+    elements.forEach(function(element) {
+      element.classList.remove('important');
+    });
+  });
+}
+
+function addRecordClassToMIALoglines() {
+  var loglines = document.querySelectorAll('p.logline');
+
+  loglines.forEach(function(logline) {
+    var speech = logline.querySelector('span.speech');
+    if (speech && speech.textContent.includes('МИА')) {
+      logline.classList.add('record');
+    }
   });
 }
