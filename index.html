@@ -8,7 +8,7 @@
   </head>
   <body>
     <div id="buttons">
-      <button id="demo-button">Демо</button>
+<!--       <button id="demo-button">Демо</button> -->
       <form>
         <label for="file-input">Загрузить лог</label>
         <input type="file" id="file-input" />
@@ -16,6 +16,8 @@
       </form>
       <button onclick="toggleVisibility('dm')">DM</button>
       <button onclick="toggleVisibility('ooc')">OOC</button>
+      <button onclick="removeNonImportantParagraphs()">Чистка</button>
+      <button onclick="combineChatboxes()">Чатбоксы</button>
     </div>
     <div id="chatlog"></div>
     <div class="footer"></div>

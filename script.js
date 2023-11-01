@@ -5,7 +5,7 @@ const chatlog = document.getElementById("chatlog");
 const demoButton = document.getElementById("demo-button");
 
 fileInput.addEventListener("change", handleFileInput);
-demoButton.addEventListener("click", handleDemoButtonClick);
+/* demoButton.addEventListener("click", handleDemoButtonClick); */
 
 // Функции
 
@@ -180,7 +180,13 @@ function cleanText() {
     /(<p class="logline"><\/p>|<p><\/p>|item.+blp\n.|  \n)/gm,
     ""
   ); // Пустые абзацы
+
+  chatlogHTML = chatlogHTML.replace(/ {2,}/g, " "); // Замена двойных и более пробелов на одиночные
+  /*   chatlogHTML = chatlogHTML.replace(/([.,;!?]|[.]{3})([^ ])/g, "$1 $2"); // Многоточия */
+
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+
+  chatlogHTML = chatlogHTML.replace(/[-–—]/gm, "–"); // Однотипные дефисы
 
   chatlogHTML = chatlogHTML.replace(
     /(<p class="logline">(%s заслужил достижение|Порог|Бой|Поверженные|Участники|Победители|Liquid|\[СЕРВЕР\]|Map|X:|grid|GroundZ|ZoneX|no|&\?+|\d|\(|Так как вы бездействовали|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ шеп|\W+ создает:|Вы |Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Смена|\(d+d|&?dd|Разыгрываются).+(\n|)<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
@@ -222,7 +228,7 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/.*Результат:.*\n?/gm, "");
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
   chatlogHTML = chatlogHTML.replace(
-    /\[(Рейд|Группа|Гильдия)\]\s(.+): /gm,
+    /\[(Рейд|Лидер рейда|Лидер группы|Группа|Гильдия)\]\s(.+): /gm,
     "<p class='ooc'>[ООС] $2: "
   );
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
@@ -233,21 +239,31 @@ function cleanText() {
 function combineChatboxes() {
   var currentPlayer = "";
   var currentSpeech = "";
-  $("p.logline:has(span.player)").each(function () {
-    var player = $(this).find("span.player").text().trim();
-    var speech = $(this).find("span.speech").text().trim();
-    
-    if (player === currentPlayer) {
-      currentSpeech += " " + speech;
-      $(this).prev().find("span.speech").text(currentSpeech);
-      debugger;
-      $(this).remove();
-    } else {
-      currentPlayer = player;
-      currentSpeech = speech;
+  var currentParagraph = null;
+
+  $("p.logline").each(function () {
+    var playerElement = $(this).find("span.player");
+    if (playerElement.length > 0) {
+      var player = playerElement.text().trim();
+      var speechElement = $(this).find("span.speech");
+      var speech = speechElement.text().trim();
+
+      if (player === currentPlayer) {
+        currentSpeech += " " + speech;
+        if (currentParagraph) {
+          currentParagraph.find("span.speech").text(currentSpeech);
+        }
+        $(this).remove();
+      } else {
+        currentPlayer = player;
+        currentSpeech = speech;
+        currentParagraph = $(this);
+      }
     }
   });
 }
+
+
 
 
 function combineEmotes() {
@@ -331,13 +347,7 @@ function playersList() {
 // Раскраска ников
 
 function colorizePlayers() {
-  console.log("Удаление пустых игроков");
-  const playerList = document.querySelector("ul.players"); // получаем список игроков
-  const emptyPlayers = [...playerList.querySelectorAll("li")].filter(
-    (li) => !li.textContent.trim()
-  ); // фильтруем пустые элементы li
-  emptyPlayers.forEach((li) => li.remove()); // удаляем каждый из найденных пустых элементов li
-  console.log("Раскраска ников");
+  console.log("Окраска конкретных ников");
   const playerColors = {};
   const playerSpans = document.querySelectorAll(".player");
   const colors = [
@@ -355,17 +365,40 @@ function colorizePlayers() {
     "#FF9A02",
     "#FFD914",
   ];
+
   for (let i = 0; i < playerSpans.length; i++) {
-    const playerName = playerSpans[i].textContent.trim().slice(1, -2);
-    if (!playerColors[playerName]) {
-      const color = colors[i % colors.length]; // получаем цвет из массива цветов, с повторением при необходимости
-      playerColors[playerName] = color;
+    const playerName = playerSpans[i].textContent.trim();
+    let color;
+
+    if (playerName === "Сырорезка") {
+/*       console.log(`Найден игрок: ${playerName}`); */
+      color = "#ffd914"; // Желтый цвет для Сырорезки
+    } else if (playerName === "Дайла") {
+/*       console.log(`Найден игрок: ${playerName}`); */
+      color = "#43c59e"; // Зеленый цвет для Дайлы
+    } else {
+      if (!playerColors[playerName]) {
+        color = colors[i % colors.length]; // получаем цвет из массива цветов, с повторением при необходимости
+        playerColors[playerName] = color;
+      } else {
+        color = playerColors[playerName];
+      }
     }
-    playerSpans[i].style.color = playerColors[playerName];
+    playerSpans[i].style.color = color;
+/*     console.log(`Имя игрока: ${playerName}, Цвет: ${color}`); */
   }
-  console.log("Ники раскрашены");
-  /*   return; */
+
+  console.log("Окраска конкретных ников завершена");
+
+  console.log("Удаление пустых игроков");
+  const playerList = document.querySelector("ul.players"); // получаем список игроков
+  const emptyPlayers = [...playerList.querySelectorAll("li")].filter(
+    (li) => !li.textContent.trim()
+  ); // фильтруем пустые элементы li
+  emptyPlayers.forEach((li) => li.remove()); // удаляем каждый из найденных пустых элементов li
+  console.log("Удаление пустых игроков завершено");
 }
+
 
 // Кнопки DM и OOC
 
@@ -393,12 +426,15 @@ function formatLog() {
   console.log("Запускаю допфункции");
   removeTimestamps();
   cleanText();
-  combineEmotes();
-  combineChatboxes();
   playersList();
   colorizePlayers();
   addCommaOrDot();
   addColonToEnd();
+  combineEmotes();
+/*   combineChatboxes(); */
+  wrapThirdSpeechInEmote();
+  applyImportant();
+  
 
   // Скрываем DM и OOC по умолчанию
   const oocElements = document.getElementsByClassName("logline ooc");
@@ -441,5 +477,60 @@ function formatLog() {
 
   dates.forEach((date) => {
     date.addEventListener("click", toggleContent);
+  });
+}
+
+function wrapThirdSpeechInEmote() {
+  var chatlogHTML = document.getElementById("chatlog").innerHTML;
+  /*   chatlogHTML = chatlogHTML.replace(
+    /((<span class="speech">.+[.,:?!])(\s[—–-]\s+([а-яА-Я\s].+?)[.,:?!]\s[—–-])(.+<\/span>))/gm,
+    '<span class="speech">$2<span class="emote">$3</span>$5</span>'
+  );
+  chatlogHTML = chatlogHTML.replace(
+    /((<span class="speech">.+[.,:?!])(\s[—–-]\s+([а-яА-Я\s].+)[.,:?!])(.+<\/span>))/gm,
+    '<span class="speech">$2<span class="emote">$3</span>$5</span>'
+  ); */
+  document.getElementById("chatlog").innerHTML = chatlogHTML;
+}
+
+
+
+
+
+
+function applyImportant() {
+  console.log("applyImportant"); // Лог для проверки вызова функции
+
+  const keywords = ["Сырорезка", "МИА", "запись", "улыбочку", "фото", "снимок"];
+  $("p").each(function() { // Обновил селектор
+/*     console.log("Processing element: ", this); // Лог для проверки текущего элемента */
+    const text = $(this).text();
+    const hasKeyword = keywords.some(keyword => text.includes(keyword));
+    if (hasKeyword) {
+      console.log("Adding class 'important'"); // Лог для проверки добавления класса
+      $(this).addClass("important");
+/*     } else {
+      console.log("Removing class 'important'"); // Лог для проверки удаления класса
+      $(this).removeClass("important"); */
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  console.log("DOMContentLoaded");
+  function toggleImportantClass(event) {
+    var paragraph = event.target.closest('p');
+    if (paragraph) {
+      paragraph.classList.toggle('important');
+    }
+  }
+
+  document.addEventListener('click', toggleImportantClass);
+});
+
+function removeNonImportantParagraphs() {
+  const paragraphs = document.querySelectorAll('p:not(.important)');
+  paragraphs.forEach(paragraph => {
+    paragraph.remove();
   });
 }
