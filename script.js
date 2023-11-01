@@ -257,13 +257,23 @@ function combineChatboxes() {
       if (player === currentPlayer) {
         currentSpeech += " " + speech;
         speechElement.text(currentSpeech); // Обновляем содержимое текущего элемента
-        console.log("Merged with previous logline. Player: " + currentPlayer + ", Speech: " + currentSpeech);
+        console.log(
+          "Merged with previous logline. Player: " +
+            currentPlayer +
+            ", Speech: " +
+            currentSpeech
+        );
         $(element).prev().remove(); // Удаляем предыдущий элемент
-/*         $(element).remove(); // Удаляем текущий элемент */
+        /*         $(element).remove(); // Удаляем текущий элемент */
       } else {
         currentPlayer = player;
         currentSpeech = speech;
-        console.log("New player, starting new logline. Player: " + currentPlayer + ", Speech: " + currentSpeech);
+        console.log(
+          "New player, starting new logline. Player: " +
+            currentPlayer +
+            ", Speech: " +
+            currentSpeech
+        );
       }
     }
 
@@ -277,9 +287,6 @@ function combineChatboxes() {
 
   console.log("Chatbox combination complete.");
 }
-
-
-
 
 function combineEmotes() {
   var currentPlayer = "";
@@ -386,10 +393,10 @@ function colorizePlayers() {
     let color;
 
     if (playerName === "Сырорезка") {
-/*       console.log(`Найден игрок: ${playerName}`); */
+      /*       console.log(`Найден игрок: ${playerName}`); */
       color = "#ffd914"; // Желтый цвет для Сырорезки
     } else if (playerName === "Дайла") {
-/*       console.log(`Найден игрок: ${playerName}`); */
+      /*       console.log(`Найден игрок: ${playerName}`); */
       color = "#43c59e"; // Зеленый цвет для Дайлы
     } else {
       if (!playerColors[playerName]) {
@@ -400,7 +407,7 @@ function colorizePlayers() {
       }
     }
     playerSpans[i].style.color = color;
-/*     console.log(`Имя игрока: ${playerName}, Цвет: ${color}`); */
+    /*     console.log(`Имя игрока: ${playerName}, Цвет: ${color}`); */
   }
 
   console.log("Окраска конкретных ников завершена");
@@ -413,7 +420,6 @@ function colorizePlayers() {
   emptyPlayers.forEach((li) => li.remove()); // удаляем каждый из найденных пустых элементов li
   console.log("Удаление пустых игроков завершено");
 }
-
 
 // Кнопки DM и OOC
 
@@ -446,11 +452,12 @@ function formatLog() {
   addCommaOrDot();
   addColonToEnd();
   combineEmotes();
-/*   combineChatboxes(); */
+  /*   combineChatboxes(); */
   wrapThirdSpeechInEmote();
   applyImportant();
   addRecordClassToMIALoglines();
-  
+  /*   toggleContent(); */
+  setupToggleHandlers();
 
   // Скрываем DM и OOC по умолчанию
   const oocElements = document.getElementsByClassName("logline ooc");
@@ -462,32 +469,12 @@ function formatLog() {
     element.style.display = "none";
   }
 
-  // Сворачивание
-
+  // Сворачиваем главы
   const chapterElements = document.querySelectorAll(".chapter");
 
   chapterElements.forEach((chapterElement, index) => {
-    if (index === 0) {
-      chapterElement.classList.add("expanded");
-    } else {
-      chapterElement.classList.add("collapsed");
-    }
+    chapterElement.classList.add("collapsed");
   });
-
-  function toggleContent(event) {
-    const chapter = event.target.closest(".chapter");
-    const content = chapter.querySelector(".content");
-
-    if (chapter.classList.contains("collapsed")) {
-      chapter.classList.remove("collapsed");
-      chapter.classList.add("expanded");
-      content.style.maxHeight = content.scrollHeight + "px";
-    } else {
-      chapter.classList.remove("expanded");
-      chapter.classList.add("collapsed");
-      content.style.maxHeight = null;
-    }
-  }
 
   const dates = document.querySelectorAll(".date");
 
@@ -509,66 +496,100 @@ function wrapThirdSpeechInEmote() {
   document.getElementById("chatlog").innerHTML = chatlogHTML;
 }
 
-
-
-
-
-
 function applyImportant() {
   console.log("applyImportant"); // Лог для проверки вызова функции
 
   const keywords = ["Сырорезка", "МИА", "запись", "улыбочку", "фото", "снимок"];
-  $("p").each(function() { // Обновил селектор
-/*     console.log("Processing element: ", this); // Лог для проверки текущего элемента */
+  $("p").each(function () {
+    // Обновил селектор
+    /*     console.log("Processing element: ", this); // Лог для проверки текущего элемента */
     const text = $(this).text();
-    const hasKeyword = keywords.some(keyword => text.includes(keyword));
+    const hasKeyword = keywords.some((keyword) => text.includes(keyword));
     if (hasKeyword) {
       console.log("Adding class 'important'"); // Лог для проверки добавления класса
       $(this).addClass("important");
-/*     } else {
+      /*     } else {
       console.log("Removing class 'important'"); // Лог для проверки удаления класса
       $(this).removeClass("important"); */
     }
   });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
   console.log("DOMContentLoaded");
   function toggleImportantClass(event) {
-    var paragraph = event.target.closest('p');
+    var paragraph = event.target.closest("p");
     if (paragraph) {
-      paragraph.classList.toggle('important');
+      paragraph.classList.toggle("important");
     }
   }
 
-  document.addEventListener('click', toggleImportantClass);
+  document.addEventListener("click", toggleImportantClass);
 });
 
 function removeNonImportantParagraphs() {
-  const paragraphs = document.querySelectorAll('p:not(.important)');
-  paragraphs.forEach(paragraph => {
+  removeImportantClass()
+  const paragraphs = document.querySelectorAll("p:not(.important)");
+  paragraphs.forEach((paragraph) => {
     paragraph.remove();
   });
 }
 
 function removeImportantClass() {
-  var containers = document.querySelectorAll('.collapsed');
+  var containers = document.querySelectorAll(".collapsed");
 
-  containers.forEach(function(container) {
-    var elements = container.querySelectorAll('p.important');
-    elements.forEach(function(element) {
-      element.classList.remove('important');
+  containers.forEach(function (container) {
+    var elements = container.querySelectorAll("p.important");
+    elements.forEach(function (element) {
+      element.classList.remove("important");
     });
   });
 }
 
 function addRecordClassToMIALoglines() {
-  var loglines = document.querySelectorAll('p.logline');
+  var loglines = document.querySelectorAll("p.logline");
 
-  loglines.forEach(function(logline) {
-    var speech = logline.querySelector('span.speech');
-    if (speech && speech.textContent.includes('МИА')) {
-      logline.classList.add('record');
+  loglines.forEach(function (logline) {
+    var speech = logline.querySelector("span.speech");
+    if (speech && speech.textContent.includes("МИА")) {
+      logline.classList.add("record");
     }
   });
 }
+
+function setupChapterCollapse() {
+  // Сворачивание
+  const chapterElements = document.querySelectorAll(".chapter");
+
+  chapterElements.forEach((chapterElement, index) => {
+    if (index === 0) {
+      chapterElement.classList.add("expanded");
+    } else {
+      chapterElement.classList.add("collapsed");
+    }
+  });
+}
+
+function toggleContent(event) {
+  const chapter = event.target.closest(".chapter");
+  const content = chapter.querySelector(".content");
+
+  if (chapter.classList.contains("collapsed")) {
+    chapter.classList.remove("collapsed");
+    chapter.classList.add("expanded");
+    content.style.maxHeight = content.scrollHeight + "px";
+  } else {
+    chapter.classList.remove("expanded");
+    chapter.classList.add("collapsed");
+    content.style.maxHeight = null;
+  }
+}
+
+function setupToggleHandlers() {
+  const dates = document.querySelectorAll(".date");
+  dates.forEach((date) => {
+    date.addEventListener("click", toggleContent);
+  });
+}
+
+// Добавьте вызов setupToggleHandlers() в нужном месте, например, в конце вашего скрипта.
