@@ -274,8 +274,6 @@ p.logline.announcment * {
     color: #ff6a00!important;
 }
 
-span.player {}
-
 p.logline.announcment > span.player {
     display: none;
 }
