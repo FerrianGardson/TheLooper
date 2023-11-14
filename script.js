@@ -84,11 +84,19 @@ function divideChapters(text) {
       if (!chapters[chapterTitle]) {
         chapters[chapterTitle] = [];
       }
+      // Изменили строку ниже: добавляем новые главы в конец массива
       chapters[chapterTitle].push(line);
     }
   });
-  return chapters;
+
+  // Изменили строку ниже: меняем порядок глав в объекте chapters
+  const reversedChapters = Object.fromEntries(
+    Object.entries(chapters).reverse()
+  );
+
+  return reversedChapters;
 }
+
 
 // Удаление таймштампов
 

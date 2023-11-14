@@ -174,7 +174,7 @@ ul.players {
 .chapter.collapsed > h2.date {
   color: rgb(255, 255, 255) !important;
 }
-.chapter.collapsed > h2.date:hover {
+.chapter.collapsed > h2.date:hover, h2.date:hover {
   color: orange !important;
   cursor: pointer;
 }
@@ -293,3 +293,8 @@ input#keywordsInput {
 input:focus-visible {
     color: var(--black);
 }
+
+div#chatlog {
+  /* display: flex; */
+  /* flex-direction: column-reverse; */
+  }
