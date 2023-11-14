@@ -515,7 +515,9 @@ const commaKeyCode = 188;
 // Глобальная переменная для хранения предыдущего символа
 let previousKeyCode = null;
 
+
 function handleKeyPress(event) {
+  let keywordsInput = document.getElementById('keywordsInput');
   if (event.keyCode === spaceKeyCode) {
     // Проверяем, был ли предыдущий символ пробел или запятая
     if (
@@ -525,6 +527,7 @@ function handleKeyPress(event) {
     ) {
       event.preventDefault();
     }
+    else {keywordsInput.value += ', ';}
   }
 
   if (event.keyCode === enterKeyCode) {
