@@ -514,7 +514,22 @@ function handleKeyPress(event) {
   if (event.keyCode === enterKeyCode) {
     applyImportant();
   }
+
+  if (event.key === ' ') {
+    // Получаем текущее значение инпута
+    let currentValue = document.getElementById("keywordsInput").value;
+    
+    // Добавляем запятую и пробел к текущему значению
+    document.getElementById("keywordsInput").value = currentValue + ', ';
+    
+    // Предотвращаем дальнейшее выполнение действий по умолчанию (в данном случае, вставку пробела)
+    event.preventDefault();
+  }
+
 }
+
+
+
 
 
 document
