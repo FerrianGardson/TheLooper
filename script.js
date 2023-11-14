@@ -453,7 +453,7 @@ function formatLog() {
   /*   combineChatboxes(); */
   wrapThirdSpeechInEmote();
 
-/*   applyImportant(); */
+  /*   applyImportant(); */
 
   addRecordClassToMIALoglines();
   /*   toggleContent(); */
@@ -507,30 +507,34 @@ function wrapThirdSpeechInEmote() {
   document.getElementById("chatlog").innerHTML = chatlogHTML;
 }
 
+// Код клавиши пробела
+const spaceKeyCode = 32;
+const enterKeyCode = 13;
+const commaKeyCode = 188;
+
+// Глобальная переменная для хранения предыдущего символа
+let previousKeyCode = null;
+
 function handleKeyPress(event) {
-  // Код клавиши Enter
-  const enterKeyCode = 13;
+  if (event.keyCode === spaceKeyCode) {
+    // Проверяем, был ли предыдущий символ пробел или запятая
+    if (
+      previousKeyCode == spaceKeyCode ||
+      previousKeyCode == commaKeyCode ||
+      previousKeyCode == null
+    ) {
+      event.preventDefault();
+    }
+  }
 
   if (event.keyCode === enterKeyCode) {
+    // Ваш код для обработки нажатия Enter
     applyImportant();
   }
 
-  if (event.key === ' ') {
-    // Получаем текущее значение инпута
-    let currentValue = document.getElementById("keywordsInput").value;
-    
-    // Добавляем запятую и пробел к текущему значению
-    document.getElementById("keywordsInput").value = currentValue + ', ';
-    
-    // Предотвращаем дальнейшее выполнение действий по умолчанию (в данном случае, вставку пробела)
-    event.preventDefault();
-  }
-
+  // Сохраняем текущий код клавиши в качестве предыдущего для следующего сравнения
+  previousKeyCode = event.keyCode;
 }
-
-
-
-
 
 document
   .getElementById("keywordsInput")
@@ -541,34 +545,37 @@ document
     }
   });
 
-  function applyImportant() {
-    console.log("Выделение ключевых слов");
-  
-    // Получаем ключевые слова из поля ввода и разбиваем их по запятой
-    let keywordsInput = document.getElementById("keywordsInput").value;
-    let keywords = keywordsInput.split(",").map(keyword => keyword.trim());
-  
-    $("p").each(function () {
-      const text = $(this).text();
-      const hasKeyword = keywords.some((keyword) => text.includes(keyword));
-      
-      // Разбиваем слова с минусом и проверяем, если второе слово со знаком минуса
-      const splitKeywords = keywords.map(keyword => keyword.split("-"));
-      const isRemoveKeyword = splitKeywords.some(pair => pair.length === 2 && text.includes(pair[1].trim()));
-  
-      if (hasKeyword && !isRemoveKeyword) {
-        console.log(`Adding class 'important'`);
-        $(this).addClass("important");
-      } else if (isRemoveKeyword) {
-        console.log(`Removing class 'important'`);
-        $(this).removeClass("important");
-      }
-    });
-  }
-  
-  
-  
-  
+function applyImportant() {
+  console.log("Выделение ключевых слов");
+
+  // Получаем ключевые слова из поля ввода и разбиваем их по запятой
+  let keywordsInput = document.getElementById("keywordsInput").value;
+
+  // Разбиваем ключевые слова по запятой, убираем лишние пробелы и фильтруем пустые строки
+  let keywords = keywordsInput
+    .split(",")
+    .map((keyword) => keyword.trim())
+    .filter(Boolean);
+
+  $("p").each(function () {
+    const text = $(this).text();
+    const hasKeyword = keywords.some((keyword) => text.includes(keyword));
+
+    // Разбиваем слова с минусом и проверяем, если второе слово со знаком минуса
+    const splitKeywords = keywords.map((keyword) => keyword.split("-"));
+    const isRemoveKeyword = splitKeywords.some(
+      (pair) => pair.length === 2 && text.includes(pair[1].trim())
+    );
+
+    if (hasKeyword && !isRemoveKeyword) {
+      console.log(`Adding class 'important'`);
+      $(this).addClass("important");
+    } else if (isRemoveKeyword) {
+      console.log(`Removing class 'important'`);
+      $(this).removeClass("important");
+    }
+  });
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOMContentLoaded");
