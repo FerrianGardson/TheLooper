@@ -304,3 +304,7 @@ div#buttons {
     color: #6fb5ff;
     /* opacity: 1; */
 }
+
+p.record .speech {
+  color: #ffd914;
+}

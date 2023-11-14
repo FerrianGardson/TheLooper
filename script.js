@@ -189,10 +189,20 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/[-–—]/gm, "–"); // Однотипные дефисы
 
   chatlogHTML = chatlogHTML.replace(
-    /(<p class="logline">(%s заслужил достижение|Порог|Бой|Поверженные|Участники|Победители|Liquid|\[СЕРВЕР\]|Map|X:|grid|GroundZ|ZoneX|no|&\?+|\d|\(|Так как вы бездействовали|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ шеп|\W+ создает:|Вы |Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Смена|\(d+d|&?dd|Разыгрываются).+(\n|)<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
+    /(<p class="logline">(%s заслужил достижение|&\?137|Подключиться|Порог|Бой|Поверженные|Участники|Победители|Liquid|\[СЕРВЕР\]|&amp;\?\d+|&\?\d+|Map|X:|grid|GroundZ|ZoneX|no|&\?+|\d|\(|Так как вы бездействовали|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ шеп|\W+ создает:|Вы |Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Смена|\(d+d|&?dd|Разыгрываются).+(\n|)<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
     ""
-  ); // ООС-сообщение
+  ); // ООС-сообщения
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+
+  chatlogHTML = chatlogHTML.replace(/.*Результат:.*\n?/gm, "");
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+  chatlogHTML = chatlogHTML.replace(
+    /\[(Рейд|Лидер рейда|Лидер группы|Группа|Гильдия)\]\s(.+): /gm,
+    "<p class='ooc'>[ООС] $2: "
+  );
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+
+
   document.getElementById("chatlog").innerHTML = chatlogHTML;
   chatlogHTML = chatlogHTML.replace(
     /<p class="logline">(.+)\s(пытается помешать побегу|проваливает попытку побега|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает|предлагает вам).*(\n|)<\/p>/gm,
@@ -224,14 +234,6 @@ function cleanText() {
     "<p class='logline yell'><span class='player'>$1</span> <span class='speech'>$2</span></p>"
   ); // Крик, дефисы, а также облачает реплику в классы
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
-
-  chatlogHTML = chatlogHTML.replace(/.*Результат:.*\n?/gm, "");
-  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
-  chatlogHTML = chatlogHTML.replace(
-    /\[(Рейд|Лидер рейда|Лидер группы|Группа|Гильдия)\]\s(.+): /gm,
-    "<p class='ooc'>[ООС] $2: "
-  );
-  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 }
 
 // Объединение чатбоксов
@@ -257,23 +259,23 @@ function combineChatboxes() {
       if (player === currentPlayer) {
         currentSpeech += " " + speech;
         speechElement.text(currentSpeech); // Обновляем содержимое текущего элемента
-        console.log(
+        /*         console.log(
           "Merged with previous logline. Player: " +
             currentPlayer +
             ", Speech: " +
             currentSpeech
-        );
+        ); */
         $(element).prev().remove(); // Удаляем предыдущий элемент
         /*         $(element).remove(); // Удаляем текущий элемент */
       } else {
         currentPlayer = player;
         currentSpeech = speech;
-        console.log(
+        /*         console.log(
           "New player, starting new logline. Player: " +
             currentPlayer +
             ", Speech: " +
             currentSpeech
-        );
+        ); */
       }
     }
 
@@ -419,6 +421,7 @@ function colorizePlayers() {
   ); // фильтруем пустые элементы li
   emptyPlayers.forEach((li) => li.remove()); // удаляем каждый из найденных пустых элементов li
   console.log("Удаление пустых игроков завершено");
+  
 }
 
 // Кнопки DM и OOC
@@ -447,19 +450,27 @@ function formatLog() {
   console.log("Запускаю допфункции");
   removeTimestamps();
   cleanText();
+
   playersList();
+
   colorizePlayers();
+
   addCommaOrDot();
+
   addColonToEnd();
+
   combineEmotes();
   /*   combineChatboxes(); */
   wrapThirdSpeechInEmote();
+
   applyImportant();
+
   addRecordClassToMIALoglines();
   /*   toggleContent(); */
-  setupToggleHandlers();
+  /*   setupToggleHandlers(); */
 
   // Скрываем DM и OOC по умолчанию
+  console.log("Скрываем DM и OOC по умолчанию");
   const oocElements = document.getElementsByClassName("logline ooc");
   const dmElements = document.getElementsByClassName("logline dm");
   for (const element of oocElements) {
@@ -469,7 +480,10 @@ function formatLog() {
     element.style.display = "none";
   }
 
+  
+
   // Сворачиваем главы
+  console.log("Сворачиваем главы");
   const chapterElements = document.querySelectorAll(".chapter");
 
   chapterElements.forEach((chapterElement, index) => {
@@ -481,6 +495,7 @@ function formatLog() {
   dates.forEach((date) => {
     date.addEventListener("click", toggleContent);
   });
+  
 }
 
 function wrapThirdSpeechInEmote() {
@@ -494,10 +509,12 @@ function wrapThirdSpeechInEmote() {
     '<span class="speech">$2<span class="emote">$3</span>$5</span>'
   ); */
   document.getElementById("chatlog").innerHTML = chatlogHTML;
+  
 }
 
 function applyImportant() {
   console.log("applyImportant"); // Лог для проверки вызова функции
+  
 
   const keywords = ["Сырорезка", "МИА", "запись", "улыбочку", "фото", "снимок"];
   $("p").each(function () {
@@ -513,6 +530,7 @@ function applyImportant() {
       $(this).removeClass("important"); */
     }
   });
+  
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -528,14 +546,24 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function removeNonImportantParagraphs() {
-  removeImportantClass()
+  console.log("removeNonImportantParagraphs");
+  removeImportantClass();
+
+  // Удаляем абзацы без класса .important
   const paragraphs = document.querySelectorAll("p:not(.important)");
   paragraphs.forEach((paragraph) => {
     paragraph.remove();
   });
+
+  // Удаляем все элементы с классом .chapter.collapsed
+  const collapsedChapters = document.querySelectorAll(".chapter.collapsed");
+  collapsedChapters.forEach((chapter) => {
+    chapter.remove();
+  });
 }
 
 function removeImportantClass() {
+  console.log("removeImportantClass");
   var containers = document.querySelectorAll(".collapsed");
 
   containers.forEach(function (container) {
@@ -547,6 +575,8 @@ function removeImportantClass() {
 }
 
 function addRecordClassToMIALoglines() {
+  
+  console.log("addRecordClassToMIALoglines");
   var loglines = document.querySelectorAll("p.logline");
 
   loglines.forEach(function (logline) {
@@ -555,9 +585,11 @@ function addRecordClassToMIALoglines() {
       logline.classList.add("record");
     }
   });
+  
 }
 
 function setupChapterCollapse() {
+  console.log("setupChapterCollapse");
   // Сворачивание
   const chapterElements = document.querySelectorAll(".chapter");
 
@@ -571,6 +603,7 @@ function setupChapterCollapse() {
 }
 
 function toggleContent(event) {
+  console.log("toggleContent");
   const chapter = event.target.closest(".chapter");
   const content = chapter.querySelector(".content");
 
@@ -586,6 +619,7 @@ function toggleContent(event) {
 }
 
 function setupToggleHandlers() {
+  console.log("setupToggleHandlers");
   const dates = document.querySelectorAll(".date");
   dates.forEach((date) => {
     date.addEventListener("click", toggleContent);

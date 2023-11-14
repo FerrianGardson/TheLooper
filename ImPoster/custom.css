@@ -8,6 +8,9 @@ section.slice.slice-md.animate-hover-slide-3.bg-base-img.content.fr-view {
     background: 0;
 }
 
+.container.auto {
+}
+
 .slice.slice-md.animate-hover-slide-3.bg-base-img.content.fr-view > div > .container.auto {
     padding: 0;
 }
@@ -26,6 +29,9 @@ section.slice.slice-md.animate-hover-slide-3.bg-base-img.content.fr-view {
     font-weight: bold;
 }
 
+.intro {
+}
+
 .intro p {
     color: white!important;
     font-size: 18px!important;
@@ -41,6 +47,8 @@ section.slice.slice-md.animate-hover-slide-3.bg-base-img.content.fr-view {
 .content p {
     background: none!important;
 }
+
+.post {}
 
 .wp-block.default.article.post.no-margin {
     padding: 36px;
@@ -85,6 +93,10 @@ img.fr-fic.fr-dib {
     width: 100%!important;
     height: auto;
     margin: 1em 0!important;
+}
+.wp-block.default.no-border.binded-chars > div {
+    /* display: flex; */
+    /* gap: 1em; */
 }
 
 h2.block-title {
@@ -143,6 +155,8 @@ p.logline {
 span.speech {
     color: white;
 }
+
+img.fr-fic.fr-dii {}
 
 .post p img {
     margin: 1em 0!important;
