@@ -231,7 +231,7 @@ function cleanText() {
 
   chatlogHTML = chatlogHTML.replace(
     /<p class="logline emote">(\W+?)\s(.+?)<\/p>/gm,
-    '<p class="logline emote"><span class="player">$1 </span><span class="logline emote">$2</span></p>\n'
+    '<p class="logline emote"><span class="player">$1 </span><span class="emote">$2</span></p>\n'
   ); // Авторы эмоутов
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
@@ -256,7 +256,8 @@ function combineChatboxes() {
   var currentPlayer = "";
   var currentSpeech = "";
 
-  var elements = $("p.logline");
+  // Обновляем селектор, чтобы выбирать только внутри развёрнутых глав
+  var elements = $("div.chapter.expanded p.logline");
   var length = elements.length;
 
   for (var i = 0; i < length; i++) {
@@ -271,23 +272,10 @@ function combineChatboxes() {
       if (player === currentPlayer) {
         currentSpeech += " " + speech;
         speechElement.text(currentSpeech); // Обновляем содержимое текущего элемента
-        /*         console.log(
-          "Merged with previous logline. Player: " +
-            currentPlayer +
-            ", Speech: " +
-            currentSpeech
-        ); */
         $(element).prev().remove(); // Удаляем предыдущий элемент
-        /*         $(element).remove(); // Удаляем текущий элемент */
       } else {
         currentPlayer = player;
         currentSpeech = speech;
-        /*         console.log(
-          "New player, starting new logline. Player: " +
-            currentPlayer +
-            ", Speech: " +
-            currentSpeech
-        ); */
       }
     }
 
@@ -302,10 +290,11 @@ function combineChatboxes() {
   console.log("Chatbox combination complete.");
 }
 
+
 function combineEmotes() {
   var currentPlayer = "";
   var currentEmote = "";
-  $("p.emote:has(span.player)").each(function () {
+  $("div.chapter.expanded p.emote:has(span.player)").each(function () {
     var player = $(this).find("span.player").text().trim();
     var emote = $(this).find("span.emote").text().trim();
 
@@ -319,6 +308,7 @@ function combineEmotes() {
     }
   });
 }
+
 
 // Список игроков
 
@@ -503,6 +493,10 @@ function formatLog() {
       }
     });
   }
+  
+  console.log("А первой добавляется expanded");
+  chapterElements[0].classList.add("expanded");
+  
 
   const dates = document.querySelectorAll(".date");
 
@@ -520,11 +514,11 @@ function wrapThirdSpeechInEmote() {
   var chatlogHTML = document.getElementById("chatlog").innerHTML;
   /*   chatlogHTML = chatlogHTML.replace(
     /((<span class="speech">.+[.,:?!])(\s[—–-]\s+([а-яА-Я\s].+?)[.,:?!]\s[—–-])(.+<\/span>))/gm,
-    '<span class="speech">$2<span class="logline emote">$3</span>$5</span>'
+    '<span class="speech">$2<span class="emote">$3</span>$5</span>'
   );
   chatlogHTML = chatlogHTML.replace(
     /((<span class="speech">.+[.,:?!])(\s[—–-]\s+([а-яА-Я\s].+)[.,:?!])(.+<\/span>))/gm,
-    '<span class="speech">$2<span class="logline emote">$3</span>$5</span>'
+    '<span class="speech">$2<span class="emote">$3</span>$5</span>'
   ); */
   document.getElementById("chatlog").innerHTML = chatlogHTML;
 }
