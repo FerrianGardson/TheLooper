@@ -105,7 +105,6 @@ function divideChapters(text) {
   return reversedChapters;
 }
 
-
 // Удаление таймштампов
 
 function removeTimestamps() {
@@ -251,13 +250,13 @@ function cleanText() {
 // Объединение чатбоксов
 
 function combineChatboxes() {
-  console.log("Combining chatboxes...");
+  console.log("Объединяем чатбоксы...");
 
   var currentPlayer = "";
   var currentSpeech = "";
 
   // Обновляем селектор, чтобы выбирать только внутри развёрнутых глав
-  var elements = $("div.chapter.expanded p.logline");
+  var elements = $("div.chapter.expanded p.logline.say");
   var length = elements.length;
 
   for (var i = 0; i < length; i++) {
@@ -283,30 +282,61 @@ function combineChatboxes() {
     if (nextElement.hasClass("logline emote") || i === length - 1) {
       currentPlayer = "";
       currentSpeech = "";
-      console.log("Next element is an emote, exiting loop.");
+      console.log("Реплики кончились, прерываем цикл");
     }
   }
 
-  console.log("Chatbox combination complete.");
+  console.log("Объединение чатбоксов завершено");
 }
 
-
 function combineEmotes() {
+  console.log("Объединяем эмоуты...");
+
+  // Удаляем пустые элементы
+  $("div.chapter.expanded p.logline.emote:empty").remove();
+
   var currentPlayer = "";
   var currentEmote = "";
-  $("div.chapter.expanded p.emote:has(span.player)").each(function () {
-    var player = $(this).find("span.player").text().trim();
-    var emote = $(this).find("span.emote").text().trim();
 
-    if (player === currentPlayer) {
-      currentEmote += " " + emote;
-      $(this).prev().find("span.emote").append(emote);
-      $(this).remove();
-    } else {
-      currentPlayer = player;
-      currentEmote = emote;
+  // Обновляем селектор, чтобы выбирать только внутри развёрнутых глав
+  var elements = $("div.chapter.expanded p.logline.emote, div.chapter.expanded p.logline.say");
+  var length = elements.length;
+
+  for (var i = 0; i < length; i++) {
+    var element = elements[i];
+
+    // Проверка, является ли текущий элемент эмоутом
+    if ($(element).hasClass("logline") && $(element).hasClass("emote")) {
+      var playerElement = $(element).find("span.player");
+      if (playerElement.length > 0) {
+        var player = playerElement.text().trim();
+        var emoteElement = $(element).find("span.emote");
+        var emote = emoteElement.text().trim();
+
+        console.log("Игрок: " + player + ", Эмоут: " + emote);
+
+        if (player === currentPlayer) {
+          currentEmote += " " + emote;
+          emoteElement.text(currentEmote); // Обновляем содержимое текущего элемента
+          $(element).prev().remove(); // Удаляем предыдущий элемент
+
+          console.log("Объединено с предыдущим. Новый эмоут: " + currentEmote);
+          console.log("Удален предыдущий элемент.");
+        } else {
+          currentPlayer = player;
+          currentEmote = emote;
+
+          console.log("Новый игрок, начинаем новый элемент. Игрок: " + currentPlayer + ", Эмоут: " + currentEmote);
+        }
+      }
+    } else if ($(element).hasClass("logline") && $(element).hasClass("say")) {
+      currentPlayer = "";
+      currentEmote = "";
+      console.log("Реплика, пропускаем элемент");
     }
-  });
+  }
+
+  console.log("Объединение эмоутов завершено");
 }
 
 
@@ -483,20 +513,19 @@ function formatLog() {
   const chapterElements = document.querySelectorAll(".chapter");
 
   if (chapterElements.length === 1) {
-    console.log("Если есть только одна глава, делаем её expanded");
+    console.log("Есть только одна глава, разворачиваем");
     chapterElements[0].classList.add("expanded");
   } else {
-    console.log("Иначе применяем collapsed для всех глав, кроме первой");
+    console.log("Больше одной главы, сворачиваем все кроме первой");
     chapterElements.forEach((chapterElement, index) => {
       if (index !== 0) {
         chapterElement.classList.add("collapsed");
       }
     });
   }
-  
+
   console.log("А первой добавляется expanded");
   chapterElements[0].classList.add("expanded");
-  
 
   const dates = document.querySelectorAll(".date");
 
@@ -506,6 +535,8 @@ function formatLog() {
 }
 
 function combineFunctions() {
+  // Удаляем пустые элементы
+  $("div.chapter.expanded p.logline.emote:empty").remove();
   combineChatboxes();
   combineEmotes();
 }
