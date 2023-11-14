@@ -15,16 +15,17 @@
           <input type="file" id="file-input" />
           <!-- <button type="submit">Загрузить</button> -->
         </form>
-        <input
-        type="text"
-        id="keywordsInput"
-        placeholder="Введите ключевые слова через запятую"
-        onkeypress="handleKeyPress(event)"
-        value="МИА, фото, улыбочку, запись"
-      />
-      
+        <div id="keywords">
+          <input
+            type="text"
+            id="keywordsInput"
+            placeholder="Введите ключевые слова через запятую"
+            onkeypress="handleKeyPress(event)"
+            value="МИА, фото, улыбочку, запись"
+          />
 
-        <button onclick="applyImportant()">Выделение</button>
+          <button onclick="applyImportant()">Выделение</button>
+        </div>
         <button onclick="toggleVisibility('dm')">DM</button>
         <button onclick="toggleVisibility('ooc')">OOC</button>
         <!--       <button onclick="removeImportantClass()">Выделение</button> -->
