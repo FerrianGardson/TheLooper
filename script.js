@@ -27,11 +27,7 @@ function renderChatLog(text) {
   formatLog();
 }
 
-// Обработка таймштампов
-
-// Обработка таймштампов
-
-// Обработка таймштампов
+// Создание глав
 
 function createChapterElement(chapterTitle, chapterLines) {
   const chapter = document.createElement("div");
@@ -48,48 +44,58 @@ function createChapterElement(chapterTitle, chapterLines) {
   let nightLines = []; // Массив для хранения строк с таймштампами между 0:00 и 6:00
   let isNight = false;
 
-  chapterLines.forEach((line) => {
-    const match = line.match(/^(\d+)\/(\d+)\s/);
-    if (match) {
-      const month = parseInt(match[1]);
-      const day = parseInt(match[2]);
-      let date = new Date(Date.UTC(2023, month - 1, day));
+// ...
 
-      if (date.getHours() < 6) {
-        date.setDate(date.getDate() - 1);
-        isNight = true;
-      } else {
-        isNight = false;
-      }
+chapterLines.forEach((line) => {
+  const match = line.match(/^(\d+)\/(\d+)\s(\d+:\d+:\d+\.\d+)\s/);
+  if (match) {
+    const month = parseInt(match[1]);
+    const day = parseInt(match[2]);
+    const time = match[3];
+    let date = new Date();
+    date.setUTCMonth(month - 1);
+    date.setUTCDate(day);
 
-      const monthNames = [
-        "января",
-        "февраля",
-        "марта",
-        "апреля",
-        "мая",
-        "июня",
-        "июля",
-        "августа",
-        "сентября",
-        "октября",
-        "ноября",
-        "декабря",
-      ];
-      const monthName = monthNames[date.getUTCMonth()];
-      const chapterTitle = `Запись от ${date.getUTCDate()} ${monthName}`;
+    // Получаем часы из строки времени
+    const hours = parseInt(time.split(':')[0]);
 
-      if (!isNight) {
-        chapterContent.appendChild(createParagraph(line));
-      } else {
-        nightLines.push(line);
-      }
-    } else if (isNight) {
+    if (hours < 6) {
+      isNight = true;
+    } else {
+      isNight = false;
+    }
+
+    const monthNames = [
+      "января",
+      "февраля",
+      "марта",
+      "апреля",
+      "мая",
+      "июня",
+      "июля",
+      "августа",
+      "сентября",
+      "октября",
+      "ноября",
+      "декабря",
+    ];
+    const monthName = monthNames[date.getUTCMonth()];
+    const chapterTitle = `Запись от ${date.getUTCDate()} ${monthName}`;
+
+    if (isNight) {
       nightLines.push(line);
     } else {
       chapterContent.appendChild(createParagraph(line));
     }
-  });
+  } else if (isNight) {
+    nightLines.push(line);
+  } else {
+    chapterContent.appendChild(createParagraph(line));
+  }
+});
+
+// ...
+
 
   // Если есть строки с таймштампами между 0:00 и 6:00, добавляем их в контейнер .night
   if (nightLines.length > 0) {
@@ -97,12 +103,15 @@ function createChapterElement(chapterTitle, chapterLines) {
     nightContainer.classList.add("night");
     nightContainer.innerHTML = nightLines.join("");
     chapterContent.appendChild(nightContainer);
+    console.log("Night lines added to nightContainer:", nightLines); // Лог для отслеживания добавления строк в nightContainer
   }
 
   chapter.appendChild(chapterContent);
 
   return chapter;
 }
+
+
 
 // Вспомогательная функция для создания абзаца
 function createParagraph(text) {
@@ -114,6 +123,7 @@ function createParagraph(text) {
 
 
 // ФУНКЦИИ
+
 
 // Разделение на главы
 
@@ -127,13 +137,10 @@ function divideChapters(text) {
     if (match) {
       const month = parseInt(match[1]);
       const day = parseInt(match[2]);
-      let date = new Date(Date.UTC(2023, month - 1, day));
-
-      // Проверяем, если текущий час меньше 6, уменьшаем день
-      if (date.getHours() < 6) {
-        date.setDate(date.getDate() - 1);
-      }
-
+      let date = new Date();
+      date.setUTCMonth(month - 1);
+      date.setUTCDate(day);
+  
       const monthNames = [
         "января",
         "февраля",
@@ -150,11 +157,10 @@ function divideChapters(text) {
       ];
       const monthName = monthNames[date.getUTCMonth()];
       const chapterTitle = `Запись от ${date.getUTCDate()} ${monthName}`;
-
+  
       if (!chapters[chapterTitle]) {
         chapters[chapterTitle] = [];
       }
-      // Изменили строку ниже: добавляем новые главы в конец массива
       chapters[chapterTitle].push(line);
     }
   });
@@ -166,6 +172,64 @@ function divideChapters(text) {
 
   return reversedChapters;
 }
+
+// Новая функция для перемещения .night из более свежей главы в более старую
+function moveNightContent() {
+  const chapters = document.querySelectorAll(".chapter");
+  let fresherChapter = null;
+  let olderChapter = null;
+
+  chapters.forEach((chapter) => {
+    const chapterTitleElement = chapter.querySelector(".date");
+    if (chapterTitleElement) {
+      const chapterTitle = chapterTitleElement.textContent;
+      const match = chapterTitle.match(/(\d+) ([а-я]+)$/i);
+
+      if (match) {
+        const day = parseInt(match[1]);
+        const month = getMonthIndex(match[2]);
+        const chapterDate = new Date(0, month, day);
+
+        if (!fresherChapter || chapterDate > fresherChapter.date) {
+          olderChapter = fresherChapter;
+          fresherChapter = { chapter, date: chapterDate };
+        } else if (!olderChapter || chapterDate > olderChapter.date) {
+          olderChapter = { chapter, date: chapterDate };
+        }
+      }
+    }
+  });
+
+  if (fresherChapter && olderChapter) {
+    const nightContainer = fresherChapter.chapter.querySelector(".night");
+    if (nightContainer) {
+      olderChapter.chapter
+        .querySelector(".content")
+        .appendChild(createParagraph(nightContainer.innerHTML));
+    }
+    fresherChapter.chapter.remove();
+  }
+}
+
+// Вспомогательная функция для получения индекса месяца
+function getMonthIndex(monthName) {
+  const monthNames = [
+    "января",
+    "февраля",
+    "марта",
+    "апреля",
+    "мая",
+    "июня",
+    "июля",
+    "августа",
+    "сентября",
+    "октября",
+    "ноября",
+    "декабря",
+  ];
+  return monthNames.indexOf(monthName.toLowerCase());
+}
+
 
 // Удаление таймштампов
 
