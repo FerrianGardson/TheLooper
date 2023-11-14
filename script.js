@@ -147,7 +147,9 @@ function addCommaOrDot() {
 
 function addColonToEnd() {
   // Находим все элементы с классом "logline", исключая "emote" и "whisper"
-  const loglines = document.querySelectorAll(".logline:not(.emote):not(.whisper)");
+  const loglines = document.querySelectorAll(
+    ".logline:not(.emote):not(.whisper)"
+  );
 
   // Проходимся по каждому элементу с классом "logline"
   loglines.forEach((logline) => {
@@ -193,7 +195,6 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/ {2,}/g, " "); // Замена двойных и более пробелов на одиночные
   /*   chatlogHTML = chatlogHTML.replace(/([.,;!?]|[.]{3})([^ ])/g, "$1 $2"); // Многоточия */
 
-
   chatlogHTML = chatlogHTML.replace(/[-–—]/gm, "–"); // Однотипные дефисы
 
   chatlogHTML = chatlogHTML.replace(
@@ -205,14 +206,8 @@ function cleanText() {
     /<p class="logline say">Вы\sшепчете\s(.+?)\:\s?(.+)\n<\/p>/gm,
     "<p class='logline whisper'><span class='whisper'>Вы шепчете $1:</span> <span class='speech'>$2</span></p>"
   );
-  
-  
 
-  
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
-  debugger;
-
-
 
   chatlogHTML = chatlogHTML.replace(
     /(<p class="logline say">(%s заслужил достижение|&\?137|На вас наложен эффект|Подключиться|Порог|Бой|Поверженные|Участники|Победители|Liquid|\[СЕРВЕР\]|&amp;\?\d+|&\?\d+|Map|X:|grid|GroundZ|ZoneX|no|&\?+|\d|\(|Так как вы бездействовали|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ создает:|Вы |Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Смена|\(d+d|&?dd|Разыгрываются).+(\n|)<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
@@ -224,8 +219,6 @@ function cleanText() {
     /\[(Рейд|Лидер рейда|Лидер группы|Группа|Гильдия)\]\s(.+): /gm,
     "<p class='logline ooc'>[ООС] <span class='player'>$2</span> "
   );
-
-
 
   document.getElementById("chatlog").innerHTML = chatlogHTML;
   chatlogHTML = chatlogHTML.replace(
@@ -248,7 +241,6 @@ function cleanText() {
     /<p class="logline say">(.+?)\sговорит:\s?[—–-]?\s?(.+)\n<\/p>/gm,
     "<p class='logline say'><span class='player'>$1</span> <span class='speech'>$2</span></p>"
   ); // Речь, дефисы, а также облачает реплику в классы
-
 
   chatlogHTML = chatlogHTML.replace(
     /<p class="logline say">(.+) кричит:\s?[—–-]?\s?(.+)\n<\/p>/gm,
@@ -310,7 +302,9 @@ function combineEmotes() {
   var currentEmote = "";
 
   // Обновляем селектор, чтобы выбирать только внутри развёрнутых глав
-  var elements = $("div.chapter.expanded p.logline.emote, div.chapter.expanded p.logline.say");
+  var elements = $(
+    "div.chapter.expanded p.logline.emote, div.chapter.expanded p.logline.say"
+  );
   var length = elements.length;
 
   for (var i = 0; i < length; i++) {
@@ -337,7 +331,12 @@ function combineEmotes() {
           currentPlayer = player;
           currentEmote = emote;
 
-          console.log("Новый игрок, начинаем новый элемент. Игрок: " + currentPlayer + ", Эмоут: " + currentEmote);
+          console.log(
+            "Новый игрок, начинаем новый элемент. Игрок: " +
+              currentPlayer +
+              ", Эмоут: " +
+              currentEmote
+          );
         }
       }
     } else if ($(element).hasClass("logline") && $(element).hasClass("say")) {
@@ -349,7 +348,6 @@ function combineEmotes() {
 
   console.log("Объединение эмоутов завершено");
 }
-
 
 // Список игроков
 
