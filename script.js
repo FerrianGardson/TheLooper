@@ -27,7 +27,7 @@ function renderChatLog(text) {
   formatLog();
 }
 
-// Ваши остальные функции и код...
+// Обработка таймштампов
 
 function createChapterElement(chapterTitle, chapterLines) {
   const chapter = document.createElement("div");
@@ -59,12 +59,19 @@ function divideChapters(text) {
   console.log("Разделение на главы");
   const logLines = text.trim().split("\n");
   const chapters = {};
+
   logLines.forEach((line) => {
     const match = line.match(/^(\d+)\/(\d+)\s/);
     if (match) {
       const month = parseInt(match[1]);
       const day = parseInt(match[2]);
-      const date = new Date(Date.UTC(2023, month - 1, day));
+      let date = new Date(Date.UTC(2023, month - 1, day));
+
+      // Проверяем, если текущий час меньше 6, уменьшаем день
+      if (date.getHours() < 6) {
+        date.setDate(date.getDate() - 1);
+      }
+
       const monthNames = [
         "января",
         "февраля",
@@ -79,8 +86,9 @@ function divideChapters(text) {
         "ноября",
         "декабря",
       ];
-      const monthName = monthNames[date.getMonth()];
-      const chapterTitle = `Запись от ${day} ${monthName}`;
+      const monthName = monthNames[date.getUTCMonth()];
+      const chapterTitle = `Запись от ${date.getUTCDate()} ${monthName}`;
+
       if (!chapters[chapterTitle]) {
         chapters[chapterTitle] = [];
       }
@@ -457,10 +465,10 @@ function formatLog() {
 
   addColonToEnd();
 
-  combineEmotes();
+  /*   combineEmotes(); */
   /*   combineChatboxes(); */
   wrapThirdSpeechInEmote();
-  combineChatboxes();
+  /*   combineChatboxes(); */
 
   /*   applyImportant(); */
 
@@ -501,6 +509,11 @@ function formatLog() {
   dates.forEach((date) => {
     date.addEventListener("click", toggleContent);
   });
+}
+
+function combineFunctions() {
+  combineChatboxes();
+  combineEmotes();
 }
 
 function wrapThirdSpeechInEmote() {
