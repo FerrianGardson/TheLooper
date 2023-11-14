@@ -202,7 +202,6 @@ function cleanText() {
   );
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
-
   document.getElementById("chatlog").innerHTML = chatlogHTML;
   chatlogHTML = chatlogHTML.replace(
     /<p class="logline">(.+)\s(пытается помешать побегу|проваливает попытку побега|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает|предлагает вам).*(\n|)<\/p>/gm,
@@ -421,7 +420,6 @@ function colorizePlayers() {
   ); // фильтруем пустые элементы li
   emptyPlayers.forEach((li) => li.remove()); // удаляем каждый из найденных пустых элементов li
   console.log("Удаление пустых игроков завершено");
-  
 }
 
 // Кнопки DM и OOC
@@ -480,22 +478,30 @@ function formatLog() {
     element.style.display = "none";
   }
 
-  
+// Сворачиваем главы
+console.log("Сворачиваем главы");
 
-  // Сворачиваем главы
-  console.log("Сворачиваем главы");
-  const chapterElements = document.querySelectorAll(".chapter");
+const chapterElements = document.querySelectorAll(".chapter");
 
+if (chapterElements.length === 1) {
+  console.log("Если есть только одна глава, делаем её expanded");
+  chapterElements[0].classList.add("expanded");
+} else {
+  console.log("Иначе применяем collapsed для всех глав, кроме первой"); 
   chapterElements.forEach((chapterElement, index) => {
-    chapterElement.classList.add("collapsed");
+    if (index !== 0) {
+      chapterElement.classList.add("collapsed");
+    }
   });
+}
 
-  const dates = document.querySelectorAll(".date");
+const dates = document.querySelectorAll(".date");
 
-  dates.forEach((date) => {
-    date.addEventListener("click", toggleContent);
-  });
-  
+dates.forEach((date) => {
+  date.addEventListener("click", toggleContent);
+});
+
+
 }
 
 function wrapThirdSpeechInEmote() {
@@ -509,12 +515,10 @@ function wrapThirdSpeechInEmote() {
     '<span class="speech">$2<span class="emote">$3</span>$5</span>'
   ); */
   document.getElementById("chatlog").innerHTML = chatlogHTML;
-  
 }
 
 function applyImportant() {
   console.log("applyImportant"); // Лог для проверки вызова функции
-  
 
   const keywords = ["Сырорезка", "МИА", "запись", "улыбочку", "фото", "снимок"];
   $("p").each(function () {
@@ -530,7 +534,6 @@ function applyImportant() {
       $(this).removeClass("important"); */
     }
   });
-  
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -575,7 +578,6 @@ function removeImportantClass() {
 }
 
 function addRecordClassToMIALoglines() {
-  
   console.log("addRecordClassToMIALoglines");
   var loglines = document.querySelectorAll("p.logline");
 
@@ -585,22 +587,33 @@ function addRecordClassToMIALoglines() {
       logline.classList.add("record");
     }
   });
-  
 }
 
-function setupChapterCollapse() {
+// Сворачивание
+
+/* function setupChapterCollapse() {
   console.log("setupChapterCollapse");
-  // Сворачивание
-  const chapterElements = document.querySelectorAll(".chapter");
 
-  chapterElements.forEach((chapterElement, index) => {
-    if (index === 0) {
-      chapterElement.classList.add("expanded");
-    } else {
-      chapterElement.classList.add("collapsed");
-    }
-  });
-}
+  const chapterElements = document.querySelectorAll(".chapter");
+  
+  if (chapterElements.length === 1) {
+    // Если есть только одна глава, делаем её expanded
+    chapterElements[0].classList.add("expanded");
+    console.log("Только одна глава, expanded");
+  } else {
+    // Иначе применяем collapsed для всех, кроме первой
+    chapterElements.forEach((chapterElement, index) => {
+      if (index === 0) {
+        chapterElement.classList.add("expanded");
+        console.log("Что-то пошло не так");
+      } else {
+        chapterElement.classList.add("collapsed");
+        console.log("Что-то пошло не так №2");
+      }
+    });
+  }
+} */
+
 
 function toggleContent(event) {
   console.log("toggleContent");
@@ -618,12 +631,12 @@ function toggleContent(event) {
   }
 }
 
-function setupToggleHandlers() {
+/* function setupToggleHandlers() {
   console.log("setupToggleHandlers");
   const dates = document.querySelectorAll(".date");
   dates.forEach((date) => {
     date.addEventListener("click", toggleContent);
   });
-}
+} */
 
 // Добавьте вызов setupToggleHandlers() в нужном месте, например, в конце вашего скрипта.
