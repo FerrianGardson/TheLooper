@@ -289,3 +289,6 @@ input#keywordsInput {
 input:focus-visible {
     color: var(--black);
 }
+p.logline.whisper .speech, span.whisper {
+  color: #d361d3;
+}

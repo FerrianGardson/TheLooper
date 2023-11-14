@@ -146,8 +146,8 @@ function addCommaOrDot() {
 // Двоеточие после ников
 
 function addColonToEnd() {
-  // Находим все элементы с классом "logline"
-  const loglines = document.querySelectorAll(".logline:not(.emote)");
+  // Находим все элементы с классом "logline", исключая "emote" и "whisper"
+  const loglines = document.querySelectorAll(".logline:not(.emote):not(.whisper)");
 
   // Проходимся по каждому элементу с классом "logline"
   loglines.forEach((logline) => {
@@ -179,13 +179,11 @@ function cleanText() {
     /<p.+>\[Лидер (рейда|группы)\].+:/gm,
     "<p class='logline dm'>[ДМ]:"
   );
-  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
   chatlogHTML = chatlogHTML.replace(
     /<p.+>\[Объявление рейду](.+):(.+)\n<\/p>/gm,
     "<p class='logline announcment'><span class='player'>$1</span><span class='speech'>$2</span></p>"
   ); // Ролевые объявления
-  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
   chatlogHTML = chatlogHTML.replace(
     /(<p class="logline say"><\/p>|<p><\/p>|item.+blp\n.|  \n)/gm,
@@ -195,55 +193,68 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/ {2,}/g, " "); // Замена двойных и более пробелов на одиночные
   /*   chatlogHTML = chatlogHTML.replace(/([.,;!?]|[.]{3})([^ ])/g, "$1 $2"); // Многоточия */
 
-  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
   chatlogHTML = chatlogHTML.replace(/[-–—]/gm, "–"); // Однотипные дефисы
 
   chatlogHTML = chatlogHTML.replace(
-    /(<p class="logline say">(%s заслужил достижение|&\?137|На вас наложен эффект|Подключиться|Порог|Бой|Поверженные|Участники|Победители|Liquid|\[СЕРВЕР\]|&amp;\?\d+|&\?\d+|Map|X:|grid|GroundZ|ZoneX|no|&\?+|\d|\(|Так как вы бездействовали|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ шеп|\W+ создает:|Вы |Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Смена|\(d+d|&?dd|Разыгрываются).+(\n|)<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
+    /<p class="logline say">(.+?)\sшепчет:\s?[—–-]?\s?(.+)\n<\/p>/gm,
+    "<p class='logline whisper'><span class='player'>$1</span> <span class='speech'>шепчет: $2</span></p>"
+  ); // Шёпот, дефисы, а также облачает реплику в классы
+
+  chatlogHTML = chatlogHTML.replace(
+    /<p class="logline say">Вы\sшепчете\s(.+?)\:\s?(.+)\n<\/p>/gm,
+    "<p class='logline whisper'><span class='whisper'>Вы шепчете $1:</span> <span class='speech'>$2</span></p>"
+  );
+  
+  
+
+  
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+  debugger;
+
+
+
+  chatlogHTML = chatlogHTML.replace(
+    /(<p class="logline say">(%s заслужил достижение|&\?137|На вас наложен эффект|Подключиться|Порог|Бой|Поверженные|Участники|Победители|Liquid|\[СЕРВЕР\]|&amp;\?\d+|&\?\d+|Map|X:|grid|GroundZ|ZoneX|no|&\?+|\d|\(|Так как вы бездействовали|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ создает:|Вы |Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Смена|\(d+d|&?dd|Разыгрываются).+(\n|)<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
     ""
   ); // ООС-сообщения
-  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
   chatlogHTML = chatlogHTML.replace(/.*Результат:.*\n?/gm, "");
-  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
   chatlogHTML = chatlogHTML.replace(
     /\[(Рейд|Лидер рейда|Лидер группы|Группа|Гильдия)\]\s(.+): /gm,
     "<p class='logline ooc'>[ООС] <span class='player'>$2</span> "
   );
 
-  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+
 
   document.getElementById("chatlog").innerHTML = chatlogHTML;
   chatlogHTML = chatlogHTML.replace(
     /<p class="logline say">(.+)\s(пытается помешать побегу|проваливает попытку побега|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает|предлагает вам).*(\n|)<\/p>/gm,
     ""
   ); // Игрок %ООС-действие%
-  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
   document.getElementById("chatlog").innerHTML = chatlogHTML;
   chatlogHTML = chatlogHTML.replace(
     /<p class="logline say">((?:(?!говорит:|кричит).)*)\n<\/p>/gm,
     '<p class="logline emote">$1</p>'
   ); // Эмоуты
-  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
   chatlogHTML = chatlogHTML.replace(
     /<p class="logline emote">(\W+?)\s(.+?)<\/p>/gm,
     '<p class="logline emote"><span class="player">$1 </span><span class="emote">$2</span></p>\n'
   ); // Авторы эмоутов
-  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
   chatlogHTML = chatlogHTML.replace(
     /<p class="logline say">(.+?)\sговорит:\s?[—–-]?\s?(.+)\n<\/p>/gm,
     "<p class='logline say'><span class='player'>$1</span> <span class='speech'>$2</span></p>"
   ); // Речь, дефисы, а также облачает реплику в классы
-  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+
 
   chatlogHTML = chatlogHTML.replace(
     /<p class="logline say">(.+) кричит:\s?[—–-]?\s?(.+)\n<\/p>/gm,
     "<p class='logline yell'><span class='player'>$1</span> <span class='speech'>$2</span></p>"
   ); // Крик, дефисы, а также облачает реплику в классы
+
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 }
 
