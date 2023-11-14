@@ -508,21 +508,29 @@ function wrapThirdSpeechInEmote() {
   document.getElementById("chatlog").innerHTML = chatlogHTML;
 }
 
-function applyImportant() {
-  console.log("Выделение ключевых слов"); // Лог для проверки вызова функции
+document.getElementById("keywordsInput").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    console.log("Нажат Enter в поле заполнения");
+    applyImportant();
+  }
+});
 
-  const keywords = ["Сырорезка", "МИА", "запись", "улыбочку", "фото", "снимок"];
+function applyImportant() {
+  console.log("Выделение ключевых слов"); 
+
+  // Получаем ключевые слова из поля ввода и разбиваем их по запятой
+  let keywordsInput = document.getElementById("keywordsInput").value;
+  let keywords = keywordsInput.split(",").map(keyword => keyword.trim());
+
   $("p").each(function () {
-    // Обновил селектор
-    /*     console.log("Processing element: ", this); // Лог для проверки текущего элемента */
     const text = $(this).text();
     const hasKeyword = keywords.some((keyword) => text.includes(keyword));
     if (hasKeyword) {
-      console.log("Adding class 'important'"); // Лог для проверки добавления класса
+      console.log("Adding class 'important'");
       $(this).addClass("important");
-      /*     } else {
-      console.log("Removing class 'important'"); // Лог для проверки удаления класса
-      $(this).removeClass("important"); */
+    } else {
+      console.log("Removing class 'important'");
+      $(this).removeClass("important");
     }
   });
 }

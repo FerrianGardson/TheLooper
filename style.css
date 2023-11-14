@@ -4,18 +4,15 @@
   padding: 0px;
 }
 html {
-  font-size: 16px;
+  font-size: 18px;
+  line-height: 1.5em;
 }
-body {
-  background-color: rgb(255, 255, 255);
-  color: rgb(51, 51, 51);
-  font-family: sans-serif;
-  font-size: 1em;
-  line-height: 1.5;
-}
+
 #chatlog {
   background: rgba(0, 0, 0, 0.32);
-  padding: 4em;
+  padding: 4rem;
+  padding-top: 8rem;
+  min-height: 100vh;
 }
 
 .player {
@@ -24,38 +21,14 @@ body {
 .speech {
   color: rgb(255, 255, 255);
 }
-button,
-.date:hover {
-  cursor: pointer;
-}
-body {
-  background: url("https://media.discordapp.net/attachments/1095798939418116276/1095807195368652830/image.png")
-    right top no-repeat fixed rgb(26, 12, 1);
-  color: white;
-  font-family: "Roboto Light", sans-serif;
-  font-size: 18px;
-}
+
 h2 {
-  font-family: "Roboto Black";
   font-size: 3em;
 }
 h2:not(:first-of-type) {
   margin-top: 6em;
 }
-p.logline.yell {
-  /* color: red; */
-  /* font-weight: bold; */
-  /* text-transform: uppercase; */
-}
 
-button {
-  background: rgba(0, 0, 0, 0.37);
-  border: 1px solid white;
-  color: white;
-  font-family: "roboto light", arial;
-  margin-left: 8px;
-  padding: 1em;
-}
 button:hover {
   background: linear-gradient(45deg, white, rgba(255, 255, 255, 0.32));
   color: black;
@@ -63,15 +36,15 @@ button:hover {
 div#buttons {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  position: fixed;
-  right: 24px;
+  justify-content: flex-start;
+  left: 24px;
   top: 24px;
+  gap: 0.5rem;
+  width: 100%;
 }
 .yell {
   color: red;
   font-weight: bold;
-  /* text-transform: uppercase; */
 }
 .chapter:not(:first-child) {
   margin-top: 2em;
@@ -80,13 +53,7 @@ p.dm {
   color: rgb(255, 94, 0);
   font-weight: bold;
 }
-button {
-  border-radius: 0.5em;
-  font-size: 1em;
-  height: 2.5em;
-  padding: 0.5em 1em;
-  width: 50%;
-}
+
 .players {
   display: flex;
   flex-flow: row wrap;
@@ -99,21 +66,12 @@ button {
 ul.players {
   margin-bottom: 0.5em;
 }
-/* .chapter li:not(:last-child)::after {
-  content: ",";
-} */
 .content.hidden {
   display: block;
   max-height: 190px;
   opacity: 0.21;
   overflow: hidden;
 }
-/* span.player::after {
-  content: ":";
-} */
-/* .chapter li:last-child::after {
-  content: ".";
-} */
 .hidden {
   display: none;
 }
@@ -123,23 +81,9 @@ ul.players {
   opacity: 0.2;
   overflow: hidden;
 }
-* {
-  box-sizing: border-box;
-  margin: 0px;
-  padding: 0px;
-}
-html {
-  font-size: 16px;
-}
-body {
-  background-color: rgb(255, 255, 255);
-  color: rgb(51, 51, 51);
-  font-family: sans-serif;
-  font-size: 1em;
-  line-height: 1.5;
-}
 
-p.logline span.emote, p.emote span.emote {
+p.logline span.emote,
+p.emote span.emote {
   color: orange;
 }
 .player {
@@ -154,29 +98,16 @@ body {
     right top no-repeat fixed rgb(26, 12, 1);
   color: white;
   font-family: "Roboto Light", sans-serif;
-  font-size: 18px;
 }
 h2 {
   font-family: "Roboto Black";
-  font-size: 3em;
   width: fit-content;
+  line-height: 1em;
 }
 h2:not(:first-of-type) {
   margin-top: 6em;
 }
-p.ooc, .p.ooc * {
-  /* color: rgba(255, 255, 255, 0.43)!important; */
-}
-button,
-label {
-  background: rgba(0, 0, 0, 0.37);
-  border: 1px solid rgba(255, 255, 255, 0.26);
-  border-radius: 2em;
-  color: rgba(255, 255, 255, 0.46);
-  font-family: "roboto light", arial;
-  margin-left: 8px;
-  padding: 1em;
-}
+
 button:hover,
 label:hover {
   background: linear-gradient(45deg, rgb(255, 191, 0), rgb(62, 43, 0));
@@ -184,24 +115,26 @@ label:hover {
   font-weight: 600;
 }
 
-.yell {
-  /* color: red !important; */
-  /* font-weight: bold; */
-  /* text-transform: uppercase; */
-}
-
 p.dm {
   color: rgb(255, 94, 0);
   font-weight: bold;
 }
 button,
-label {
+label,
+textarea,
+input {
   cursor: pointer;
-  font-size: 1em;
-  height: 2.5em;
+  font-size: 1rem;
+  height: 2.5em !important;
   padding: 0.5em 1em;
   white-space: nowrap;
-  width: fit-content;
+  min-width: fit-content;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.37);
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 2em;
+  color: rgba(255, 255, 255, 0.46);
+  font-family: "roboto light", arial;
 }
 .players {
   display: flex;
@@ -216,21 +149,12 @@ label {
 ul.players {
   margin-bottom: 0.5em;
 }
-/* .chapter li:not(:last-child)::after {
-  content: ",";
-} */
 .content.hidden {
   display: block;
   max-height: 190px;
   opacity: 0.21;
   overflow: hidden;
 }
-/* span.player::after {
-  content: ":";
-} */
-/* .chapter li:last-child::after {
-  content: ".";
-} */
 .hidden {
   display: none;
 }
@@ -268,43 +192,45 @@ input[type="file"] {
 }
 
 p.logline.announcment * {
-    font-weight: bold;
-    color: #ff6a00!important;
+  font-weight: bold;
+  color: #ff6a00 !important;
 }
 
 p.logline.announcment > span.player {
-    display: none;
+  display: none;
 }
 
 p.logline.yell > .speech {
-    color: inherit;
-    text-transform: uppercase;
+  color: inherit;
+  text-transform: uppercase;
 }
 
 p {
-    /* display: none; */
-    opacity: 0.5;
+  opacity: 0.5;
 }
 
 p.important {
-    display: block;
-    opacity: 1;
+  display: block;
+  opacity: 1;
 }
-
-div#buttons {
-    z-index: 1;
-}
-
-.ooc * {
-    /* opacity: inherit!important; */
-    /* color: inherit!important; */
-}span.emote {}
 
 .ooc {
-    color: #6fb5ff;
-    /* opacity: 1; */
+  color: #6fb5ff;
 }
 
 p.record .speech {
   color: #ffd914;
+}
+
+.nav {
+  width: 100vw;
+  background: #00000073;
+  position: fixed;
+  backdrop-filter: blur(3px);
+  padding: 1rem 4rem;
+  z-index: 1;
+}
+
+textarea {
+  resize: none;
 }

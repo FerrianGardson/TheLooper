@@ -7,18 +7,26 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   <body>
-    <div id="buttons">
-<!--       <button id="demo-button">Демо</button> -->
-      <form>
-        <label for="file-input">Загрузить лог</label>
-        <input type="file" id="file-input" />
-        <!-- <button type="submit">Загрузить</button> -->
-      </form>
-      <button onclick="toggleVisibility('dm')">DM</button>
-      <button onclick="toggleVisibility('ooc')">OOC</button>
-<!--       <button onclick="removeImportantClass()">Выделение</button> -->
-      <button onclick="removeNonImportantParagraphs()">Чистка</button>
-      <button onclick="combineChatboxes()">Чатбоксы</button>
+    <div class="nav">
+      <div id="buttons">
+        <!--       <button id="demo-button">Демо</button> -->
+        <form>
+          <label for="file-input">Загрузить лог</label>
+          <input type="file" id="file-input" />
+          <!-- <button type="submit">Загрузить</button> -->
+        </form>
+        <textarea
+          id="keywordsInput"
+          placeholder="Введите ключевые слова через запятую"
+          onkeydown="applyImportant"
+        ></textarea>
+        <button onclick="applyImportant()">Выделение</button>
+        <button onclick="toggleVisibility('dm')">DM</button>
+        <button onclick="toggleVisibility('ooc')">OOC</button>
+        <!--       <button onclick="removeImportantClass()">Выделение</button> -->
+        <button onclick="removeNonImportantParagraphs()">Чистка</button>
+        <button onclick="combineChatboxes()">Чатбоксы</button>
+      </div>
     </div>
     <div id="chatlog"></div>
     <div class="footer"></div>
