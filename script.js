@@ -526,25 +526,34 @@ document
     }
   });
 
-function applyImportant() {
-  console.log("Выделение ключевых слов"); 
-
-  // Получаем ключевые слова из поля ввода и разбиваем их по запятой
-  let keywordsInput = document.getElementById("keywordsInput").value;
-  let keywords = keywordsInput.split(",").map(keyword => keyword.trim());
-
-  $("p").each(function () {
-    const text = $(this).text();
-    const hasKeyword = keywords.some((keyword) => text.includes(keyword));
-    if (hasKeyword) {
-      console.log("Adding class 'important'");
-      $(this).addClass("important");
-/*     } else {
-      console.log("Removing class 'important'");
-      $(this).removeClass("important"); */
-    }
-  });
-}
+  function applyImportant() {
+    console.log("Выделение ключевых слов");
+  
+    // Получаем ключевые слова из поля ввода и разбиваем их по запятой
+    let keywordsInput = document.getElementById("keywordsInput").value;
+    let keywords = keywordsInput.split(",").map(keyword => keyword.trim());
+  
+    $("p").each(function () {
+      const text = $(this).text();
+      const hasKeyword = keywords.some((keyword) => text.includes(keyword));
+      
+      // Разбиваем слова с минусом и проверяем, если второе слово со знаком минуса
+      const splitKeywords = keywords.map(keyword => keyword.split("-"));
+      const isRemoveKeyword = splitKeywords.some(pair => pair.length === 2 && text.includes(pair[1].trim()));
+  
+      if (hasKeyword && !isRemoveKeyword) {
+        console.log(`Adding class 'important'`);
+        $(this).addClass("important");
+      } else if (isRemoveKeyword) {
+        console.log(`Removing class 'important'`);
+        $(this).removeClass("important");
+      }
+    });
+  }
+  
+  
+  
+  
 
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOMContentLoaded");
