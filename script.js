@@ -1,29 +1,23 @@
-// Загрузка файла или клик по «Демо»
+// Загрузка файла
 
 const fileInput = document.getElementById("file-input");
 const chatlog = document.getElementById("chatlog");
-const demoButton = document.getElementById("demo-button");
 
 fileInput.addEventListener("change", handleFileInput);
-/* demoButton.addEventListener("click", handleDemoButtonClick); */
 
 // Функции
 
 async function handleFileInput(event) {
+  // Очищаем содержимое div.chatlog перед загрузкой нового файла
+  chatlog.innerHTML = "";
+
   const file = event.target.files[0];
   const text = await file.text();
   renderChatLog(text);
 }
 
-async function handleDemoButtonClick() {
-  const response = await fetch("WoWChatLog.txt");
-  const text = await response.text();
-  renderChatLog(text);
-}
-
 function renderChatLog(text) {
   const chapters = divideChapters(text);
-  chatlog.innerHTML = "";
 
   for (const [chapterTitle, chapterLines] of Object.entries(chapters)) {
     const chapter = createChapterElement(chapterTitle, chapterLines);
@@ -32,6 +26,9 @@ function renderChatLog(text) {
 
   formatLog();
 }
+
+// Ваши остальные функции и код...
+
 
 function createChapterElement(chapterTitle, chapterLines) {
   const chapter = document.createElement("div");
@@ -198,8 +195,9 @@ function cleanText() {
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
   chatlogHTML = chatlogHTML.replace(
     /\[(Рейд|Лидер рейда|Лидер группы|Группа|Гильдия)\]\s(.+): /gm,
-    "<p class='ooc'>[ООС] $2: "
+    "<p class='ooc'>[ООС] <span class='player'>$2</span> "
   );
+
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
   document.getElementById("chatlog").innerHTML = chatlogHTML;
@@ -367,10 +365,8 @@ function playersList() {
   });
 }
 
-// Раскраска ников
-
 function colorizePlayers() {
-  console.log("Окраска конкретных ников");
+  console.log("Раскраска ников");
   const playerColors = {};
   const playerSpans = document.querySelectorAll(".player");
   const colors = [
@@ -396,9 +392,6 @@ function colorizePlayers() {
     if (playerName === "Сырорезка") {
       /*       console.log(`Найден игрок: ${playerName}`); */
       color = "#ffd914"; // Желтый цвет для Сырорезки
-    } else if (playerName === "Дайла") {
-      /*       console.log(`Найден игрок: ${playerName}`); */
-      color = "#43c59e"; // Зеленый цвет для Дайлы
     } else {
       if (!playerColors[playerName]) {
         color = colors[i % colors.length]; // получаем цвет из массива цветов, с повторением при необходимости
@@ -411,7 +404,7 @@ function colorizePlayers() {
     /*     console.log(`Имя игрока: ${playerName}, Цвет: ${color}`); */
   }
 
-  console.log("Окраска конкретных ников завершена");
+  console.log("Окраска ников завершена");
 
   console.log("Удаление пустых игроков");
   const playerList = document.querySelector("ul.players"); // получаем список игроков
@@ -478,30 +471,28 @@ function formatLog() {
     element.style.display = "none";
   }
 
-// Сворачиваем главы
-console.log("Сворачиваем главы");
+  // Сворачиваем главы
+  console.log("Сворачиваем главы");
 
-const chapterElements = document.querySelectorAll(".chapter");
+  const chapterElements = document.querySelectorAll(".chapter");
 
-if (chapterElements.length === 1) {
-  console.log("Если есть только одна глава, делаем её expanded");
-  chapterElements[0].classList.add("expanded");
-} else {
-  console.log("Иначе применяем collapsed для всех глав, кроме первой"); 
-  chapterElements.forEach((chapterElement, index) => {
-    if (index !== 0) {
-      chapterElement.classList.add("collapsed");
-    }
+  if (chapterElements.length === 1) {
+    console.log("Если есть только одна глава, делаем её expanded");
+    chapterElements[0].classList.add("expanded");
+  } else {
+    console.log("Иначе применяем collapsed для всех глав, кроме первой");
+    chapterElements.forEach((chapterElement, index) => {
+      if (index !== 0) {
+        chapterElement.classList.add("collapsed");
+      }
+    });
+  }
+
+  const dates = document.querySelectorAll(".date");
+
+  dates.forEach((date) => {
+    date.addEventListener("click", toggleContent);
   });
-}
-
-const dates = document.querySelectorAll(".date");
-
-dates.forEach((date) => {
-  date.addEventListener("click", toggleContent);
-});
-
-
 }
 
 function wrapThirdSpeechInEmote() {
@@ -613,7 +604,6 @@ function addRecordClassToMIALoglines() {
     });
   }
 } */
-
 
 function toggleContent(event) {
   console.log("toggleContent");
