@@ -29,7 +29,6 @@ function renderChatLog(text) {
 
 // Ваши остальные функции и код...
 
-
 function createChapterElement(chapterTitle, chapterLines) {
   const chapter = document.createElement("div");
   chapter.classList.add("chapter");
@@ -454,13 +453,13 @@ function formatLog() {
   /*   combineChatboxes(); */
   wrapThirdSpeechInEmote();
 
-  applyImportant();
+/*   applyImportant(); */
 
   addRecordClassToMIALoglines();
   /*   toggleContent(); */
   /*   setupToggleHandlers(); */
 
-/*   // Скрываем DM и OOC по умолчанию
+  /*   // Скрываем DM и OOC по умолчанию
   console.log("Скрываем DM и OOC по умолчанию");
   const oocElements = document.getElementsByClassName("logline ooc");
   const dmElements = document.getElementsByClassName("logline dm");
@@ -508,12 +507,24 @@ function wrapThirdSpeechInEmote() {
   document.getElementById("chatlog").innerHTML = chatlogHTML;
 }
 
-document.getElementById("keywordsInput").addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
-    console.log("Нажат Enter в поле заполнения");
+function handleKeyPress(event) {
+  // Код клавиши Enter
+  const enterKeyCode = 13;
+
+  if (event.keyCode === enterKeyCode) {
     applyImportant();
   }
-});
+}
+
+
+document
+  .getElementById("keywordsInput")
+  .addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      console.log("Нажат Enter в поле заполнения");
+      applyImportant();
+    }
+  });
 
 function applyImportant() {
   console.log("Выделение ключевых слов"); 
@@ -528,9 +539,9 @@ function applyImportant() {
     if (hasKeyword) {
       console.log("Adding class 'important'");
       $(this).addClass("important");
-    } else {
+/*     } else {
       console.log("Removing class 'important'");
-      $(this).removeClass("important");
+      $(this).removeClass("important"); */
     }
   });
 }
