@@ -29,6 +29,10 @@ function renderChatLog(text) {
 
 // Обработка таймштампов
 
+// Обработка таймштампов
+
+// Обработка таймштампов
+
 function createChapterElement(chapterTitle, chapterLines) {
   const chapter = document.createElement("div");
   chapter.classList.add("chapter");
@@ -40,16 +44,74 @@ function createChapterElement(chapterTitle, chapterLines) {
 
   const chapterContent = document.createElement("div");
   chapterContent.classList.add("content");
-  chapter.appendChild(chapterContent);
+
+  let nightLines = []; // Массив для хранения строк с таймштампами между 0:00 и 6:00
+  let isNight = false;
 
   chapterLines.forEach((line) => {
-    const paragraph = document.createElement("p");
-    paragraph.textContent = line;
-    chapterContent.appendChild(paragraph);
+    const match = line.match(/^(\d+)\/(\d+)\s/);
+    if (match) {
+      const month = parseInt(match[1]);
+      const day = parseInt(match[2]);
+      let date = new Date(Date.UTC(2023, month - 1, day));
+
+      if (date.getHours() < 6) {
+        date.setDate(date.getDate() - 1);
+        isNight = true;
+      } else {
+        isNight = false;
+      }
+
+      const monthNames = [
+        "января",
+        "февраля",
+        "марта",
+        "апреля",
+        "мая",
+        "июня",
+        "июля",
+        "августа",
+        "сентября",
+        "октября",
+        "ноября",
+        "декабря",
+      ];
+      const monthName = monthNames[date.getUTCMonth()];
+      const chapterTitle = `Запись от ${date.getUTCDate()} ${monthName}`;
+
+      if (!isNight) {
+        chapterContent.appendChild(createParagraph(line));
+      } else {
+        nightLines.push(line);
+      }
+    } else if (isNight) {
+      nightLines.push(line);
+    } else {
+      chapterContent.appendChild(createParagraph(line));
+    }
   });
+
+  // Если есть строки с таймштампами между 0:00 и 6:00, добавляем их в контейнер .night
+  if (nightLines.length > 0) {
+    const nightContainer = document.createElement("div");
+    nightContainer.classList.add("night");
+    nightContainer.innerHTML = nightLines.join("");
+    chapterContent.appendChild(nightContainer);
+  }
+
+  chapter.appendChild(chapterContent);
 
   return chapter;
 }
+
+// Вспомогательная функция для создания абзаца
+function createParagraph(text) {
+  const paragraph = document.createElement("p");
+  paragraph.textContent = text;
+  return paragraph;
+}
+
+
 
 // ФУНКЦИИ
 
