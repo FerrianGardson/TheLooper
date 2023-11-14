@@ -133,7 +133,7 @@ function addCommaOrDot() {
 
 function addColonToEnd() {
   // Находим все элементы с классом "logline"
-  const loglines = document.querySelectorAll(".logline");
+  const loglines = document.querySelectorAll(".logline:not(.emote)");
 
   // Проходимся по каждому элементу с классом "logline"
   loglines.forEach((logline) => {
@@ -210,13 +210,13 @@ function cleanText() {
   document.getElementById("chatlog").innerHTML = chatlogHTML;
   chatlogHTML = chatlogHTML.replace(
     /<p class="logline say">((?:(?!говорит:|кричит).)*)\n<\/p>/gm,
-    '<p class="emote">$1</p>'
+    '<p class="logline emote">$1</p>'
   ); // Эмоуты
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
   chatlogHTML = chatlogHTML.replace(
-    /<p class="emote">(\W+?)\s(.+?)<\/p>/gm,
-    '<p class="emote"><span class="player">$1 </span><span class="emote">$2</span></p>\n'
+    /<p class="logline emote">(\W+?)\s(.+?)<\/p>/gm,
+    '<p class="logline emote"><span class="player">$1 </span><span class="logline emote">$2</span></p>\n'
   ); // Авторы эмоутов
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
@@ -277,7 +277,7 @@ function combineChatboxes() {
     }
 
     var nextElement = $(element).next();
-    if (nextElement.hasClass("emote") || i === length - 1) {
+    if (nextElement.hasClass("logline emote") || i === length - 1) {
       currentPlayer = "";
       currentSpeech = "";
       console.log("Next element is an emote, exiting loop.");
@@ -499,17 +499,17 @@ function wrapThirdSpeechInEmote() {
   var chatlogHTML = document.getElementById("chatlog").innerHTML;
   /*   chatlogHTML = chatlogHTML.replace(
     /((<span class="speech">.+[.,:?!])(\s[—–-]\s+([а-яА-Я\s].+?)[.,:?!]\s[—–-])(.+<\/span>))/gm,
-    '<span class="speech">$2<span class="emote">$3</span>$5</span>'
+    '<span class="speech">$2<span class="logline emote">$3</span>$5</span>'
   );
   chatlogHTML = chatlogHTML.replace(
     /((<span class="speech">.+[.,:?!])(\s[—–-]\s+([а-яА-Я\s].+)[.,:?!])(.+<\/span>))/gm,
-    '<span class="speech">$2<span class="emote">$3</span>$5</span>'
+    '<span class="speech">$2<span class="logline emote">$3</span>$5</span>'
   ); */
   document.getElementById("chatlog").innerHTML = chatlogHTML;
 }
 
 function applyImportant() {
-  console.log("applyImportant"); // Лог для проверки вызова функции
+  console.log("Выделение ключевых слов"); // Лог для проверки вызова функции
 
   const keywords = ["Сырорезка", "МИА", "запись", "улыбочку", "фото", "снимок"];
   $("p").each(function () {
