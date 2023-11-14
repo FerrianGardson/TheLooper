@@ -185,7 +185,7 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/[-–—]/gm, "–"); // Однотипные дефисы
 
   chatlogHTML = chatlogHTML.replace(
-    /(<p class="logline say">(%s заслужил достижение|&\?137|Подключиться|Порог|Бой|Поверженные|Участники|Победители|Liquid|\[СЕРВЕР\]|&amp;\?\d+|&\?\d+|Map|X:|grid|GroundZ|ZoneX|no|&\?+|\d|\(|Так как вы бездействовали|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ шеп|\W+ создает:|Вы |Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Смена|\(d+d|&?dd|Разыгрываются).+(\n|)<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
+    /(<p class="logline say">(%s заслужил достижение|&\?137|На вас наложен эффект|Подключиться|Порог|Бой|Поверженные|Участники|Победители|Liquid|\[СЕРВЕР\]|&amp;\?\d+|&\?\d+|Map|X:|grid|GroundZ|ZoneX|no|&\?+|\d|\(|Так как вы бездействовали|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ шеп|\W+ создает:|Вы |Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Смена|\(d+d|&?dd|Разыгрываются).+(\n|)<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
     ""
   ); // ООС-сообщения
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
@@ -452,10 +452,11 @@ function formatLog() {
   combineEmotes();
   /*   combineChatboxes(); */
   wrapThirdSpeechInEmote();
+  combineChatboxes();
 
   /*   applyImportant(); */
 
-  addRecordClassToMIALoglines();
+  /*   addRecordClassToMIALoglines(); */
   /*   toggleContent(); */
   /*   setupToggleHandlers(); */
 
@@ -507,36 +508,13 @@ function wrapThirdSpeechInEmote() {
   document.getElementById("chatlog").innerHTML = chatlogHTML;
 }
 
-// Код клавиши пробела
-const spaceKeyCode = 32;
 const enterKeyCode = 13;
-const commaKeyCode = 188;
-
-// Глобальная переменная для хранения предыдущего символа
-let previousKeyCode = null;
-
 
 function handleKeyPress(event) {
-  let keywordsInput = document.getElementById('keywordsInput');
-  if (event.keyCode === spaceKeyCode) {
-    // Проверяем, был ли предыдущий символ пробел или запятая
-    if (
-      previousKeyCode == spaceKeyCode ||
-      previousKeyCode == commaKeyCode ||
-      previousKeyCode == null
-    ) {
-      event.preventDefault();
-    }
-    else {keywordsInput.value += ', ';}
-  }
-
   if (event.keyCode === enterKeyCode) {
     // Ваш код для обработки нажатия Enter
     applyImportant();
   }
-
-  // Сохраняем текущий код клавиши в качестве предыдущего для следующего сравнения
-  previousKeyCode = event.keyCode;
 }
 
 document
@@ -551,17 +529,30 @@ document
 function applyImportant() {
   console.log("Выделение ключевых слов");
 
-  // Получаем ключевые слова из поля ввода и разбиваем их по запятой
+  // Получаем ключевые слова из поля ввода с учетом слов внутри кавычек
   let keywordsInput = document.getElementById("keywordsInput").value;
 
-  // Разбиваем ключевые слова по запятой, убираем лишние пробелы и фильтруем пустые строки
-  let keywords = keywordsInput
-    .split(",")
-    .map((keyword) => keyword.trim())
-    .filter(Boolean);
+  // Используем регулярное выражение для поиска слов внутри кавычек с игнорированием регистра
+  let regex = /«([^»]+)»|([^,]+)(?:,\s*|$)/gi;
 
+  // Массив для хранения найденных ключевых слов
+  let keywords = [];
+  let match;
+
+  while ((match = regex.exec(keywordsInput)) !== null) {
+    // Выбираем найденное слово из подмассива, учитывая кавычки, и удаляем двойные пробелы
+    let keyword = (match[1] || match[2]).replace(/\s+/g, " ");
+    if (keyword) {
+      keywords.push(keyword.trim().toLowerCase());
+    }
+  }
+
+  console.log("Захваченные переменные:");
+  console.log(keywords);
+
+  // Добавляем класс 'important' только для тех элементов, которые соответствуют текущему запросу
   $("p").each(function () {
-    const text = $(this).text();
+    const text = $(this).text().toLowerCase().replace(/\s+/g, " ");
     const hasKeyword = keywords.some((keyword) => text.includes(keyword));
 
     // Разбиваем слова с минусом и проверяем, если второе слово со знаком минуса
@@ -571,10 +562,10 @@ function applyImportant() {
     );
 
     if (hasKeyword && !isRemoveKeyword) {
-      console.log(`Adding class 'important'`);
+      console.log(`Adding class 'important' to text: ${text}`);
       $(this).addClass("important");
     } else if (isRemoveKeyword) {
-      console.log(`Removing class 'important'`);
+      console.log(`Removing class 'important' from text: ${text}`);
       $(this).removeClass("important");
     }
   });
@@ -621,7 +612,7 @@ function removeImportantClass() {
   });
 }
 
-function addRecordClassToMIALoglines() {
+/* function addRecordClassToMIALoglines() {
   console.log("addRecordClassToMIALoglines");
   var loglines = document.querySelectorAll("p.logline");
 
@@ -631,7 +622,7 @@ function addRecordClassToMIALoglines() {
       logline.classList.add("record");
     }
   });
-}
+} */
 
 // Сворачивание
 
