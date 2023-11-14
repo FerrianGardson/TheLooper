@@ -16,6 +16,8 @@ async function handleFileInput(event) {
   renderChatLog(text);
 }
 
+
+
 function renderChatLog(text) {
   const chapters = divideChapters(text);
 
