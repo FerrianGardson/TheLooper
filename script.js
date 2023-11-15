@@ -137,12 +137,39 @@ function transferNightLines(rootElement) {
           // Вставляем .night-transfered в конец .content после всех .logline
           nextChapterContent.appendChild(nightElement);
 
-          console.log(`Строки для ночи из главы с датой: ${currentDate} добавлены в конец контента в следующей главе: ${nextDateElement.textContent.trim()}`);
+          console.log(`Строки для ночи из главы с датой: «${currentDate}» добавлены в конец контента в следующей главе: «${nextDateElement.textContent.trim()}»`);
         } else {
           console.log(`Контейнер контента или дата не найдены в следующей главе. Строки для ночи не будут перемещены.`);
         }
       } else {
         console.log(`Следующая глава не найдена. Строки для ночи из главы с датой: ${currentDate} не будут перемещены.`);
+
+        // Если следующей главы нет, то попробуем добавить .night-transfered в сам конец текущей главы
+        chapter.querySelector('.content').appendChild(nightElement);
+        console.log(`Строки для ночи из главы с датой: «${currentDate}» добавлены в конец контента текущей главы, так как следующая глава не найдена.`);
+
+        // Теперь попробуем найти следующую главу еще раз после вставки
+        nextChapter = chapter.nextElementSibling;
+
+        while (nextChapter && !nextChapter.querySelector('.date')) {
+          nextChapter = nextChapter.nextElementSibling;
+        }
+
+        if (nextChapter) {
+          const nextDateElement = nextChapter.querySelector('.date');
+          const nextChapterContent = nextChapter.querySelector('.content');
+
+          if (nextDateElement && nextChapterContent) {
+            // Вставляем .night-transfered в конец .content после всех .logline
+            nextChapterContent.appendChild(nightElement);
+
+            console.log(`Теперь строки для ночи из главы с датой: «${currentDate}» добавлены в конец контента в следующей главе: «${nextDateElement.textContent.trim()}»`);
+          } else {
+            console.log(`Контейнер контента или дата не найдены в следующей главе после вставки. Строки для ночи не будут перемещены.`);
+          }
+        } else {
+          console.log(`После вставки строки для ночи из главы с датой: «${currentDate}» не удалось найти следующую главу. Строки для ночи не будут перемещены.`);
+        }
       }
     }
 
@@ -150,7 +177,8 @@ function transferNightLines(rootElement) {
     nestedChapters.forEach(nestedChapter => nightTransfer(nestedChapter));
   }
 
-  nightTransfer(rootElement);
+  let chatlogElement = document.getElementById("chatlog");
+  nightTransfer(chatlogElement);
 }
 
 
