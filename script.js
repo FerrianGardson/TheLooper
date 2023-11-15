@@ -344,8 +344,8 @@ function cleanText() {
 
   chatlogHTML = chatlogHTML.replace(/.*Результат:.*\n?/gm, "");
   chatlogHTML = chatlogHTML.replace(
-    /\[(Рейд|Лидер рейда|Лидер группы|Группа|Гильдия)\]\s(.+): /gm,
-    "<p class='logline ooc'>[ООС] <span class='player'>$2</span> "
+    /\[(Рейд|Лидер рейда|Лидер группы|Группа|Гильдия)\]\s(.+?)\:\s(.+)/gm,
+    "<p class='logline ooc'>[ООС] <span class='player'>$2</span> <span class='speech'>$3</span></p>"
   );
 
   document.getElementById("chatlog").innerHTML = chatlogHTML;
@@ -613,13 +613,9 @@ function formatLog() {
   console.log("Запускаю допфункции");
   removeTimestamps();
   cleanText();
-
   playersList();
-
   colorizePlayers();
-
   addCommaOrDot();
-
   addColonToEnd();
 
   /*   combineEmotes(); */
