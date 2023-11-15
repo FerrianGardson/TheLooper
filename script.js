@@ -102,8 +102,8 @@ function createChapterElement(chapterTitle, chapterLines) {
     nightContainer.classList.add("night");
     nightContainer.innerHTML = nightLines.join("");
     chapterContent.appendChild(nightContainer);
-    console.log("Night lines added to nightContainer:", nightLines); // Лог для отслеживания добавления строк в nightContainer
-  }
+/*     console.log("Night lines added to nightContainer:", nightLines); // Лог для отслеживания добавления строк в nightContainer
+ */  }
 
   chapter.appendChild(chapterContent);
 
@@ -122,8 +122,8 @@ function createParagraph(text) {
 // Разделение на главы
 
 function divideChapters(text) {
-  console.log("Разделение на главы");
-  const logLines = text.trim().split("\n");
+/*   console.log("Разделение на главы");
+ */  const logLines = text.trim().split("\n");
   const chapters = {};
 
   logLines.forEach((line) => {
@@ -227,7 +227,7 @@ function getMonthIndex(monthName) {
 // Удаление таймштампов
 
 function removeTimestamps() {
-  console.log("Удаление таймштампов");
+/*   console.log("Удаление таймштампов"); */
   const chatlog = document.getElementById("chatlog");
   const chatlogHTML = chatlog.innerHTML;
   const cleanedHTML = chatlogHTML.replace(
@@ -286,8 +286,8 @@ function addColonToEnd() {
 // Чистка от мусора
 
 function cleanText() {
-  console.log("Чистка от мусора");
-
+/*   console.log("Чистка от мусора");
+ */
   // Определение
 
   let chatlogHTML = document.getElementById("chatlog").innerHTML;
@@ -412,8 +412,8 @@ function combineChatboxes() {
 }
 
 function combineEmotes() {
-  console.log("Объединяем эмоуты...");
-
+/*   console.log("Объединяем эмоуты...");
+ */
   // Удаляем пустые элементы
   $("div.chapter.expanded p.logline.emote:empty").remove();
 
@@ -438,15 +438,15 @@ function combineEmotes() {
         var emoteElement = $(element).find("span.emote");
         var emote = emoteElement.text().trim();
 
-        console.log("Игрок: " + player + ", Эмоут: " + emote);
+/*         console.log("Игрок: " + player + ", Эмоут: " + emote); */
 
         if (player === currentPlayer) {
           currentEmote += " " + emote;
           emoteElement.text(currentEmote); // Обновляем содержимое текущего элемента
           $(element).prev().remove(); // Удаляем предыдущий элемент
 
-          console.log("Объединено с предыдущим. Новый эмоут: " + currentEmote);
-          console.log("Удален предыдущий элемент.");
+/*           console.log("Объединено с предыдущим. Новый эмоут: " + currentEmote);
+          console.log("Удален предыдущий элемент."); */
         } else {
           currentPlayer = player;
           currentEmote = emote;
@@ -456,30 +456,30 @@ function combineEmotes() {
             .addBack(".chapter")
             .prop("outerHTML");
 
-          console.log(
+/*           console.log(
             "Новый игрок, начинаем новый элемент. Игрок: " +
               currentPlayer +
               ", Эмоут: " +
               currentEmote
-          );
+          ); */
         }
       }
     } else if ($(element).hasClass("logline") && $(element).hasClass("say")) {
       currentPlayer = "";
       currentEmote = "";
       currentChapter = "";
-      console.log("Реплика, пропускаем элемент");
+/*       console.log("Реплика, пропускаем элемент"); */
     }
   }
 
-  console.log("Объединение эмоутов завершено");
-}
+/*   console.log("Объединение эмоутов завершено");
+ */}
 
 // Список игроков
 
 function playersList() {
-  console.log("Список игроков");
-  // Создаем пустой массив для хранения имен игроков
+/*   console.log("Список игроков");
+ */  // Создаем пустой массив для хранения имен игроков
   let players = [];
 
   // Находим все .chapter на странице
@@ -536,8 +536,8 @@ function playersList() {
 }
 
 function colorizePlayers() {
-  console.log("Раскраска ников");
-  const playerColors = {};
+/*   console.log("Раскраска ников");
+ */  const playerColors = {};
   const playerSpans = document.querySelectorAll(".player");
   const colors = [
     "#43c59eff",
@@ -574,16 +574,16 @@ function colorizePlayers() {
     /*     console.log(`Имя игрока: ${playerName}, Цвет: ${color}`); */
   }
 
-  console.log("Окраска ников завершена");
-
-  console.log("Удаление пустых игроков");
-  const playerList = document.querySelector("ul.players"); // получаем список игроков
+/*   console.log("Окраска ников завершена");
+ */
+/*   console.log("Удаление пустых игроков");
+ */  const playerList = document.querySelector("ul.players"); // получаем список игроков
   const emptyPlayers = [...playerList.querySelectorAll("li")].filter(
     (li) => !li.textContent.trim()
   ); // фильтруем пустые элементы li
   emptyPlayers.forEach((li) => li.remove()); // удаляем каждый из найденных пустых элементов li
-  console.log("Удаление пустых игроков завершено");
-}
+/*   console.log("Удаление пустых игроков завершено");
+ */}
 
 // Кнопки DM и OOC
 
@@ -608,8 +608,8 @@ function toggleVisibility(className) {
 
 function formatLog() {
   let chatlogHTML = document.getElementById("chatlog").innerHTML;
-  console.log("Запускаю допфункции");
-  removeTimestamps();
+/*   console.log("Запускаю допфункции");
+ */  removeTimestamps();
   cleanText();
   transferNightLines(document.body);
   playersList();
@@ -621,34 +621,7 @@ function formatLog() {
 }
 
 function emoteToSpeech() {
-  // Находим все элементы с классом "logline emote"
-  var emoteElements = document.querySelectorAll('.logline.emote');
 
-  // Проходим по каждому найденному элементу
-  emoteElements.forEach(function (element) {
-      // Находим дочерний элемент с классом "emote"
-      var emoteSpan = element.querySelector('.emote');
-
-      // Если элемент с классом "emote" найден
-      if (emoteSpan) {
-          // Получаем текст из элемента с классом "emote"
-          var emoteText = emoteSpan.innerText;
-
-          // Разбиваем текст по двоеточию
-          var parts = emoteText.split(':');
-
-          // Если есть часть после двоеточия
-          if (parts.length > 1) {
-              // Создаем новый элемент span с классом "speech" и вставляем текст после двоеточия
-              var speechSpan = document.createElement('span');
-              speechSpan.className = 'speech';
-              speechSpan.innerText = parts.slice(1).join(':').trim();
-
-              // Заменяем элемент с классом "emote" на новый элемент с классом "emote" и вложенным "speech"
-              emoteSpan.innerHTML = parts[0] + ':<span class="speech">' + speechSpan.outerHTML + '</span>';
-          }
-      }
-  });
 }
 
 function transferNightLines(rootElement) {
@@ -675,22 +648,22 @@ function transferNightLines(rootElement) {
     }
 
     if (!nextChapter) {
-      console.log(
+/*       console.log(
         `Следующая глава не найдена. Строки для ночи из главы с датой: ${currentDate} не будут перемещены.`
-      );
+      ); */
     } else {
       const nextDateElement = nextChapter.querySelector(".date");
       const nextChapterContent = nextChapter.querySelector(".content");
 
       if (!nextDateElement || !nextChapterContent) {
-        console.log(
+/*         console.log(
           `Контейнер контента или дата не найдены в следующей главе. Строки для ночи не будут перемещены.`
-        );
+        ); */
       } else {
         nextChapterContent.appendChild(nightElement);
-        console.log(
+/*         console.log(
           `Строки для ночи из главы с датой: «${currentDate}» добавлены в конец контента в следующей главе: «${nextDateElement.textContent.trim()}»`
-        );
+        ); */
       }
     }
   }
@@ -724,15 +697,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function chapterCollapse() {
   // Сворачиваем главы
-  console.log("Начало функции chapterCollapse");
+/*   console.log("Начало функции chapterCollapse"); */
 
   const chapterElements = document.querySelectorAll(".chapter");
 
   if (chapterElements.length === 1) {
-    console.log("Есть только одна глава, разворачиваем");
+/*     console.log("Есть только одна глава, разворачиваем"); */
     chapterElements[0].classList.add("expanded");
   } else {
-    console.log("Больше одной главы, сворачиваем все кроме первой");
+/*     console.log("Больше одной главы, сворачиваем все кроме первой"); */
     chapterElements.forEach((chapterElement, index) => {
       if (index !== 0) {
         chapterElement.classList.add("collapsed");
@@ -740,7 +713,7 @@ function chapterCollapse() {
     });
   }
 
-  console.log("А первой добавляется expanded");
+/*   console.log("А первой добавляется expanded"); */
   chapterElements[0].classList.add("expanded");
 
   const dates = document.querySelectorAll(".date");
@@ -749,12 +722,12 @@ function chapterCollapse() {
     date.addEventListener("click", toggleContent);
   });
 
-  console.log("Функция chapterCollapse успешно выполнена");
+/*   console.log("Функция chapterCollapse успешно выполнена"); */
 }
 
 function toggleContent(event) {
   // Функция сворачивания
-  console.log("Начало функции toggleContent");
+/*   console.log("Начало функции toggleContent"); */
   const chapter = event.target.closest(".chapter");
   const content = chapter.querySelector(".content");
 
@@ -768,7 +741,7 @@ function toggleContent(event) {
     content.style.maxHeight = null;
   }
 
-  console.log("Функция toggleContent успешно выполнена");
+/*   console.log("Функция toggleContent успешно выполнена"); */
 }
 
 function combineFunctions() {
@@ -792,13 +765,13 @@ document
   .getElementById("keywordsInput")
   .addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
-      console.log("Нажат Enter в поле заполнения");
+/*       console.log("Нажат Enter в поле заполнения"); */
       applyImportant();
     }
   });
 
 function applyImportant() {
-  console.log("Выделение ключевых слов");
+/*   console.log("Выделение ключевых слов"); */
 
   // Получаем ключевые слова из поля ввода с учетом слов внутри кавычек
   let keywordsInput = document.getElementById("keywordsInput").value;
@@ -818,7 +791,7 @@ function applyImportant() {
     }
   }
 
-  console.log("Захваченные переменные:");
+/*   console.log("Захваченные переменные:"); */
   console.log(keywords);
 
   // Добавляем класс 'important' только для тех элементов, которые соответствуют текущему запросу
@@ -833,10 +806,10 @@ function applyImportant() {
     );
 
     if (hasKeyword && !isRemoveKeyword) {
-      console.log(`Adding class 'important' to text: ${text}`);
+/*       console.log(`Adding class 'important' to text: ${text}`); */
       $(this).addClass("important");
     } else if (isRemoveKeyword) {
-      console.log(`Removing class 'important' from text: ${text}`);
+/*       console.log(`Removing class 'important' from text: ${text}`); */
       $(this).removeClass("important");
     }
   });
@@ -872,7 +845,7 @@ function removeNonImportantParagraphs() {
 }
 
 function removeImportantClass() {
-  console.log("removeImportantClass");
+/*   console.log("removeImportantClass"); */
   var containers = document.querySelectorAll(".collapsed");
 
   containers.forEach(function (container) {
