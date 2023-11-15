@@ -604,7 +604,7 @@ function toggleVisibility(className) {
   }
 }
 
-// ГЛАВНАЯ ФУНКЦИЯ
+// Главная функция
 
 function formatLog() {
   let chatlogHTML = document.getElementById("chatlog").innerHTML;
@@ -612,12 +612,43 @@ function formatLog() {
   removeTimestamps();
   cleanText();
   transferNightLines(document.body);
-/*   chapterCollapse(); */
   playersList();
   colorizePlayers();
   addCommaOrDot();
   addColonToEnd();
-  wrapThirdSpeechInEmote();
+  chapterCollapse();
+  emoteToSpeech()
+}
+
+function emoteToSpeech() {
+  // Находим все элементы с классом "logline emote"
+  var emoteElements = document.querySelectorAll('.logline.emote');
+
+  // Проходим по каждому найденному элементу
+  emoteElements.forEach(function (element) {
+      // Находим дочерний элемент с классом "emote"
+      var emoteSpan = element.querySelector('.emote');
+
+      // Если элемент с классом "emote" найден
+      if (emoteSpan) {
+          // Получаем текст из элемента с классом "emote"
+          var emoteText = emoteSpan.innerText;
+
+          // Разбиваем текст по двоеточию
+          var parts = emoteText.split(':');
+
+          // Если есть часть после двоеточия
+          if (parts.length > 1) {
+              // Создаем новый элемент span с классом "speech" и вставляем текст после двоеточия
+              var speechSpan = document.createElement('span');
+              speechSpan.className = 'speech';
+              speechSpan.innerText = parts.slice(1).join(':').trim();
+
+              // Заменяем элемент с классом "emote" на новый элемент с классом "emote" и вложенным "speech"
+              emoteSpan.innerHTML = parts[0] + ':<span class="speech">' + speechSpan.outerHTML + '</span>';
+          }
+      }
+  });
 }
 
 function transferNightLines(rootElement) {
@@ -666,6 +697,24 @@ function transferNightLines(rootElement) {
 
   const chapters = rootElement.querySelectorAll(".chapter");
   chapters.forEach((chapter) => nightTransfer(chapter));
+
+  removeEmptyChapters()
+}
+
+function removeEmptyChapters() {
+  // Находим все элементы с классом "chapter"
+  const chapterElements = document.querySelectorAll(".chapter");
+
+  // Перебираем найденные элементы и удаляем те, у которых нет содержимого внутри элемента с классом "content"
+  chapterElements.forEach((chapterElement) => {
+    const contentElement = chapterElement.querySelector(".content");
+
+    // Проверяем, если содержимое отсутствует или содержит только пробельные символы
+    if (!contentElement || contentElement.innerHTML.trim() === "") {
+      // Удаляем элемент
+      chapterElement.remove();
+    }
+  });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -729,18 +778,6 @@ function combineFunctions() {
   combineEmotes();
 }
 
-function wrapThirdSpeechInEmote() {
-  var chatlogHTML = document.getElementById("chatlog").innerHTML;
-  /*   chatlogHTML = chatlogHTML.replace(
-    /((<span class="speech">.+[.,:?!])(\s[—–-]\s+([а-яА-Я\s].+?)[.,:?!]\s[—–-])(.+<\/span>))/gm,
-    '<span class="speech">$2<span class="emote">$3</span>$5</span>'
-  );
-  chatlogHTML = chatlogHTML.replace(
-    /((<span class="speech">.+[.,:?!])(\s[—–-]\s+([а-яА-Я\s].+)[.,:?!])(.+<\/span>))/gm,
-    '<span class="speech">$2<span class="emote">$3</span>$5</span>'
-  ); */
-  document.getElementById("chatlog").innerHTML = chatlogHTML;
-}
 
 const enterKeyCode = 13;
 
