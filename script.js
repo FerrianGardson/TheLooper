@@ -16,8 +16,6 @@ async function handleFileInput(event) {
   renderChatLog(text);
 }
 
-
-
 function renderChatLog(text) {
   const chapters = divideChapters(text);
 
@@ -46,173 +44,27 @@ function createChapterElement(chapterTitle, chapterLines) {
   let nightLines = []; // Массив для хранения строк с таймштампами между 0:00 и 6:00
   let isNight = false;
 
-// ...
+  // ...
 
-chapterLines.forEach((line) => {
-  const match = line.match(/^(\d+)\/(\d+)\s(\d+:\d+:\d+\.\d+)\s/);
-  if (match) {
-    const month = parseInt(match[1]);
-    const day = parseInt(match[2]);
-    const time = match[3];
-    let date = new Date();
-    date.setUTCMonth(month - 1);
-    date.setUTCDate(day);
-
-    // Получаем часы из строки времени
-    const hours = parseInt(time.split(':')[0]);
-
-    if (hours < 6) {
-      isNight = true;
-    } else {
-      isNight = false;
-    }
-
-    const monthNames = [
-      "января",
-      "февраля",
-      "марта",
-      "апреля",
-      "мая",
-      "июня",
-      "июля",
-      "августа",
-      "сентября",
-      "октября",
-      "ноября",
-      "декабря",
-    ];
-    const monthName = monthNames[date.getUTCMonth()];
-    const chapterTitle = `Запись от ${date.getUTCDate()} ${monthName}`;
-
-    if (isNight) {
-      nightLines.push(line);
-    } else {
-      chapterContent.appendChild(createParagraph(line));
-    }
-  } else if (isNight) {
-    nightLines.push(line);
-  } else {
-    chapterContent.appendChild(createParagraph(line));
-  }
-});
-
-// ...
-
-
-  // Если есть строки с таймштампами между 0:00 и 6:00, добавляем их в контейнер .night
-  if (nightLines.length > 0) {
-    const nightContainer = document.createElement("div");
-    nightContainer.classList.add("night");
-    nightContainer.innerHTML = nightLines.join("");
-    chapterContent.appendChild(nightContainer);
-    console.log("Night lines added to nightContainer:", nightLines); // Лог для отслеживания добавления строк в nightContainer
-  }
-
-  chapter.appendChild(chapterContent);
-
-  return chapter;
-}
-
-function transferNightLines(rootElement) {
-  function nightTransfer(chapter) {
-    const dateElement = chapter.querySelector('.date');
-    let nightElement = chapter.querySelector('.night');
-
-    if (dateElement && nightElement && !nightElement.classList.contains('night-transfered')) {
-      const currentDate = dateElement.textContent.trim();
-      nightElement.classList.remove('night');
-      nightElement.classList.add('night-transfered');
-
-      let nextChapter = chapter.nextElementSibling;
-
-      while (nextChapter && !nextChapter.querySelector('.date')) {
-        nextChapter = nextChapter.nextElementSibling;
-      }
-
-      if (nextChapter) {
-        const nextDateElement = nextChapter.querySelector('.date');
-        const nextChapterContent = nextChapter.querySelector('.content');
-
-        if (nextDateElement && nextChapterContent) {
-          // Вставляем .night-transfered в конец .content после всех .logline
-          nextChapterContent.appendChild(nightElement);
-
-          console.log(`Строки для ночи из главы с датой: «${currentDate}» добавлены в конец контента в следующей главе: «${nextDateElement.textContent.trim()}»`);
-        } else {
-          console.log(`Контейнер контента или дата не найдены в следующей главе. Строки для ночи не будут перемещены.`);
-        }
-      } else {
-        console.log(`Следующая глава не найдена. Строки для ночи из главы с датой: ${currentDate} не будут перемещены.`);
-
-        // Если следующей главы нет, то попробуем добавить .night-transfered в сам конец текущей главы
-        chapter.querySelector('.content').appendChild(nightElement);
-        console.log(`Строки для ночи из главы с датой: «${currentDate}» добавлены в конец контента текущей главы, так как следующая глава не найдена.`);
-
-        // Теперь попробуем найти следующую главу еще раз после вставки
-        nextChapter = chapter.nextElementSibling;
-
-        while (nextChapter && !nextChapter.querySelector('.date')) {
-          nextChapter = nextChapter.nextElementSibling;
-        }
-
-        if (nextChapter) {
-          const nextDateElement = nextChapter.querySelector('.date');
-          const nextChapterContent = nextChapter.querySelector('.content');
-
-          if (nextDateElement && nextChapterContent) {
-            // Вставляем .night-transfered в конец .content после всех .logline
-            nextChapterContent.appendChild(nightElement);
-
-            console.log(`Теперь строки для ночи из главы с датой: «${currentDate}» добавлены в конец контента в следующей главе: «${nextDateElement.textContent.trim()}»`);
-          } else {
-            console.log(`Контейнер контента или дата не найдены в следующей главе после вставки. Строки для ночи не будут перемещены.`);
-          }
-        } else {
-          console.log(`После вставки строки для ночи из главы с датой: «${currentDate}» не удалось найти следующую главу. Строки для ночи не будут перемещены.`);
-        }
-      }
-    }
-
-    const nestedChapters = chapter.querySelectorAll('.chapter');
-    nestedChapters.forEach(nestedChapter => nightTransfer(nestedChapter));
-  }
-
-  let chatlogElement = document.getElementById("chatlog");
-  nightTransfer(chatlogElement);
-}
-
-
-
-
-
-// Вспомогательная функция для создания абзаца
-function createParagraph(text) {
-  const paragraph = document.createElement("p");
-  paragraph.textContent = text;
-  return paragraph;
-}
-
-
-
-// ФУНКЦИИ
-
-
-// Разделение на главы
-
-function divideChapters(text) {
-  console.log("Разделение на главы");
-  const logLines = text.trim().split("\n");
-  const chapters = {};
-
-  logLines.forEach((line) => {
-    const match = line.match(/^(\d+)\/(\d+)\s/);
+  chapterLines.forEach((line) => {
+    const match = line.match(/^(\d+)\/(\d+)\s(\d+:\d+:\d+\.\d+)\s/);
     if (match) {
       const month = parseInt(match[1]);
       const day = parseInt(match[2]);
+      const time = match[3];
       let date = new Date();
       date.setUTCMonth(month - 1);
       date.setUTCDate(day);
-  
+
+      // Получаем часы из строки времени
+      const hours = parseInt(time.split(":")[0]);
+
+      if (hours < 6) {
+        isNight = true;
+      } else {
+        isNight = false;
+      }
+
       const monthNames = [
         "января",
         "февраля",
@@ -229,7 +81,77 @@ function divideChapters(text) {
       ];
       const monthName = monthNames[date.getUTCMonth()];
       const chapterTitle = `Запись от ${date.getUTCDate()} ${monthName}`;
-  
+
+      if (isNight) {
+        nightLines.push(line);
+      } else {
+        chapterContent.appendChild(createParagraph(line));
+      }
+    } else if (isNight) {
+      nightLines.push(line);
+    } else {
+      chapterContent.appendChild(createParagraph(line));
+    }
+  });
+
+  // ...
+
+  // Если есть строки с таймштампами между 0:00 и 6:00, добавляем их в контейнер .night
+  if (nightLines.length > 0) {
+    const nightContainer = document.createElement("div");
+    nightContainer.classList.add("night");
+    nightContainer.innerHTML = nightLines.join("");
+    chapterContent.appendChild(nightContainer);
+    console.log("Night lines added to nightContainer:", nightLines); // Лог для отслеживания добавления строк в nightContainer
+  }
+
+  chapter.appendChild(chapterContent);
+
+  return chapter;
+}
+
+// Вспомогательная функция для создания абзаца
+function createParagraph(text) {
+  const paragraph = document.createElement("p");
+  paragraph.textContent = text;
+  return paragraph;
+}
+
+// ФУНКЦИИ
+
+// Разделение на главы
+
+function divideChapters(text) {
+  console.log("Разделение на главы");
+  const logLines = text.trim().split("\n");
+  const chapters = {};
+
+  logLines.forEach((line) => {
+    const match = line.match(/^(\d+)\/(\d+)\s/);
+    if (match) {
+      const month = parseInt(match[1]);
+      const day = parseInt(match[2]);
+      let date = new Date();
+      date.setUTCMonth(month - 1);
+      date.setUTCDate(day);
+
+      const monthNames = [
+        "января",
+        "февраля",
+        "марта",
+        "апреля",
+        "мая",
+        "июня",
+        "июля",
+        "августа",
+        "сентября",
+        "октября",
+        "ноября",
+        "декабря",
+      ];
+      const monthName = monthNames[date.getUTCMonth()];
+      const chapterTitle = `Запись от ${date.getUTCDate()} ${monthName}`;
+
       if (!chapters[chapterTitle]) {
         chapters[chapterTitle] = [];
       }
@@ -301,7 +223,6 @@ function getMonthIndex(monthName) {
   ];
   return monthNames.indexOf(monthName.toLowerCase());
 }
-
 
 // Удаление таймштампов
 
@@ -529,8 +450,11 @@ function combineEmotes() {
         } else {
           currentPlayer = player;
           currentEmote = emote;
-          currentChapter = $(element).closest('.night').find('.chapter').addBack('.chapter').prop('outerHTML');
-
+          currentChapter = $(element)
+            .closest(".night")
+            .find(".chapter")
+            .addBack(".chapter")
+            .prop("outerHTML");
 
           console.log(
             "Новый игрок, начинаем новый элемент. Игрок: " +
@@ -550,7 +474,6 @@ function combineEmotes() {
 
   console.log("Объединение эмоутов завершено");
 }
-
 
 // Список игроков
 
@@ -689,35 +612,70 @@ function formatLog() {
   removeTimestamps();
   cleanText();
   transferNightLines(document.body);
+/*   chapterCollapse(); */
   playersList();
   colorizePlayers();
   addCommaOrDot();
   addColonToEnd();
-
-  /*   combineEmotes(); */
-  /*   combineChatboxes(); */
   wrapThirdSpeechInEmote();
-  /*   combineChatboxes(); */
+}
 
-  /*   applyImportant(); */
+function transferNightLines(rootElement) {
+  function nightTransfer(chapter) {
+    const dateElement = chapter.querySelector(".date");
+    let nightElement = chapter.querySelector(".night");
 
-  /*   addRecordClassToMIALoglines(); */
-  /*   toggleContent(); */
-  /*   setupToggleHandlers(); */
+    if (
+      !dateElement ||
+      !nightElement ||
+      nightElement.classList.contains("night-transfered")
+    ) {
+      return;
+    }
 
-  /*   // Скрываем DM и OOC по умолчанию
-  console.log("Скрываем DM и OOC по умолчанию");
-  const oocElements = document.getElementsByClassName("logline ooc");
-  const dmElements = document.getElementsByClassName("logline dm");
-  for (const element of oocElements) {
-    element.style.display = "none";
+    const currentDate = dateElement.textContent.trim();
+    nightElement.classList.remove("night");
+    nightElement.classList.add("night-transfered");
+
+    let nextChapter = chapter.nextElementSibling;
+
+    while (nextChapter && !nextChapter.querySelector(".date")) {
+      nextChapter = nextChapter.nextElementSibling;
+    }
+
+    if (!nextChapter) {
+      console.log(
+        `Следующая глава не найдена. Строки для ночи из главы с датой: ${currentDate} не будут перемещены.`
+      );
+    } else {
+      const nextDateElement = nextChapter.querySelector(".date");
+      const nextChapterContent = nextChapter.querySelector(".content");
+
+      if (!nextDateElement || !nextChapterContent) {
+        console.log(
+          `Контейнер контента или дата не найдены в следующей главе. Строки для ночи не будут перемещены.`
+        );
+      } else {
+        nextChapterContent.appendChild(nightElement);
+        console.log(
+          `Строки для ночи из главы с датой: «${currentDate}» добавлены в конец контента в следующей главе: «${nextDateElement.textContent.trim()}»`
+        );
+      }
+    }
   }
-  for (const element of dmElements) {
-    element.style.display = "none";
-  } */
 
+  const chapters = rootElement.querySelectorAll(".chapter");
+  chapters.forEach((chapter) => nightTransfer(chapter));
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  let chatlogElement = document.getElementById("chatlog");
+  transferNightLines(chatlogElement);
+});
+
+function chapterCollapse() {
   // Сворачиваем главы
-  console.log("Сворачиваем главы");
+  console.log("Начало функции chapterCollapse");
 
   const chapterElements = document.querySelectorAll(".chapter");
 
@@ -741,6 +699,27 @@ function formatLog() {
   dates.forEach((date) => {
     date.addEventListener("click", toggleContent);
   });
+
+  console.log("Функция chapterCollapse успешно выполнена");
+}
+
+function toggleContent(event) {
+  // Функция сворачивания
+  console.log("Начало функции toggleContent");
+  const chapter = event.target.closest(".chapter");
+  const content = chapter.querySelector(".content");
+
+  if (chapter.classList.contains("collapsed")) {
+    chapter.classList.remove("collapsed");
+    chapter.classList.add("expanded");
+    content.style.maxHeight = content.scrollHeight + "px";
+  } else {
+    chapter.classList.remove("expanded");
+    chapter.classList.add("collapsed");
+    content.style.maxHeight = null;
+  }
+
+  console.log("Функция toggleContent успешно выполнена");
 }
 
 function combineFunctions() {
@@ -904,22 +883,6 @@ function removeImportantClass() {
   }
 } */
 
-function toggleContent(event) {
-  console.log("toggleContent");
-  const chapter = event.target.closest(".chapter");
-  const content = chapter.querySelector(".content");
-
-  if (chapter.classList.contains("collapsed")) {
-    chapter.classList.remove("collapsed");
-    chapter.classList.add("expanded");
-    content.style.maxHeight = content.scrollHeight + "px";
-  } else {
-    chapter.classList.remove("expanded");
-    chapter.classList.add("collapsed");
-    content.style.maxHeight = null;
-  }
-}
-
 /* function setupToggleHandlers() {
   console.log("setupToggleHandlers");
   const dates = document.querySelectorAll(".date");
@@ -932,43 +895,42 @@ function toggleContent(event) {
 
 function oocToEmote() {
   // Находим элементы с классом "logline ooc" в пределах ".chapter.expanded"
-  var elements = document.querySelectorAll('.chapter.expanded .logline.ooc');
+  var elements = document.querySelectorAll(".chapter.expanded .logline.ooc");
 
   // Проходимся по каждому найденному элементу
-  elements.forEach(function(element) {
-      // Удаляем элемент span с классом "ooc"
-      var oocElement = element.querySelector('.ooc');
-      oocElement.parentNode.removeChild(oocElement);
+  elements.forEach(function (element) {
+    // Удаляем элемент span с классом "ooc"
+    var oocElement = element.querySelector(".ooc");
+    oocElement.parentNode.removeChild(oocElement);
 
-      // Заменяем класс "ooc" на "emote" у родительского элемента
-      element.classList.remove('ooc');
-      element.classList.add('emote');
+    // Заменяем класс "ooc" на "emote" у родительского элемента
+    element.classList.remove("ooc");
+    element.classList.add("emote");
 
-      // Получаем вложенный элемент с классом "speech" и меняем его класс
-      var speechElement = element.querySelector('.speech');
-      if (speechElement) {
-          speechElement.classList.remove('speech');
-          speechElement.classList.add('emote');
-      }
+    // Получаем вложенный элемент с классом "speech" и меняем его класс
+    var speechElement = element.querySelector(".speech");
+    if (speechElement) {
+      speechElement.classList.remove("speech");
+      speechElement.classList.add("emote");
+    }
   });
   removeEmptyParagraphs();
 }
 
-
 function removeEmptyParagraphs() {
   // Находим элементы с классом "chapter expanded"
-  var chapters = document.querySelectorAll('.chapter.expanded');
+  var chapters = document.querySelectorAll(".chapter.expanded");
 
   // Проходимся по каждому найденному элементу
-  chapters.forEach(function(chapter) {
-      // Находим все параграфы внутри элемента
-      var paragraphs = chapter.querySelectorAll('p');
+  chapters.forEach(function (chapter) {
+    // Находим все параграфы внутри элемента
+    var paragraphs = chapter.querySelectorAll("p");
 
-      // Проходимся по каждому параграфу и удаляем его, если он пустой
-      paragraphs.forEach(function(paragraph) {
-          if (paragraph.innerHTML.trim() === '') {
-              paragraph.parentNode.removeChild(paragraph);
-          }
-      });
+    // Проходимся по каждому параграфу и удаляем его, если он пустой
+    paragraphs.forEach(function (paragraph) {
+      if (paragraph.innerHTML.trim() === "") {
+        paragraph.parentNode.removeChild(paragraph);
+      }
+    });
   });
 }
