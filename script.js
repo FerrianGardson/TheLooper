@@ -345,7 +345,7 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/.*Результат:.*\n?/gm, "");
   chatlogHTML = chatlogHTML.replace(
     /\[(Рейд|Лидер рейда|Лидер группы|Группа|Гильдия)\]\s(.+?)\:\s(.+)/gm,
-    "<p class='logline ooc'>[ООС] <span class='player'>$2</span> <span class='speech'>$3</span></p>"
+    "<p class='logline ooc'><span class='ooc'>[ООС]</span> <span class='player'>$2</span> <span class='speech'>$3</span></p>"
   );
 
   document.getElementById("chatlog").innerHTML = chatlogHTML;
@@ -853,3 +853,38 @@ function toggleContent(event) {
 } */
 
 // Добавьте вызов setupToggleHandlers() в нужном месте, например, в конце вашего скрипта.
+
+function oocToEmote() {
+  // Находим элементы с классом "logline ooc" в пределах ".chapter.expanded"
+  var elements = document.querySelectorAll('.chapter.expanded .logline.ooc');
+
+  // Проходимся по каждому найденному элементу
+  elements.forEach(function(element) {
+      // Удаляем элемент span с классом "ooc"
+      var oocElement = element.querySelector('.ooc');
+      oocElement.parentNode.removeChild(oocElement);
+
+      // Заменяем класс "ooc" на "emote" у родительского элемента
+      element.classList.remove('ooc');
+      element.classList.add('emote');
+  });
+  removeEmptyParagraphs();
+}
+
+function removeEmptyParagraphs() {
+  // Находим элементы с классом "chapter expanded"
+  var chapters = document.querySelectorAll('.chapter.expanded');
+
+  // Проходимся по каждому найденному элементу
+  chapters.forEach(function(chapter) {
+      // Находим все параграфы внутри элемента
+      var paragraphs = chapter.querySelectorAll('p');
+
+      // Проходимся по каждому параграфу и удаляем его, если он пустой
+      paragraphs.forEach(function(paragraph) {
+          if (paragraph.innerHTML.trim() === '') {
+              paragraph.parentNode.removeChild(paragraph);
+          }
+      });
+  });
+}
