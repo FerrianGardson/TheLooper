@@ -459,7 +459,8 @@ function combineEmotes() {
         } else {
           currentPlayer = player;
           currentEmote = emote;
-          currentChapter = element.closest('.chapter').html();
+          currentChapter = $(element).closest('.night').find('.chapter').addBack('.chapter').prop('outerHTML');
+
 
           console.log(
             "Новый игрок, начинаем новый элемент. Игрок: " +
