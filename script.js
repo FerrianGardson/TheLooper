@@ -428,6 +428,7 @@ function combineEmotes() {
 
   var currentPlayer = "";
   var currentEmote = "";
+  var currentChapter = "";
 
   // Обновляем селектор, чтобы выбирать только внутри развёрнутых глав
   var elements = $(
@@ -458,6 +459,7 @@ function combineEmotes() {
         } else {
           currentPlayer = player;
           currentEmote = emote;
+          currentChapter = element.closest('.chapter').html();
 
           console.log(
             "Новый игрок, начинаем новый элемент. Игрок: " +
@@ -470,12 +472,14 @@ function combineEmotes() {
     } else if ($(element).hasClass("logline") && $(element).hasClass("say")) {
       currentPlayer = "";
       currentEmote = "";
+      currentChapter = "";
       console.log("Реплика, пропускаем элемент");
     }
   }
 
   console.log("Объединение эмоутов завершено");
 }
+
 
 // Список игроков
 
@@ -867,9 +871,17 @@ function oocToEmote() {
       // Заменяем класс "ooc" на "emote" у родительского элемента
       element.classList.remove('ooc');
       element.classList.add('emote');
+
+      // Получаем вложенный элемент с классом "speech" и меняем его класс
+      var speechElement = element.querySelector('.speech');
+      if (speechElement) {
+          speechElement.classList.remove('speech');
+          speechElement.classList.add('emote');
+      }
   });
   removeEmptyParagraphs();
 }
+
 
 function removeEmptyParagraphs() {
   // Находим элементы с классом "chapter expanded"
