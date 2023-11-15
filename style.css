@@ -292,3 +292,15 @@ input:focus-visible {
 p.logline.whisper .speech, span.whisper {
   color: #d361d3;
 }
+
+.night {
+  display: block;
+  background: #ff000045;
+  padding: 1em;
+}
+
+.night-transfered {
+  display: block;
+  background: rgba(0, 128, 0, 0.37);
+  padding: 1em;
+}

@@ -113,6 +113,48 @@ chapterLines.forEach((line) => {
   return chapter;
 }
 
+function transferNightLines(rootElement) {
+  function nightTransfer(chapter) {
+    const dateElement = chapter.querySelector('.date');
+    let nightElement = chapter.querySelector('.night');
+
+    if (dateElement && nightElement && !nightElement.classList.contains('night-transfered')) {
+      const currentDate = dateElement.textContent.trim();
+      nightElement.classList.remove('night');
+      nightElement.classList.add('night-transfered');
+
+      let nextChapter = chapter.nextElementSibling;
+
+      while (nextChapter && !nextChapter.querySelector('.date')) {
+        nextChapter = nextChapter.nextElementSibling;
+      }
+
+      if (nextChapter) {
+        const nextDateElement = nextChapter.querySelector('.date');
+        const nextChapterContent = nextChapter.querySelector('.content');
+
+        if (nextDateElement && nextChapterContent) {
+          // Вставляем .night-transfered в конец .content после всех .logline
+          nextChapterContent.appendChild(nightElement);
+
+          console.log(`Строки для ночи из главы с датой: ${currentDate} добавлены в конец контента в следующей главе: ${nextDateElement.textContent.trim()}`);
+        } else {
+          console.log(`Контейнер контента или дата не найдены в следующей главе. Строки для ночи не будут перемещены.`);
+        }
+      } else {
+        console.log(`Следующая глава не найдена. Строки для ночи из главы с датой: ${currentDate} не будут перемещены.`);
+      }
+    }
+
+    const nestedChapters = chapter.querySelectorAll('.chapter');
+    nestedChapters.forEach(nestedChapter => nightTransfer(nestedChapter));
+  }
+
+  nightTransfer(rootElement);
+}
+
+
+
 
 
 // Вспомогательная функция для создания абзаца
@@ -618,6 +660,7 @@ function formatLog() {
   console.log("Запускаю допфункции");
   removeTimestamps();
   cleanText();
+  transferNightLines(document.body);
   playersList();
   colorizePlayers();
   addCommaOrDot();
