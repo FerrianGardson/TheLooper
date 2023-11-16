@@ -813,6 +813,14 @@ function emoteToSpeech() {
       '<span class="emote"><span class="speech">– $1</span>'
     );
 
+    // Замена третьего  выражения
+    newEmoteText = newEmoteText.replace(
+      /[,.!?]\s*–\s*(.+\s–)/gm,
+      '<span class="emote"><span class="speech">– $1</span>'
+    );
+
+    
+
     // Заменяем существующий HTML внутри элемента
     emoteElement.innerHTML = newEmoteText;
   });
@@ -835,11 +843,11 @@ function sayToEmote() {
   sayElements.forEach(function (sayElement) {
     // Орфография
     sayElement.innerHTML = sayElement.innerHTML.replace(
-      /(\.\.\.|[,.!?]|\s)\s*([-–—]\s*[А-Я].+?)\s[-–—]\s*([А-Я])/g,
+      /(\.\.\.|[,.!?]|\s)\s*([-–—]\s*[А-Я].+?)[,.:]\s[-–—]\s*([А-Я])/g,
       ", $2. – $3"
     );
   });
-debugger;
+  debugger;
   sayElements.forEach(function (sayElement) {
     // Заменяем текст внутри span.speech
     sayElement.innerHTML = sayElement.innerHTML.replace(
