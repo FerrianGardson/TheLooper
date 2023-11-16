@@ -209,8 +209,13 @@ p.logline.yell > .speech {
   text-transform: uppercase;
 }
 
-p {
-  /* opacity: 0.5; */
+p.logline {
+  opacity: 0.5;
+}
+
+/* Стиль для выключенного CSS */
+#chatlog.disabled p.logline {
+  opacity: 1; /* Любые изменения, когда CSS выключен */
 }
 
 p.important {

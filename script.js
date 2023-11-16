@@ -1,31 +1,92 @@
 // Загрузка файла
 
-const fileInput = document.getElementById("file-input");
-const chatlog = document.getElementById("chatlog");
+  // Получаем элементы DOM
+  const fileInputTxt = document.getElementById("file-input-txt");
+  const fileInputHtml = document.getElementById("file-input-html");
+  const chatlog = document.getElementById("chatlog");
 
-fileInput.addEventListener("change", handleFileInput);
+  // Добавляем слушатель события на изменение input файла (TXT)
+  fileInputTxt.addEventListener("change", handleFileInputTxt);
 
-// Функции
+  // Добавляем слушатель события на изменение input файла (HTML)
+  fileInputHtml.addEventListener("change", handleFileInputHtml);
 
-async function handleFileInput(event) {
-  // Очищаем содержимое div.chatlog перед загрузкой нового файла
-  chatlog.innerHTML = "";
+  // Функции
 
-  const file = event.target.files[0];
-  const text = await file.text();
-  renderChatLog(text);
-}
+  async function handleFileInputTxt(event) {
+    // Очищаем содержимое div.chatlog перед загрузкой нового файла
+    chatlog.innerHTML = "";
 
-function renderChatLog(text) {
-  const chapters = divideChapters(text);
+    // Получаем файл из события
+    const file = event.target.files[0];
 
-  for (const [chapterTitle, chapterLines] of Object.entries(chapters)) {
-    const chapter = createChapterElement(chapterTitle, chapterLines);
-    chatlog.appendChild(chapter);
+    // Проверяем, что файл существует
+    if (file) {
+      // Читаем содержимое файла как текст
+      const text = await file.text();
+
+      // Рендерим чатлог с текстовым содержимым файла
+      renderChatLog(text);
+    } else {
+      console.error("Файл не найден");
+    }
   }
 
-  formatLog();
+// Кнопка Opacity
+
+const toggleCssButton = document.getElementById("toggle-css-button");
+
+// Добавляем слушатель события на кнопку
+toggleCssButton.addEventListener("click", toggleCss);
+
+// Функция для включения/выключения CSS
+function toggleCss() {
+  // Переключаем стиль у элемента
+  chatlog.classList.toggle("disabled");
 }
+
+  async function handleFileInputHtml(event) {
+    // Очищаем содержимое div.chatlog перед загрузкой нового файла
+    chatlog.innerHTML = "";
+
+    // Получаем файл из события
+    const file = event.target.files[0];
+
+    // Проверяем, что файл существует
+    if (file) {
+      // Читаем содержимое файла как текст
+      const htmlText = await file.text();
+
+      // Извлекаем #chatlog из HTML и заменяем текущий #chatlog
+      const parser = new DOMParser();
+      const htmlDocument = parser.parseFromString(htmlText, "text/html");
+      const newChatlog = htmlDocument.getElementById("chatlog");
+
+      if (newChatlog) {
+        chatlog.innerHTML = newChatlog.innerHTML;
+        // Можно также скопировать дополнительные атрибуты, например, классы или стили,
+        // если они необходимы для правильного отображения
+      } else {
+        console.error("#chatlog не найден в загруженном HTML");
+      }
+    } else {
+      console.error("Файл не найден");
+    }
+  }
+
+  function renderChatLog(text) {
+    // Разбиваем текст на главы (или что-то подобное)
+    const chapters = divideChapters(text);
+
+    // Создаем элементы для каждой главы и добавляем их в чатлог
+    for (const [chapterTitle, chapterLines] of Object.entries(chapters)) {
+      const chapter = createChapterElement(chapterTitle, chapterLines);
+      chatlog.appendChild(chapter);
+    }
+
+    // Дополнительные операции форматирования лога
+    formatLog();
+  }
 
 // Создание глав
 
