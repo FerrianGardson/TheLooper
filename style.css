@@ -214,10 +214,6 @@ p.logline {
   opacity: 0.5;
 }
 
-/* Стиль для выключенного CSS */
-#chatlog.disabled p.logline {
-  opacity: 1; /* Любые изменения, когда CSS выключен */
-}
 
 p.important {
   display: block;
@@ -301,14 +297,25 @@ p.logline.whisper .speech, span.whisper {
   color: #d361d3;
 }
 
-.night {
+#chatlog.debug .night {
   display: block;
   background: #ff000045;
   padding: 1em;
 }
 
-.night-transfered {
-  /* display: block; */
-  /* background: rgba(0, 128, 0, 0.37); */
-  /* padding: 1em; */
+/* Стиль для выключенного CSS */
+#chatlog.debug p.logline {
+  opacity: 1; /* Любые изменения, когда CSS выключен */
 }
+
+.time {
+  display: none!important;
+}
+
+#chatlog.debug .night–transfered {
+  display: block;
+  background: rgba(0, 128, 0, 0.37);
+  padding: 1em;
+}
+
+#chatlog.debug .time {display: block!important;opacity: 0.5;float: left;padding-right: 0.5rem;}

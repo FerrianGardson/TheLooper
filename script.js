@@ -32,17 +32,55 @@ async function handleFileInputTxt(event) {
   }
 }
 
-// Кнопка Opacity
+function debug() {
+  chatlog.classList.toggle("debug");
+  removeConsecutiveTimes();
+}
 
-const toggleCssButton = document.getElementById("toggle-css-button");
+function removeConsecutiveTimes() {
+  // Получаем все элементы с классом "chapter"
+  var chapters = document.querySelectorAll(".chapter");
 
-// Добавляем слушатель события на кнопку
-toggleCssButton.addEventListener("click", toggleCss);
+  // Проходимся по каждому элементу
+  chapters.forEach(function (chapter) {
+    // Получаем все элементы .time внутри текущего элемента .chapter
+    var times = chapter.querySelectorAll(".time");
 
-// Функция для включения/выключения CSS
-function toggleCss() {
-  // Переключаем стиль у элемента
-  chatlog.classList.toggle("disabled");
+    // Переменная для хранения индекса последнего элемента .time
+    var lastIndex = -1;
+
+    // Проходимся по каждому элементу .time
+    times.forEach(function (time, index) {
+      // Проверяем, идет ли текущий .time после предыдущего
+      if (index === lastIndex + 1) {
+        // Удаляем предыдущий .time
+        times[lastIndex].remove();
+      }
+
+      // Обновляем индекс последнего .time
+      lastIndex = index;
+    });
+  });
+
+  // Теперь обрабатываем случай, когда .time находится внутри .night-transfered
+  var nightTransferedTimes = document.querySelectorAll(
+    ".night-transfered .time"
+  );
+
+  // Переменная для хранения индекса последнего элемента .time внутри .night-transfered
+  var lastNightTransferedIndex = -1;
+
+  // Проходимся по каждому элементу .time внутри .night-transfered
+  nightTransferedTimes.forEach(function (time, index) {
+    // Проверяем, идет ли текущий .time после предыдущего внутри .night-transfered
+    if (index === lastNightTransferedIndex + 1) {
+      // Удаляем предыдущий .time
+      nightTransferedTimes[lastNightTransferedIndex].remove();
+    }
+
+    // Обновляем индекс последнего .time внутри .night-transfered
+    lastNightTransferedIndex = index;
+  });
 }
 
 async function handleFileInputHtml(event) {
@@ -163,8 +201,7 @@ function createChapterElement(chapterTitle, chapterLines) {
     nightContainer.classList.add("night");
     nightContainer.innerHTML = nightLines.join("");
     chapterContent.appendChild(nightContainer);
-    /*     console.log("Night lines added to nightContainer:", nightLines); // Лог для отслеживания добавления строк в nightContainer
-     */
+    console.log("Night lines added to nightContainer:", nightLines); // Лог для отслеживания добавления строк в nightContainer
   }
 
   chapter.appendChild(chapterContent);
@@ -288,13 +325,14 @@ function getMonthIndex(monthName) {
 
 // Удаление таймштампов
 
-function removeTimestamps() {
+function formatTimestamps() {
   /*   console.log("Удаление таймштампов"); */
   const chatlog = document.getElementById("chatlog");
   const chatlogHTML = chatlog.innerHTML;
   const cleanedHTML = chatlogHTML.replace(
-    /\d{1,2}\/\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}\.\d{1,3}\s+/g,
+    /(\d{1,2}\/\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}\.\d{1,3}\s+)/g,
     '<p class="logline say">'
+    /* <p class="time">$1</p> */
   );
   chatlog.innerHTML = cleanedHTML;
 }
@@ -685,15 +723,71 @@ function toggleVisibility(className) {
 function formatLog() {
   let chatlogHTML = document.getElementById("chatlog").innerHTML;
   /*   console.log("Запускаю допфункции");
-   */ removeTimestamps();
-  cleanText();
+   */ formatTimestamps();
   transferNightLines(document.body);
+  cleanText();
   playersList();
   colorizePlayers();
   addCommaOrDot();
   addColonToEnd();
   chapterCollapse();
   emoteToSpeech();
+  addIdToChapter();
+}
+
+// Функция для форматирования текста даты
+function formatDate(dateText) {
+  // Разделяем текст даты на число и месяц
+  var parts = dateText.split(" ");
+
+  // Получаем числовое значение даты
+  var day = parts[2];
+
+  // Получаем месяц и преобразуем его в нужный формат
+  var month = getMonthAbbreviation(parts[3]);
+
+  // Собираем идентификатор и добавляем его к классам элемента
+  return month + day;
+}
+
+// Функция для получения аббревиатуры месяца
+function getMonthAbbreviation(month) {
+  // Маппинг полных названий месяцев на их аббревиатуры
+  var monthMap = {
+    января: "january",
+    февраля: "february",
+    марта: "march",
+    апреля: "april",
+    мая: "may",
+    июня: "june",
+    июля: "july",
+    августа: "august",
+    сентября: "september",
+    октября: "october",
+    ноября: "november",
+    декабря: "december",
+  };
+
+  // Возвращаем аббревиатуру месяца или оставляем оригинальный текст, если аббревиатура не найдена
+  return monthMap[month.toLowerCase()] || month;
+}
+
+// Функция для добавления идентификаторов к элементам с классом "chapter"
+function addIdToChapter() {
+  // Получаем все элементы с классом "chapter"
+  var chapters = document.querySelectorAll(".chapter");
+
+  // Проходимся по каждому элементу и добавляем id
+  chapters.forEach(function (chapter) {
+    // Получаем текст из элемента h2 с классом "date"
+    var dateText = chapter.querySelector(".date").innerText;
+
+    // Преобразуем текст даты в формат "DDMMMM" (например, "13ноября")
+    var formattedDate = formatDate(dateText);
+
+    // Собираем идентификатор и добавляем его к классам элемента
+    chapter.id = formattedDate;
+  });
 }
 
 function emoteToSpeech() {
@@ -751,7 +845,6 @@ function sayToEmote() {
       '$1 <span class="emote">– $2$3 </span>'
     );
   });
-  debugger;
   sayToEmote2();
 }
 
@@ -776,7 +869,7 @@ function sayToEmote2() {
       /([,.!?:])\s*[-–—]\s*(.+)([:.!?])/g,
       '$1 <span class="emote">– $2$3</span>'
     );
-    debugger;
+
   });
 }
 
@@ -792,6 +885,7 @@ function transferNightLines(rootElement) {
       }
       const currentDate = dateElement.textContent.trim();
       nightElement.classList.remove("night");
+      nightElement.classList.add("night-transfered");
 
       let nextChapter = chapters[i + 1];
       if (!nextChapter) {
@@ -980,20 +1074,22 @@ function openImportantChapters() {
     }
 
     // Вывести переменные на каждой итерации для отладки
-    console.log("Iteration:", i);
+    /*     console.log("Iteration:", i);
     console.log("Chapter:", chapter);
     console.log("Classes after update:", chapter.className);
-    console.log("--------------------------");
+    console.log("--------------------------"); */
   }
 }
 
 function scrollToNearestImportant() {
   // Находим все элементы с классом .chapter.expanded > logline.important
-  const importantElements = document.querySelectorAll('.chapter.expanded .logline.important');
+  const importantElements = document.querySelectorAll(
+    ".chapter.expanded .logline.important"
+  );
 
   // Если элементы не найдены, завершаем выполнение функции
   if (importantElements.length === 0) {
-    console.log('Нет элементов для прокрутки');
+    console.log("Нет элементов для прокрутки");
     return;
   }
 
@@ -1022,20 +1118,18 @@ function scrollToNearestImportant() {
   if (nearestElement) {
     const elementRect = nearestElement.getBoundingClientRect();
     const elementCenter = elementRect.top + elementRect.height / 2;
-    const scrollToY = elementCenter + currentScrollPosition - window.innerHeight / 2;
+    const scrollToY =
+      elementCenter + currentScrollPosition - window.innerHeight / 2;
 
     window.scrollTo({
       top: scrollToY,
-      behavior: 'smooth' // Добавляем плавность прокрутки, если поддерживается браузером
+      behavior: "smooth", // Добавляем плавность прокрутки, если поддерживается браузером
     });
   }
 }
 
 // Пример использования
 scrollToNearestImportant();
-
-
-
 
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOMContentLoaded");
