@@ -988,36 +988,54 @@ function openImportantChapters() {
 }
 
 function scrollToNearestImportant() {
-  // Найти все элементы с классом .chapter.expanded
-  var expandedChapters = document.querySelectorAll(".chapter.expanded");
+  // Находим все элементы с классом .chapter.expanded > logline.important
+  const importantElements = document.querySelectorAll('.chapter.expanded .logline.important');
 
-  // Инициализировать переменные для хранения ближайшего расстояния и элемента
-  var closestDistance = Infinity;
-  var closestImportantElement = null;
+  // Если элементы не найдены, завершаем выполнение функции
+  if (importantElements.length === 0) {
+    console.log('Нет элементов для прокрутки');
+    return;
+  }
 
-  // Пройти по каждому .chapter.expanded
-  expandedChapters.forEach(function (expandedChapter) {
-    // Найти ближайший дочерний элемент с классом .logline.important
-    var importantElement = expandedChapter.querySelector(".logline.important");
+  // Находим текущее положение вертикальной прокрутки страницы
+  const currentScrollPosition = window.scrollY || window.pageYOffset;
 
-    // Если такой элемент найден
-    if (importantElement) {
-      // Вычислить расстояние от верха страницы
-      var distance = Math.abs(importantElement.getBoundingClientRect().top);
+  // Инициализируем переменные для хранения информации о ближайшем элементе
+  let nearestElement = null;
+  let minDistance = Infinity;
 
-      // Проверить, является ли это ближайшим элементом
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestImportantElement = importantElement;
-      }
+  // Итерируемся по всем найденным элементам
+  importantElements.forEach((element) => {
+    // Вычисляем расстояние от центра экрана до текущего элемента
+    const rect = element.getBoundingClientRect();
+    const elementCenter = rect.top + rect.height / 2;
+    const distance = Math.abs(window.innerHeight / 2 - elementCenter);
+
+    // Если текущий элемент ближе к центру экрана, чем предыдущие, обновляем переменные
+    if (distance < minDistance) {
+      minDistance = distance;
+      nearestElement = element;
     }
   });
 
-  // Если найден ближайший элемент, прокрутить к нему
-  if (closestImportantElement) {
-    closestImportantElement.scrollIntoView({ behavior: "smooth" });
+  // Если ближайший элемент найден, прокручиваем страницу к нему
+  if (nearestElement) {
+    const elementRect = nearestElement.getBoundingClientRect();
+    const elementCenter = elementRect.top + elementRect.height / 2;
+    const scrollToY = elementCenter + currentScrollPosition - window.innerHeight / 2;
+
+    window.scrollTo({
+      top: scrollToY,
+      behavior: 'smooth' // Добавляем плавность прокрутки, если поддерживается браузером
+    });
   }
 }
+
+// Пример использования
+scrollToNearestImportant();
+
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOMContentLoaded");
