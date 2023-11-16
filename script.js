@@ -372,7 +372,7 @@ function cleanText() {
 // Объединение чатбоксов
 
 function combineChatboxes() {
-  console.log("Объединяем чатбоксы...");
+  console.log("Начало объединения чатбоксов...");
 
   var currentPlayer = "";
   var currentSpeech = "";
@@ -381,8 +381,12 @@ function combineChatboxes() {
   var elements = $("div.chapter.expanded p.logline.say");
   var length = elements.length;
 
+  console.log("Найдено " + length + " элементов для объединения.");
+
   for (var i = 0; i < length; i++) {
     var element = elements[i];
+
+    console.log("Обрабатываем элемент " + (i + 1) + " из " + length);
 
     var playerElement = $(element).find("span.player");
     if (playerElement.length > 0) {
@@ -390,11 +394,16 @@ function combineChatboxes() {
       var speechElement = $(element).find("span.speech");
       var speech = speechElement.text().trim();
 
+      console.log("Игрок: " + player + ", Реплика: " + speech);
+
       if (player === currentPlayer) {
+        console.log("Тот же игрок, объединяем реплики...");
         currentSpeech += " " + speech;
-        speechElement.text(currentSpeech); // Обновляем содержимое текущего элемента
+        console.log("Удаляем предыдущий элемент:", $(element).prev());
         $(element).prev().remove(); // Удаляем предыдущий элемент
+        speechElement.text(currentSpeech); // Обновляем содержимое текущего элемента
       } else {
+        console.log("Новый игрок, начинаем новую реплику...");
         currentPlayer = player;
         currentSpeech = speech;
       }
@@ -410,6 +419,7 @@ function combineChatboxes() {
 
   console.log("Объединение чатбоксов завершено");
 }
+
 
 function combineEmotes() {
 /*   console.log("Объединяем эмоуты...");
@@ -625,52 +635,35 @@ function emoteToSpeech() {
 }
 
 function transferNightLines(rootElement) {
-  function nightTransfer(chapter) {
-    const dateElement = chapter.querySelector(".date");
-    let nightElement = chapter.querySelector(".night");
+  function nightTransfer(chapters) {
+    chapters.forEach(function (chapter, i) {
+      const dateElement = chapter.querySelector('.date');
+      let nightElement = chapter.querySelector('.night');
 
-    if (
-      !dateElement ||
-      !nightElement ||
-      nightElement.classList.contains("night-transfered")
-    ) {
-      return;
-    }
-
-    const currentDate = dateElement.textContent.trim();
-    nightElement.classList.remove("night");
-    nightElement.classList.add("night-transfered");
-
-    let nextChapter = chapter.nextElementSibling;
-
-    while (nextChapter && !nextChapter.querySelector(".date")) {
-      nextChapter = nextChapter.nextElementSibling;
-    }
-
-    if (!nextChapter) {
-/*       console.log(
-        `Следующая глава не найдена. Строки для ночи из главы с датой: ${currentDate} не будут перемещены.`
-      ); */
-    } else {
-      const nextDateElement = nextChapter.querySelector(".date");
-      const nextChapterContent = nextChapter.querySelector(".content");
-
-      if (!nextDateElement || !nextChapterContent) {
-/*         console.log(
-          `Контейнер контента или дата не найдены в следующей главе. Строки для ночи не будут перемещены.`
-        ); */
-      } else {
-        nextChapterContent.appendChild(nightElement);
-/*         console.log(
-          `Строки для ночи из главы с датой: «${currentDate}» добавлены в конец контента в следующей главе: «${nextDateElement.textContent.trim()}»`
-        ); */
+      if (!dateElement || !nightElement) {
+        // Или нет date, или нет night.
+        return;
       }
-    }
+      const currentDate = dateElement.textContent.trim();
+      nightElement.classList.remove('night');
+
+      let nextChapter = chapters[i+1]
+      if (!nextChapter) {
+        // Нет следующей главы.
+        return;
+      }
+      const nextDateElement = nextChapter.querySelector('.date');
+      const nextChapterContent = nextChapter.querySelector('.content');
+      if (!nextDateElement || !nextChapterContent) {
+        console.log(`Контейнер контента или дата не найдены в следующей главе. Строки для ночи не будут перемещены.`);
+      }
+
+      nextChapterContent.appendChild(nightElement);
+      console.log(`Строки для ночи из главы с датой: «${currentDate}» добавлены в конец контента в следующей главе: «${nextDateElement.textContent.trim()}»`);
+    });
   }
-
-  const chapters = rootElement.querySelectorAll(".chapter");
-  chapters.forEach((chapter) => nightTransfer(chapter));
-
+  let chatlogElement = document.getElementById("chatlog");
+  nightTransfer(chatlogElement.querySelectorAll('.chapter'));
   removeEmptyChapters()
 }
 
