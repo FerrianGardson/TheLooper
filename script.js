@@ -376,6 +376,7 @@ function combineChatboxes() {
 
   var currentPlayer = "";
   var currentSpeech = "";
+  var previousSpeech = null;
 
   // Обновляем селектор, чтобы выбирать только внутри развёрнутых глав
   var elements = $("div.chapter.expanded p.logline.say");
@@ -399,8 +400,8 @@ function combineChatboxes() {
       if (player === currentPlayer) {
         console.log("Тот же игрок, объединяем реплики...");
         currentSpeech += " " + speech;
-        console.log("Удаляем предыдущий элемент:", $(element).prev());
-        $(element).prev().remove(); // Удаляем предыдущий элемент
+        console.log("Удаляем предыдущую реплику:", previousSpeech);
+        $(previousSpeech).remove(); // Удаляем предыдущую реплику
         speechElement.text(currentSpeech); // Обновляем содержимое текущего элемента
       } else {
         console.log("Новый игрок, начинаем новую реплику...");
@@ -408,6 +409,8 @@ function combineChatboxes() {
         currentSpeech = speech;
       }
     }
+
+    previousSpeech = element;
 
     var nextElement = $(element).next();
     if (nextElement.hasClass("logline emote") || i === length - 1) {
@@ -419,6 +422,7 @@ function combineChatboxes() {
 
   console.log("Объединение чатбоксов завершено");
 }
+
 
 
 function combineEmotes() {
