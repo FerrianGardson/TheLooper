@@ -835,16 +835,19 @@ function sayToEmote() {
   sayElements.forEach(function (sayElement) {
     // Орфография
     sayElement.innerHTML = sayElement.innerHTML.replace(
-      /(...|\s|[,.!?])\s*([-–—]\s*[А-Я].+?)\s[-–—]\s*([А-Я])/g,
+      /(\.\.\.|[,.!?]|\s)\s*([-–—]\s*[А-Я].+?)\s[-–—]\s*([А-Я])/g,
       ", $2. – $3"
     );
-
+  });
+debugger;
+  sayElements.forEach(function (sayElement) {
     // Заменяем текст внутри span.speech
     sayElement.innerHTML = sayElement.innerHTML.replace(
       /([,.!?:])\s*[-–—]\s*(.+?)([:!?.]\s*[-–—])/g,
       '$1 <span class="emote">– $2$3 </span>'
     );
   });
+  debugger;
   sayToEmote2();
 }
 
@@ -869,7 +872,6 @@ function sayToEmote2() {
       /([,.!?:])\s*[-–—]\s*(.+)([:.!?])/g,
       '$1 <span class="emote">– $2$3</span>'
     );
-
   });
 }
 
