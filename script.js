@@ -699,60 +699,86 @@ function formatLog() {
 function emoteToSpeech() {
   console.log("emoteToSpeech");
   // Находим все элементы с классами .chapter.expanded .logline.emote
-  var emoteElements = document.querySelectorAll('.chapter.expanded .logline.emote span.emote');
+  var emoteElements = document.querySelectorAll(
+    ".chapter.expanded .logline.emote span.emote"
+  );
 
   // Проходимся по каждому элементу и выполняем замену текста с помощью регулярного выражения
-  emoteElements.forEach(function(emoteElement) {
-      var emoteText = emoteElement.textContent;
+  emoteElements.forEach(function (emoteElement) {
+    var emoteText = emoteElement.textContent;
 
-      // Замена первого выражения
-      var newEmoteText = emoteText.replace(/:\s*[-–—]\s*(.+)/gm, ': <span class="speech">– $1</span>');
+    // Замена первого выражения
+    var newEmoteText = emoteText.replace(
+      /:\s*[-–—]\s*(.+)/gm,
+      ': <span class="speech">– $1</span>'
+    );
 
-      // Замена второго выражения
-      newEmoteText = newEmoteText.replace(/^\s*[-–—] (.+)/gm, '<span class="emote"><span class="speech">– $1</span>');
+    // Замена второго выражения
+    newEmoteText = newEmoteText.replace(
+      /^\s*[-–—] (.+)/gm,
+      '<span class="emote"><span class="speech">– $1</span>'
+    );
 
-      // Заменяем существующий HTML внутри элемента
-      emoteElement.innerHTML = newEmoteText;
+    // Заменяем существующий HTML внутри элемента
+    emoteElement.innerHTML = newEmoteText;
   });
 }
 
 function killNav() {
-  var navElements = document.querySelectorAll('.nav');
-  navElements.forEach(function(navElement) {
-      navElement.parentNode.removeChild(navElement);
+  var navElements = document.querySelectorAll(".nav");
+  navElements.forEach(function (navElement) {
+    navElement.parentNode.removeChild(navElement);
   });
 }
 
 function sayToEmote() {
-  // Находим все элементы с классами .chapter.expanded p.logline.say
-  var sayElements = document.querySelectorAll('.chapter.expanded p.logline.say');
+  // Находим все элементы с классами .chapter.expanded p.logline.say .speech
+  var sayElements = document.querySelectorAll(
+    ".chapter.expanded p.logline.say .speech"
+  );
 
-  // Проходимся по каждому элементу и выполняем замену текста с помощью регулярного выражения
-  sayElements.forEach(function(sayElement) {
-      // Проверяем, что innerHTML существует
-      if (sayElement.innerHTML !== undefined) {
-          var sayText = sayElement.innerHTML;
+  // Проходимся по каждому элементу
+  sayElements.forEach(function (sayElement) {
+    // Орфография
+    sayElement.innerHTML = sayElement.innerHTML.replace(
+      /(...|\s|[,.!?])\s*([-–—]\s*[А-Я].+?)\s[-–—]\s*([А-Я])/g,
+      ", $2. – $3"
+    );
 
-          // Орфография
-          sayText = sayText.replace(/(...|\s|[,.!?])\s*([-–—]\s*[А-Я].+?)\s[-–—]\s*([А-Я])/g, ', $2. – $3');
-          sayElement.innerHTML = sayText;
-          debugger;
-          // Заменяем текст внутри span.speech
-          sayText = sayText.replace(/([,.!?:])\s*[-–—]\s*(.+?)([:!?.]\s*[-–—])/g, '$1 <span class="emote">– $2$3</span>');
-          sayElement.innerHTML = sayText;
-          debugger;
-          // Заменяем третье лицо, идущее до конца speech.
-          sayText = sayText.replace(/([,.!?:])\s*[-–—]\s*(.+)([:.!?])<\/span>/g, '$1 <span class="emote">– $2$3</span></span>');
-
-          // Заменяем существующий HTML внутри элемента
-          sayElement.innerHTML = sayText;
-      }
+    // Заменяем текст внутри span.speech
+    sayElement.innerHTML = sayElement.innerHTML.replace(
+      /([,.!?:])\s*[-–—]\s*(.+?)([:!?.]\s*[-–—])/g,
+      '$1 <span class="emote">– $2$3 </span>'
+    );
   });
+  debugger;
+  sayToEmote2();
 }
 
+function sayToEmote2() {
+  // Находим все элементы с классами .chapter.expanded p.logline.say .speech
+  var sayElements = document.querySelectorAll(
+    ".chapter.expanded p.logline.say span.speech"
+  );
 
+  // Фильтруем элементы, чтобы оставить только те, которые не содержат span.emote
+  var filteredSayElements = Array.from(sayElements).filter(function (
+    sayElement
+  ) {
+    return !sayElement.querySelector("span.emote");
+  });
 
+  sayElements = filteredSayElements;
 
+  // Проходимся по каждому элементу
+  sayElements.forEach(function (sayElement) {
+    sayElement.innerHTML = sayElement.innerHTML.replace(
+      /([,.!?:])\s*[-–—]\s*(.+)([:.!?])/g,
+      '$1 <span class="emote">– $2$3</span>'
+    );
+    debugger;
+  });
+}
 
 function transferNightLines(rootElement) {
   function nightTransfer(chapters) {
@@ -775,15 +801,15 @@ function transferNightLines(rootElement) {
       const nextDateElement = nextChapter.querySelector(".date");
       const nextChapterContent = nextChapter.querySelector(".content");
       if (!nextDateElement || !nextChapterContent) {
-        console.log(
+/*         console.log(
           `Контейнер контента или дата не найдены в следующей главе. Строки для ночи не будут перемещены.`
-        );
+        ); */
       }
 
       nextChapterContent.appendChild(nightElement);
-      console.log(
+/*       console.log(
         `Строки для ночи из главы с датой: «${currentDate}» добавлены в конец контента в следующей главе: «${nextDateElement.textContent.trim()}»`
-      );
+      ); */
     });
   }
   let chatlogElement = document.getElementById("chatlog");
@@ -886,6 +912,9 @@ document
     }
   });
 
+
+
+
 function applyImportant() {
   /*   console.log("Выделение ключевых слов"); */
 
@@ -929,7 +958,36 @@ function applyImportant() {
       $(this).removeClass("important");
     }
   });
+
+  moveToImportant();
 }
+
+function moveToImportant() {
+  // Найти все элементы с классом .chapter
+  var chapters = document.querySelectorAll('.chapter');
+
+  // Пройти по каждому .chapter с использованием цикла for и i
+  for (var i = 0; i < chapters.length; i++) {
+      var chapter = chapters[i];
+
+      // Удалить класс .expanded и добавить класс .collapsed у всех .chapter
+      chapter.classList.remove('expanded');
+      chapter.classList.add('collapsed');
+
+      // Проверить, содержит ли .chapter дочерний элемент с классом .logline.important
+      if (chapter.querySelector('.logline.important')) {
+          // Если содержит, добавить класс .expanded
+          chapter.classList.add('expanded');
+      }
+
+      // Вывести переменные на каждой итерации для отладки
+      console.log('Iteration:', i);
+      console.log('Chapter:', chapter);
+      console.log('Classes after update:', chapter.className);
+      console.log('--------------------------');
+  }
+}
+
 
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOMContentLoaded");
@@ -945,30 +1003,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function removeNonImportantParagraphs() {
   console.log("removeNonImportantParagraphs");
-  removeImportantClass();
-
-  // Удаляем абзацы без класса .important
-  const paragraphs = document.querySelectorAll("p:not(.important)");
-  paragraphs.forEach((paragraph) => {
-    paragraph.remove();
-  });
 
   // Удаляем все элементы с классом .chapter.collapsed
   const collapsedChapters = document.querySelectorAll(".chapter.collapsed");
   collapsedChapters.forEach((chapter) => {
     chapter.remove();
   });
-}
 
-function removeImportantClass() {
-  /*   console.log("removeImportantClass"); */
-  var containers = document.querySelectorAll(".collapsed");
-
-  containers.forEach(function (container) {
-    var elements = container.querySelectorAll("p.important");
-    elements.forEach(function (element) {
-      element.classList.remove("important");
-    });
+  // Удаляем абзацы без класса .important
+  const paragraphs = document.querySelectorAll("p:not(.important)");
+  paragraphs.forEach((paragraph) => {
+    paragraph.remove();
   });
 }
 
