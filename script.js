@@ -801,13 +801,13 @@ function transferNightLines(rootElement) {
       const nextDateElement = nextChapter.querySelector(".date");
       const nextChapterContent = nextChapter.querySelector(".content");
       if (!nextDateElement || !nextChapterContent) {
-/*         console.log(
+        /*         console.log(
           `Контейнер контента или дата не найдены в следующей главе. Строки для ночи не будут перемещены.`
         ); */
       }
 
       nextChapterContent.appendChild(nightElement);
-/*       console.log(
+      /*       console.log(
         `Строки для ночи из главы с датой: «${currentDate}» добавлены в конец контента в следующей главе: «${nextDateElement.textContent.trim()}»`
       ); */
     });
@@ -912,9 +912,6 @@ document
     }
   });
 
-
-
-
 function applyImportant() {
   /*   console.log("Выделение ключевых слов"); */
 
@@ -959,36 +956,68 @@ function applyImportant() {
     }
   });
 
-  moveToImportant();
+  openImportantChapters();
+  scrollToNearestImportant();
 }
 
-function moveToImportant() {
+function openImportantChapters() {
   // Найти все элементы с классом .chapter
-  var chapters = document.querySelectorAll('.chapter');
+  var chapters = document.querySelectorAll(".chapter");
 
   // Пройти по каждому .chapter с использованием цикла for и i
   for (var i = 0; i < chapters.length; i++) {
-      var chapter = chapters[i];
+    var chapter = chapters[i];
 
-      // Удалить класс .expanded и добавить класс .collapsed у всех .chapter
-      chapter.classList.remove('expanded');
-      chapter.classList.add('collapsed');
+    // Удалить класс .expanded и добавить класс .collapsed у всех .chapter
+    chapter.classList.remove("expanded");
+    chapter.classList.add("collapsed");
 
-      // Проверить, содержит ли .chapter дочерний элемент с классом .logline.important
-      if (chapter.querySelector('.logline.important')) {
-          // Если содержит, добавить класс .expanded
-          chapter.classList.remove('collapsed');
-          chapter.classList.add('expanded');
-      }
+    // Проверить, содержит ли .chapter дочерний элемент с классом .logline.important
+    if (chapter.querySelector(".logline.important")) {
+      // Если содержит, добавить класс .expanded
+      chapter.classList.remove("collapsed");
+      chapter.classList.add("expanded");
+    }
 
-      // Вывести переменные на каждой итерации для отладки
-      console.log('Iteration:', i);
-      console.log('Chapter:', chapter);
-      console.log('Classes after update:', chapter.className);
-      console.log('--------------------------');
+    // Вывести переменные на каждой итерации для отладки
+    console.log("Iteration:", i);
+    console.log("Chapter:", chapter);
+    console.log("Classes after update:", chapter.className);
+    console.log("--------------------------");
   }
 }
 
+function scrollToNearestImportant() {
+  // Найти все элементы с классом .chapter.expanded
+  var expandedChapters = document.querySelectorAll(".chapter.expanded");
+
+  // Инициализировать переменные для хранения ближайшего расстояния и элемента
+  var closestDistance = Infinity;
+  var closestImportantElement = null;
+
+  // Пройти по каждому .chapter.expanded
+  expandedChapters.forEach(function (expandedChapter) {
+    // Найти ближайший дочерний элемент с классом .logline.important
+    var importantElement = expandedChapter.querySelector(".logline.important");
+
+    // Если такой элемент найден
+    if (importantElement) {
+      // Вычислить расстояние от верха страницы
+      var distance = Math.abs(importantElement.getBoundingClientRect().top);
+
+      // Проверить, является ли это ближайшим элементом
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestImportantElement = importantElement;
+      }
+    }
+  });
+
+  // Если найден ближайший элемент, прокрутить к нему
+  if (closestImportantElement) {
+    closestImportantElement.scrollIntoView({ behavior: "smooth" });
+  }
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOMContentLoaded");
