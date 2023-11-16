@@ -14,12 +14,22 @@
           <label for="file-input-txt">Загрузить лог (TXT)</label>
           <input type="file" id="file-input-txt" />
         </form>
-        
+
         <form>
           <label for="file-input-html">Загрузить лог (HTML)</label>
           <input type="file" id="file-input-html" />
         </form>
         <button id="toggle-css-button">Opacity</button>
+
+        <!--         <button onclick="toggleVisibility('dm')">DM</button>
+        <button onclick="toggleVisibility('ooc')">OOC</button> -->
+        <!--       <button onclick="removeImportantClass()">Выделение</button> -->
+        <button onclick="removeNonImportantParagraphs()">Чистка</button>
+        <button onclick="oocToEmote()">OOC =&gt; Emote</button>
+        <button onclick="emoteToSpeech()">Emote =&gt; Say</button>
+        <button onclick="sayToEmote()">Say => Emote</button>
+        <button onclick="combineFunctions()">Чатбоксы</button>
+        <button onclick="killNav()">Kill Nav</button>
         <div id="keywords">
           <input
             type="text"
@@ -31,12 +41,6 @@
 
           <button onclick="applyImportant()">Выделение</button>
         </div>
-        <!--         <button onclick="toggleVisibility('dm')">DM</button>
-        <button onclick="toggleVisibility('ooc')">OOC</button> -->
-        <!--       <button onclick="removeImportantClass()">Выделение</button> -->
-        <button onclick="removeNonImportantParagraphs()">Чистка</button>
-        <button onclick="oocToEmote()">OOC => Emote</button>
-        <button onclick="combineFunctions()">Чатбоксы</button>
       </div>
     </div>
     <div id="chatlog"></div>

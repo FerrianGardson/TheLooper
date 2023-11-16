@@ -1,36 +1,36 @@
 // Загрузка файла
 
-  // Получаем элементы DOM
-  const fileInputTxt = document.getElementById("file-input-txt");
-  const fileInputHtml = document.getElementById("file-input-html");
-  const chatlog = document.getElementById("chatlog");
+// Получаем элементы DOM
+const fileInputTxt = document.getElementById("file-input-txt");
+const fileInputHtml = document.getElementById("file-input-html");
+const chatlog = document.getElementById("chatlog");
 
-  // Добавляем слушатель события на изменение input файла (TXT)
-  fileInputTxt.addEventListener("change", handleFileInputTxt);
+// Добавляем слушатель события на изменение input файла (TXT)
+fileInputTxt.addEventListener("change", handleFileInputTxt);
 
-  // Добавляем слушатель события на изменение input файла (HTML)
-  fileInputHtml.addEventListener("change", handleFileInputHtml);
+// Добавляем слушатель события на изменение input файла (HTML)
+fileInputHtml.addEventListener("change", handleFileInputHtml);
 
-  // Функции
+// Функции
 
-  async function handleFileInputTxt(event) {
-    // Очищаем содержимое div.chatlog перед загрузкой нового файла
-    chatlog.innerHTML = "";
+async function handleFileInputTxt(event) {
+  // Очищаем содержимое div.chatlog перед загрузкой нового файла
+  chatlog.innerHTML = "";
 
-    // Получаем файл из события
-    const file = event.target.files[0];
+  // Получаем файл из события
+  const file = event.target.files[0];
 
-    // Проверяем, что файл существует
-    if (file) {
-      // Читаем содержимое файла как текст
-      const text = await file.text();
+  // Проверяем, что файл существует
+  if (file) {
+    // Читаем содержимое файла как текст
+    const text = await file.text();
 
-      // Рендерим чатлог с текстовым содержимым файла
-      renderChatLog(text);
-    } else {
-      console.error("Файл не найден");
-    }
+    // Рендерим чатлог с текстовым содержимым файла
+    renderChatLog(text);
+  } else {
+    console.error("Файл не найден");
   }
+}
 
 // Кнопка Opacity
 
@@ -45,48 +45,48 @@ function toggleCss() {
   chatlog.classList.toggle("disabled");
 }
 
-  async function handleFileInputHtml(event) {
-    // Очищаем содержимое div.chatlog перед загрузкой нового файла
-    chatlog.innerHTML = "";
+async function handleFileInputHtml(event) {
+  // Очищаем содержимое div.chatlog перед загрузкой нового файла
+  chatlog.innerHTML = "";
 
-    // Получаем файл из события
-    const file = event.target.files[0];
+  // Получаем файл из события
+  const file = event.target.files[0];
 
-    // Проверяем, что файл существует
-    if (file) {
-      // Читаем содержимое файла как текст
-      const htmlText = await file.text();
+  // Проверяем, что файл существует
+  if (file) {
+    // Читаем содержимое файла как текст
+    const htmlText = await file.text();
 
-      // Извлекаем #chatlog из HTML и заменяем текущий #chatlog
-      const parser = new DOMParser();
-      const htmlDocument = parser.parseFromString(htmlText, "text/html");
-      const newChatlog = htmlDocument.getElementById("chatlog");
+    // Извлекаем #chatlog из HTML и заменяем текущий #chatlog
+    const parser = new DOMParser();
+    const htmlDocument = parser.parseFromString(htmlText, "text/html");
+    const newChatlog = htmlDocument.getElementById("chatlog");
 
-      if (newChatlog) {
-        chatlog.innerHTML = newChatlog.innerHTML;
-        // Можно также скопировать дополнительные атрибуты, например, классы или стили,
-        // если они необходимы для правильного отображения
-      } else {
-        console.error("#chatlog не найден в загруженном HTML");
-      }
+    if (newChatlog) {
+      chatlog.innerHTML = newChatlog.innerHTML;
+      // Можно также скопировать дополнительные атрибуты, например, классы или стили,
+      // если они необходимы для правильного отображения
     } else {
-      console.error("Файл не найден");
+      console.error("#chatlog не найден в загруженном HTML");
     }
+  } else {
+    console.error("Файл не найден");
+  }
+}
+
+function renderChatLog(text) {
+  // Разбиваем текст на главы (или что-то подобное)
+  const chapters = divideChapters(text);
+
+  // Создаем элементы для каждой главы и добавляем их в чатлог
+  for (const [chapterTitle, chapterLines] of Object.entries(chapters)) {
+    const chapter = createChapterElement(chapterTitle, chapterLines);
+    chatlog.appendChild(chapter);
   }
 
-  function renderChatLog(text) {
-    // Разбиваем текст на главы (или что-то подобное)
-    const chapters = divideChapters(text);
-
-    // Создаем элементы для каждой главы и добавляем их в чатлог
-    for (const [chapterTitle, chapterLines] of Object.entries(chapters)) {
-      const chapter = createChapterElement(chapterTitle, chapterLines);
-      chatlog.appendChild(chapter);
-    }
-
-    // Дополнительные операции форматирования лога
-    formatLog();
-  }
+  // Дополнительные операции форматирования лога
+  formatLog();
+}
 
 // Создание глав
 
@@ -163,8 +163,9 @@ function createChapterElement(chapterTitle, chapterLines) {
     nightContainer.classList.add("night");
     nightContainer.innerHTML = nightLines.join("");
     chapterContent.appendChild(nightContainer);
-/*     console.log("Night lines added to nightContainer:", nightLines); // Лог для отслеживания добавления строк в nightContainer
- */  }
+    /*     console.log("Night lines added to nightContainer:", nightLines); // Лог для отслеживания добавления строк в nightContainer
+     */
+  }
 
   chapter.appendChild(chapterContent);
 
@@ -183,8 +184,8 @@ function createParagraph(text) {
 // Разделение на главы
 
 function divideChapters(text) {
-/*   console.log("Разделение на главы");
- */  const logLines = text.trim().split("\n");
+  /*   console.log("Разделение на главы");
+   */ const logLines = text.trim().split("\n");
   const chapters = {};
 
   logLines.forEach((line) => {
@@ -288,7 +289,7 @@ function getMonthIndex(monthName) {
 // Удаление таймштампов
 
 function removeTimestamps() {
-/*   console.log("Удаление таймштампов"); */
+  /*   console.log("Удаление таймштампов"); */
   const chatlog = document.getElementById("chatlog");
   const chatlogHTML = chatlog.innerHTML;
   const cleanedHTML = chatlogHTML.replace(
@@ -347,8 +348,8 @@ function addColonToEnd() {
 // Чистка от мусора
 
 function cleanText() {
-/*   console.log("Чистка от мусора");
- */
+  /*   console.log("Чистка от мусора");
+   */
   // Определение
 
   let chatlogHTML = document.getElementById("chatlog").innerHTML;
@@ -484,11 +485,9 @@ function combineChatboxes() {
   console.log("Объединение чатбоксов завершено");
 }
 
-
-
 function combineEmotes() {
-/*   console.log("Объединяем эмоуты...");
- */
+  /*   console.log("Объединяем эмоуты...");
+   */
   // Удаляем пустые элементы
   $("div.chapter.expanded p.logline.emote:empty").remove();
 
@@ -513,14 +512,14 @@ function combineEmotes() {
         var emoteElement = $(element).find("span.emote");
         var emote = emoteElement.text().trim();
 
-/*         console.log("Игрок: " + player + ", Эмоут: " + emote); */
+        /*         console.log("Игрок: " + player + ", Эмоут: " + emote); */
 
         if (player === currentPlayer) {
           currentEmote += " " + emote;
           emoteElement.text(currentEmote); // Обновляем содержимое текущего элемента
           $(element).prev().remove(); // Удаляем предыдущий элемент
 
-/*           console.log("Объединено с предыдущим. Новый эмоут: " + currentEmote);
+          /*           console.log("Объединено с предыдущим. Новый эмоут: " + currentEmote);
           console.log("Удален предыдущий элемент."); */
         } else {
           currentPlayer = player;
@@ -531,7 +530,7 @@ function combineEmotes() {
             .addBack(".chapter")
             .prop("outerHTML");
 
-/*           console.log(
+          /*           console.log(
             "Новый игрок, начинаем новый элемент. Игрок: " +
               currentPlayer +
               ", Эмоут: " +
@@ -543,18 +542,19 @@ function combineEmotes() {
       currentPlayer = "";
       currentEmote = "";
       currentChapter = "";
-/*       console.log("Реплика, пропускаем элемент"); */
+      /*       console.log("Реплика, пропускаем элемент"); */
     }
   }
 
-/*   console.log("Объединение эмоутов завершено");
- */}
+  /*   console.log("Объединение эмоутов завершено");
+   */
+}
 
 // Список игроков
 
 function playersList() {
-/*   console.log("Список игроков");
- */  // Создаем пустой массив для хранения имен игроков
+  /*   console.log("Список игроков");
+   */ // Создаем пустой массив для хранения имен игроков
   let players = [];
 
   // Находим все .chapter на странице
@@ -611,8 +611,8 @@ function playersList() {
 }
 
 function colorizePlayers() {
-/*   console.log("Раскраска ников");
- */  const playerColors = {};
+  /*   console.log("Раскраска ников");
+   */ const playerColors = {};
   const playerSpans = document.querySelectorAll(".player");
   const colors = [
     "#43c59eff",
@@ -649,16 +649,17 @@ function colorizePlayers() {
     /*     console.log(`Имя игрока: ${playerName}, Цвет: ${color}`); */
   }
 
-/*   console.log("Окраска ников завершена");
- */
-/*   console.log("Удаление пустых игроков");
- */  const playerList = document.querySelector("ul.players"); // получаем список игроков
+  /*   console.log("Окраска ников завершена");
+   */
+  /*   console.log("Удаление пустых игроков");
+   */ const playerList = document.querySelector("ul.players"); // получаем список игроков
   const emptyPlayers = [...playerList.querySelectorAll("li")].filter(
     (li) => !li.textContent.trim()
   ); // фильтруем пустые элементы li
   emptyPlayers.forEach((li) => li.remove()); // удаляем каждый из найденных пустых элементов li
-/*   console.log("Удаление пустых игроков завершено");
- */}
+  /*   console.log("Удаление пустых игроков завершено");
+   */
+}
 
 // Кнопки DM и OOC
 
@@ -683,8 +684,8 @@ function toggleVisibility(className) {
 
 function formatLog() {
   let chatlogHTML = document.getElementById("chatlog").innerHTML;
-/*   console.log("Запускаю допфункции");
- */  removeTimestamps();
+  /*   console.log("Запускаю допфункции");
+   */ removeTimestamps();
   cleanText();
   transferNightLines(document.body);
   playersList();
@@ -692,44 +693,102 @@ function formatLog() {
   addCommaOrDot();
   addColonToEnd();
   chapterCollapse();
-  emoteToSpeech()
+  emoteToSpeech();
 }
 
 function emoteToSpeech() {
+  console.log("emoteToSpeech");
+  // Находим все элементы с классами .chapter.expanded .logline.emote
+  var emoteElements = document.querySelectorAll('.chapter.expanded .logline.emote span.emote');
 
+  // Проходимся по каждому элементу и выполняем замену текста с помощью регулярного выражения
+  emoteElements.forEach(function(emoteElement) {
+      var emoteText = emoteElement.textContent;
+
+      // Замена первого выражения
+      var newEmoteText = emoteText.replace(/:\s*[-–—]\s*(.+)/gm, ': <span class="speech">– $1</span>');
+
+      // Замена второго выражения
+      newEmoteText = newEmoteText.replace(/^\s*[-–—] (.+)/gm, '<span class="emote"><span class="speech">– $1</span>');
+
+      // Заменяем существующий HTML внутри элемента
+      emoteElement.innerHTML = newEmoteText;
+  });
 }
+
+function killNav() {
+  var navElements = document.querySelectorAll('.nav');
+  navElements.forEach(function(navElement) {
+      navElement.parentNode.removeChild(navElement);
+  });
+}
+
+function sayToEmote() {
+  // Находим все элементы с классами .chapter.expanded p.logline.say
+  var sayElements = document.querySelectorAll('.chapter.expanded p.logline.say');
+
+  // Проходимся по каждому элементу и выполняем замену текста с помощью регулярного выражения
+  sayElements.forEach(function(sayElement) {
+      // Проверяем, что innerHTML существует
+      if (sayElement.innerHTML !== undefined) {
+          var sayText = sayElement.innerHTML;
+
+          // Орфография
+          sayText = sayText.replace(/(...|\s|[,.!?])\s*([-–—]\s*[А-Я].+?)\s[-–—]\s*([А-Я])/g, ', $2. – $3');
+          sayElement.innerHTML = sayText;
+          debugger;
+          // Заменяем текст внутри span.speech
+          sayText = sayText.replace(/([,.!?:])\s*[-–—]\s*(.+?)([:!?.]\s*[-–—])/g, '$1 <span class="emote">– $2$3</span>');
+          sayElement.innerHTML = sayText;
+          debugger;
+          // Заменяем третье лицо, идущее до конца speech.
+          sayText = sayText.replace(/([,.!?:])\s*[-–—]\s*(.+)([:.!?])<\/span>/g, '$1 <span class="emote">– $2$3</span></span>');
+
+          // Заменяем существующий HTML внутри элемента
+          sayElement.innerHTML = sayText;
+      }
+  });
+}
+
+
+
+
 
 function transferNightLines(rootElement) {
   function nightTransfer(chapters) {
     chapters.forEach(function (chapter, i) {
-      const dateElement = chapter.querySelector('.date');
-      let nightElement = chapter.querySelector('.night');
+      const dateElement = chapter.querySelector(".date");
+      let nightElement = chapter.querySelector(".night");
 
       if (!dateElement || !nightElement) {
         // Или нет date, или нет night.
         return;
       }
       const currentDate = dateElement.textContent.trim();
-      nightElement.classList.remove('night');
+      nightElement.classList.remove("night");
 
-      let nextChapter = chapters[i+1]
+      let nextChapter = chapters[i + 1];
       if (!nextChapter) {
         // Нет следующей главы.
         return;
       }
-      const nextDateElement = nextChapter.querySelector('.date');
-      const nextChapterContent = nextChapter.querySelector('.content');
+      const nextDateElement = nextChapter.querySelector(".date");
+      const nextChapterContent = nextChapter.querySelector(".content");
       if (!nextDateElement || !nextChapterContent) {
-        console.log(`Контейнер контента или дата не найдены в следующей главе. Строки для ночи не будут перемещены.`);
+        console.log(
+          `Контейнер контента или дата не найдены в следующей главе. Строки для ночи не будут перемещены.`
+        );
       }
 
       nextChapterContent.appendChild(nightElement);
-      console.log(`Строки для ночи из главы с датой: «${currentDate}» добавлены в конец контента в следующей главе: «${nextDateElement.textContent.trim()}»`);
+      console.log(
+        `Строки для ночи из главы с датой: «${currentDate}» добавлены в конец контента в следующей главе: «${nextDateElement.textContent.trim()}»`
+      );
     });
   }
   let chatlogElement = document.getElementById("chatlog");
-  nightTransfer(chatlogElement.querySelectorAll('.chapter'));
-  removeEmptyChapters()
+  nightTransfer(chatlogElement.querySelectorAll(".chapter"));
+  removeEmptyChapters();
 }
 
 function removeEmptyChapters() {
@@ -755,15 +814,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function chapterCollapse() {
   // Сворачиваем главы
-/*   console.log("Начало функции chapterCollapse"); */
+  /*   console.log("Начало функции chapterCollapse"); */
 
   const chapterElements = document.querySelectorAll(".chapter");
 
   if (chapterElements.length === 1) {
-/*     console.log("Есть только одна глава, разворачиваем"); */
+    /*     console.log("Есть только одна глава, разворачиваем"); */
     chapterElements[0].classList.add("expanded");
   } else {
-/*     console.log("Больше одной главы, сворачиваем все кроме первой"); */
+    /*     console.log("Больше одной главы, сворачиваем все кроме первой"); */
     chapterElements.forEach((chapterElement, index) => {
       if (index !== 0) {
         chapterElement.classList.add("collapsed");
@@ -771,7 +830,7 @@ function chapterCollapse() {
     });
   }
 
-/*   console.log("А первой добавляется expanded"); */
+  /*   console.log("А первой добавляется expanded"); */
   chapterElements[0].classList.add("expanded");
 
   const dates = document.querySelectorAll(".date");
@@ -780,12 +839,12 @@ function chapterCollapse() {
     date.addEventListener("click", toggleContent);
   });
 
-/*   console.log("Функция chapterCollapse успешно выполнена"); */
+  /*   console.log("Функция chapterCollapse успешно выполнена"); */
 }
 
 function toggleContent(event) {
   // Функция сворачивания
-/*   console.log("Начало функции toggleContent"); */
+  /*   console.log("Начало функции toggleContent"); */
   const chapter = event.target.closest(".chapter");
   const content = chapter.querySelector(".content");
 
@@ -799,7 +858,7 @@ function toggleContent(event) {
     content.style.maxHeight = null;
   }
 
-/*   console.log("Функция toggleContent успешно выполнена"); */
+  /*   console.log("Функция toggleContent успешно выполнена"); */
 }
 
 function combineFunctions() {
@@ -808,7 +867,6 @@ function combineFunctions() {
   combineChatboxes();
   combineEmotes();
 }
-
 
 const enterKeyCode = 13;
 
@@ -823,13 +881,13 @@ document
   .getElementById("keywordsInput")
   .addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
-/*       console.log("Нажат Enter в поле заполнения"); */
+      /*       console.log("Нажат Enter в поле заполнения"); */
       applyImportant();
     }
   });
 
 function applyImportant() {
-/*   console.log("Выделение ключевых слов"); */
+  /*   console.log("Выделение ключевых слов"); */
 
   // Получаем ключевые слова из поля ввода с учетом слов внутри кавычек
   let keywordsInput = document.getElementById("keywordsInput").value;
@@ -849,7 +907,7 @@ function applyImportant() {
     }
   }
 
-/*   console.log("Захваченные переменные:"); */
+  /*   console.log("Захваченные переменные:"); */
   console.log(keywords);
 
   // Добавляем класс 'important' только для тех элементов, которые соответствуют текущему запросу
@@ -864,10 +922,10 @@ function applyImportant() {
     );
 
     if (hasKeyword && !isRemoveKeyword) {
-/*       console.log(`Adding class 'important' to text: ${text}`); */
+      /*       console.log(`Adding class 'important' to text: ${text}`); */
       $(this).addClass("important");
     } else if (isRemoveKeyword) {
-/*       console.log(`Removing class 'important' from text: ${text}`); */
+      /*       console.log(`Removing class 'important' from text: ${text}`); */
       $(this).removeClass("important");
     }
   });
@@ -903,7 +961,7 @@ function removeNonImportantParagraphs() {
 }
 
 function removeImportantClass() {
-/*   console.log("removeImportantClass"); */
+  /*   console.log("removeImportantClass"); */
   var containers = document.querySelectorAll(".collapsed");
 
   containers.forEach(function (container) {

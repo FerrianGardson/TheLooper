@@ -42,12 +42,13 @@ button:hover {
 }
 div#buttons {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
   left: 24px;
   top: 24px;
   gap: 0.5rem;
   width: 100%;
+  justify-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 .yell {
   color: red;
@@ -257,9 +258,11 @@ input {
 div#keywords {
     display: flex;
     /* gap: 0.5rem; */
-    width: -webkit-fill-available;
+    /* width: -webkit-fill-available; */
+    min-width: 1em;
     padding: 0;
     flex-shrink: 1;
+    flex-grow: 1;
     overflow: hidden;
     border: 1px solid var(--grey);
 }
