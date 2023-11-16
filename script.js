@@ -977,6 +977,7 @@ function moveToImportant() {
       // Проверить, содержит ли .chapter дочерний элемент с классом .logline.important
       if (chapter.querySelector('.logline.important')) {
           // Если содержит, добавить класс .expanded
+          chapter.classList.remove('collapsed');
           chapter.classList.add('expanded');
       }
 
