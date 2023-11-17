@@ -792,15 +792,13 @@ function addIdToChapter() {
 
 function emoteToSpeech() {
   console.log("emoteToSpeech");
-
   // Находим все элементы с классами .chapter.expanded .logline.emote
   var emoteElements = document.querySelectorAll(
     ".chapter.expanded .logline.emote span.emote"
   );
 
-  // Проходимся по каждому элементу и выполняем первую замену текста с помощью регулярного выражения
-  emoteElements.forEach(function (emoteElement, index) {
-    console.log(`Iteration ${index + 1} - First Replacement`);
+  // Проходимся по каждому элементу и выполняем замену текста с помощью регулярного выражения
+  emoteElements.forEach(function (emoteElement) {
     var emoteText = emoteElement.textContent;
 
     // Замена первого выражения
@@ -809,58 +807,22 @@ function emoteToSpeech() {
       ': <span class="speech">– $1</span>'
     );
 
-    console.log("Original Text:", emoteText);
-    console.log("New Text:", newEmoteText);
-
-    // Заменяем существующий HTML внутри элемента
-    emoteElement.innerHTML = newEmoteText;
-  });
-
-  // Отрендерить и сделать паузу на debugger'e
-/*   debugger; */
-
-  // Проходимся по каждому элементу и выполняем вторую замену текста с помощью регулярного выражения
-  emoteElements.forEach(function (emoteElement, index) {
-    console.log(`Iteration ${index + 1} - Second Replacement`);
-    var emoteText = emoteElement.textContent;
-
     // Замена второго выражения
-    var newEmoteText = emoteText.replace(
+    newEmoteText = newEmoteText.replace(
       /^\s*[-–—] (.+)/gm,
       '<span class="emote"><span class="speech">– $1</span>'
     );
 
-    console.log("Original Text:", emoteText);
-    console.log("New Text:", newEmoteText);
-
-    // Заменяем существующий HTML внутри элемента
-    emoteElement.innerHTML = newEmoteText;
-  });
-
-  // Отрендерить и сделать паузу на debugger'e
-/*   debugger; */
-
-  // Проходимся по каждому элементу и выполняем третью замену текста с помощью регулярного выражения
-  emoteElements.forEach(function (emoteElement, index) {
-    console.log(`Iteration ${index + 1} - Third Replacement`);
-    var emoteText = emoteElement.textContent;
-
     // Замена третьего выражения
-    var newEmoteText = emoteText.replace(
-      /[,.!?]\s*–\s*(.+\s–)/gm,
-      '<span class="emote"><span class="speech">– $1</span>'
+    newEmoteText = newEmoteText.replace(
+      /([,.!?])\s*–\s*(.+\s–)/gm,
+      '$1 <span class="emote">$2</p></span>'
     );
 
-    console.log("Original Text:", emoteText);
-    console.log("New Text:", newEmoteText);
-
     // Заменяем существующий HTML внутри элемента
     emoteElement.innerHTML = newEmoteText;
   });
-/*   debugger; */
 }
-
-
 
 function killNav() {
   var navElements = document.querySelectorAll(".nav");
