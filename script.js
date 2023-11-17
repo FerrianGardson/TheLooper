@@ -1,3 +1,21 @@
+// Главная функция
+
+function formatLog() {
+  let chatlogHTML = document.getElementById("chatlog").innerHTML;
+  /*   console.log("Запускаю допфункции");
+   */ formatTimestamps();
+  transferNightLines(document.body);
+  cleanText();
+  playersList();
+  colorizePlayers();
+  addCommaOrDot();
+  addColonToEnd();
+  combineFunctions();
+  chapterCollapse();
+  emoteToSpeech();
+  addIdToChapter();
+}
+
 // Загрузка файла
 
 // Получаем элементы DOM
@@ -483,31 +501,36 @@ function combineSpeech() {
   var currentSpeechElement = "";
   var elements = document.querySelectorAll("div.chapter p.logline");
   var length = elements.length;
-  //console.log("Найдено " + length + " логлайнов.");
 
   for (var i = 0; i < length; i++) {
     var element = elements[i];
-
-    //console.log(i + 1 + " из " + length);
+    console.log(i);
 
     if (!element.classList.contains("say")) {
       currentPlayer = "";
       currentSpeech = "";
       previousSpeech = "";
       previousPlayer = "";
+      previousLogline = "";
+      //  console.log("Скип");
       continue;
     } else {
       currentLogline = element;
       currentPlayerElement = element.querySelector("span.player");
+      currentPlayer = currentPlayerElement
+        ? currentPlayerElement.textContent
+        : "";
       currentSpeechElement = element.querySelector("span.speech");
-      currentPlayer = currentPlayerElement.textContent.trim();
-      currentSpeech = currentSpeechElement.textContent.trim();
+      currentSpeech = currentSpeechElement
+        ? currentSpeechElement.textContent
+        : "";
     }
 
     if (!previousSpeech) {
       previousSpeech = currentSpeech;
       previousPlayer = currentPlayer;
       previousLogline = currentLogline;
+      console.log("Первая реплика", previousLogline);
       continue;
     }
 
@@ -517,7 +540,6 @@ function combineSpeech() {
       currentSpeech &&
       currentPlayer == previousPlayer
     ) {
-      console.log(currentSpeech);
       combinedSpeech = previousSpeech + " " + currentSpeech;
       currentSpeechElement.textContent = combinedSpeech;
       previousLogline.remove();
@@ -526,14 +548,21 @@ function combineSpeech() {
       previousPlayer = currentPlayer;
       currentSpeechElement = "";
       currentPlayerElement = "";
-
       continue;
     }
+
+    if (currentPlayer != previousPlayer) {
+      previousPlayer = currentPlayer;
+      previousSpeech = currentSpeech;
+      previousLogline = currentLogline;
+      continue;
+    }
+
     continue;
   }
 }
 
-function combineEmotes() {
+/* function combineEmotes() {
   var currentPlayer = "";
   var currentEmote = "";
   var currentLogline = "";
@@ -543,33 +572,45 @@ function combineEmotes() {
   var combinedEmote = "";
   var currentPlayerElement = "";
   var currentEmoteElement = "";
-
-  // Обновляем селектор, чтобы выбирать только внутри развёрнутых глав
-  var elements = document.querySelectorAll("div.chapter p.logline");
+  var elements = document.querySelectorAll(
+    "div.chapter p.logline span.player + span.emote"
+  );
   var length = elements.length;
+  //console.log("Найдено " + length + " логлайнов.");
+
   for (var i = 0; i < length; i++) {
     var element = elements[i];
+    // console.log(element);
 
-    console.log(i + 1 + " из " + length);
+    //console.log(i + 1 + " из " + length);
 
-    if (!element.classList.contains("emote")) {
+    if (
+      !element.classList.contains("emote") ||
+      currentPlayer != previousPlayer
+    ) {
       currentPlayer = "";
       currentEmote = "";
       previousEmote = "";
       previousPlayer = "";
+      previousLogline = "";
       continue;
     } else {
       currentLogline = element;
       currentPlayerElement = element.querySelector("span.player");
+      currentPlayer = currentPlayerElement
+        ? currentPlayerElement.textContent
+        : "";
       currentEmoteElement = element.querySelector("span.emote");
-      currentPlayer = currentPlayerElement.textContent.trim();
-      currentEmote = currentEmoteElement.textContent.trim();
+      currentPlayer = currentPlayerElement.textContent;
+      currentEmote = currentEmoteElement.textContent;
     }
 
     if (!previousEmote) {
       previousEmote = currentEmote;
       previousPlayer = currentPlayer;
       previousLogline = currentLogline;
+      //   console.log("Реплика на удаление", previousLogline);
+      //  console.log("Первая реплика", currentPlayer, currentEmote);
       continue;
     }
 
@@ -579,20 +620,32 @@ function combineEmotes() {
       currentEmote &&
       currentPlayer == previousPlayer
     ) {
+      //  console.log("Прежний игрок", currentPlayer, currentEmote);
       combinedEmote = previousEmote + " " + currentEmote;
       currentEmoteElement.textContent = combinedEmote;
       previousLogline.remove();
-
-      // Обновляем переменные
       previousLogline = currentLogline;
       previousEmote = combinedEmote;
       previousPlayer = currentPlayer;
       currentEmoteElement = "";
       currentPlayerElement = "";
+
       continue;
     }
+
+    if (currentPlayer != previousPlayer) {
+      // console.log("Новый игрок " + currentPlayer + "Реплика " + currentEmote);
+      previousPlayer = currentPlayer;
+      previousEmote = currentEmote;
+      currentEmoteElement = "";
+      currentPlayerElement = "";
+      previousLogline = currentLogline;
+      continue;
+    }
+
+    break;
   }
-}
+} */
 
 // Список игроков
 
@@ -703,6 +756,11 @@ function colorizePlayers() {
   emptyPlayers.forEach((li) => li.remove()); // удаляем каждый из найденных пустых элементов li
   /*   console.log("Удаление пустых игроков завершено");
    */
+
+  // Находим все элементы <p> с классом "logline say"
+  var elements = document.querySelectorAll("p.logline.say");
+
+  // Проходим по каждому элементу
 }
 
 // Кнопки DM и OOC
@@ -722,24 +780,6 @@ function toggleVisibility(className) {
   } else {
     button.textContent = `Show/hide ${className.toUpperCase()}`;
   }
-}
-
-// Главная функция
-
-function formatLog() {
-  let chatlogHTML = document.getElementById("chatlog").innerHTML;
-  /*   console.log("Запускаю допфункции");
-   */ formatTimestamps();
-  transferNightLines(document.body);
-  cleanText();
-  playersList();
-  colorizePlayers();
-  addCommaOrDot();
-  addColonToEnd();
-  combineFunctions();
-  chapterCollapse();
-  emoteToSpeech();
-  addIdToChapter();
 }
 
 // Функция для форматирования текста даты
