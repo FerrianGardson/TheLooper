@@ -11,7 +11,7 @@ function formatLog() {
   addCommaOrDot();
   addColonToEnd();
   combineFunctions();
-  chapterCollapse();
+/*   chapterCollapse(); */
   emoteToSpeech();
   addIdToChapter();
 }
@@ -526,13 +526,13 @@ function combineSpeech() {
         : "";
     }
 
-    if (!previousSpeech) {
+/*     if (!previousSpeech) {
       previousSpeech = currentSpeech;
       previousPlayer = currentPlayer;
       previousLogline = currentLogline;
-      console.log("Первая реплика", previousLogline);
+     // console.log("Первая реплика", previousLogline);
       continue;
-    }
+    } */
 
     if (
       previousPlayer &&
@@ -562,7 +562,7 @@ function combineSpeech() {
   }
 }
 
-/* function combineEmotes() {
+function combineEmotes() {
   var currentPlayer = "";
   var currentEmote = "";
   var currentLogline = "";
@@ -572,55 +572,47 @@ function combineSpeech() {
   var combinedEmote = "";
   var currentPlayerElement = "";
   var currentEmoteElement = "";
-  var elements = document.querySelectorAll(
-    "div.chapter p.logline span.player + span.emote"
-  );
+  var elements = document.querySelectorAll("div.chapter p.logline");
   var length = elements.length;
-  //console.log("Найдено " + length + " логлайнов.");
 
   for (var i = 0; i < length; i++) {
     var element = elements[i];
-    // console.log(element);
 
-    //console.log(i + 1 + " из " + length);
+    // console.log(i);
 
-    if (
-      !element.classList.contains("emote") ||
-      currentPlayer != previousPlayer
-    ) {
+    if (!element.classList.contains("emote")) {
       currentPlayer = "";
       currentEmote = "";
       previousEmote = "";
       previousPlayer = "";
       previousLogline = "";
+      // console.log("Skip");
       continue;
     } else {
       currentLogline = element;
       currentPlayerElement = element.querySelector("span.player");
-      currentPlayer = currentPlayerElement
-        ? currentPlayerElement.textContent
-        : "";
+      currentPlayer = currentPlayerElement ? currentPlayerElement.textContent : "";
       currentEmoteElement = element.querySelector("span.emote");
-      currentPlayer = currentPlayerElement.textContent;
-      currentEmote = currentEmoteElement.textContent;
+      currentEmote = currentEmoteElement ? currentEmoteElement.textContent : "";
     }
 
-    if (!previousEmote) {
+/*     if (!previousEmote && currentEmote && currentPlayer && currentLogline) {
       previousEmote = currentEmote;
       previousPlayer = currentPlayer;
       previousLogline = currentLogline;
-      //   console.log("Реплика на удаление", previousLogline);
-      //  console.log("Первая реплика", currentPlayer, currentEmote);
+      console.log("Первая реплика",currentLogline);
+            continue;
+    } */
+
+    if (currentPlayer != previousPlayer) {
+      previousPlayer = currentPlayer;
+      previousEmote = currentEmote;
+      previousLogline = currentLogline;
+      console.log("Новый игрок",currentPlayer);
       continue;
     }
 
-    if (
-      previousPlayer &&
-      previousEmote &&
-      currentEmote &&
-      currentPlayer == previousPlayer
-    ) {
-      //  console.log("Прежний игрок", currentPlayer, currentEmote);
+    if (previousPlayer && previousEmote && currentEmote && currentPlayer == previousPlayer) {
       combinedEmote = previousEmote + " " + currentEmote;
       currentEmoteElement.textContent = combinedEmote;
       previousLogline.remove();
@@ -629,23 +621,13 @@ function combineSpeech() {
       previousPlayer = currentPlayer;
       currentEmoteElement = "";
       currentPlayerElement = "";
-
       continue;
     }
 
-    if (currentPlayer != previousPlayer) {
-      // console.log("Новый игрок " + currentPlayer + "Реплика " + currentEmote);
-      previousPlayer = currentPlayer;
-      previousEmote = currentEmote;
-      currentEmoteElement = "";
-      currentPlayerElement = "";
-      previousLogline = currentLogline;
-      continue;
-    }
-
-    break;
+    continue;
   }
-} */
+}
+
 
 // Список игроков
 
@@ -1283,6 +1265,7 @@ function oocToEmote() {
     }
   });
   removeEmptyParagraphs();
+  combineEmotes();
 }
 
 function removeEmptyParagraphs() {
