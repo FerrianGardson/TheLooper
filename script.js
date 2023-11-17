@@ -471,124 +471,128 @@ function cleanText() {
 
 // Объединение чатбоксов
 
-function combineChatboxes() {
-  // console.log("Начало объединения чатбоксов...");
-
+function combineSpeech() {
   var currentPlayer = "";
   var currentSpeech = "";
-  var previousSpeech = null;
-
-  // Обновляем селектор, чтобы выбирать только внутри развёрнутых глав
-  var elements = $("div.chapter.expanded p.logline.say");
+  var currentLogline = "";
+  var previousPlayer = "";
+  var previousSpeech = "";
+  var previousLogline = "";
+  var combinedSpeech = "";
+  var currentPlayerElement = "";
+  var currentSpeechElement = "";
+  var elements = document.querySelectorAll("div.chapter p.logline");
   var length = elements.length;
-
-  // console.log("Найдено " + length + " элементов для объединения.");
+  //console.log("Найдено " + length + " логлайнов.");
 
   for (var i = 0; i < length; i++) {
     var element = elements[i];
 
-    // console.log("Обрабатываем элемент " + (i + 1) + " из " + length);
+    //console.log(i + 1 + " из " + length);
 
-    var playerElement = $(element).find("span.player");
-    if (playerElement.length > 0) {
-      var player = playerElement.text().trim();
-      var speechElement = $(element).find("span.speech");
-      var speech = speechElement.text().trim();
-
-      // console.log("Игрок: " + player + ", Реплика: " + speech);
-
-      if (player === currentPlayer) {
-        // console.log("Тот же игрок, объединяем реплики...");
-        currentSpeech += " " + speech;
-        // console.log("Удаляем предыдущую реплику:", previousSpeech);
-        $(previousSpeech).remove(); // Удаляем предыдущую реплику
-        speechElement.text(currentSpeech); // Обновляем содержимое текущего элемента
-      } else {
-        // console.log("Новый игрок, начинаем новую реплику...");
-        currentPlayer = player;
-        currentSpeech = speech;
-      }
-    }
-
-    previousSpeech = element;
-
-    var nextElement = $(element).next();
-    if (nextElement.hasClass("logline emote") || i === length - 1) {
+    if (!element.classList.contains("say")) {
       currentPlayer = "";
       currentSpeech = "";
-      //  console.log("Реплики кончились, прерываем цикл");
+      previousSpeech = "";
+      previousPlayer = "";
+      continue;
+    } else {
+      currentLogline = element;
+      currentPlayerElement = element.querySelector("span.player");
+      currentSpeechElement = element.querySelector("span.speech");
+      currentPlayer = currentPlayerElement.textContent.trim();
+      currentSpeech = currentSpeechElement.textContent.trim();
     }
-  }
 
-  // console.log("Объединение чатбоксов завершено");
+    if (!previousSpeech) {
+      previousSpeech = currentSpeech;
+      previousPlayer = currentPlayer;
+      previousLogline = currentLogline;
+      continue;
+    }
+
+    if (
+      previousPlayer &&
+      previousSpeech &&
+      currentSpeech &&
+      currentPlayer == previousPlayer
+    ) {
+      console.log(currentSpeech);
+      combinedSpeech = previousSpeech + " " + currentSpeech;
+      currentSpeechElement.textContent = combinedSpeech;
+      previousLogline.remove();
+      previousLogline = currentLogline;
+      previousSpeech = combinedSpeech;
+      previousPlayer = currentPlayer;
+      currentSpeechElement = "";
+      currentPlayerElement = "";
+
+      continue;
+    }
+    continue;
+  }
 }
 
 function combineEmotes() {
-  console.log("Начинаем объединение эмоутов...");
-
-  // Удаляем пустые элементы
-  $("div.chapter.expanded p.logline.emote:empty").remove();
-
   var currentPlayer = "";
   var currentEmote = "";
-  var currentChapter = "";
-  var PreviousChatbox = null;
-  var CurrentChatbox = null;
+  var currentLogline = "";
+  var previousPlayer = "";
+  var previousEmote = "";
+  var previousLogline = "";
+  var combinedEmote = "";
+  var currentPlayerElement = "";
+  var currentEmoteElement = "";
 
   // Обновляем селектор, чтобы выбирать только внутри развёрнутых глав
-  var elements = $("div.chapter.expanded p.logline.emote, div.chapter.expanded p.logline.say");
+  var elements = document.querySelectorAll("div.chapter p.logline");
   var length = elements.length;
-
-  console.log("Найдено элементов для обработки: " + length);
-
   for (var i = 0; i < length; i++) {
     var element = elements[i];
 
-    // Проверка, является ли текущий элемент эмоутом
-    if ($(element).hasClass("logline") && $(element).hasClass("emote")) {
-      var playerElement = $(element).find("span.player");
+    console.log(i + 1 + " из " + length);
 
-      if (playerElement.length > 0) {
-        var player = playerElement.text().trim();
-        var emoteElement = $(element).find("span.emote");
-        var emote = emoteElement.text().trim();
-
-        console.log("Обрабатываем элемент: " + element.tagName + ", Игрок: " + player + ", Эмоут: " + emote);
-
-        if (player === currentPlayer) {
-          currentEmote += " " + emote;
-          emoteElement.text(currentEmote); // Обновляем содержимое текущего элемента
-
-          // Используем переменные для предыдущего и текущего элементов
-          if (PreviousChatbox) {
-            PreviousChatbox.remove(); // Удаляем предыдущий элемент
-            console.log("Объединено с предыдущим. Новый эмоут: " + currentEmote);
-            console.log("Удален предыдущий элемент.");
-          }
-        } else {
-          currentPlayer = player;
-          currentEmote = emote;
-          currentChapter = $(element).closest(".night").find(".chapter").addBack(".chapter").prop("outerHTML");
-
-          // Сохраняем текущий элемент в переменную
-          CurrentChatbox = $(element);
-          console.log("Новый игрок, начинаем новый элемент. Игрок: " + currentPlayer + ", Эмоут: " + currentEmote);
-        }
-      }
-    } else if ($(element).hasClass("logline") && $(element).hasClass("say")) {
+    if (!element.classList.contains("emote")) {
       currentPlayer = "";
       currentEmote = "";
-      currentChapter = "";
-      console.log("Элемент является репликой, пропускаем его.");
+      previousEmote = "";
+      previousPlayer = "";
+      continue;
+    } else {
+      currentLogline = element;
+      currentPlayerElement = element.querySelector("span.player");
+      currentEmoteElement = element.querySelector("span.emote");
+      currentPlayer = currentPlayerElement.textContent.trim();
+      currentEmote = currentEmoteElement.textContent.trim();
     }
 
-    // Обновляем переменную для предыдущего элемента
-    PreviousChatbox = CurrentChatbox;
+    if (!previousEmote) {
+      previousEmote = currentEmote;
+      previousPlayer = currentPlayer;
+      previousLogline = currentLogline;
+      continue;
+    }
+
+    if (
+      previousPlayer &&
+      previousEmote &&
+      currentEmote &&
+      currentPlayer == previousPlayer
+    ) {
+      combinedEmote = previousEmote + " " + currentEmote;
+      currentEmoteElement.textContent = combinedEmote;
+      previousLogline.remove();
+
+      // Обновляем переменные
+      previousLogline = currentLogline;
+      previousEmote = combinedEmote;
+      previousPlayer = currentPlayer;
+      currentEmoteElement = "";
+      currentPlayerElement = "";
+      continue;
+    }
   }
-
-  console.log("Объединение эмоутов завершено");
 }
-
 
 // Список игроков
 
@@ -732,6 +736,7 @@ function formatLog() {
   colorizePlayers();
   addCommaOrDot();
   addColonToEnd();
+  combineFunctions();
   chapterCollapse();
   emoteToSpeech();
   addIdToChapter();
@@ -994,7 +999,7 @@ function toggleContent(event) {
 function combineFunctions() {
   // Удаляем пустые элементы
   $("div.chapter.expanded p.logline.emote:empty").remove();
-  combineChatboxes();
+  combineSpeech();
   combineEmotes();
 }
 
