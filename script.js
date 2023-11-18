@@ -34,12 +34,12 @@ function correctSpelling() {
 
       // Вот с помощью этой малышки – Похлопал по оптике
       textContent = textContent.replace(
-        /([а-я][ "»])\s*–\s*([А-Я])/g,
+        /([а-я](?:["»]|))\s*–\s*([А-Я])/g,
         "$1, – $2"
       );
 
-/*       textContent = textContent.replace(/кот/g, "кошка");
-      textContent = textContent.replace(/кот/g, "кошка");
+     textContent = textContent.replace(/-/g, "–");
+    /*  textContent = textContent.replace(/кот/g, "кошка");
       textContent = textContent.replace(/кот/g, "кошка");
       textContent = textContent.replace(/кот/g, "кошка");
       textContent = textContent.replace(/кот/g, "кошка");
@@ -487,7 +487,7 @@ function cleanText() {
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
   chatlogHTML = chatlogHTML.replace(
-    /(<p class="logline say">(%s заслужил достижение|&\?137|На вас наложен эффект|Подключиться|Порог|Бой|Поверженные|Участники|Победители|Liquid|\[СЕРВЕР\]|&amp;\?\d+|&\?\d+|Map|X:|grid|GroundZ|ZoneX|no|&\?+|\d|\(|Так как вы бездействовали|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ создает:|Вы |Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Смена|\(d+d|&?dd|Разыгрываются).+(\n|)<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
+    /(<p class="logline say">(%s заслужил достижение|&\?137|На вас наложен эффект|Подключиться|Порог|Бой|Поверженные|Участники|Победители|Liquid|\[СЕРВЕР\]|&amp;\?\d+|&\?\d+|Map|X:|grid|GroundZ|ZoneX|no|&\?+|\d|\(|Так как вы бездействовали|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ создает:|Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Смена|\(d+d|&?dd|Разыгрываются).+(\n|)<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
     ""
   ); // ООС-сообщения
 
@@ -862,8 +862,7 @@ function killNav() {
 }
 
 function sayToEmote() {
-  // Запускаем функцию correctSpelling
-  // correctSpelling();
+
 
   let speech = "";
 
@@ -877,7 +876,7 @@ function sayToEmote() {
 
     // Обрабатываем текст с помощью регулярного выражения
     let updatedText = sayText.replace(
-      /([!?:.,])\s((?:–.+(?:[!?:]|\s–\s*)))/g,
+      /([!?:.,])\s((?:–.+?(?:[!?:]|\s–\s*|<\/span>)))/g,
       '$1 <span class="emote">$2</span>'
     );
 
@@ -891,8 +890,7 @@ function sayToEmote() {
 }
 
 function emoteToSpeech() {
-  // Запускаем функцию correctSpelling
-  // correctSpelling();
+
   let emotes = "";
   // Собираем все p.logline.emote
   emotes = document.querySelectorAll("p.logline.emote");
