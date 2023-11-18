@@ -35,7 +35,7 @@ function correctSpelling() {
 
       // Вот с помощью этой малышки – Похлопал по оптике
       textContent = textContent.replace(
-        /([а-я](?:["»]|))\s–\s([А-Я])/g,
+        /([а-я](?:["»]|))\s–\s*([А-Я])/g,
         "$1, – $2"
       );
 
