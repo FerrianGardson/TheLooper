@@ -1,3 +1,17 @@
+const enterKeyCode = 13;
+
+document.addEventListener("DOMContentLoaded", function () {
+  // console.log("DOMContentLoaded");
+  function toggleImportantClass(event) {
+    var paragraph = event.target.closest("p");
+    if (paragraph) {
+      paragraph.classList.toggle("important");
+    }
+  }
+
+  document.addEventListener("click", toggleImportantClass);
+});
+
 // Главная функция
 
 function formatLog() {
@@ -1043,7 +1057,7 @@ function combineFunctions() {
   combineEmotes();
 }
 
-const enterKeyCode = 13;
+
 
 function handleKeyPress(event) {
   if (event.keyCode === enterKeyCode) {
@@ -1186,17 +1200,7 @@ function scrollToNearestImportant() {
 // Пример использования
 scrollToNearestImportant();
 
-document.addEventListener("DOMContentLoaded", function () {
-  // console.log("DOMContentLoaded");
-  function toggleImportantClass(event) {
-    var paragraph = event.target.closest("p");
-    if (paragraph) {
-      paragraph.classList.toggle("important");
-    }
-  }
 
-  document.addEventListener("click", toggleImportantClass);
-});
 
 function removeNonImportantParagraphs() {
   // console.log("removeNonImportantParagraphs");

@@ -15,32 +15,33 @@
           <input type="file" id="file-input-txt" />
         </form>
 
-        <form>
+<!--         <form>
           <label for="file-input-html">(HTML)</label>
           <input type="file" id="file-input-html" />
-        </form>
-        <button onclick="debug()">Дебаг</button>
+        </form> -->
+    <!--     <button onclick="debug()">Дебаг</button> -->
 
         <!--         <button onclick="toggleVisibility('dm')">DM</button>
         <button onclick="toggleVisibility('ooc')">OOC</button> -->
         <!--       <button onclick="removeImportantClass()">Выделение</button> -->
-        <button onclick="removeNonImportantParagraphs()">Чистка</button>
-        <button onclick="oocToEmote()">OOC =&gt; Emote</button>
-        <button onclick="combineFunctions()">Чатбоксы</button>
-        <button onclick="emoteToSpeech()">Emote =&gt; Say</button>
-        <button onclick="sayToEmote()">Say => Emote</button>
-        <button onclick="killNav()">Kill Nav</button>
+        
+<!--         <button onclick="oocToEmote()">OOC =&gt; Emote</button> -->
+<!--         <button onclick="combineFunctions()">Чатбоксы</button> -->
+<!--         <button onclick="emoteToSpeech()">Emote =&gt; Say</button> -->
+      <!--   <button onclick="sayToEmote()">Say => Emote</button> -->
+      <!--   <button onclick="killNav()">Kill Nav</button> -->
         <div id="keywords">
           <input
             type="text"
             id="keywordsInput"
             placeholder="Введите ключевые слова через запятую"
             onkeypress="handleKeyPress(event)"
-            value="«Однажды как Калигуля привёл коня»"
+            value="МИА, запись, фото, улыбочку, -шепчет, -ООС, -[МИА]"
           />
 
           <button onclick="applyImportant()">Выделение</button>
         </div>
+        <button onclick="removeNonImportantParagraphs()">Чистка</button>
       </div>
     </div>
     <div id="chatlog"></div>
