@@ -33,7 +33,10 @@ function correctSpelling() {
       var textContent = spanElement.textContent;
 
       // Вот с помощью этой малышки – Похлопал по оптике
-      textContent = textContent.replace(/([а-я][ "»])\s*–\s*([А-Я])/g, "$1, – $2");
+      textContent = textContent.replace(
+        /([а-я][ "»])\s*–\s*([А-Я])/g,
+        "$1, – $2"
+      );
 
       textContent = textContent.replace(/кот/g, "кошка");
       textContent = textContent.replace(/кот/g, "кошка");
@@ -1280,8 +1283,26 @@ function oocToEmote() {
   removeEmptyParagraphs();
   combineEmotes();
   emoteToSpeech();
+  removeDashAtStart();
 
   //  console.log("Завершение выполнения функции oocToEmote");
+}
+
+function removeDashAtStart() {
+  // Собираем все p.logline.emote с span.speech
+  var emotes = $("p.logline.emote:has(span.speech)");
+
+  // Индексируем и обрабатываем каждый p.logline.emote с span.speech
+  for (var i = 0; i < emotes.length; i++) {
+    // Получаем текст из HTML-элемента
+    var emoteText = emotes[i].innerHTML;
+
+    // Обрабатываем текст с помощью регулярного выражения
+    var updatedEmoteText = emoteText.replace(/(<\/span>\s*<span class="emote"><span class="speech">)–\s*/, "$1"); // Удаляем дефис в начале текста
+
+    // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
+    emotes[i].innerHTML = updatedEmoteText;
+  }
 }
 
 function removeEmptyParagraphs() {
