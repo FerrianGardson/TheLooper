@@ -6,6 +6,7 @@ function formatLog() {
    */ formatTimestamps();
   transferNightLines(document.body);
   cleanText();
+  yourEmotes();
   playersList();
   colorizePlayers();
   addCommaOrDot();
@@ -34,7 +35,7 @@ function correctSpelling() {
 
       // Вот с помощью этой малышки – Похлопал по оптике
       textContent = textContent.replace(
-        /([а-я](?:["»]|))\s*–\s*([А-Я])/g,
+        /([а-я](?:["»]|))\s–\s([А-Я])/g,
         "$1, – $2"
       );
 
@@ -734,6 +735,23 @@ function playersList() {
       date.parentNode.insertBefore(playerList, date.nextSibling);
     }
     players = [];
+  });
+}
+function yourEmotes() {
+  // Находим все элементы с классом "player" и текстом "Вы"
+  const playerSpans = document.querySelectorAll(".player");
+  playerSpans.forEach((playerSpan) => {
+    if (playerSpan.textContent.trim() === "Вы") {
+      // Создаем новый элемент span с классом "emote"
+      const emoteSpan = document.createElement("span");
+      emoteSpan.classList.add("emote");
+
+      // Копируем содержимое из span.player в новый span.emote
+      emoteSpan.textContent = playerSpan.textContent;
+
+      // Заменяем span.player на span.emote
+      playerSpan.parentNode.replaceChild(emoteSpan, playerSpan);
+    }
   });
 }
 
