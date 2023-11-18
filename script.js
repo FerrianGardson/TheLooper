@@ -39,8 +39,8 @@ function correctSpelling() {
         "$1, – $2"
       );
 
-     textContent = textContent.replace(/-/g, "–");
-    /*  textContent = textContent.replace(/кот/g, "кошка");
+      textContent = textContent.replace(/-/g, "–");
+      /*  textContent = textContent.replace(/кот/g, "кошка");
       textContent = textContent.replace(/кот/g, "кошка");
       textContent = textContent.replace(/кот/g, "кошка");
       textContent = textContent.replace(/кот/g, "кошка");
@@ -451,10 +451,6 @@ function cleanText() {
 
   let chatlogHTML = document.getElementById("chatlog").innerHTML;
 
-  chatlogHTML = chatlogHTML.replace(/\|\d\-\d\((.+)\)/gm, "$1"); // Кривые падежи в стандартных эмоутах
-
-  document.getElementById("chatlog").innerHTML = chatlogHTML;
-
   chatlogHTML = chatlogHTML.replace(
     /<p.+>\[Лидер (рейда|группы)\].+:/gm,
     "<p class='logline dm'>[ДМ]:"
@@ -471,7 +467,7 @@ function cleanText() {
   ); // Пустые абзацы
 
   chatlogHTML = chatlogHTML.replace(/ {2,}/g, " "); // Замена двойных и более пробелов на одиночные
-  /*   chatlogHTML = chatlogHTML.replace(/([.,;!?]|[.]{3})([^ ])/g, "$1 $2"); // Многоточия */
+  //   chatlogHTML = chatlogHTML.replace(/([.,;!?]|[.]{3})([^ ])/g, "$1 $2"); // Многоточия
 
   chatlogHTML = chatlogHTML.replace(/[-–—]/gm, "–"); // Однотипные дефисы
 
@@ -488,7 +484,7 @@ function cleanText() {
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
   chatlogHTML = chatlogHTML.replace(
-    /(<p class="logline say">(%s заслужил достижение|&\?137|На вас наложен эффект|Подключиться|Порог|Бой|Поверженные|Участники|Победители|Liquid|\[СЕРВЕР\]|&amp;\?\d+|&\?\d+|Map|X:|grid|GroundZ|ZoneX|no|&\?+|\d|\(|Так как вы бездействовали|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ создает:|Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Смена|\(d+d|&?dd|Разыгрываются).+(\n|)<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
+    /(<p class="logline say">(%s заслужил достижение|&\?137|Вы заняты|Вы отошли|Вы подбираете|На вас наложен эффект|Вы присоединились к каналу|Вы получаете|Подключиться|Порог|Бой|Поверженные|Участники|Победители|Liquid|\[СЕРВЕР\]|&amp;\?\d+|&\?\d+|Map|X:|grid|GroundZ|ZoneX|no|&\?+|\d|\(|Так как вы бездействовали|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ создает:|Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Смена|\(d+d|&?dd|Разыгрываются).+(\n|)<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
     ""
   ); // ООС-сообщения
 
@@ -500,7 +496,7 @@ function cleanText() {
 
   document.getElementById("chatlog").innerHTML = chatlogHTML;
   chatlogHTML = chatlogHTML.replace(
-    /<p class="logline say">(.+)\s(пытается помешать побегу|проваливает попытку побега|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает|предлагает вам).*(\n|)<\/p>/gm,
+    /<p class="logline say">(.+)\s(пытается помешать побегу|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает|предлагает вам).*(\n|)<\/p>/gm,
     ""
   ); // Игрок %ООС-действие%
 
@@ -524,6 +520,8 @@ function cleanText() {
     /<p class="logline say">(.+) кричит:\s?[—–-]?\s?(.+)\n<\/p>/gm,
     "<p class='logline yell'><span class='player'>$1</span> <span class='speech'>$2</span></p>"
   ); // Крик, дефисы, а также облачает реплику в классы
+
+  chatlogHTML = chatlogHTML.replace(/(?:\|\d–\d\((.+?)\))/gm, "$1"); // Кривые падежи в стандартных эмоутах
 
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 }
@@ -571,7 +569,7 @@ function combineSpeech() {
       previousSpeech = currentSpeech;
       previousPlayer = currentPlayer;
       previousLogline = currentLogline;
-      console.log("Первая реплика", previousLogline);
+      // console.log("Первая реплика", previousLogline);
       continue;
     }
 
@@ -880,8 +878,6 @@ function killNav() {
 }
 
 function sayToEmote() {
-
-
   let speech = "";
 
   // Собираем все p.logline.say
@@ -908,7 +904,6 @@ function sayToEmote() {
 }
 
 function emoteToSpeech() {
-
   let emotes = "";
   // Собираем все p.logline.emote
   emotes = document.querySelectorAll("p.logline.emote");
@@ -1314,7 +1309,10 @@ function removeDashAtStart() {
     var emoteText = emotes[i].innerHTML;
 
     // Обрабатываем текст с помощью регулярного выражения
-    var updatedEmoteText = emoteText.replace(/(<\/span>\s*<span class="emote"><span class="speech">)–\s*/, "$1"); // Удаляем дефис в начале текста
+    var updatedEmoteText = emoteText.replace(
+      /(<\/span>\s*<span class="emote"><span class="speech">)–\s*/,
+      "$1"
+    ); // Удаляем дефис в начале текста
 
     // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
     emotes[i].innerHTML = updatedEmoteText;
