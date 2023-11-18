@@ -845,9 +845,6 @@ function emoteToSpeech() {
   // Запускаем функцию correctSpelling
   correctSpelling();
 
-  // Ставим debugger
-  debugger;
-
   // Собираем все p.logline.emote
   var emotes = document.querySelectorAll('p.logline.emote');
 
@@ -875,51 +872,26 @@ function killNav() {
 }
 
 function sayToEmote() {
-  // Находим все элементы с классами .chapter.expanded p.logline.say .speech
-  var sayElements = document.querySelectorAll(
-    ".chapter.expanded p.logline.say .speech"
-  );
+  // Запускаем функцию correctSpelling
+  correctSpelling();
 
-  // Проходимся по каждому элементу
-  sayElements.forEach(function (sayElement) {
-    // Орфография
-    sayElement.innerHTML = sayElement.innerHTML.replace(
-      /(\.\.\.|[,.!?]|\s)\s*([-–—]\s*[А-Я].+?)[,.:]\s[-–—]\s*([А-Я])/g,
-      ", $2. – $3"
-    );
-  });
-  sayElements.forEach(function (sayElement) {
-    // Заменяем текст внутри span.speech
-    sayElement.innerHTML = sayElement.innerHTML.replace(
-      /([,.!?:])\s*[-–—]\s*(.+?)([:!?.]\s*[-–—])/g,
-      '$1 <span class="emote">– $2$3 </span>'
-    );
-  });
-  sayToEmote2();
-}
+  // Собираем все p.logline.say
+  var sayElements = document.querySelectorAll('p.logline.say');
 
-function sayToEmote2() {
-  // Находим все элементы с классами .chapter.expanded p.logline.say .speech
-  var sayElements = document.querySelectorAll(
-    ".chapter.expanded p.logline.say span.speech"
-  );
+  // Индексируем и обрабатываем каждый p.logline.say
+  for (var i = 0; i < sayElements.length; i++) {
+    // Получаем текст из HTML-элемента
+    var sayText = sayElements[i].innerHTML;
 
-  // Фильтруем элементы, чтобы оставить только те, которые не содержат span.emote
-  var filteredSayElements = Array.from(sayElements).filter(function (
-    sayElement
-  ) {
-    return !sayElement.querySelector("span.emote");
-  });
+    // Обрабатываем текст с помощью регулярного выражения
+    var updatedEmoteText = sayText.replace(/([!?:.,])\s(–.+?[–.!?])/g, '$1 <span class="emote">$2</span>');
 
-  sayElements = filteredSayElements;
+    // Выводим обновленную версию текста
+    console.log(`Say ${i + 1} - Updated Emote: ${updatedEmoteText}`);
 
-  // Проходимся по каждому элементу
-  sayElements.forEach(function (sayElement) {
-    sayElement.innerHTML = sayElement.innerHTML.replace(
-      /([,.!?:])\s*[-–—]\s*(.+)([:.!?])/g,
-      '$1 <span class="emote">– $2$3</span>'
-    );
-  });
+    // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
+    sayElements[i].innerHTML = updatedEmoteText;
+  }
 }
 
 function transferNightLines(rootElement) {
