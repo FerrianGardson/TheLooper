@@ -1285,29 +1285,55 @@ function removeNonImportantParagraphs() {
 // Добавьте вызов setupToggleHandlers() в нужном месте, например, в конце вашего скрипта.
 
 function oocToEmote() {
+  console.log("Начало выполнения функции oocToEmote");
+
   // Находим элементы с классом "logline ooc" в пределах ".chapter.expanded"
   var elements = document.querySelectorAll(".chapter.expanded .logline.ooc");
+  console.log(`Найдено ${elements.length} элементов с классом "logline ooc"`);
 
   // Проходимся по каждому найденному элементу
   elements.forEach(function (element) {
+    console.log("Обработка нового элемента");
+
     // Удаляем элемент span с классом "ooc"
     var oocElement = element.querySelector(".ooc");
     oocElement.parentNode.removeChild(oocElement);
+    console.log("Удален элемент span с классом 'ooc'");
 
     // Заменяем класс "ooc" на "emote" у родительского элемента
     element.classList.remove("ooc");
     element.classList.add("emote");
+    console.log("Класс 'ooc' заменен на 'emote'");
 
     // Получаем вложенный элемент с классом "speech" и меняем его класс
     var speechElement = element.querySelector(".speech");
     if (speechElement) {
       speechElement.classList.remove("speech");
       speechElement.classList.add("emote");
+      console.log("Класс 'speech' заменен на 'emote' для вложенного элемента");
     }
   });
+
   removeEmptyParagraphs();
   combineEmotes();
+
+  console.log("Завершение выполнения функции oocToEmote");
 }
+
+// Пример объявления новой функции removeEmptyParagraphs
+function removeEmptyParagraphs() {
+  console.log("Выполнение функции removeEmptyParagraphs");
+  // Ваш код для удаления пустых абзацев
+  console.log("Завершение функции removeEmptyParagraphs");
+}
+
+// Пример объявления новой функции combineEmotes
+function combineEmotes() {
+  console.log("Выполнение функции combineEmotes");
+  // Ваш код для объединения эмоций
+  console.log("Завершение функции combineEmotes");
+}
+
 
 function removeEmptyParagraphs() {
   // Находим элементы с классом "chapter expanded"
