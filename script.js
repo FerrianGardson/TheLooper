@@ -12,8 +12,10 @@ function formatLog() {
   addColonToEnd();
   combineFunctions();
   chapterCollapse();
-  /*   emoteToSpeech(); */
   addIdToChapter();
+  correctSpelling();
+  emoteToSpeech();
+  sayToEmote();
 }
 
 function correctSpelling() {
@@ -583,7 +585,7 @@ function combineSpeech() {
     }
 
     if (currentPlayer != previousPlayer) {
-      console.log("Новый игрок");
+      // console.log("Новый игрок");
       previousPlayer = currentPlayer;
       previousSpeech = currentSpeech;
       previousLogline = currentLogline;
@@ -624,7 +626,7 @@ function combineEmotes() {
         : "";
       currentEmoteElement = element.querySelector("span.emote");
       currentEmote = currentEmoteElement ? currentEmoteElement.textContent : "";
-      console.log(currentEmote);
+      // console.log(currentEmote);
     }
 
     if (!previousEmote) {
@@ -841,29 +843,6 @@ function addIdToChapter() {
   });
 }
 
-function emoteToSpeech() {
-  // Запускаем функцию correctSpelling
-  correctSpelling();
-
-  // Собираем все p.logline.emote
-  var emotes = document.querySelectorAll('p.logline.emote');
-
-  // Индексируем и обрабатываем каждый p.logline.emote
-  for (var i = 0; i < emotes.length; i++) {
-    // Получаем текст из HTML-элемента
-    var emoteText = emotes[i].innerHTML;
-
-    // Обрабатываем текст с помощью регулярного выражения (здесь просто пример)
-    var updatedEmoteText = emoteText.replace(/(–\s(?:["«])?[А-Я](?:.+?)(?:(?:<\/span>)| – ))/g, '<span class="speech">$1</span>');
-
-    // Выводим обновленную версию текста
-    console.log(`Emote ${i + 1} - Updated Emote: ${updatedEmoteText}`);
-
-    // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
-    emotes[i].innerHTML = updatedEmoteText;
-  }
-}
-
 function killNav() {
   var navElements = document.querySelectorAll(".nav");
   navElements.forEach(function (navElement) {
@@ -873,24 +852,57 @@ function killNav() {
 
 function sayToEmote() {
   // Запускаем функцию correctSpelling
-  correctSpelling();
+  // correctSpelling();
+
+  let speech = "";
 
   // Собираем все p.logline.say
-  var sayElements = document.querySelectorAll('p.logline.say');
+  speech = document.querySelectorAll("p.say");
 
   // Индексируем и обрабатываем каждый p.logline.say
-  for (var i = 0; i < sayElements.length; i++) {
+  for (let i = 0; i < speech.length; i++) {
     // Получаем текст из HTML-элемента
-    var sayText = sayElements[i].innerHTML;
+    let sayText = speech[i].innerHTML;
 
     // Обрабатываем текст с помощью регулярного выражения
-    var updatedEmoteText = sayText.replace(/([!?:.,])\s(–.+?[–.!?])/g, '$1 <span class="emote">$2</span>');
+    let updatedText = sayText.replace(
+      /([!?:.,])\s(–.+?[–.!?])/g,
+      '$1 <span class="emote">$2</span>'
+    );
+
+    speech[i].innerHTML = updatedText;
 
     // Выводим обновленную версию текста
-    console.log(`Say ${i + 1} - Updated Emote: ${updatedEmoteText}`);
+    //console.log(`Say ${i + 1} - Updated Emote: ${updatedText}`);
 
     // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
-    sayElements[i].innerHTML = updatedEmoteText;
+  }
+}
+
+function emoteToSpeech() {
+  // Запускаем функцию correctSpelling
+  // correctSpelling();
+  let emotes = "";
+  // Собираем все p.logline.emote
+  emotes = document.querySelectorAll("p.logline.emote");
+
+  // Индексируем и обрабатываем каждый p.logline.emote
+  for (let i = 0; i < emotes.length; i++) {
+    // Получаем текст из HTML-элемента
+    let emoteText = emotes[i].innerHTML;
+    // console.log("Эмоут", emoteText);
+
+    // Обрабатываем текст с помощью регулярного выражения (здесь просто пример)
+    let updatedEmoteText = emoteText.replace(
+      /(–\s(?:["«])?[А-Я](?:.+?)(?:(?:<\/span>)| – ))/g,
+      '<span class="speech">$1</span>'
+    );
+
+    // Выводим обновленную версию текста
+    // console.log(`Emote ${i + 1} - Updated Emote: ${updatedEmoteText}`);
+
+    // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
+    emotes[i].innerHTML = updatedEmoteText;
   }
 }
 
