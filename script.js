@@ -38,6 +38,7 @@ function correctSpelling() {
         "$1, – $2"
       );
 
+/*       textContent = textContent.replace(/кот/g, "кошка");
       textContent = textContent.replace(/кот/g, "кошка");
       textContent = textContent.replace(/кот/g, "кошка");
       textContent = textContent.replace(/кот/g, "кошка");
@@ -47,8 +48,7 @@ function correctSpelling() {
       textContent = textContent.replace(/кот/g, "кошка");
       textContent = textContent.replace(/кот/g, "кошка");
       textContent = textContent.replace(/кот/g, "кошка");
-      textContent = textContent.replace(/кот/g, "кошка");
-      textContent = textContent.replace(/кот/g, "кошка");
+      textContent = textContent.replace(/кот/g, "кошка"); */
 
       // Присваиваем обновленное текстовое содержимое обратно элементу
       spanElement.textContent = textContent;
@@ -877,7 +877,7 @@ function sayToEmote() {
 
     // Обрабатываем текст с помощью регулярного выражения
     let updatedText = sayText.replace(
-      /([!?:.,])\s(–.+?[–.!?])/g,
+      /([!?:.,])\s((?:–.+(?:[!?:]|\s–\s*)))/g,
       '$1 <span class="emote">$2</span>'
     );
 
@@ -905,7 +905,7 @@ function emoteToSpeech() {
 
     // Обрабатываем текст с помощью регулярного выражения (здесь просто пример)
     let updatedEmoteText = emoteText.replace(
-      /(–\s(?:["«])?(\(.+?\)\s*)[А-Я](?:.+?)(?:[,.!?] –|<\/span>))/g,
+      /(–\s(?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)(?:[,.!?] –|<\/span>))/g,
       '<span class="speech">$1</span>'
     );
 
