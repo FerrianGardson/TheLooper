@@ -11,8 +11,8 @@ function formatLog() {
   addCommaOrDot();
   addColonToEnd();
   combineFunctions();
-/*   chapterCollapse(); */
-  emoteToSpeech();
+  /*   chapterCollapse(); */
+/*   emoteToSpeech(); */
   addIdToChapter();
 }
 
@@ -526,7 +526,7 @@ function combineSpeech() {
         : "";
     }
 
-/*     if (!previousSpeech) {
+    /*     if (!previousSpeech) {
       previousSpeech = currentSpeech;
       previousPlayer = currentPlayer;
       previousLogline = currentLogline;
@@ -591,12 +591,14 @@ function combineEmotes() {
     } else {
       currentLogline = element;
       currentPlayerElement = element.querySelector("span.player");
-      currentPlayer = currentPlayerElement ? currentPlayerElement.textContent : "";
+      currentPlayer = currentPlayerElement
+        ? currentPlayerElement.textContent
+        : "";
       currentEmoteElement = element.querySelector("span.emote");
       currentEmote = currentEmoteElement ? currentEmoteElement.textContent : "";
     }
 
-/*     if (!previousEmote && currentEmote && currentPlayer && currentLogline) {
+    /*     if (!previousEmote && currentEmote && currentPlayer && currentLogline) {
       previousEmote = currentEmote;
       previousPlayer = currentPlayer;
       previousLogline = currentLogline;
@@ -608,11 +610,16 @@ function combineEmotes() {
       previousPlayer = currentPlayer;
       previousEmote = currentEmote;
       previousLogline = currentLogline;
-      console.log("Новый игрок",currentPlayer);
+      console.log("Новый игрок", currentPlayer);
       continue;
     }
 
-    if (previousPlayer && previousEmote && currentEmote && currentPlayer == previousPlayer) {
+    if (
+      previousPlayer &&
+      previousEmote &&
+      currentEmote &&
+      currentPlayer == previousPlayer
+    ) {
       combinedEmote = previousEmote + " " + currentEmote;
       currentEmoteElement.textContent = combinedEmote;
       previousLogline.remove();
@@ -627,7 +634,6 @@ function combineEmotes() {
     continue;
   }
 }
-
 
 // Список игроков
 
@@ -690,8 +696,7 @@ function playersList() {
 }
 
 function colorizePlayers() {
-  /*   console.log("Раскраска ников");
-   */ const playerColors = {};
+  const playerColors = {};
   const playerSpans = document.querySelectorAll(".player");
   const colors = [
     "#43c59eff",
@@ -714,7 +719,6 @@ function colorizePlayers() {
     let color;
 
     if (playerName === "Сырорезка") {
-      /*       console.log(`Найден игрок: ${playerName}`); */
       color = "#ffd914"; // Желтый цвет для Сырорезки
     } else {
       if (!playerColors[playerName]) {
@@ -725,25 +729,15 @@ function colorizePlayers() {
       }
     }
     playerSpans[i].style.color = color;
-    /*     console.log(`Имя игрока: ${playerName}, Цвет: ${color}`); */
   }
 
-  /*   console.log("Окраска ников завершена");
-   */
-  /*   console.log("Удаление пустых игроков");
-   */ const playerList = document.querySelector("ul.players"); // получаем список игроков
+  const playerList = document.querySelector("ul.players");
   const emptyPlayers = [...playerList.querySelectorAll("li")].filter(
     (li) => !li.textContent.trim()
-  ); // фильтруем пустые элементы li
-  emptyPlayers.forEach((li) => li.remove()); // удаляем каждый из найденных пустых элементов li
-  /*   console.log("Удаление пустых игроков завершено");
-   */
-
-  // Находим все элементы <p> с классом "logline say"
-  var elements = document.querySelectorAll("p.logline.say");
-
-  // Проходим по каждому элементу
+  );
+  emptyPlayers.forEach((li) => li.remove());
 }
+
 
 // Кнопки DM и OOC
 
@@ -821,9 +815,27 @@ function addIdToChapter() {
 
 function emoteToSpeech() {
   console.log("emoteToSpeech");
-  // Находим все элементы с классами .chapter.expanded .logline.emote
+
   var emoteElements = document.querySelectorAll(
-    ".chapter.expanded .logline.emote span.emote"
+    ".chapter.expanded .logline.emote span.emote:not(:has(span.speech))"
+  );
+
+  // Проходимся по каждому элементу и выполняем замену текста с помощью регулярного выражения
+  emoteElements.forEach(function (emoteElement) {
+    var emoteText = emoteElement.textContent;
+
+    // Замена нулевого выражения
+    var newEmoteText = emoteText.replace(
+      /(– [А-Я](.+)[!.,?]\s–)/gm,
+      '<span class="speech">$1</span>'
+    );
+
+    emoteElement.innerHTML = newEmoteText;
+  });
+
+  
+  emoteElements = document.querySelectorAll(
+    ".chapter.expanded .logline.emote span.emote:not(:has(span.speech))"
   );
 
   // Проходимся по каждому элементу и выполняем замену текста с помощью регулярного выражения
@@ -836,11 +848,41 @@ function emoteToSpeech() {
       ': <span class="speech">– $1</span>'
     );
 
+    emoteElement.innerHTML = newEmoteText;
+  });
+
+  debugger;
+
+  // Цикл
+
+  emoteElements = document.querySelectorAll(
+    ".chapter.expanded .logline.emote span.emote:not(:has(span.speech))"
+  );
+
+  // Проходимся по каждому элементу и выполняем замену текста с помощью регулярного выражения
+  emoteElements.forEach(function (emoteElement) {
+    var emoteText = emoteElement.textContent;
+
     // Замена второго выражения
     newEmoteText = newEmoteText.replace(
       /^\s*[-–—] (.+)/gm,
       '<span class="emote"><span class="speech">– $1</span>'
     );
+
+    emoteElement.innerHTML = newEmoteText;
+  });
+
+  debugger;
+
+  // Цикл
+
+  emoteElements = document.querySelectorAll(
+    ".chapter.expanded .logline.emote span.emote:not(:has(span.speech))"
+  );
+
+  // Проходимся по каждому элементу и выполняем замену текста с помощью регулярного выражения
+  emoteElements.forEach(function (emoteElement) {
+    var emoteText = emoteElement.textContent;
 
     // Замена третьего выражения
     newEmoteText = newEmoteText.replace(
@@ -848,9 +890,10 @@ function emoteToSpeech() {
       '$1 <span class="emote">$2</p></span>'
     );
 
-    // Заменяем существующий HTML внутри элемента
     emoteElement.innerHTML = newEmoteText;
   });
+
+  // Заменяем существующий HTML внутри элемента
 }
 
 function killNav() {
@@ -874,7 +917,6 @@ function sayToEmote() {
       ", $2. – $3"
     );
   });
-  debugger;
   sayElements.forEach(function (sayElement) {
     // Заменяем текст внутри span.speech
     sayElement.innerHTML = sayElement.innerHTML.replace(
@@ -882,7 +924,6 @@ function sayToEmote() {
       '$1 <span class="emote">– $2$3 </span>'
     );
   });
-  debugger;
   sayToEmote2();
 }
 
