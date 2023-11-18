@@ -546,6 +546,10 @@ function combineSpeech() {
     if (!element.classList.contains("say")) {
       currentPlayer = "";
       currentSpeech = "";
+      currentLogline = "";
+      previousPlayer = "";
+      previousSpeech = "";
+      previousLogline = "";
       continue;
     } else {
       currentLogline = element;
@@ -617,6 +621,10 @@ function combineEmotes() {
     if (!element.classList.contains("emote")) {
       currentEmote = "";
       currentPlayer = "";
+      previousPlayer = "";
+      previousLogline = "";
+      previousEmote = "";
+      currentLogline = "";
       continue;
     } else {
       currentLogline = element;
@@ -1271,6 +1279,7 @@ function oocToEmote() {
 
   removeEmptyParagraphs();
   combineEmotes();
+  emoteToSpeech();
 
   //  console.log("Завершение выполнения функции oocToEmote");
 }
