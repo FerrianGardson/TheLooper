@@ -905,7 +905,7 @@ function emoteToSpeech() {
 
     // Обрабатываем текст с помощью регулярного выражения (здесь просто пример)
     let updatedEmoteText = emoteText.replace(
-      /(–\s(?:["«])?[А-Я](?:.+?)(?:[,.!?] –|<\/span>))/g,
+      /(–\s(?:["«])?(\(.+?\)\s*)[А-Я](?:.+?)(?:[,.!?] –|<\/span>))/g,
       '<span class="speech">$1</span>'
     );
 
