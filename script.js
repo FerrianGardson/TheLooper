@@ -33,7 +33,7 @@ function correctSpelling() {
       var textContent = spanElement.textContent;
 
       // Вот с помощью этой малышки – Похлопал по оптике
-      textContent = textContent.replace(/([а-я])\s*–\s*([А-Я])/g, "$1, – $2");
+      textContent = textContent.replace(/([а-я][ "»])\s*–\s*([А-Я])/g, "$1, – $2");
 
       textContent = textContent.replace(/кот/g, "кошка");
       textContent = textContent.replace(/кот/g, "кошка");
