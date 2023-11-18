@@ -11,9 +11,44 @@ function formatLog() {
   addCommaOrDot();
   addColonToEnd();
   combineFunctions();
-  /*   chapterCollapse(); */
-/*   emoteToSpeech(); */
+  chapterCollapse();
+  /*   emoteToSpeech(); */
   addIdToChapter();
+}
+
+function correctSpelling() {
+  // Находим все элементы <p> с классом "logline"
+  var loglineElements = document.querySelectorAll("p.logline");
+
+  // Проходим по каждому элементу
+  loglineElements.forEach(function (loglineElement) {
+    // Находим все элементы <span> внутри текущего элемента
+    var spanElements = loglineElement.querySelectorAll("span");
+
+    // Проходим по каждому элементу <span>
+    spanElements.forEach(function (spanElement) {
+      // Получаем текстовое содержимое элемента
+      var textContent = spanElement.textContent;
+
+      // Вот с помощью этой малышки – Похлопал по оптике
+      textContent = textContent.replace(/([а-я])\s*–\s*([А-Я])/g, "$1, – $2");
+
+      textContent = textContent.replace(/кот/g, "кошка");
+      textContent = textContent.replace(/кот/g, "кошка");
+      textContent = textContent.replace(/кот/g, "кошка");
+      textContent = textContent.replace(/кот/g, "кошка");
+      textContent = textContent.replace(/кот/g, "кошка");
+      textContent = textContent.replace(/кот/g, "кошка");
+      textContent = textContent.replace(/кот/g, "кошка");
+      textContent = textContent.replace(/кот/g, "кошка");
+      textContent = textContent.replace(/кот/g, "кошка");
+      textContent = textContent.replace(/кот/g, "кошка");
+      textContent = textContent.replace(/кот/g, "кошка");
+
+      // Присваиваем обновленное текстовое содержимое обратно элементу
+      spanElement.textContent = textContent;
+    });
+  });
 }
 
 // Загрузка файла
@@ -148,7 +183,7 @@ function renderChatLog(text) {
 
 function createChapterElement(chapterTitle, chapterLines) {
   const chapter = document.createElement("div");
-  chapter.classList.add("chapter");
+  chapter.classList.add("chapter", "expanded");
 
   const chapterHeader = document.createElement("h2");
   chapterHeader.classList.add("date");
@@ -504,15 +539,11 @@ function combineSpeech() {
 
   for (var i = 0; i < length; i++) {
     var element = elements[i];
-    console.log(i);
+    // console.log(i);
 
     if (!element.classList.contains("say")) {
       currentPlayer = "";
       currentSpeech = "";
-      previousSpeech = "";
-      previousPlayer = "";
-      previousLogline = "";
-      //  console.log("Скип");
       continue;
     } else {
       currentLogline = element;
@@ -526,13 +557,13 @@ function combineSpeech() {
         : "";
     }
 
-    /*     if (!previousSpeech) {
+    if (!previousSpeech) {
       previousSpeech = currentSpeech;
       previousPlayer = currentPlayer;
       previousLogline = currentLogline;
-     // console.log("Первая реплика", previousLogline);
+      console.log("Первая реплика", previousLogline);
       continue;
-    } */
+    }
 
     if (
       previousPlayer &&
@@ -552,6 +583,7 @@ function combineSpeech() {
     }
 
     if (currentPlayer != previousPlayer) {
+      console.log("Новый игрок");
       previousPlayer = currentPlayer;
       previousSpeech = currentSpeech;
       previousLogline = currentLogline;
@@ -581,12 +613,8 @@ function combineEmotes() {
     // console.log(i);
 
     if (!element.classList.contains("emote")) {
-      currentPlayer = "";
       currentEmote = "";
-      previousEmote = "";
-      previousPlayer = "";
-      previousLogline = "";
-      // console.log("Skip");
+      currentPlayer = "";
       continue;
     } else {
       currentLogline = element;
@@ -596,21 +624,22 @@ function combineEmotes() {
         : "";
       currentEmoteElement = element.querySelector("span.emote");
       currentEmote = currentEmoteElement ? currentEmoteElement.textContent : "";
+      console.log(currentEmote);
     }
 
-    /*     if (!previousEmote && currentEmote && currentPlayer && currentLogline) {
+    if (!previousEmote) {
       previousEmote = currentEmote;
       previousPlayer = currentPlayer;
       previousLogline = currentLogline;
-      console.log("Первая реплика",currentLogline);
-            continue;
-    } */
+      //console.log("Первый эмоут", previousLogline);
+      continue;
+    }
 
     if (currentPlayer != previousPlayer) {
       previousPlayer = currentPlayer;
       previousEmote = currentEmote;
       previousLogline = currentLogline;
-      console.log("Новый игрок", currentPlayer);
+      //console.log("Новый игрок", currentPlayer);
       continue;
     }
 
@@ -638,8 +667,8 @@ function combineEmotes() {
 // Список игроков
 
 function playersList() {
-  /*   console.log("Список игроков");
-   */ // Создаем пустой массив для хранения имен игроков
+  //  console.log("Список игроков");
+  // Создаем пустой массив для хранения имен игроков
   let players = [];
 
   // Находим все .chapter на странице
@@ -738,7 +767,6 @@ function colorizePlayers() {
   emptyPlayers.forEach((li) => li.remove());
 }
 
-
 // Кнопки DM и OOC
 
 function toggleVisibility(className) {
@@ -814,86 +842,29 @@ function addIdToChapter() {
 }
 
 function emoteToSpeech() {
-  console.log("emoteToSpeech");
+  // Запускаем функцию correctSpelling
+  correctSpelling();
 
-  var emoteElements = document.querySelectorAll(
-    ".chapter.expanded .logline.emote span.emote:not(:has(span.speech))"
-  );
-
-  // Проходимся по каждому элементу и выполняем замену текста с помощью регулярного выражения
-  emoteElements.forEach(function (emoteElement) {
-    var emoteText = emoteElement.textContent;
-
-    // Замена нулевого выражения
-    var newEmoteText = emoteText.replace(
-      /(– [А-Я](.+)[!.,?]\s–)/gm,
-      '<span class="speech">$1</span>'
-    );
-
-    emoteElement.innerHTML = newEmoteText;
-  });
-
-  
-  emoteElements = document.querySelectorAll(
-    ".chapter.expanded .logline.emote span.emote:not(:has(span.speech))"
-  );
-
-  // Проходимся по каждому элементу и выполняем замену текста с помощью регулярного выражения
-  emoteElements.forEach(function (emoteElement) {
-    var emoteText = emoteElement.textContent;
-
-    // Замена первого выражения
-    var newEmoteText = emoteText.replace(
-      /:\s*[-–—]\s*(.+)/gm,
-      ': <span class="speech">– $1</span>'
-    );
-
-    emoteElement.innerHTML = newEmoteText;
-  });
-
+  // Ставим debugger
   debugger;
 
-  // Цикл
+  // Собираем все p.logline.emote
+  var emotes = document.querySelectorAll('p.logline.emote');
 
-  emoteElements = document.querySelectorAll(
-    ".chapter.expanded .logline.emote span.emote:not(:has(span.speech))"
-  );
+  // Индексируем и обрабатываем каждый p.logline.emote
+  for (var i = 0; i < emotes.length; i++) {
+    // Получаем текст из HTML-элемента
+    var emoteText = emotes[i].innerHTML;
 
-  // Проходимся по каждому элементу и выполняем замену текста с помощью регулярного выражения
-  emoteElements.forEach(function (emoteElement) {
-    var emoteText = emoteElement.textContent;
+    // Обрабатываем текст с помощью регулярного выражения (здесь просто пример)
+    var updatedEmoteText = emoteText.replace(/(–\s[А-Я](.+?)((<\/span>)| – ))/g, '<span class="speech">$1</span>');
 
-    // Замена второго выражения
-    newEmoteText = newEmoteText.replace(
-      /^\s*[-–—] (.+)/gm,
-      '<span class="emote"><span class="speech">– $1</span>'
-    );
+    // Выводим обновленную версию текста
+    console.log(`Emote ${i + 1} - Updated Emote: ${updatedEmoteText}`);
 
-    emoteElement.innerHTML = newEmoteText;
-  });
-
-  debugger;
-
-  // Цикл
-
-  emoteElements = document.querySelectorAll(
-    ".chapter.expanded .logline.emote span.emote:not(:has(span.speech))"
-  );
-
-  // Проходимся по каждому элементу и выполняем замену текста с помощью регулярного выражения
-  emoteElements.forEach(function (emoteElement) {
-    var emoteText = emoteElement.textContent;
-
-    // Замена третьего выражения
-    newEmoteText = newEmoteText.replace(
-      /([,.!?])\s*–\s*(.+\s–)/gm,
-      '$1 <span class="emote">$2</p></span>'
-    );
-
-    emoteElement.innerHTML = newEmoteText;
-  });
-
-  // Заменяем существующий HTML внутри элемента
+    // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
+    emotes[i].innerHTML = updatedEmoteText;
+  }
 }
 
 function killNav() {
@@ -1285,55 +1256,40 @@ function removeNonImportantParagraphs() {
 // Добавьте вызов setupToggleHandlers() в нужном месте, например, в конце вашего скрипта.
 
 function oocToEmote() {
-  console.log("Начало выполнения функции oocToEmote");
+  // console.log("Начало выполнения функции oocToEmote");
 
   // Находим элементы с классом "logline ooc" в пределах ".chapter.expanded"
   var elements = document.querySelectorAll(".chapter.expanded .logline.ooc");
-  console.log(`Найдено ${elements.length} элементов с классом "logline ooc"`);
+  // console.log(`Найдено ${elements.length} элементов с классом "logline ooc"`);
 
   // Проходимся по каждому найденному элементу
   elements.forEach(function (element) {
-    console.log("Обработка нового элемента");
+    // console.log("Обработка нового элемента");
 
     // Удаляем элемент span с классом "ooc"
     var oocElement = element.querySelector(".ooc");
     oocElement.parentNode.removeChild(oocElement);
-    console.log("Удален элемент span с классом 'ooc'");
+    // console.log("Удален элемент span с классом 'ooc'");
 
     // Заменяем класс "ooc" на "emote" у родительского элемента
     element.classList.remove("ooc");
     element.classList.add("emote");
-    console.log("Класс 'ooc' заменен на 'emote'");
+    // console.log("Класс 'ooc' заменен на 'emote'");
 
     // Получаем вложенный элемент с классом "speech" и меняем его класс
     var speechElement = element.querySelector(".speech");
     if (speechElement) {
       speechElement.classList.remove("speech");
       speechElement.classList.add("emote");
-      console.log("Класс 'speech' заменен на 'emote' для вложенного элемента");
+      // console.log("Класс 'speech' заменен на 'emote' для вложенного элемента");
     }
   });
 
   removeEmptyParagraphs();
   combineEmotes();
 
-  console.log("Завершение выполнения функции oocToEmote");
+  //  console.log("Завершение выполнения функции oocToEmote");
 }
-
-// Пример объявления новой функции removeEmptyParagraphs
-function removeEmptyParagraphs() {
-  console.log("Выполнение функции removeEmptyParagraphs");
-  // Ваш код для удаления пустых абзацев
-  console.log("Завершение функции removeEmptyParagraphs");
-}
-
-// Пример объявления новой функции combineEmotes
-function combineEmotes() {
-  console.log("Выполнение функции combineEmotes");
-  // Ваш код для объединения эмоций
-  console.log("Завершение функции combineEmotes");
-}
-
 
 function removeEmptyParagraphs() {
   // Находим элементы с классом "chapter expanded"
