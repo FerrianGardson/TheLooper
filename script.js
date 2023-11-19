@@ -12,6 +12,36 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("click", toggleImportantClass);
 });
 
+function chapterCollapse() {
+  // Сворачиваем главы
+  /*   console.log("Начало функции chapterCollapse"); */
+
+  const chapterElements = document.querySelectorAll(".chapter");
+
+  if (chapterElements.length === 1) {
+    /*     console.log("Есть только одна глава, разворачиваем"); */
+    chapterElements[0].classList.add("expanded");
+  } else {
+    /*     console.log("Больше одной главы, сворачиваем все кроме первой"); */
+    chapterElements.forEach((chapterElement, index) => {
+      if (index !== 0) {
+        chapterElement.classList.add("collapsed");
+      }
+    });
+  }
+
+  /*   console.log("А первой добавляется expanded"); */
+  chapterElements[0].classList.add("expanded");
+
+  const dates = document.querySelectorAll(".date");
+
+  dates.forEach((date) => {
+    date.addEventListener("click", toggleContent);
+  });
+
+  /*   console.log("Функция chapterCollapse успешно выполнена"); */
+}
+
 // Главная функция
 
 function formatLog() {
@@ -1001,35 +1031,7 @@ document.addEventListener("DOMContentLoaded", function () {
   transferNightLines(chatlogElement);
 });
 
-function chapterCollapse() {
-  // Сворачиваем главы
-  /*   console.log("Начало функции chapterCollapse"); */
 
-  const chapterElements = document.querySelectorAll(".chapter");
-
-  if (chapterElements.length === 1) {
-    /*     console.log("Есть только одна глава, разворачиваем"); */
-    chapterElements[0].classList.add("expanded");
-  } else {
-    /*     console.log("Больше одной главы, сворачиваем все кроме первой"); */
-    chapterElements.forEach((chapterElement, index) => {
-      if (index !== 0) {
-        chapterElement.classList.add("collapsed");
-      }
-    });
-  }
-
-  /*   console.log("А первой добавляется expanded"); */
-  chapterElements[0].classList.add("expanded");
-
-  const dates = document.querySelectorAll(".date");
-
-  dates.forEach((date) => {
-    date.addEventListener("click", toggleContent);
-  });
-
-  /*   console.log("Функция chapterCollapse успешно выполнена"); */
-}
 
 function toggleContent(event) {
   // Функция сворачивания
