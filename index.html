@@ -1,52 +1,102 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>The Looper</title>
-    <link rel="stylesheet" href="./style.css" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  </head>
-  <body>
-    <div class="nav">
-      <div id="buttons">
-        <!--       <button id="demo-button">Демо</button> -->
-        <form>
-          <label for="file-input-txt">Загрузить лог (TXT)</label>
-          <input type="file" id="file-input-txt" />
-        </form>
 
-<!--         <form>
-          <label for="file-input-html">(HTML)</label>
-          <input type="file" id="file-input-html" />
-        </form> -->
-    <!--     <button onclick="debug()">Дебаг</button> -->
+<head>
+  <meta charset="utf-8" />
+  <title>The Looper</title>
+  <link rel="stylesheet" href="./style.css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
 
-        <!--         <button onclick="toggleVisibility('dm')">DM</button>
+<body>
+  <div class="nav">
+    <div id="buttons">
+      <!--       <button id="demo-button">Демо</button> -->
+      <form>
+        <label for="file-input-txt">Загрузить лог (TXT)</label>
+        <input type="file" id="file-input-txt" />
+      </form>
+
+      <form>
+        <label for="file-input-html">(HTML)</label>
+        <input type="file" id="file-input-html" />
+      </form>
+      <!--     <button onclick="debug()">Дебаг</button> -->
+
+      <!--         <button onclick="toggleVisibility('dm')">DM</button>
         <button onclick="toggleVisibility('ooc')">OOC</button> -->
-        <!--       <button onclick="removeImportantClass()">Выделение</button> -->
-        
-<!--         <button onclick="oocToEmote()">OOC =&gt; Emote</button> -->
-<!--         <button onclick="combineFunctions()">Чатбоксы</button> -->
-<!--         <button onclick="emoteToSpeech()">Emote =&gt; Say</button> -->
+      <!--       <button onclick="removeImportantClass()">Выделение</button> -->
+
+      <button onclick="oocToEmote()">OOC =&gt; Emote</button>
+      <button onclick="combineFunctions()">Чатбоксы</button>
+      <!--         <button onclick="emoteToSpeech()">Emote =&gt; Say</button> -->
       <!--   <button onclick="sayToEmote()">Say => Emote</button> -->
       <!--   <button onclick="killNav()">Kill Nav</button> -->
-        <div id="keywords">
-          <input
-            type="text"
-            id="keywordsInput"
-            placeholder="Введите ключевые слова через запятую"
-            onkeypress="handleKeyPress(event)"
-            value="МИА, запись, фото, улыбочку, -шепчет, -ООС, -[МИА]"
-          />
+      <div id="keywords">
+        <input type="text" id="keywordsInput" placeholder="Введите ключевые слова через запятую"
+          onkeypress="handleKeyPress(event)" value="МИА, запись, фото, улыбочку, -шепчет, -ООС, -[МИА]" />
 
-          <button onclick="applyImportant()">Выделение</button>
-        </div>
-        <button onclick="removeNonImportantParagraphs()">Чистка</button>
+        <button onclick="applyImportant()">Выделение</button>
       </div>
+      <button onclick="removeNonImportantParagraphs()">Чистка</button>
+
+      <button onclick="removeCollapsed()">Коллапс</button>
+      <button onclick="chapterReverse()">Реверс</button>
+      <button onclick="postReplace()">Постреплейс</button>
+
+
+
+
+      <script>
+        function removeCollapsed() {
+          // 1. Удалить все ul.players и div.collapsed
+          var playersList = document.querySelectorAll('ul.players');
+          playersList.forEach(function (player) {
+            player.remove();
+          });
+
+          var collapsedDivs = document.querySelectorAll('div.collapsed');
+          collapsedDivs.forEach(function (div) {
+            div.remove();
+          });
+        }
+
+        function chapterReverse() {
+          // 2. Отсортировать в обратном порядке детей #chatlog
+          var chatlog = document.getElementById('chatlog');
+          var messages = Array.from(chatlog.children);
+          // Сортировка в обратном порядке
+          messages.reverse();
+          // Удаление детей #chatlog
+          while (chatlog.firstChild) {
+            chatlog.removeChild(chatlog.firstChild);
+          }
+          // Вставка отсортированных сообщений
+          messages.forEach(function (message) {
+            chatlog.appendChild(message);
+          });
+        }
+
+        function postReplace() {
+          // Получаем весь HTML-код страницы
+          var updatedHTML = document.documentElement.innerHTML;
+
+          // Выполняем замену "кот" на "кошка" с использованием регулярного выражения
+          updatedHTML = updatedHTML.replace(
+            /<span class=\"emote\"><span class=\"speech\">— /g,
+            '<span class="emote"><span class="speech">'
+          );
+
+          // Обновляем HTML-код страницы
+          document.documentElement.innerHTML = updatedHTML;
+        }
+      </script>
     </div>
-    <div id="chatlog"></div>
-    <div class="footer"></div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="script.js"></script>
-  </body>
+  </div>
+  <div id="chatlog"></div>
+  <div class="footer"></div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="script.js"></script>
+</body>
+
 </html>

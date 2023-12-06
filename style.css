@@ -218,6 +218,7 @@ p.logline {
 p.important {
   display: block;
   opacity: 1;
+  margin: 0.5em 0;
 }
 
 .ooc {

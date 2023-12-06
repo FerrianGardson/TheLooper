@@ -513,7 +513,9 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/ {2,}/g, " "); // Замена двойных и более пробелов на одиночные
   //   chatlogHTML = chatlogHTML.replace(/([.,;!?]|[.]{3})([^ ])/g, "$1 $2"); // Многоточия
 
-  chatlogHTML = chatlogHTML.replace(/[-–—]/gm, "–"); // Однотипные дефисы
+  chatlogHTML = chatlogHTML.replace(/\s*[-–—]\s*/gm, " – "); // Однотипные дефисы
+
+  // chatlogHTML = chatlogHTML.replace(/\s*—\*s/gm, " — "); // Косяк Дайлы
 
   chatlogHTML = chatlogHTML.replace(
     /<p class="logline say">(.+?)\sшепчет:\s?[—–-]?\s?(.+)\n<\/p>/gm,
@@ -524,8 +526,6 @@ function cleanText() {
     /<p class="logline say">Вы\sшепчете\s(.+?)\:\s?(.+)\n<\/p>/gm,
     "<p class='logline whisper'><span class='whisper'>Вы шепчете $1:</span> <span class='speech'>$2</span></p>"
   );
-
-  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
   chatlogHTML = chatlogHTML.replace(
     /(<p class="logline say">(%s заслужил достижение|&\?137|Вы заняты|Вы отошли|Вы подбираете|На вас наложен эффект|Вы присоединились к каналу|Вы получаете|Подключиться|Порог|Бой|Поверженные|Участники|Победители|Liquid|\[СЕРВЕР\]|&amp;\?\d+|&\?\d+|Map|X:|grid|GroundZ|ZoneX|no|&\?+|\d|\(|Так как вы бездействовали|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ создает:|Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Смена|\(d+d|&?dd|Разыгрываются).+(\n|)<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
@@ -564,6 +564,11 @@ function cleanText() {
     /<p class="logline say">(.+) кричит:\s?[—–-]?\s?(.+)\n<\/p>/gm,
     "<p class='logline yell'><span class='player'>$1</span> <span class='speech'>$2</span></p>"
   ); // Крик, дефисы, а также облачает реплику в классы
+
+
+  // Вывод для дебага
+  // document.getElementById("chatlog").innerHTML = chatlogHTML;
+  // debugger;
 
   chatlogHTML = chatlogHTML.replace(/(?:\|\d–\d\((.+?)\))/gm, "$1"); // Кривые падежи в стандартных эмоутах
 
@@ -934,7 +939,7 @@ function sayToEmote() {
 
     // Обрабатываем текст с помощью регулярного выражения
     let updatedText = sayText.replace(
-      /([!?:.,])\s((?:–.+?(?:[!?:]|\s–\s*|<\/span>)))/g,
+      /([!?:.,])\s((?:–.+?(?:[!?:]|[!?:.,]\s–\s*|<\/span>)))/g,
       '$1 <span class="emote">$2</span>'
     );
 
@@ -970,6 +975,26 @@ function emoteToSpeech() {
     // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
     emotes[i].innerHTML = updatedEmoteText;
   }
+
+  // Находим все span.speech > span.emote
+  var speechEmoteElements = document.querySelectorAll(
+    "span.speech > span.emote"
+  );
+
+  // Заменяем символ "–" на "—"
+  speechEmoteElements.forEach(function (element) {
+    element.innerText = element.innerText.replace(/–/g, "—");
+  });
+
+  // Находим все span.emote > span.speech
+  var emoteSpeechElements = document.querySelectorAll(
+    "span.emote > span.speech"
+  );
+
+  // Заменяем символ "–" на "—"
+  emoteSpeechElements.forEach(function (element) {
+    element.innerText = element.innerText.replace(/–/g, "—");
+  });
 }
 
 function transferNightLines(rootElement) {
@@ -1031,8 +1056,6 @@ document.addEventListener("DOMContentLoaded", function () {
   transferNightLines(chatlogElement);
 });
 
-
-
 function toggleContent(event) {
   // Функция сворачивания
   /*   console.log("Начало функции toggleContent"); */
@@ -1058,8 +1081,6 @@ function combineFunctions() {
   combineSpeech();
   combineEmotes();
 }
-
-
 
 function handleKeyPress(event) {
   if (event.keyCode === enterKeyCode) {
@@ -1202,8 +1223,6 @@ function scrollToNearestImportant() {
 // Пример использования
 scrollToNearestImportant();
 
-
-
 function removeNonImportantParagraphs() {
   // console.log("removeNonImportantParagraphs");
 
@@ -1324,6 +1343,7 @@ function removeDashAtStart() {
     emotes[i].innerHTML = updatedEmoteText;
   }
 }
+
 
 function removeEmptyParagraphs() {
   // Находим элементы с классом "chapter expanded"
