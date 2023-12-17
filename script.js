@@ -1,28 +1,38 @@
 const enterKeyCode = 13;
 
-document.addEventListener("DOMContentLoaded", function () {
-  // console.log("DOMContentLoaded");
-  function toggleImportantClass(event) {
-    var paragraph = event.target.closest("p");
-    if (paragraph) {
-      paragraph.classList.toggle("important");
-    }
+function toggleImportantClass(event) {
+  var paragraph = event.target.closest("p");
+  if (paragraph) {
+    paragraph.classList.toggle("important");
   }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("DOMContentLoaded");
 
   document.addEventListener("click", toggleImportantClass);
+  const dates = document.querySelectorAll(".date");
+  dates.forEach((date) => {
+    date.addEventListener("click", toggleContent);
+  });
 });
 
 function chapterCollapse() {
   // Сворачиваем главы
-  /*   console.log("Начало функции chapterCollapse"); */
+  /* console.log("Начало функции chapterCollapse"); */
 
   const chapterElements = document.querySelectorAll(".chapter");
 
+  // Удаляем классы expanded и collapsed у всех элементов
+  chapterElements.forEach((chapterElement) => {
+    chapterElement.classList.remove("expanded", "collapsed");
+  });
+
   if (chapterElements.length === 1) {
-    /*     console.log("Есть только одна глава, разворачиваем"); */
+    /* console.log("Есть только одна глава, разворачиваем"); */
     chapterElements[0].classList.add("expanded");
   } else {
-    /*     console.log("Больше одной главы, сворачиваем все кроме первой"); */
+    /* console.log("Больше одной главы, сворачиваем все кроме первой"); */
     chapterElements.forEach((chapterElement, index) => {
       if (index !== 0) {
         chapterElement.classList.add("collapsed");
@@ -30,35 +40,33 @@ function chapterCollapse() {
     });
   }
 
-  /*   console.log("А первой добавляется expanded"); */
+  /* console.log("А первой добавляется expanded"); */
   chapterElements[0].classList.add("expanded");
-
   const dates = document.querySelectorAll(".date");
-
   dates.forEach((date) => {
     date.addEventListener("click", toggleContent);
   });
 
-  /*   console.log("Функция chapterCollapse успешно выполнена"); */
+  /* console.log("Функция chapterCollapse успешно выполнена"); */
 }
 
 // Главная функция
 
 function formatLog() {
   let chatlogHTML = document.getElementById("chatlog").innerHTML;
-  /*   console.log("Запускаю допфункции");
-   */ formatTimestamps();
+  // console.log("Запускаю допфункции");
+  formatTimestamps();
   transferNightLines(document.body);
   cleanText();
   yourEmotes();
-  playersList();
-  colorizePlayers();
+/*   playersList(); */
+  colorizePlayers(playerColorMap);
   addCommaOrDot();
   addColonToEnd();
   combineFunctions();
   chapterCollapse();
   addIdToChapter();
-  correctSpelling();
+  //correctSpelling();
   emoteToSpeech();
   sayToEmote();
 }
@@ -78,22 +86,12 @@ function correctSpelling() {
       var textContent = spanElement.textContent;
 
       // Вот с помощью этой малышки – Похлопал по оптике
-      textContent = textContent.replace(
-        /([а-я](?:["»]|))\s–\s*([А-Я])/g,
-        "$1, – $2"
-      );
+      /* textContent = textContent.replace(
+ /([а-я](?:["»]|))\s–\s*([А-Я])/g,
+ "$1, — $2"
+ ); */
 
-      textContent = textContent.replace(/-/g, "–");
-      /*  textContent = textContent.replace(/кот/g, "кошка");
-      textContent = textContent.replace(/кот/g, "кошка");
-      textContent = textContent.replace(/кот/g, "кошка");
-      textContent = textContent.replace(/кот/g, "кошка");
-      textContent = textContent.replace(/кот/g, "кошка");
-      textContent = textContent.replace(/кот/g, "кошка");
-      textContent = textContent.replace(/кот/g, "кошка");
-      textContent = textContent.replace(/кот/g, "кошка");
-      textContent = textContent.replace(/кот/g, "кошка");
-      textContent = textContent.replace(/кот/g, "кошка"); */
+      //textContent = textContent.replace(/кот/g, "кошка");
 
       // Присваиваем обновленное текстовое содержимое обратно элементу
       spanElement.textContent = textContent;
@@ -207,6 +205,7 @@ async function handleFileInputHtml(event) {
       chatlog.innerHTML = newChatlog.innerHTML;
       // Можно также скопировать дополнительные атрибуты, например, классы или стили,
       // если они необходимы для правильного отображения
+      chapterCollapse();
     } else {
       console.error("#chatlog не найден в загруженном HTML");
     }
@@ -249,7 +248,7 @@ function createChapterElement(chapterTitle, chapterLines) {
   // ...
 
   chapterLines.forEach((line) => {
-    const match = line.match(/^(\d+)\/(\d+)\s(\d+:\d+:\d+\.\d+)\s/);
+    const match = line.match(/^(\d+?)\/(\d+?)\s(\d+:\d+:\d+\.\d+?)\s/);
     if (match) {
       const month = parseInt(match[1]);
       const day = parseInt(match[2]);
@@ -282,7 +281,7 @@ function createChapterElement(chapterTitle, chapterLines) {
         "декабря",
       ];
       const monthName = monthNames[date.getUTCMonth()];
-      const chapterTitle = `Запись от ${date.getUTCDate()} ${monthName}`;
+      const chapterTitle = `Запись от ${date.getUTCDate()} ${monthName}`;
 
       if (isNight) {
         nightLines.push(line);
@@ -324,12 +323,12 @@ function createParagraph(text) {
 // Разделение на главы
 
 function divideChapters(text) {
-  /*   console.log("Разделение на главы");
+  /* console.log("Разделение на главы");
    */ const logLines = text.trim().split("\n");
   const chapters = {};
 
   logLines.forEach((line) => {
-    const match = line.match(/^(\d+)\/(\d+)\s/);
+    const match = line.match(/^(\d+?)\/(\d+?)\s/);
     if (match) {
       const month = parseInt(match[1]);
       const day = parseInt(match[2]);
@@ -379,7 +378,7 @@ function moveNightContent() {
     const chapterTitleElement = chapter.querySelector(".date");
     if (chapterTitleElement) {
       const chapterTitle = chapterTitleElement.textContent;
-      const match = chapterTitle.match(/(\d+) ([а-я]+)$/i);
+      const match = chapterTitle.match(/(\d+?) ([а-я]+?)$/i);
 
       if (match) {
         const day = parseInt(match[1]);
@@ -429,11 +428,11 @@ function getMonthIndex(monthName) {
 // Удаление таймштампов
 
 function formatTimestamps() {
-  /*   console.log("Удаление таймштампов"); */
+  /* console.log("Удаление таймштампов"); */
   const chatlog = document.getElementById("chatlog");
   const chatlogHTML = chatlog.innerHTML;
   const cleanedHTML = chatlogHTML.replace(
-    /(\d{1,2}\/\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}\.\d{1,3}\s+)/g,
+    /(\d{1,2}\/\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}\.\d{1,3}\s+?)/g,
     '<p class="logline say">'
     /* <p class="time">$1</p> */
   );
@@ -443,7 +442,6 @@ function formatTimestamps() {
 // Список игроков
 
 function addCommaOrDot() {
-  /*      */
   // Находим все элементы с классом "players"
   const playersContainers = document.querySelectorAll(".players");
 
@@ -489,90 +487,92 @@ function addColonToEnd() {
 // Чистка от мусора
 
 function cleanText() {
-  /*   console.log("Чистка от мусора");
-   */
-  // Определение
+  //console.log("Чистка от мусора");
 
-  let chatlogHTML = document.getElementById("chatlog").innerHTML;
+  let chatlogHTML = document.getElementById("chatlog").innerHTML; // Определение
+
+  chatlogHTML = chatlogHTML.replace(/кошка/g, "кот"); // Пример
+
+  chatlogHTML = chatlogHTML.replace(/\<p.*\>\s*\<\/p\>/g, ""); // Пустые абзацы
+
+  chatlogHTML = chatlogHTML.replace(/[-–—]/g, "–"); // Однотипные дефисы
+
+  chatlogHTML = chatlogHTML.replace(/\>\s/g, ">"); // Багфикс пробела в начале контейнера
+
+  // chatlogHTML = chatlogHTML.replace(/\n<\//g, '</'); // Багфикс переноса
+
+  chatlogHTML = chatlogHTML.replace(/\|\d\–\d\((.+?)\)/g, "$1"); // Кривые падежи
 
   chatlogHTML = chatlogHTML.replace(
-    /<p.+>\[Лидер (рейда|группы)\].+:/gm,
-    "<p class='logline dm'>[ДМ]:"
-  );
+    /\<p class="logline say"\>(.+)\s*?шепчет:\s*?(.*?)(|\n)\<\/p\>/g,
+    '<p class="logline whisper"><span class="player">$1</span> шепчет: <span class="speech">$2</span></p>'
+  ); // Шёпот игрока
 
   chatlogHTML = chatlogHTML.replace(
-    /<p.+>\[Объявление рейду](.+):(.+)\n<\/p>/gm,
+    /\<p class="logline say"\>Вы\sшепчете\s(.*?)\:\s(.*?)(|\n)\<\/p\>/g,
+    '<p class="logline whisper">Вы шепчете <span class="player">$1</span>: <span class="speech">$2</span></p>'
+  ); // Ваш шёпот
+
+  chatlogHTML = chatlogHTML.replace(
+    /<p class="logline say">(\d+|\>\>|[A-z]|Zone|Используйте|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|щит|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
+    ""
+  ); // Системные сообщения, начинаются с указанных слов
+
+  chatlogHTML = chatlogHTML.replace(
+    /<p.*?(GUID|Fly|\d+\–го уровня).*?\n*?<\/p>/g,
+    ""
+  ); // Системные сообщения, содержат указанные слова в середине
+
+  //chatlogHTML = chatlogHTML.replace(/<p.*?>[a-zA-Z].*?\n*?<\/p>/g, ""); // Начинаются с английского
+
+  chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:"); // |Hchannel:PARTY|h[Лидер группы]|h Роуз: => [Лидер группы] Роуз:
+
+  chatlogHTML = chatlogHTML.replace(
+    /<p.*?>(.+?)\s(действие|приглашается|создает|устанавливает вам|находится в|производит|ложится|похоже, навеселе|.*пивко неплохо дает в голову|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает|предлагает вам).*(\n|)<\/p>/gm,
+    ""
+  ); // Игрок %ООС-действие%
+
+  chatlogHTML = chatlogHTML.replace(
+    /\[(Рейд|Лидер рейда|Лидер группы|Группа|Гильдия)\]\s(.+?)\:\s(.+)/g,
+    "<p class='logline ooc'><span class='ooc'>[ООС]</span> <span class='player'>$2</span> <span class='speech'>$3</span></p>"
+  ); //ООС-каналы
+
+  chatlogHTML = chatlogHTML.replace(
+    /<p.+>\[Объявление рейду](.+?):(.+?)\n<\/p>/g,
     "<p class='logline announcment'><span class='player'>$1</span><span class='speech'>$2</span></p>"
   ); // Ролевые объявления
 
   chatlogHTML = chatlogHTML.replace(
-    /(<p class="logline say"><\/p>|<p><\/p>|item.+blp\n.|  \n)/gm,
-    ""
-  ); // Пустые абзацы
-
-  chatlogHTML = chatlogHTML.replace(/ {2,}/g, " "); // Замена двойных и более пробелов на одиночные
-  //   chatlogHTML = chatlogHTML.replace(/([.,;!?]|[.]{3})([^ ])/g, "$1 $2"); // Многоточия
-
-  chatlogHTML = chatlogHTML.replace(/\s*[-–—]\s*/gm, " – "); // Однотипные дефисы
-
-  // chatlogHTML = chatlogHTML.replace(/\s*—\*s/gm, " — "); // Косяк Дайлы
-
-  chatlogHTML = chatlogHTML.replace(
-    /<p class="logline say">(.+?)\sшепчет:\s?[—–-]?\s?(.+)\n<\/p>/gm,
-    "<p class='logline whisper'><span class='player'>$1</span> <span class='speech'>шепчет: $2</span></p>"
-  ); // Шёпот, дефисы, а также облачает реплику в классы
-
-  chatlogHTML = chatlogHTML.replace(
-    /<p class="logline say">Вы\sшепчете\s(.+?)\:\s?(.+)\n<\/p>/gm,
-    "<p class='logline whisper'><span class='whisper'>Вы шепчете $1:</span> <span class='speech'>$2</span></p>"
-  );
-
-  chatlogHTML = chatlogHTML.replace(
-    /(<p class="logline say">(%s заслужил достижение|&\?137|Вы заняты|Вы отошли|Вы подбираете|На вас наложен эффект|Вы присоединились к каналу|Вы получаете|Подключиться|Порог|Бой|Поверженные|Участники|Победители|Liquid|\[СЕРВЕР\]|&amp;\?\d+|&\?\d+|Map|X:|grid|GroundZ|ZoneX|no|&\?+|\d|\(|Так как вы бездействовали|Ваш|Защитное|Магическое|Силовое|Ловкое|Вам|GUID|Статус|Персонаж|Добро|Поздравляем|Разделение|Специальное|Начислено|ОШИБКА|Сломанные|Отношение|Ваша|\W+ создает:|Способн|Кастомн|щит|Ткан|Entered building|Game Object|Получено задание|Stopped|Done!|Смена|\(d+d|&?dd|Разыгрываются).+(\n|)<\/p>|\|Hchannel:(RAID|PARTY|GUILD)\|h|\|h)/gm,
-    ""
-  ); // ООС-сообщения
-
-  chatlogHTML = chatlogHTML.replace(/.*Результат:.*\n?/gm, "");
-  chatlogHTML = chatlogHTML.replace(
-    /\[(Рейд|Лидер рейда|Лидер группы|Группа|Гильдия)\]\s(.+?)\:\s(.+)/gm,
-    "<p class='logline ooc'><span class='ooc'>[ООС]</span> <span class='player'>$2</span> <span class='speech'>$3</span></p>"
-  );
-
-  document.getElementById("chatlog").innerHTML = chatlogHTML;
-  chatlogHTML = chatlogHTML.replace(
-    /<p class="logline say">(.+)\s(пытается помешать побегу|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает|предлагает вам).*(\n|)<\/p>/gm,
-    ""
-  ); // Игрок %ООС-действие%
-
-  document.getElementById("chatlog").innerHTML = chatlogHTML;
-  chatlogHTML = chatlogHTML.replace(
-    /<p class="logline say">((?:(?!говорит:|кричит).)*)\n<\/p>/gm,
-    '<p class="logline emote">$1</p>'
-  ); // Эмоуты
-
-  chatlogHTML = chatlogHTML.replace(
-    /<p class="logline emote">(\W+?)\s(.+?)<\/p>/gm,
-    '<p class="logline emote"><span class="player">$1 </span><span class="emote">$2</span></p>\n'
-  ); // Авторы эмоутов
-
-  chatlogHTML = chatlogHTML.replace(
-    /<p class="logline say">(.+?)\sговорит:\s?[—–-]?\s?(.+)\n<\/p>/gm,
+    /<p class="logline say">(.+?)\s*?говорит:\s*[ —–-]\s*?(.+?)\n<\/p>/g,
     "<p class='logline say'><span class='player'>$1</span> <span class='speech'>$2</span></p>"
   ); // Речь, дефисы, а также облачает реплику в классы
 
   chatlogHTML = chatlogHTML.replace(
-    /<p class="logline say">(.+) кричит:\s?[—–-]?\s?(.+)\n<\/p>/gm,
+    /<p class="logline say">(.+?) кричит:\s*?[—–-]?\s*?(.*?)\n<\/p>/g,
     "<p class='logline yell'><span class='player'>$1</span> <span class='speech'>$2</span></p>"
   ); // Крик, дефисы, а также облачает реплику в классы
 
+  chatlogHTML = chatlogHTML.replace(
+    /<p class="logline say">((?:(?!говорит:|кричит).)*?)\n<\/p>/g,
+    '<p class="logline emote">$1</p>'
+  ); // Эмоуты
+
+  chatlogHTML = chatlogHTML.replace(
+    /<p class="logline emote">(\W+?)\s(.+?)<\/p>/g,
+    '<p class="logline emote"><span class="player">$1</span><span class="emote"> $2</span></p>\n'
+  ); // Авторы эмоутов
+
+  chatlogHTML = chatlogHTML.replace(/\s*?,/g, ","); // Удаляем пробелы перед запятыми
+
+  // chatlogHTML = chatlogHTML.replace(/<p.*?(\d+\–го уровня).*<\/p>/g, ""); // Воин 12-го уровня
+
+  chatlogHTML = chatlogHTML.replace(/(\(|\[)Дарн.*?(\)|\])/g, "[дарнасский]"); // Дарнасский
+
+  chatlogHTML = chatlogHTML.replace(/\s*?\|+/g, ""); // Пример
 
   // Вывод для дебага
-  // document.getElementById("chatlog").innerHTML = chatlogHTML;
-  // debugger;
-
-  chatlogHTML = chatlogHTML.replace(/(?:\|\d–\d\((.+?)\))/gm, "$1"); // Кривые падежи в стандартных эмоутах
-
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+  //debugger;
 }
 
 // Объединение чатбоксов
@@ -725,65 +725,70 @@ function combineEmotes() {
   }
 }
 
+
+
 // Список игроков
 
-function playersList() {
-  //  console.log("Список игроков");
-  // Создаем пустой массив для хранения имен игроков
-  let players = [];
+function colorizePlayers(playerColorMap) {
+  const playerColors = {};
+  const chapters = document.querySelectorAll(".chapter");
 
-  // Находим все .chapter на странице
-  let chapters = document.querySelectorAll(".chapter");
-
-  // Для каждого .chapter
   chapters.forEach((chapter) => {
-    // Находим .date внутри .chapter
-    let date = chapter.querySelector(".date");
+    const playerSpans = chapter.querySelectorAll(".player");
 
-    // Создаем новый список ul для игроков
-    let playerList = document.createElement("ul");
-    playerList.classList.add("players");
+    playerSpans.forEach((span, index) => {
+      const playerName = span.textContent.trim();
+      let colorClass;
 
-    // Находим все имена игроков внутри .chapter
-    let playerNames = chapter.querySelectorAll(".player");
-
-    // Для каждого имени игрока
-    playerNames.forEach((name) => {
-      // Получаем текст имени
-      let playerName = name.textContent.trim();
-
-      // Получаем стиль цвета игрока
-      let playerColor = getComputedStyle(name).color;
-
-      // Если имя игрока не является пустым
-      if (playerName !== "") {
-        // Если имя игрока еще не было добавлено в список
-        if (!players.includes(playerName)) {
-          // Добавляем имя игрока в список имен
-          players.push(playerName);
-
-          // Создаем новый элемент списка li для имени игрока
-          let playerItem = document.createElement("li");
-
-          // Устанавливаем текст элемента списка равным имени игрока
-          playerItem.textContent = playerName;
-          playerItem.className = "player";
-          playerItem.style.color = playerColor; // Устанавливаем стиль цвета игрока
-
-          // Добавляем элемент списка в список игроков
-          playerList.appendChild(playerItem);
-        }
+      if (playerColorMap[playerName]) {
+        colorClass = playerColorMap[playerName];
+      } else {
+        colorClass = playerColors[playerName] || (playerColors[playerName] = getColorClass(index));
       }
+
+      span.classList.remove("red", "green", "blue-1", "blue-2", "blue-3", "yellow", "orange", "purple-1", "purple-2", "purple-3");
+      span.classList.add(colorClass);
     });
 
-    // Если были найдены имена игроков внутри .chapter
-    if (playerList.childElementCount > 0) {
-      // Добавляем список игроков под .date
-      date.parentNode.insertBefore(playerList, date.nextSibling);
-    }
-    players = [];
+    const uniquePlayers = new Set(Array.from(playerSpans).map(span => span.textContent.trim()));
+
+    const playerList = document.createElement("ul");
+    playerList.classList.add("players");
+
+    Array.from(uniquePlayers).forEach((uniquePlayerName, index) => {
+      const playerItem = document.createElement("li");
+      playerItem.textContent = uniquePlayerName;
+      playerItem.className = "player";
+
+      const colorClass = playerColorMap[uniquePlayerName] || playerColors[uniquePlayerName] || getColorClass(index);
+
+      playerItem.classList.remove("red", "green", "blue-1", "blue-2", "blue-3", "yellow", "orange", "purple-1", "purple-2", "purple-3");
+      playerItem.classList.add(colorClass);
+
+      playerList.appendChild(playerItem);
+    });
+
+    chapter.insertBefore(playerList, chapter.firstChild);
   });
+
+  function getColorClass(index) {
+    const colors = ["red", "green", "blue-1", "blue-2", "blue-3", "yellow", "orange", "purple-1", "purple-2", "purple-3"];
+    return colors[index % colors.length];
+  }
 }
+
+// Пример использования функции с картой цветов
+const playerColorMap = {
+  "Фэрриан": "blue-3",
+  "Ананита": "green",
+  "Жуль": "red",
+  "Хейвинд": "red",
+  "Фуффис": "green",
+  "Киббл": "green",
+  "Лезинг": "orange"
+};
+
+
 function yourEmotes() {
   // Находим все элементы с классом "player" и текстом "Вы"
   const playerSpans = document.querySelectorAll(".player");
@@ -802,48 +807,34 @@ function yourEmotes() {
   });
 }
 
-function colorizePlayers() {
+/* function colorizePlayers() {
   const playerColors = {};
   const playerSpans = document.querySelectorAll(".player");
-  const colors = [
-    "#43c59eff",
-    "#5398beff",
-    "#f18f01ff",
-    "#4f4789ff",
-    "#dd403aff",
-    "#00AC48",
-    "#0A74EC",
-    "#6420FF",
-    "#677799",
-    "#AE5EFF",
-    "#E6451B",
-    "#FF9A02",
-    "#FFD914",
-  ];
 
-  for (let i = 0; i < playerSpans.length; i++) {
-    const playerName = playerSpans[i].textContent.trim();
-    let color;
+  playerSpans.forEach((span, i) => {
+    const playerName = span.textContent.trim();
+    const colorClass = playerColors[playerName] || (playerColors[playerName] = getColorClass(i));
 
-    if (playerName === "Сырорезка") {
-      color = "#ffd914"; // Желтый цвет для Сырорезки
-    } else {
-      if (!playerColors[playerName]) {
-        color = colors[i % colors.length]; // получаем цвет из массива цветов, с повторением при необходимости
-        playerColors[playerName] = color;
-      } else {
-        color = playerColors[playerName];
-      }
-    }
-    playerSpans[i].style.color = color;
-  }
+    // Удаление предыдущих классов цвета и атрибута style
+        span.removeAttribute("style");
+
+    // Добавление нового класса цвета
+    span.classList.add(colorClass);
+  });
 
   const playerList = document.querySelector("ul.players");
-  const emptyPlayers = [...playerList.querySelectorAll("li")].filter(
-    (li) => !li.textContent.trim()
-  );
-  emptyPlayers.forEach((li) => li.remove());
+  const emptyPlayers = Array.from(playerList.querySelectorAll("li")).filter(li => !li.textContent.trim());
+  emptyPlayers.forEach(li => li.remove());
+
+  function getColorClass(index) {
+    const colors = ["red", "green", "blue-1", "blue-2", "blue-3", "yellow", "orange", "purple-1", "purple-2", "purple-3"];
+    return colors[index % colors.length];
+  }
 }
+ */
+
+
+
 
 // Кнопки DM и OOC
 
@@ -1019,15 +1010,15 @@ function transferNightLines(rootElement) {
       const nextDateElement = nextChapter.querySelector(".date");
       const nextChapterContent = nextChapter.querySelector(".content");
       if (!nextDateElement || !nextChapterContent) {
-        /*         console.log(
-          `Контейнер контента или дата не найдены в следующей главе. Строки для ночи не будут перемещены.`
-        ); */
+        /* console.log(
+ `Контейнер контента или дата не найдены в следующей главе. Строки для ночи не будут перемещены.`
+ ); */
       }
 
       nextChapterContent.appendChild(nightElement);
-      /*       console.log(
-        `Строки для ночи из главы с датой: «${currentDate}» добавлены в конец контента в следующей главе: «${nextDateElement.textContent.trim()}»`
-      ); */
+      /* console.log(
+ `Строки для ночи из главы с датой: «${currentDate}» добавлены в конец контента в следующей главе: «${nextDateElement.textContent.trim()}»`
+ ); */
     });
   }
   let chatlogElement = document.getElementById("chatlog");
@@ -1058,7 +1049,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function toggleContent(event) {
   // Функция сворачивания
-  /*   console.log("Начало функции toggleContent"); */
+  /* console.log("Начало функции toggleContent"); */
   const chapter = event.target.closest(".chapter");
   const content = chapter.querySelector(".content");
 
@@ -1072,7 +1063,7 @@ function toggleContent(event) {
     content.style.maxHeight = null;
   }
 
-  /*   console.log("Функция toggleContent успешно выполнена"); */
+  /* console.log("Функция toggleContent успешно выполнена"); */
 }
 
 function combineFunctions() {
@@ -1093,19 +1084,19 @@ document
   .getElementById("keywordsInput")
   .addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
-      /*       console.log("Нажат Enter в поле заполнения"); */
+      /* console.log("Нажат Enter в поле заполнения"); */
       applyImportant();
     }
   });
 
 function applyImportant() {
-  /*   console.log("Выделение ключевых слов"); */
+  /* console.log("Выделение ключевых слов"); */
 
   // Получаем ключевые слова из поля ввода с учетом слов внутри кавычек
   let keywordsInput = document.getElementById("keywordsInput").value;
 
   // Используем регулярное выражение для поиска слов внутри кавычек с игнорированием регистра
-  let regex = /«([^»]+)»|([^,]+)(?:,\s*|$)/gi;
+  let regex = /«([^»]+?)»|([^,]+?)(?:,\s*|$)/gi;
 
   // Массив для хранения найденных ключевых слов
   let keywords = [];
@@ -1119,7 +1110,7 @@ function applyImportant() {
     }
   }
 
-  /*   console.log("Захваченные переменные:"); */
+  /* console.log("Захваченные переменные:"); */
   // console.log(keywords);
 
   // Добавляем класс 'important' только для тех элементов, которые соответствуют текущему запросу
@@ -1134,10 +1125,10 @@ function applyImportant() {
     );
 
     if (hasKeyword && !isRemoveKeyword) {
-      /*       console.log(`Adding class 'important' to text: ${text}`); */
+      /* console.log(`Adding class 'important' to text: ${text}`); */
       $(this).addClass("important");
     } else if (isRemoveKeyword) {
-      /*       console.log(`Removing class 'important' from text: ${text}`); */
+      /* console.log(`Removing class 'important' from text: ${text}`); */
       $(this).removeClass("important");
     }
   });
@@ -1166,10 +1157,10 @@ function openImportantChapters() {
     }
 
     // Вывести переменные на каждой итерации для отладки
-    /*     console.log("Iteration:", i);
-    console.log("Chapter:", chapter);
-    console.log("Classes after update:", chapter.className);
-    console.log("--------------------------"); */
+    /* console.log("Iteration:", i);
+ console.log("Chapter:", chapter);
+ console.log("Classes after update:", chapter.className);
+ console.log("--------------------------"); */
   }
 }
 
@@ -1237,51 +1228,52 @@ function removeNonImportantParagraphs() {
   paragraphs.forEach((paragraph) => {
     paragraph.remove();
   });
+  removeCollapsed();
 }
 
 /* function addRecordClassToMIALoglines() {
-  console.log("addRecordClassToMIALoglines");
-  var loglines = document.querySelectorAll("p.logline");
+ console.log("addRecordClassToMIALoglines");
+ var loglines = document.querySelectorAll("p.logline");
 
-  loglines.forEach(function (logline) {
-    var speech = logline.querySelector("span.speech");
-    if (speech && speech.textContent.includes("МИА")) {
-      logline.classList.add("record");
-    }
-  });
+ loglines.forEach(function (logline) {
+ var speech = logline.querySelector("span.speech");
+ if (speech && speech.textContent.includes("МИА")) {
+ logline.classList.add("record");
+ }
+ });
 } */
 
 // Сворачивание
 
 /* function setupChapterCollapse() {
-  console.log("setupChapterCollapse");
+ console.log("setupChapterCollapse");
 
-  const chapterElements = document.querySelectorAll(".chapter");
-  
-  if (chapterElements.length === 1) {
-    // Если есть только одна глава, делаем её expanded
-    chapterElements[0].classList.add("expanded");
-    console.log("Только одна глава, expanded");
-  } else {
-    // Иначе применяем collapsed для всех, кроме первой
-    chapterElements.forEach((chapterElement, index) => {
-      if (index === 0) {
-        chapterElement.classList.add("expanded");
-        console.log("Что-то пошло не так");
-      } else {
-        chapterElement.classList.add("collapsed");
-        console.log("Что-то пошло не так №2");
-      }
-    });
-  }
+ const chapterElements = document.querySelectorAll(".chapter");
+ 
+ if (chapterElements.length === 1) {
+ // Если есть только одна глава, делаем её expanded
+ chapterElements[0].classList.add("expanded");
+ console.log("Только одна глава, expanded");
+ } else {
+ // Иначе применяем collapsed для всех, кроме первой
+ chapterElements.forEach((chapterElement, index) => {
+ if (index === 0) {
+ chapterElement.classList.add("expanded");
+ console.log("Что-то пошло не так");
+ } else {
+ chapterElement.classList.add("collapsed");
+ console.log("Что-то пошло не так №2");
+ }
+ });
+ }
 } */
 
 /* function setupToggleHandlers() {
-  console.log("setupToggleHandlers");
-  const dates = document.querySelectorAll(".date");
-  dates.forEach((date) => {
-    date.addEventListener("click", toggleContent);
-  });
+ console.log("setupToggleHandlers");
+ const dates = document.querySelectorAll(".date");
+ dates.forEach((date) => {
+ date.addEventListener("click", toggleContent);
+ });
 } */
 
 // Добавьте вызов setupToggleHandlers() в нужном месте, например, в конце вашего скрипта.
@@ -1321,7 +1313,7 @@ function oocToEmote() {
   emoteToSpeech();
   removeDashAtStart();
 
-  //  console.log("Завершение выполнения функции oocToEmote");
+  // console.log("Завершение выполнения функции oocToEmote");
 }
 
 function removeDashAtStart() {
@@ -1333,17 +1325,10 @@ function removeDashAtStart() {
     // Получаем текст из HTML-элемента
     var emoteText = emotes[i].innerHTML;
 
-    // Обрабатываем текст с помощью регулярного выражения
-    var updatedEmoteText = emoteText.replace(
-      /(<\/span>\s*<span class="emote"><span class="speech">)–\s*/,
-      "$1"
-    ); // Удаляем дефис в начале текста
-
     // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
     emotes[i].innerHTML = updatedEmoteText;
   }
 }
-
 
 function removeEmptyParagraphs() {
   // Находим элементы с классом "chapter expanded"

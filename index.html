@@ -11,53 +11,49 @@
 <body>
   <div class="nav">
     <div id="buttons">
-      <!--       <button id="demo-button">Демо</button> -->
+
       <form>
         <label for="file-input-txt">Загрузить лог (TXT)</label>
-        <input type="file" id="file-input-txt" />
+        <input type="file" id="file-input-txt">
       </form>
 
       <form>
         <label for="file-input-html">(HTML)</label>
-        <input type="file" id="file-input-html" />
+        <input type="file" id="file-input-html">
       </form>
-      <!--     <button onclick="debug()">Дебаг</button> -->
 
-      <!--         <button onclick="toggleVisibility('dm')">DM</button>
-        <button onclick="toggleVisibility('ooc')">OOC</button> -->
-      <!--       <button onclick="removeImportantClass()">Выделение</button> -->
-
-      <button onclick="oocToEmote()">OOC =&gt; Emote</button>
-      <button onclick="combineFunctions()">Чатбоксы</button>
-      <!--         <button onclick="emoteToSpeech()">Emote =&gt; Say</button> -->
-      <!--   <button onclick="sayToEmote()">Say => Emote</button> -->
-      <!--   <button onclick="killNav()">Kill Nav</button> -->
       <div id="keywords">
         <input type="text" id="keywordsInput" placeholder="Введите ключевые слова через запятую"
-          onkeypress="handleKeyPress(event)" value="МИА, запись, фото, улыбочку, -шепчет, -ООС, -[МИА]" />
+          onkeypress="handleKeyPress(event)"
+          value="Запись, фото, улыбочку, -шепчет, -ООС, -[МИА]">
 
         <button onclick="applyImportant()">Выделение</button>
       </div>
       <button onclick="removeNonImportantParagraphs()">Чистка</button>
-
-      <button onclick="removeCollapsed()">Коллапс</button>
+      <button onclick="oocToEmote()">OOC =&gt; Emote</button>
+     <!--  <button onclick="removeCollapsed()">Коллапс</button>
       <button onclick="chapterReverse()">Реверс</button>
       <button onclick="postReplace()">Постреплейс</button>
-
-
-
-
+      <button onclick="removePlayers()">Удалить игроков</button>
+      <button onclick="combineFunctions()">Чатбоксы</button>
+      <button onclick="debug()">Дебаг</button>
+      <button onclick="toggleVisibility('dm')">DM</button>
+      <button onclick="toggleVisibility('ooc')">OOC</button>
+      <button onclick="emoteToSpeech()">Emote =&gt; Say</button>
+      <button onclick="sayToEmote()">Say =&gt; Emote</button>
+      <button onclick="killNav()">Kill Nav</button> -->
       <script>
         function removeCollapsed() {
-          // 1. Удалить все ul.players и div.collapsed
-          var playersList = document.querySelectorAll('ul.players');
-          playersList.forEach(function (player) {
-            player.remove();
-          });
-
           var collapsedDivs = document.querySelectorAll('div.collapsed');
           collapsedDivs.forEach(function (div) {
             div.remove();
+          });
+        }
+
+        function removePlayers() {
+          var playersList = document.querySelectorAll('ul.players');
+          playersList.forEach(function (player) {
+            player.remove();
           });
         }
 
@@ -85,10 +81,16 @@
           updatedHTML = updatedHTML.replace(
             /<span class=\"emote\"><span class=\"speech\">— /g,
             '<span class="emote"><span class="speech">'
-          );
+          ); // Дефисы в начале реплики
+
+          updatedHTML = updatedHTML.replace(
+            /\|\d\s[-–—]\s\d\((.*)\)/g,
+            '$1'
+          ); // Кривые эмоуты, возможно сбилось из-за дефисов
 
           // Обновляем HTML-код страницы
           document.documentElement.innerHTML = updatedHTML;
+          chapterCollapse()
         }
       </script>
     </div>

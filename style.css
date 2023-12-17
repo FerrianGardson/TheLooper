@@ -1,9 +1,36 @@
 :root {
   --grey: #808080;
-    --light-grey: #c2c2c2;
-    --dark-grey: #434343;
+  --light-grey: #c2c2c2;
+  --dark-grey: #434343;
   --black: #212121;
 }
+
+:root {
+  --red: #dd403aff;
+  --green: #00ac48;
+  --blue-1: #43c59eff;
+  --blue-2: #5398beff;
+  --blue-3: #0a74ec;
+  --yellow: #ffd914;
+  --orange: #f18f01ff;
+  --purple-1: #4f4789ff;
+  --purple-2: #6420ff;
+  --purple-3: #ae5eff;
+}
+
+.red { color: var(--red); }
+.green { color: var(--green); }
+.blue-1 { color: var(--blue-1); }
+.blue-2 { color: var(--blue-2); }
+.blue-3 { color: var(--blue-3); }
+.yellow { color: var(--yellow); }
+.orange { color: var(--orange); }
+.purple-1 { color: var(--purple-1); }
+.purple-2 { color: var(--purple-2); }
+.purple-3 { color: var(--purple-3); }
+
+
+
 
 * {
   box-sizing: border-box;
@@ -127,7 +154,11 @@ p.dm {
   color: rgb(255, 94, 0);
   font-weight: bold;
 }
-button, label, textarea, input, #keywords {
+button,
+label,
+textarea,
+input,
+#keywords {
   cursor: pointer;
   font-size: 1rem;
   height: 2.5em !important;
@@ -175,7 +206,8 @@ ul.players {
 .chapter.collapsed > h2.date {
   color: rgb(255, 255, 255) !important;
 }
-.chapter.collapsed > h2.date:hover, h2.date:hover {
+.chapter.collapsed > h2.date:hover,
+h2.date:hover {
   color: orange !important;
   cursor: pointer;
 }
@@ -207,13 +239,12 @@ p.logline.announcment > span.player {
 
 p.logline.yell > .speech {
   color: inherit;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
 }
 
 p.logline {
   opacity: 0.5;
 }
-
 
 p.important {
   display: block;
@@ -242,59 +273,74 @@ textarea {
   resize: none;
 }
 
-input:focus-visible, input:hover {
-    color: white;
+input:focus-visible,
+input:hover {
+  color: white;
 }
 
 input {
-    width: -webkit-fill-available;
+  width: -webkit-fill-available;
 }
-
-
 
 div#keywords {
-    display: flex;
-    /* gap: 0.5rem; */
-    /* width: -webkit-fill-available; */
-    min-width: 1em;
-    padding: 0;
-    flex-shrink: 1;
-    flex-grow: 1;
-    overflow: hidden;
-    border: 1px solid var(--grey);
+  display: flex;
+  /* gap: 0.5rem; */
+  /* width: -webkit-fill-available; */
+  min-width: 1em;
+  padding: 0;
+  flex-shrink: 1;
+  flex-grow: 1;
+  overflow: hidden;
+  border: 1px solid var(--grey);
 }
 
-input {/* min-width: 1rem!important; *//* flex-shrink: 1; *//* width: 100%; */white-space: nowrap; /* Запрет переноса текста на новую строку */overflow: hidden;    /* Скрытие части текста, который не умещается */border: none;outline: none;text-overflow: ellipsis; /* Окончание текста многоточием */background: none;color: var(--grey);font-size: 1rem;padding-left: 1rem;/* padding-top: 12px; */width: -webkit-fill-available;/* vertical-align: middle; *//* margin: 15px; */background: white;/* box-shadow: inset 0 0 8px rgb(0 0 0 / 55%); */-webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2) inset;-moz-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2) inset;box-shadow: 0px 0px 10px 3px rgb(34 60 80 / 64%) inset;}
+input {
+  /* min-width: 1rem!important; */ /* flex-shrink: 1; */ /* width: 100%; */
+  white-space: nowrap; /* Ð—Ð°Ð¿Ñ€ÐµÑ‚ Ð¿ÐµÑ€ÐµÐ½Ð¾ÑÐ° Ñ‚ÐµÐºÑÑ‚Ð° Ð½Ð° Ð½Ð¾Ð²ÑƒÑŽ ÑÑ‚Ñ€Ð¾ÐºÑƒ */
+  overflow: hidden; /* Ð¡ÐºÑ€Ñ‹Ñ‚Ð¸Ðµ Ñ‡Ð°ÑÑ‚Ð¸ Ñ‚ÐµÐºÑÑ‚Ð°, ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ð¹ Ð½Ðµ ÑƒÐ¼ÐµÑ‰Ð°ÐµÑ‚ÑÑ */
+  border: none;
+  outline: none;
+  text-overflow: ellipsis; /* ÐžÐºÐ¾Ð½Ñ‡Ð°Ð½Ð¸Ðµ Ñ‚ÐµÐºÑÑ‚Ð° Ð¼Ð½Ð¾Ð³Ð¾Ñ‚Ð¾Ñ‡Ð¸ÐµÐ¼ */
+  background: none;
+  color: var(--grey);
+  font-size: 1rem;
+  padding-left: 1rem; /* padding-top: 12px; */
+  width: -webkit-fill-available; /* vertical-align: middle; */ /* margin: 15px; */
+  background: white; /* box-shadow: inset 0 0 8px rgb(0 0 0 / 55%); */
+  -webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
+  -moz-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
+  box-shadow: 0px 0px 10px 3px rgb(34 60 80 / 64%) inset;
+}
 
 input#keywordsInput:focus-within {
-    border: 0;
+  border: 0;
 }
 
 #keywords button {
-    padding: 0px 1rem;
-    height: auto!important;
-    /* margin: 9px; */
-    border-radius: 0;
-    border: 0;
+  padding: 0px 1rem;
+  height: auto !important;
+  /* margin: 9px; */
+  border-radius: 0;
+  border: 0;
 }
 
 input::placeholder {
-    color: var(--grey)!important;
+  color: var(--grey) !important;
 }
 
 input:hover {
-    color: var(--dark-grey);
+  color: var(--dark-grey);
 }
 
 input#keywordsInput {
-    border-radius: 0;
-    /* outline: none; */
+  border-radius: 0;
+  /* outline: none; */
 }
 
 input:focus-visible {
-    color: var(--black);
+  color: var(--black);
 }
-p.logline.whisper .speech, span.whisper {
+.whisper {
   color: #d361d3;
 }
 
@@ -304,19 +350,24 @@ p.logline.whisper .speech, span.whisper {
   padding: 1em;
 }
 
-/* Стиль для выключенного CSS */
+/* Ð¡Ñ‚Ð¸Ð»ÑŒ Ð´Ð»Ñ Ð²Ñ‹ÐºÐ»ÑŽÑ‡ÐµÐ½Ð½Ð¾Ð³Ð¾ CSS */
 #chatlog.debug p.logline {
-  opacity: 1; /* Любые изменения, когда CSS выключен */
+  opacity: 1; /* Ð›ÑŽÐ±Ñ‹Ðµ Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ñ, ÐºÐ¾Ð³Ð´Ð° CSS Ð²Ñ‹ÐºÐ»ÑŽÑ‡ÐµÐ½ */
 }
 
 .time {
-  display: none!important;
+  display: none !important;
 }
 
-#chatlog.debug .night–transfered {
+#chatlog.debug .nightâ€“transfered {
   display: block;
   background: rgba(0, 128, 0, 0.37);
   padding: 1em;
 }
 
-#chatlog.debug .time {display: block!important;opacity: 0.5;float: left;padding-right: 0.5rem;}
+#chatlog.debug .time {
+  display: block !important;
+  opacity: 0.5;
+  float: left;
+  padding-right: 0.5rem;
+}
