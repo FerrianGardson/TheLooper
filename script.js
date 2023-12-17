@@ -59,16 +59,15 @@ function formatLog() {
   transferNightLines(document.body);
   cleanText();
   yourEmotes();
-/*   playersList(); */
   colorizePlayers(playerColorMap);
   addCommaOrDot();
   addColonToEnd();
   combineFunctions();
   chapterCollapse();
   addIdToChapter();
-  //correctSpelling();
   emoteToSpeech();
   sayToEmote();
+  //correctSpelling();
 }
 
 function correctSpelling() {
@@ -493,13 +492,13 @@ function cleanText() {
 
   chatlogHTML = chatlogHTML.replace(/кошка/g, "кот"); // Пример
 
-  chatlogHTML = chatlogHTML.replace(/\<p.*\>\s*\<\/p\>/g, ""); // Пустые абзацы
-
   chatlogHTML = chatlogHTML.replace(/[-–—]/g, "–"); // Однотипные дефисы
 
   chatlogHTML = chatlogHTML.replace(/\>\s/g, ">"); // Багфикс пробела в начале контейнера
 
   // chatlogHTML = chatlogHTML.replace(/\n<\//g, '</'); // Багфикс переноса
+
+  chatlogHTML = chatlogHTML.replace(/<p><\/p>/g, ""); // Пустые абзацы
 
   chatlogHTML = chatlogHTML.replace(/\|\d\–\d\((.+?)\)/g, "$1"); // Кривые падежи
 
@@ -514,7 +513,7 @@ function cleanText() {
   ); // Ваш шёпот
 
   chatlogHTML = chatlogHTML.replace(
-    /<p class="logline say">(\d+|\>\>|[A-z]|Zone|Используйте|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|щит|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
+    /<p class="logline say">(\d+|\>\>|[A-z]|Zone|%s|Используйте|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|щит|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
     ""
   ); // Системные сообщения, начинаются с указанных слов
 
@@ -523,12 +522,10 @@ function cleanText() {
     ""
   ); // Системные сообщения, содержат указанные слова в середине
 
-  //chatlogHTML = chatlogHTML.replace(/<p.*?>[a-zA-Z].*?\n*?<\/p>/g, ""); // Начинаются с английского
-
   chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:"); // |Hchannel:PARTY|h[Лидер группы]|h Роуз: => [Лидер группы] Роуз:
 
   chatlogHTML = chatlogHTML.replace(
-    /<p.*?>(.+?)\s(действие|приглашается|создает|устанавливает вам|находится в|производит|ложится|похоже, навеселе|.*пивко неплохо дает в голову|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает|предлагает вам).*(\n|)<\/p>/gm,
+    /<p.*?>(.+?)\s(действие|приглашается|создает|предлагает|устанавливает вам|находится в|производит|ложится|похоже, навеселе|.*пивко неплохо дает в голову|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*(\n|)<\/p>/gm,
     ""
   ); // Игрок %ООС-действие%
 
@@ -568,7 +565,7 @@ function cleanText() {
 
   chatlogHTML = chatlogHTML.replace(/(\(|\[)Дарн.*?(\)|\])/g, "[дарнасский]"); // Дарнасский
 
-  chatlogHTML = chatlogHTML.replace(/\s*?\|+/g, ""); // Пример
+  chatlogHTML = chatlogHTML.replace(/\s*?\|+/g, ""); // Двойные ||
 
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
@@ -725,8 +722,6 @@ function combineEmotes() {
   }
 }
 
-
-
 // Список игроков
 
 function colorizePlayers(playerColorMap) {
@@ -743,14 +738,29 @@ function colorizePlayers(playerColorMap) {
       if (playerColorMap[playerName]) {
         colorClass = playerColorMap[playerName];
       } else {
-        colorClass = playerColors[playerName] || (playerColors[playerName] = getColorClass(index));
+        colorClass =
+          playerColors[playerName] ||
+          (playerColors[playerName] = getColorClass(index));
       }
 
-      span.classList.remove("red", "green", "blue-1", "blue-2", "blue-3", "yellow", "orange", "purple-1", "purple-2", "purple-3");
+      span.classList.remove(
+        "red",
+        "green",
+        "blue-1",
+        "blue-2",
+        "blue-3",
+        "yellow",
+        "orange",
+        "purple-1",
+        "purple-2",
+        "purple-3"
+      );
       span.classList.add(colorClass);
     });
 
-    const uniquePlayers = new Set(Array.from(playerSpans).map(span => span.textContent.trim()));
+    const uniquePlayers = new Set(
+      Array.from(playerSpans).map((span) => span.textContent.trim())
+    );
 
     const playerList = document.createElement("ul");
     playerList.classList.add("players");
@@ -760,9 +770,23 @@ function colorizePlayers(playerColorMap) {
       playerItem.textContent = uniquePlayerName;
       playerItem.className = "player";
 
-      const colorClass = playerColorMap[uniquePlayerName] || playerColors[uniquePlayerName] || getColorClass(index);
+      const colorClass =
+        playerColorMap[uniquePlayerName] ||
+        playerColors[uniquePlayerName] ||
+        getColorClass(index);
 
-      playerItem.classList.remove("red", "green", "blue-1", "blue-2", "blue-3", "yellow", "orange", "purple-1", "purple-2", "purple-3");
+      playerItem.classList.remove(
+        "red",
+        "green",
+        "blue-1",
+        "blue-2",
+        "blue-3",
+        "yellow",
+        "orange",
+        "purple-1",
+        "purple-2",
+        "purple-3"
+      );
       playerItem.classList.add(colorClass);
 
       playerList.appendChild(playerItem);
@@ -772,22 +796,32 @@ function colorizePlayers(playerColorMap) {
   });
 
   function getColorClass(index) {
-    const colors = ["red", "green", "blue-1", "blue-2", "blue-3", "yellow", "orange", "purple-1", "purple-2", "purple-3"];
+    const colors = [
+      "red",
+      "green",
+      "blue-1",
+      "blue-2",
+      "blue-3",
+      "yellow",
+      "orange",
+      "purple-1",
+      "purple-2",
+      "purple-3",
+    ];
     return colors[index % colors.length];
   }
 }
 
 // Пример использования функции с картой цветов
 const playerColorMap = {
-  "Фэрриан": "blue-3",
-  "Ананита": "green",
-  "Жуль": "red",
-  "Хейвинд": "red",
-  "Фуффис": "green",
-  "Киббл": "green",
-  "Лезинг": "orange"
+  Фэрриан: "blue-3",
+  Ананита: "green",
+  Жуль: "red",
+  Хейвинд: "red",
+  Фуффис: "green",
+  Киббл: "green",
+  Лезинг: "orange",
 };
-
 
 function yourEmotes() {
   // Находим все элементы с классом "player" и текстом "Вы"
@@ -832,9 +866,6 @@ function yourEmotes() {
   }
 }
  */
-
-
-
 
 // Кнопки DM и OOC
 
