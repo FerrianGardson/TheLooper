@@ -191,83 +191,21 @@ function createChapterElement(chapterTitle, chapterLines) {
   const chapterContent = document.createElement("div");
   chapterContent.classList.add("content");
 
-  let nightLines = []; // Массив для хранения строк с таймштампами между 0:00 и 6:00
-  let isNight = false;
-
-  // ...
-
   chapterLines.forEach((line) => {
-    const match = line.match(/^(\d+?)\/(\d+?)\s(\d+:\d+:\d+\.\d+?)\s/);
-    if (match) {
-      const month = parseInt(match[1]);
-      const day = parseInt(match[2]);
-      const time = match[3];
-      let date = new Date();
-      date.setUTCMonth(month - 1);
-      date.setUTCDate(day);
-
-      // Получаем часы из строки времени
-      const hours = parseInt(time.split(":")[0]);
-
-      if (hours < 6) {
-        isNight = true;
-      } else {
-        isNight = false;
-      }
-
-      const monthNames = [
-        "января",
-        "февраля",
-        "марта",
-        "апреля",
-        "мая",
-        "июня",
-        "июля",
-        "августа",
-        "сентября",
-        "октября",
-        "ноября",
-        "декабря",
-      ];
-      const monthName = monthNames[date.getUTCMonth()];
-      const chapterTitle = `Запись от ${date.getUTCDate()} ${monthName}`;
-
-      if (isNight) {
-        nightLines.push(line);
-      } else {
-        chapterContent.appendChild(createParagraph(line));
-      }
-    } else if (isNight) {
-      nightLines.push(line);
-    } else {
-      chapterContent.appendChild(createParagraph(line));
-    }
+    chapterContent.appendChild(createParagraph(line));
   });
-
-  // ...
-
-    // Если есть строки с таймштампами между 0:00 и 6:00, добавляем их в контейнер .night
-  if (nightLines.length > 0) {
-    const nightContainer = document.createElement("div");
-    nightContainer.classList.add("night");
-    nightContainer.innerHTML = nightLines.join("");
-    chapterContent.appendChild(nightContainer);
-    // console.log("Night lines added to nightContainer:", nightLines); // Лог для отслеживания добавления строк в nightContainer
-  }
 
   chapter.appendChild(chapterContent);
 
   return chapter;
 }
 
-// Вспомогательная функция для создания абзаца
 function createParagraph(text) {
   const paragraph = document.createElement("p");
   paragraph.textContent = text;
   return paragraph;
 }
 
-// ФУНКЦИИ
 
 // Разделение на главы
 
@@ -462,7 +400,7 @@ function cleanText() {
   ); // Ваш шёпот
 
   chatlogHTML = chatlogHTML.replace(
-    /<p class="logline say">(\d+|\>\>|[A-z]|&\?*|Zone|%s|Используйте|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|щит|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
+    /<p class="logline say">(\d+|\>\>|[A-z]|&\?*|Zone|%s|Используйте|Персонаж|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|щит|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
     ""
   ); // Системные сообщения, начинаются с указанных слов
 
@@ -783,6 +721,8 @@ const playerColorMap = {
   Фуффис: "green",
   Киббл: "green",
   Лезинг: "orange",
+  Сырорезка: "yellow",
+  Санриэль: "yellow"
 };
 
 function yourEmotes() {
