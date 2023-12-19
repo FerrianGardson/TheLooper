@@ -56,7 +56,7 @@ function formatLog() {
   let chatlogHTML = document.getElementById("chatlog").innerHTML;
   // console.log("Запускаю допфункции");
   formatTimestamps();
-  transferNightLines(document.body);
+  // transferNightLines(document.body);
   cleanText();
   yourEmotes();
   colorizePlayers(playerColorMap);
@@ -67,6 +67,7 @@ function formatLog() {
   addIdToChapter();
   emoteToSpeech();
   sayToEmote();
+  //cleanTextAgain();
   //correctSpelling();
 }
 
@@ -130,57 +131,6 @@ async function handleFileInputTxt(event) {
   } else {
     console.error("Файл не найден");
   }
-}
-
-function debug() {
-  chatlog.classList.toggle("debug");
-  removeConsecutiveTimes();
-}
-
-function removeConsecutiveTimes() {
-  // Получаем все элементы с классом "chapter"
-  var chapters = document.querySelectorAll(".chapter");
-
-  // Проходимся по каждому элементу
-  chapters.forEach(function (chapter) {
-    // Получаем все элементы .time внутри текущего элемента .chapter
-    var times = chapter.querySelectorAll(".time");
-
-    // Переменная для хранения индекса последнего элемента .time
-    var lastIndex = -1;
-
-    // Проходимся по каждому элементу .time
-    times.forEach(function (time, index) {
-      // Проверяем, идет ли текущий .time после предыдущего
-      if (index === lastIndex + 1) {
-        // Удаляем предыдущий .time
-        times[lastIndex].remove();
-      }
-
-      // Обновляем индекс последнего .time
-      lastIndex = index;
-    });
-  });
-
-  // Теперь обрабатываем случай, когда .time находится внутри .night-transfered
-  var nightTransferedTimes = document.querySelectorAll(
-    ".night-transfered .time"
-  );
-
-  // Переменная для хранения индекса последнего элемента .time внутри .night-transfered
-  var lastNightTransferedIndex = -1;
-
-  // Проходимся по каждому элементу .time внутри .night-transfered
-  nightTransferedTimes.forEach(function (time, index) {
-    // Проверяем, идет ли текущий .time после предыдущего внутри .night-transfered
-    if (index === lastNightTransferedIndex + 1) {
-      // Удаляем предыдущий .time
-      nightTransferedTimes[lastNightTransferedIndex].remove();
-    }
-
-    // Обновляем индекс последнего .time внутри .night-transfered
-    lastNightTransferedIndex = index;
-  });
 }
 
 async function handleFileInputHtml(event) {
@@ -296,7 +246,7 @@ function createChapterElement(chapterTitle, chapterLines) {
 
   // ...
 
-  // Если есть строки с таймштампами между 0:00 и 6:00, добавляем их в контейнер .night
+    // Если есть строки с таймштампами между 0:00 и 6:00, добавляем их в контейнер .night
   if (nightLines.length > 0) {
     const nightContainer = document.createElement("div");
     nightContainer.classList.add("night");
@@ -499,7 +449,6 @@ function cleanText() {
   // chatlogHTML = chatlogHTML.replace(/\n<\//g, '</'); // Багфикс переноса
 
   chatlogHTML = chatlogHTML.replace(/<p><\/p>/g, ""); // Пустые абзацы
-
   chatlogHTML = chatlogHTML.replace(/\|\d\–\d\((.+?)\)/g, "$1"); // Кривые падежи
 
   chatlogHTML = chatlogHTML.replace(
@@ -567,9 +516,22 @@ function cleanText() {
 
   chatlogHTML = chatlogHTML.replace(/\s*?\|+/g, ""); // Двойные ||
 
+  chatlogHTML = chatlogHTML.replace(/<p><\/p>/g, ""); // Пустые абзацы
+
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
-  //debugger;
+  // debugger;
+}
+
+function cleanTextAgain() {
+  //console.log("Чистка от мусора");
+
+  let chatlogHTML = document.getElementById("chatlog").innerHTML; // Определение
+
+  chatlogHTML = chatlogHTML.replace(/<p><\/p>/g, ""); // Пустые абзацы
+
+  // Вывод для дебага
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 }
 
 // Объединение чатбоксов
@@ -1019,7 +981,7 @@ function emoteToSpeech() {
   });
 }
 
-function transferNightLines(rootElement) {
+/* function transferNightLines(rootElement) {
   function nightTransfer(chapters) {
     chapters.forEach(function (chapter, i) {
       const dateElement = chapter.querySelector(".date");
@@ -1041,21 +1003,15 @@ function transferNightLines(rootElement) {
       const nextDateElement = nextChapter.querySelector(".date");
       const nextChapterContent = nextChapter.querySelector(".content");
       if (!nextDateElement || !nextChapterContent) {
-        /* console.log(
- `Контейнер контента или дата не найдены в следующей главе. Строки для ночи не будут перемещены.`
- ); */
       }
 
       nextChapterContent.appendChild(nightElement);
-      /* console.log(
- `Строки для ночи из главы с датой: «${currentDate}» добавлены в конец контента в следующей главе: «${nextDateElement.textContent.trim()}»`
- ); */
     });
   }
   let chatlogElement = document.getElementById("chatlog");
   nightTransfer(chatlogElement.querySelectorAll(".chapter"));
   removeEmptyChapters();
-}
+} */
 
 function removeEmptyChapters() {
   // Находим все элементы с классом "chapter"
@@ -1073,10 +1029,10 @@ function removeEmptyChapters() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+/* document.addEventListener("DOMContentLoaded", function () {
   let chatlogElement = document.getElementById("chatlog");
   transferNightLines(chatlogElement);
-});
+}); */
 
 function toggleContent(event) {
   // Функция сворачивания
