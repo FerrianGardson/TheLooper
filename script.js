@@ -1305,7 +1305,7 @@ document.addEventListener("keydown", function (event) {
 });
 
 document.addEventListener("keydown", function (event) {
-  if (event.key === "[" || event.key === "х" || event.keyCode === 219) {
+  if (event.key === "[" || event.key === "х") {
     console.log("Есть нажатие на клавишу [ или х");
 
     // Находим все элементы под курсором
@@ -1345,4 +1345,41 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
+document.addEventListener("keydown", function (event) {
+  if (event.key === "]" || event.key === "ъ") {
+    console.log("Есть нажатие на клавишу [ или ъ");
+
+    // Находим все элементы под курсором
+    var elementsUnderCursor = document.querySelectorAll(":hover");
+
+    // Ищем первый элемент <p> среди элементов под курсором
+    const elementUnderCursor = Array.from(elementsUnderCursor).find(element => element.tagName.toLowerCase() === 'p');
+
+    // Проверяем, найден ли элемент <p>
+    if (elementUnderCursor) {
+      // Получаем родительский <div>
+      const parentDiv = elementUnderCursor.parentElement;
+
+      // Получаем все <p> внутри родительского <div>
+      const allParagraphs = parentDiv.querySelectorAll('p');
+
+      // Определяем индекс элемента с классом 'important'
+      const importantIndex = Array.from(allParagraphs).indexOf(elementUnderCursor);
+
+      // Проверяем, есть ли следующие элементы <p>
+      if (importantIndex < allParagraphs.length - 1) {
+        const paragraphsToDelete = Array.from(allParagraphs).slice(importantIndex + 1);
+
+        // Выводим в консоль сообщение о нажатии и удаляем следующие элементы <p>
+        console.log('Клавиша [ или ъ нажата. Удаляются следующие элементы <p>:', paragraphsToDelete);
+
+        paragraphsToDelete.forEach(paragraph => {
+          paragraph.remove();
+        });
+      } else {
+        console.log('Клавиша [ или ъ нажата, но нет следующих элементов <p>');
+      }
+    }
+  }
+});
 
