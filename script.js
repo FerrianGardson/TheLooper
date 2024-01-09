@@ -1328,18 +1328,21 @@ document.addEventListener("keydown", function (event) {
       // Определяем индекс элемента с классом 'important'
       const importantIndex = Array.from(allParagraphs).indexOf(elementUnderCursor);
 
-      // Проверяем, есть ли предшествующий элемент <p>
+      // Проверяем, есть ли предшествующие элементы <p>
       if (importantIndex > 0) {
-        const previousParagraph = allParagraphs[importantIndex - 1];
+        const paragraphsToDelete = Array.from(allParagraphs).slice(0, importantIndex);
 
-        // Выводим в консоль сообщение о нажатии и удаляем предыдущий элемент <p>
-        console.log('Клавиша [ или х нажата. Удаляется предыдущий элемент <p>:', previousParagraph);
-        
-        previousParagraph.remove();
+        // Выводим в консоль сообщение о нажатии и удаляем предшествующие элементы <p>
+        console.log('Клавиша [ или х нажата. Удаляются предшествующие элементы <p>:', paragraphsToDelete);
+
+        paragraphsToDelete.forEach(paragraph => {
+          paragraph.remove();
+        });
       } else {
         console.log('Клавиша [ или х нажата, но нет предшествующих элементов <p>');
       }
     }
   }
 });
+
 
