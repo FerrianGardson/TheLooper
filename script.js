@@ -401,7 +401,7 @@ function cleanText() {
   ); // Ваш шёпот
 
   chatlogHTML = chatlogHTML.replace(
-    /<p class="logline say">(\d+|\>\>|[A-z]|&\?*|Zone|%s|Игрок|Для|Текст|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила:|Ловк:|Инта:|Физ.уст:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|щит|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
+    /<p class="logline say">(\d+|\>\>|[A-z]|&\?*|Zone|%s|Игрок|Для|Текст|Телепорт|C|Получен|Характеристики|Маг.уст:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила:|Ловк:|Инта:|Физ.уст:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|щит|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
     ""
   ); // Системные сообщения, начинаются с указанных слов
 
@@ -413,7 +413,7 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:"); // |Hchannel:PARTY|h[Лидер группы]|h Роуз: => [Лидер группы] Роуз:
 
   chatlogHTML = chatlogHTML.replace(
-    /<p.*?>([^\s]+)\s(действие|приглашается|получает|ставит|создает|предлагает|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*(\n|)<\/p>/gm,
+    /<p.*?>([^\s]+)\s(действие|приглашается|получает|ставит|создает|предлагает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*(\n|)<\/p>/gm,
     ""
   ); // Игрок %ООС-действие%
 
@@ -723,7 +723,7 @@ const playerColorMap = {
   Киббл: "green",
   Лезинг: "orange",
   Сырорезка: "yellow",
-  Санриэль: "yellow"
+  Санриэль: "yellow",
 };
 
 function yourEmotes() {
@@ -1278,18 +1278,68 @@ function removeEmptyParagraphs() {
 
 // Удаления логлайна по Delete
 
-// Файл script.js
+/* document.addEventListener("keydown", function (event) {
+  if (event.key === "Delete" || event.keyCode === 46) {
+    console.log("Есть нажатие");
 
-document.addEventListener('keydown', function(event) {
-  // Проверяем, была ли нажата клавиша Delete (код клавиши 46)
-  if (event.key === 'Delete' || event.which === 46) {
-    // Получаем элемент, над которым находится курсор
-    const targetElement = document.elementFromPoint(event.pageX, event.pageY);
+    // Получаем элемент под курсором
+    const elementUnderCursor = document.elementFromPoint(
+      event.clientX,
+      event.clientY
+    );
+  }
+}); */
 
-    // Проверяем, является ли элемент <p> с классом 'logline'
-    if (targetElement && targetElement.classList.contains('logline')) {
-      // Удаляем элемент <p> с классом 'logline'
-      targetElement.remove();
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Delete") {
+    console.log("Есть нажатие");
+    var elementsUnderCursor = document.querySelectorAll(":hover");
+    elementsUnderCursor.forEach((element) => {
+      if (element.classList.contains("logline")) {
+        // Выводим в консоль сообщение о нажатии и удаляем элемент
+        console.log("Клавиша Delete нажата. Элемент удален:", element);
+        element.remove();
+      }
+    });
+  }
+});
+
+document.addEventListener("keydown", function (event) {
+  if (event.key === "[" || event.key === "х" || event.keyCode === 219) {
+    console.log("Есть нажатие на клавишу [ или х");
+
+    // Находим все элементы под курсором
+    var elementsUnderCursor = document.querySelectorAll(":hover");
+
+    // Ищем первый элемент <p> среди элементов под курсором
+    const elementUnderCursor = Array.from(elementsUnderCursor).find(element => element.tagName.toLowerCase() === 'p');
+
+    // Проверяем, найден ли элемент <p> и присваиваем ему класс 'important'
+    if (elementUnderCursor) {
+      elementUnderCursor.classList.add('important');
+      console.log('Элементу присвоен класс important:', elementUnderCursor);
+
+      // Получаем родительский <div>
+      const parentDiv = elementUnderCursor.parentElement;
+
+      // Получаем все <p> внутри родительского <div>
+      const allParagraphs = parentDiv.querySelectorAll('p');
+
+      // Определяем индекс элемента с классом 'important'
+      const importantIndex = Array.from(allParagraphs).indexOf(elementUnderCursor);
+
+      // Проверяем, есть ли предшествующий элемент <p>
+      if (importantIndex > 0) {
+        const previousParagraph = allParagraphs[importantIndex - 1];
+
+        // Выводим в консоль сообщение о нажатии и удаляем предыдущий элемент <p>
+        console.log('Клавиша [ или х нажата. Удаляется предыдущий элемент <p>:', previousParagraph);
+        
+        previousParagraph.remove();
+      } else {
+        console.log('Клавиша [ или х нажата, но нет предшествующих элементов <p>');
+      }
     }
   }
 });
+

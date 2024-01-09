@@ -23,16 +23,19 @@
       </form>
 
       <div id="keywords">
-        <input type="text" id="keywordsInput" placeholder="Введите ключевые слова через запятую"
+        <!--         <input type="text" id="keywordsInput" placeholder="Введите ключевые слова через запятую"
           onkeypress="handleKeyPress(event)"
-          value="Запись, фото, улыбочку, -шепчет, -ООС, -[МИА]">
+          value="Запись, фото, улыбочку, -шепчет, -ООС, -[МИА]"> -->
+
+        <input type="text" id="keywordsInput" placeholder="Введите ключевые слова через запятую"
+          onkeypress="handleKeyPress(event)" value="Фэрриан, Ананита, Кэролай, -ООС, Икар, Шанталь, Тианна, -шепчет, Зверолов, Дерек, Карл, Сэнди, Фг, Аран, Хитрец, Сэверус, Джанетт, Патрульный Бёрд, Самсон, Ларин">
 
         <button onclick="applyImportant()">Выделение</button>
       </div>
       <button onclick="removeNonImportantParagraphs()">Чистка</button>
       <button onclick="oocToEmote()">OOC =&gt; Emote</button>
       <button onclick="removeCollapsed()">Коллапс</button>
-     <!--  
+      <!--  
       <button onclick="chapterReverse()">Реверс</button>
       <button onclick="postReplace()">Постреплейс</button>
       <button onclick="removePlayers()">Удалить игроков</button>
