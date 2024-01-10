@@ -401,7 +401,7 @@ function cleanText() {
   ); // Ваш шёпот
 
   chatlogHTML = chatlogHTML.replace(
-    /<p class="logline say">(\d+|\>\>|[A-z]|&\?*|Zone|%s|Игрок|Для|Текст|Телепорт|C|Получен|Характеристики|Маг.уст:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила:|Ловк:|Инта:|Физ.уст:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|щит|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
+    /<p class="logline say">(\d+|\>\>|[A-z]|&\?*|Zone|%s|Игрок|Для|Текст|Телепорт|С|Получен|Характеристики|Маг.уст:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила:|Ловк:|Инта:|Физ.уст:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|щит|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
     ""
   ); // Системные сообщения, начинаются с указанных слов
 
@@ -413,7 +413,7 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:"); // |Hchannel:PARTY|h[Лидер группы]|h Роуз: => [Лидер группы] Роуз:
 
   chatlogHTML = chatlogHTML.replace(
-    /<p.*?>([^\s]+)\s(действие|приглашается|получает|ставит|создает|предлагает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*(\n|)<\/p>/gm,
+    /<p.*?>([^\s]+)\s(действие|приглашается|получает|ставит|создает|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*(\n|)<\/p>/gm,
     ""
   ); // Игрок %ООС-действие%
 
@@ -1383,3 +1383,71 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
+document.addEventListener("keydown", function (event) {
+  if (event.shiftKey) {
+    // Находим все элементы под курсором
+    var elementsUnderCursor = document.querySelectorAll(":hover");
+
+    // Ищем первый элемент <p> среди элементов под курсором
+    const elementUnderCursor = Array.from(elementsUnderCursor).find(element => element.tagName.toLowerCase() === 'p');
+
+    // Проверяем, найден ли элемент <p> и присваиваем ему класс 'important'
+    if (elementUnderCursor) {
+      // Проверяем, не имеет ли элемент уже класс 'important'
+      if (!elementUnderCursor.classList.contains('important')) {
+        elementUnderCursor.classList.add('important');
+        console.log('Элементу присвоен класс important:', elementUnderCursor);
+      }
+    }
+  }
+});
+
+
+document.addEventListener("keydown", function (event) {
+  if (event.altKey) {
+    // Находим все элементы под курсором
+    var elementsUnderCursor = document.querySelectorAll(":hover");
+
+    // Ищем первый элемент <p class="important"> среди элементов под курсором
+    const currentImportantElement = Array.from(elementsUnderCursor).find(element => element.tagName.toLowerCase() === 'p' && element.classList.contains('important'));
+
+    if (currentImportantElement) {
+      console.log('Текущий <p class="important"> под курсором:', currentImportantElement);
+
+      // Находим следующий ближайший <p class="important">
+      let nextImportantElement = currentImportantElement.nextElementSibling;
+
+      while (nextImportantElement && !nextImportantElement.classList.contains('important')) {
+        nextImportantElement = nextImportantElement.nextElementSibling;
+      }
+
+      console.log('Следующий ближайший <p class="important">:', nextImportantElement);
+
+      // Если найден следующий важный элемент
+      if (nextImportantElement) {
+        // Получаем все обычные <p> между текущим и следующим ближайшим <p class="important">
+        const elementsBetween = [];
+        let currentElement = currentImportantElement.nextElementSibling;
+
+        while (currentElement && currentElement !== nextImportantElement && currentElement.tagName.toLowerCase() === 'p') {
+          elementsBetween.push(currentElement);
+          currentElement = currentElement.nextElementSibling;
+        }
+
+        console.log('Обычные <p> между текущим и следующим ближайшим <p class="important">:', elementsBetween);
+
+        // Присваиваем класс 'important' элементам, у которых его нет
+        elementsBetween.forEach(element => {
+          if (!element.classList.contains('important')) {
+            element.classList.add('important');
+            console.log('Элементу присвоен класс important:', element);
+          }
+        });
+      } else {
+        console.log('Нет следующего ближайшего <p class="important">');
+      }
+    } else {
+      console.log('Нет текущего <p class="important"> под курсором');
+    }
+  }
+});
