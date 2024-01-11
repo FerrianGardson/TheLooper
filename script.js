@@ -1473,6 +1473,7 @@ document.addEventListener("keydown", function (event) {
 });
 
 function exportHTML() {
+  removeEmptyLines()
   isAllSellected = false;
   selectAll();
   var element = document.createElement("a");
@@ -1520,6 +1521,8 @@ function debug() {
     element.remove();
     console.log('Пустой элемент <p class="important"> удален:', element);
   });
+
+  removeEmptyLines();
 }
 
 function removeCollapsed() {
@@ -1553,3 +1556,17 @@ function chapterReverse() {
 }
 
 console.log("Скрипт загружен");
+
+function removeEmptyLines() {
+  // Получаем тело HTML
+  var bodyHtml = document.body.innerHTML;
+
+  // Удаляем пустые строки с использованием регулярного выражения
+  var cleanedHtml = bodyHtml.replace(/^\s*[\r\n]/gm, '');
+
+  // Устанавливаем очищенное HTML обратно в тело документа
+  document.body.innerHTML = cleanedHtml;
+}
+
+// Вызываем функцию для удаления пустых строк
+
