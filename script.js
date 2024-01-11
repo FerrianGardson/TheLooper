@@ -1512,3 +1512,48 @@ function selectAll() {
   // Инвертируем состояние
   isAllSellected = !isAllSellected;
 }
+
+function debug() {
+  // Находим все пустые <p class="important">
+  const emptyImportantParagraphs =
+    document.querySelectorAll("p.important:empty");
+
+  // Удаляем каждый найденный пустой элемент
+  emptyImportantParagraphs.forEach((element) => {
+    element.remove();
+    console.log(
+      'Пустой элемент <p class="important"> удален:',
+      element
+    );
+  });
+}
+
+function removeCollapsed() {
+  var collapsedDivs = document.querySelectorAll("div.collapsed");
+  collapsedDivs.forEach(function (div) {
+    div.remove();
+  });
+}
+
+function removePlayers() {
+  var playersList = document.querySelectorAll("ul.players");
+  playersList.forEach(function (player) {
+    player.remove();
+  });
+}
+
+function chapterReverse() {
+  // 2. Отсортировать в обратном порядке детей #chatlog
+  var chatlog = document.getElementById("chatlog");
+  var messages = Array.from(chatlog.children);
+  // Сортировка в обратном порядке
+  messages.reverse();
+  // Удаление детей #chatlog
+  while (chatlog.firstChild) {
+    chatlog.removeChild(chatlog.firstChild);
+  }
+  // Вставка отсортированных сообщений
+  messages.forEach(function (message) {
+    chatlog.appendChild(message);
+  });
+}

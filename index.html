@@ -19,16 +19,6 @@
       type="text/css"
       disabled
     />
-
-    <!-- Превью -->
-    <link
-      id="previewCSS"
-      rel="stylesheet"
-      type="text/css"
-      href="https://cbipope3ka.github.io/TheLooper/preview.css"
-      type="text/css"
-      disabled
-    />
   </head>
 
   <body>
@@ -75,87 +65,19 @@
         <button onclick="selectAll()">Выбрать всё</button>
         <button onclick="exportHTML()">HTML</button>
         <!--  
-        
         <button onclick="postReplace()">Постреплейс</button>
-    
         <button onclick="combineFunctions()">Чатбоксы</button>
-        
         <button onclick="toggleVisibility('dm')">DM</button>
         <button onclick="toggleVisibility('ooc')">OOC</button>
         <button onclick="emoteToSpeech()">Emote =&gt; Say</button>
         <button onclick="sayToEmote()">Say =&gt; Emote</button>
         <button onclick="killNav()">Kill Nav</button> -->
-        <script>
-          function debug() {
-            // Находим все пустые <p class="important">
-            const emptyImportantParagraphs =
-              document.querySelectorAll("p.important:empty");
-
-            // Удаляем каждый найденный пустой элемент
-            emptyImportantParagraphs.forEach((element) => {
-              element.remove();
-              console.log(
-                'Пустой элемент <p class="important"> удален:',
-                element
-              );
-            });
-          }
-
-          function removeCollapsed() {
-            var collapsedDivs = document.querySelectorAll("div.collapsed");
-            collapsedDivs.forEach(function (div) {
-              div.remove();
-            });
-          }
-
-          function removePlayers() {
-            var playersList = document.querySelectorAll("ul.players");
-            playersList.forEach(function (player) {
-              player.remove();
-            });
-          }
-
-          function chapterReverse() {
-            // 2. Отсортировать в обратном порядке детей #chatlog
-            var chatlog = document.getElementById("chatlog");
-            var messages = Array.from(chatlog.children);
-            // Сортировка в обратном порядке
-            messages.reverse();
-            // Удаление детей #chatlog
-            while (chatlog.firstChild) {
-              chatlog.removeChild(chatlog.firstChild);
-            }
-            // Вставка отсортированных сообщений
-            messages.forEach(function (message) {
-              chatlog.appendChild(message);
-            });
-          }
-
-          function postReplace() {
-            // Получаем весь HTML-код страницы
-            var updatedHTML = document.documentElement.innerHTML;
-
-            // Выполняем замену "кот" на "кошка" с использованием регулярного выражения
-            updatedHTML = updatedHTML.replace(
-              /<span class=\"emote\"><span class=\"speech\">— /g,
-              '<span class="emote"><span class="speech">'
-            ); // Дефисы в начале реплики
-
-            updatedHTML = updatedHTML.replace(/\|\d\s[-–—]\s\d\((.*)\)/g, "$1"); // Кривые эмоуты, возможно сбилось из-за дефисов
-
-            // Обновляем HTML-код страницы
-            document.documentElement.innerHTML = updatedHTML;
-            chapterCollapse();
-          }
-        </script>
       </div>
     </div>
     <div id="chatlog"></div>
     <div class="footer"></div>
   </body>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- Внутренние ссылки -->
   <script src="script.js"></script>
   <script
     src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
@@ -164,14 +86,7 @@
     referrerpolicy="no-referrer"
   ></script>
 
-  <!-- Внешние ссылки -->
-  <script
-    src="https://cbipope3ka.github.io/TheLooper/script.js"
-    disabled
-  ></script>
-
   <script>
-    // Функция для переключения атрибута disabled у всех внешних ссылок
     function toggleExternalLinks() {
       var externalLinks = document.querySelectorAll(".external");
 
@@ -195,6 +110,27 @@
 
         xhr.open("GET", url, true);
         xhr.send();
+      }
+
+      // ЗАМЕНЯЕМ ЛОКАЛЬНЫЙ СКРИПТ НА ВНЕШНИЙ
+      // Находим существующий script элемент с src "script.js"
+      var existingScript = document.querySelector('script[src="script.js"]');
+
+      if (existingScript && existingScript.parentNode) {
+        existingScript.parentNode.replaceChild(
+          Object.assign(document.createElement("script"), {
+            src: "https://cbipope3ka.github.io/TheLooper/script.js",
+            async: true, // Добавляем атрибут async
+          }),
+          existingScript
+        );
+      } else {
+        document.body.appendChild(
+          Object.assign(document.createElement("script"), {
+            src: "https://cbipope3ka.github.io/TheLooper/script.js",
+            async: true, // Добавляем атрибут async
+          })
+        );
       }
     }
   </script>
