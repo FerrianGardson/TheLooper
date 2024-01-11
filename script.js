@@ -1407,6 +1407,7 @@ document.addEventListener("keydown", function (event) {
   if (event.altKey) {
     // Находим все элементы под курсором
     var elementsUnderCursor = document.querySelectorAll(":hover");
+    document.querySelectorAll("p:empty").forEach((element) => element.remove());
 
     // Ищем первый элемент <p class="selected"> среди элементов под курсором
     const currentselectedElement = Array.from(elementsUnderCursor).find(
@@ -1420,6 +1421,7 @@ document.addEventListener("keydown", function (event) {
         'Текущий <p class="selected"> под курсором:',
         currentselectedElement
       );
+      currentselectedElement.classList.add("scroll");
 
       // Находим следующий ближайший <p class="selected">
       let nextselectedElement = currentselectedElement.nextElementSibling;
@@ -1470,10 +1472,21 @@ document.addEventListener("keydown", function (event) {
       console.log('Нет текущего <p class="selected"> под курсором');
     }
   }
+  console.log("Скроллим");
+  document.querySelector(".scroll").scrollIntoView();
+  window.scrollBy(
+    0,
+    -(document.querySelector(".nav")?.getBoundingClientRect()?.height || 0) -
+      32
+  );
+
+  document
+    .querySelectorAll(".scroll")
+    .forEach((element) => element.classList.remove("scroll"));
 });
 
 function exportHTML() {
-  removeEmptyLines()
+  removeEmptyLines();
   isAllSellected = false;
   selectAll();
   var element = document.createElement("a");
@@ -1562,11 +1575,10 @@ function removeEmptyLines() {
   var bodyHtml = document.body.innerHTML;
 
   // Удаляем пустые строки с использованием регулярного выражения
-  var cleanedHtml = bodyHtml.replace(/^\s*[\r\n]/gm, '');
+  var cleanedHtml = bodyHtml.replace(/^\s*[\r\n]/gm, "");
 
   // Устанавливаем очищенное HTML обратно в тело документа
   document.body.innerHTML = cleanedHtml;
 }
 
 // Вызываем функцию для удаления пустых строк
-
