@@ -1,16 +1,16 @@
 const enterKeyCode = 13;
 
-function toggleImportantClass(event) {
+function toggleselectedClass(event) {
   var paragraph = event.target.closest("p");
   if (paragraph) {
-    paragraph.classList.toggle("important");
+    paragraph.classList.toggle("selected");
   }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOMContentLoaded");
 
-  document.addEventListener("click", toggleImportantClass);
+  document.addEventListener("click", toggleselectedClass);
   const dates = document.querySelectorAll(".date");
   dates.forEach((date) => {
     date.addEventListener("click", toggleContent);
@@ -67,6 +67,7 @@ function formatLog() {
   addIdToChapter();
   emoteToSpeech();
   sayToEmote();
+  selectAll();
   //cleanTextAgain();
   //correctSpelling();
 }
@@ -969,7 +970,7 @@ function combineFunctions() {
 function handleKeyPress(event) {
   if (event.keyCode === enterKeyCode) {
     // Ваш код для обработки нажатия Enter
-    applyImportant();
+    applyselected();
   }
 }
 
@@ -978,11 +979,11 @@ document
   .addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
       /* console.log("Нажат Enter в поле заполнения"); */
-      applyImportant();
+      applyselected();
     }
   });
 
-function applyImportant() {
+function applyselected() {
   /* console.log("Выделение ключевых слов"); */
 
   // Получаем ключевые слова из поля ввода с учетом слов внутри кавычек
@@ -1006,7 +1007,7 @@ function applyImportant() {
   /* console.log("Захваченные переменные:"); */
   // console.log(keywords);
 
-  // Добавляем класс 'important' только для тех элементов, которые соответствуют текущему запросу
+  // Добавляем класс 'selected' только для тех элементов, которые соответствуют текущему запросу
   $("p").each(function () {
     const text = $(this).text().toLowerCase().replace(/\s+/g, " ");
     const hasKeyword = keywords.some((keyword) => text.includes(keyword));
@@ -1018,19 +1019,19 @@ function applyImportant() {
     );
 
     if (hasKeyword && !isRemoveKeyword) {
-      /* console.log(`Adding class 'important' to text: ${text}`); */
-      $(this).addClass("important");
+      /* console.log(`Adding class 'selected' to text: ${text}`); */
+      $(this).addClass("selected");
     } else if (isRemoveKeyword) {
-      /* console.log(`Removing class 'important' from text: ${text}`); */
-      $(this).removeClass("important");
+      /* console.log(`Removing class 'selected' from text: ${text}`); */
+      $(this).removeClass("selected");
     }
   });
 
-  openImportantChapters();
-  scrollToNearestImportant();
+  openselectedChapters();
+  scrollToNearestselected();
 }
 
-function openImportantChapters() {
+function openselectedChapters() {
   // Найти все элементы с классом .chapter
   var chapters = document.querySelectorAll(".chapter");
 
@@ -1042,8 +1043,8 @@ function openImportantChapters() {
     chapter.classList.remove("expanded");
     chapter.classList.add("collapsed");
 
-    // Проверить, содержит ли .chapter дочерний элемент с классом .logline.important
-    if (chapter.querySelector(".logline.important")) {
+    // Проверить, содержит ли .chapter дочерний элемент с классом .logline.selected
+    if (chapter.querySelector(".logline.selected")) {
       // Если содержит, добавить класс .expanded
       chapter.classList.remove("collapsed");
       chapter.classList.add("expanded");
@@ -1057,14 +1058,14 @@ function openImportantChapters() {
   }
 }
 
-function scrollToNearestImportant() {
-  // Находим все элементы с классом .chapter.expanded > logline.important
-  const importantElements = document.querySelectorAll(
-    ".chapter.expanded .logline.important"
+function scrollToNearestselected() {
+  // Находим все элементы с классом .chapter.expanded > logline.selected
+  const selectedElements = document.querySelectorAll(
+    ".chapter.expanded .logline.selected"
   );
 
   // Если элементы не найдены, завершаем выполнение функции
-  if (importantElements.length === 0) {
+  if (selectedElements.length === 0) {
     // console.log("Нет элементов для прокрутки");
     return;
   }
@@ -1077,7 +1078,7 @@ function scrollToNearestImportant() {
   let minDistance = Infinity;
 
   // Итерируемся по всем найденным элементам
-  importantElements.forEach((element) => {
+  selectedElements.forEach((element) => {
     // Вычисляем расстояние от центра экрана до текущего элемента
     const rect = element.getBoundingClientRect();
     const elementCenter = rect.top + rect.height / 2;
@@ -1105,10 +1106,10 @@ function scrollToNearestImportant() {
 }
 
 // Пример использования
-scrollToNearestImportant();
+scrollToNearestselected();
 
-function removeNonImportantParagraphs() {
-  // console.log("removeNonImportantParagraphs");
+function removeNonselectedParagraphs() {
+  // console.log("removeNonselectedParagraphs");
 
   // Удаляем все элементы с классом .chapter.collapsed
   const collapsedChapters = document.querySelectorAll(".chapter.collapsed");
@@ -1116,8 +1117,8 @@ function removeNonImportantParagraphs() {
     chapter.remove();
   });
 
-  // Удаляем абзацы без класса .important
-  const paragraphs = document.querySelectorAll("p:not(.important)");
+  // Удаляем абзацы без класса .selected
+  const paragraphs = document.querySelectorAll("p:not(.selected)");
   paragraphs.forEach((paragraph) => {
     paragraph.remove();
   });
@@ -1298,10 +1299,10 @@ document.addEventListener("keydown", function (event) {
       (element) => element.tagName.toLowerCase() === "p"
     );
 
-    // Проверяем, найден ли элемент <p> и присваиваем ему класс 'important'
+    // Проверяем, найден ли элемент <p> и присваиваем ему класс 'selected'
     if (elementUnderCursor) {
-      elementUnderCursor.classList.add("important");
-      console.log("Элементу присвоен класс important:", elementUnderCursor);
+      elementUnderCursor.classList.add("selected");
+      console.log("Элементу присвоен класс selected:", elementUnderCursor);
 
       // Получаем родительский <div>
       const parentDiv = elementUnderCursor.parentElement;
@@ -1309,15 +1310,15 @@ document.addEventListener("keydown", function (event) {
       // Получаем все <p> внутри родительского <div>
       const allParagraphs = parentDiv.querySelectorAll("p");
 
-      // Определяем индекс элемента с классом 'important'
-      const importantIndex =
+      // Определяем индекс элемента с классом 'selected'
+      const selectedIndex =
         Array.from(allParagraphs).indexOf(elementUnderCursor);
 
       // Проверяем, есть ли предшествующие элементы <p>
-      if (importantIndex > 0) {
+      if (selectedIndex > 0) {
         const paragraphsToDelete = Array.from(allParagraphs).slice(
           0,
-          importantIndex
+          selectedIndex
         );
 
         // Выводим в консоль сообщение о нажатии и удаляем предшествующие элементы <p>
@@ -1358,14 +1359,14 @@ document.addEventListener("keydown", function (event) {
       // Получаем все <p> внутри родительского <div>
       const allParagraphs = parentDiv.querySelectorAll("p");
 
-      // Определяем индекс элемента с классом 'important'
-      const importantIndex =
+      // Определяем индекс элемента с классом 'selected'
+      const selectedIndex =
         Array.from(allParagraphs).indexOf(elementUnderCursor);
 
       // Проверяем, есть ли следующие элементы <p>
-      if (importantIndex < allParagraphs.length - 1) {
+      if (selectedIndex < allParagraphs.length - 1) {
         const paragraphsToDelete = Array.from(allParagraphs).slice(
-          importantIndex + 1
+          selectedIndex + 1
         );
 
         // Выводим в консоль сообщение о нажатии и удаляем следующие элементы <p>
@@ -1394,12 +1395,12 @@ document.addEventListener("keydown", function (event) {
       (element) => element.tagName.toLowerCase() === "p"
     );
 
-    // Проверяем, найден ли элемент <p> и присваиваем ему класс 'important'
+    // Проверяем, найден ли элемент <p> и присваиваем ему класс 'selected'
     if (elementUnderCursor) {
-      // Проверяем, не имеет ли элемент уже класс 'important'
-      if (!elementUnderCursor.classList.contains("important")) {
-        elementUnderCursor.classList.add("important");
-        console.log("Элементу присвоен класс important:", elementUnderCursor);
+      // Проверяем, не имеет ли элемент уже класс 'selected'
+      if (!elementUnderCursor.classList.contains("selected")) {
+        elementUnderCursor.classList.add("selected");
+        console.log("Элементу присвоен класс selected:", elementUnderCursor);
       }
     }
   }
@@ -1410,43 +1411,43 @@ document.addEventListener("keydown", function (event) {
     // Находим все элементы под курсором
     var elementsUnderCursor = document.querySelectorAll(":hover");
 
-    // Ищем первый элемент <p class="important"> среди элементов под курсором
-    const currentImportantElement = Array.from(elementsUnderCursor).find(
+    // Ищем первый элемент <p class="selected"> среди элементов под курсором
+    const currentselectedElement = Array.from(elementsUnderCursor).find(
       (element) =>
         element.tagName.toLowerCase() === "p" &&
-        element.classList.contains("important")
+        element.classList.contains("selected")
     );
 
-    if (currentImportantElement) {
+    if (currentselectedElement) {
       console.log(
-        'Текущий <p class="important"> под курсором:',
-        currentImportantElement
+        'Текущий <p class="selected"> под курсором:',
+        currentselectedElement
       );
 
-      // Находим следующий ближайший <p class="important">
-      let nextImportantElement = currentImportantElement.nextElementSibling;
+      // Находим следующий ближайший <p class="selected">
+      let nextselectedElement = currentselectedElement.nextElementSibling;
 
       while (
-        nextImportantElement &&
-        !nextImportantElement.classList.contains("important")
+        nextselectedElement &&
+        !nextselectedElement.classList.contains("selected")
       ) {
-        nextImportantElement = nextImportantElement.nextElementSibling;
+        nextselectedElement = nextselectedElement.nextElementSibling;
       }
 
       console.log(
-        'Следующий ближайший <p class="important">:',
-        nextImportantElement
+        'Следующий ближайший <p class="selected">:',
+        nextselectedElement
       );
 
       // Если найден следующий важный элемент
-      if (nextImportantElement) {
-        // Получаем все обычные <p> между текущим и следующим ближайшим <p class="important">
+      if (nextselectedElement) {
+        // Получаем все обычные <p> между текущим и следующим ближайшим <p class="selected">
         const elementsBetween = [];
-        let currentElement = currentImportantElement.nextElementSibling;
+        let currentElement = currentselectedElement.nextElementSibling;
 
         while (
           currentElement &&
-          currentElement !== nextImportantElement &&
+          currentElement !== nextselectedElement &&
           currentElement.tagName.toLowerCase() === "p"
         ) {
           elementsBetween.push(currentElement);
@@ -1454,27 +1455,29 @@ document.addEventListener("keydown", function (event) {
         }
 
         console.log(
-          'Обычные <p> между текущим и следующим ближайшим <p class="important">:',
+          'Обычные <p> между текущим и следующим ближайшим <p class="selected">:',
           elementsBetween
         );
 
-        // Присваиваем класс 'important' элементам, у которых его нет
+        // Присваиваем класс 'selected' элементам, у которых его нет
         elementsBetween.forEach((element) => {
-          if (!element.classList.contains("important")) {
-            element.classList.add("important");
-            console.log("Элементу присвоен класс important:", element);
+          if (!element.classList.contains("selected")) {
+            element.classList.add("selected");
+            console.log("Элементу присвоен класс selected:", element);
           }
         });
       } else {
-        console.log('Нет следующего ближайшего <p class="important">');
+        console.log('Нет следующего ближайшего <p class="selected">');
       }
     } else {
-      console.log('Нет текущего <p class="important"> под курсором');
+      console.log('Нет текущего <p class="selected"> под курсором');
     }
   }
 });
 
 function exportHTML() {
+  isAllSellected = false;
+  selectAll();
   var element = document.createElement("a");
   element.setAttribute(
     "href",
@@ -1486,4 +1489,26 @@ function exportHTML() {
   document.body.appendChild(element);
   element.click();
   document.body.removeChild(element);
+}
+
+var isAllSellected = false; // Переменная для отслеживания состояния
+
+function selectAll() {
+  console.log('selectAll');
+  // Находим все элементы <p> с классом logline
+  var loglineElements = document.querySelectorAll('p.logline');
+
+  // Переключаем состояние и присваиваем/удаляем класс select
+  if (isAllSellected) {
+    loglineElements.forEach(function (element) {
+      element.classList.remove('selected');
+    });
+  } else {
+    loglineElements.forEach(function (element) {
+      element.classList.add('selected');
+    });
+  }
+
+  // Инвертируем состояние
+  isAllSellected = !isAllSellected;
 }
