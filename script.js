@@ -255,42 +255,7 @@ function divideChapters(text) {
 }
 
 // Новая функция для перемещения .night из более свежей главы в более старую
-/* function moveNightContent() {
-  const chapters = document.querySelectorAll(".chapter");
-  let fresherChapter = null;
-  let olderChapter = null;
-
-  chapters.forEach((chapter) => {
-    const chapterTitleElement = chapter.querySelector(".date");
-    if (chapterTitleElement) {
-      const chapterTitle = chapterTitleElement.textContent;
-      const match = chapterTitle.match(/(\d+?) ([а-я]+?)$/i);
-
-      if (match) {
-        const day = parseInt(match[1]);
-        const month = getMonthIndex(match[2]);
-        const chapterDate = new Date(0, month, day);
-
-        if (!fresherChapter || chapterDate > fresherChapter.date) {
-          olderChapter = fresherChapter;
-          fresherChapter = { chapter, date: chapterDate };
-        } else if (!olderChapter || chapterDate > olderChapter.date) {
-          olderChapter = { chapter, date: chapterDate };
-        }
-      }
-    }
-  });
-
-  if (fresherChapter && olderChapter) {
-    const nightContainer = fresherChapter.chapter.querySelector(".night");
-    if (nightContainer) {
-      olderChapter.chapter
-        .querySelector(".content")
-        .appendChild(createParagraph(nightContainer.innerHTML));
-    }
-    fresherChapter.chapter.remove();
-  }
-} */
+// function moveNightContent() { const chapters = document.querySelectorAll(".chapter"); let fresherChapter = null; let olderChapter = null; chapters.forEach((chapter) => { const chapterTitleElement = chapter.querySelector(".date"); if (chapterTitleElement) { const chapterTitle = chapterTitleElement.textContent; const match = chapterTitle.match(/(\d+?) ([а-я]+?)$/i); if (match) { const day = parseInt(match[1]); const month = getMonthIndex(match[2]); const chapterDate = new Date(0, month, day); if (!fresherChapter || chapterDate > fresherChapter.date) { olderChapter = fresherChapter; fresherChapter = { chapter, date: chapterDate }; } else if (!olderChapter || chapterDate > olderChapter.date) { olderChapter = { chapter, date: chapterDate }; } } } }); if (fresherChapter && olderChapter) { const nightContainer = fresherChapter.chapter.querySelector(".night"); if (nightContainer) { olderChapter.chapter .querySelector(".content") .appendChild(createParagraph(nightContainer.innerHTML)); } fresherChapter.chapter.remove(); } }
 
 // Вспомогательная функция для получения индекса месяца
 function getMonthIndex(monthName) {
@@ -1303,19 +1268,23 @@ document.addEventListener("keydown", function (event) {
         // Если под курсором <h2 class="date">, удаляем родительский div.chapter
         const chapterDiv = element.closest("div.chapter");
         if (chapterDiv) {
-          console.log("Клавиша Delete нажата. Родительский div.chapter удален:", chapterDiv);
+          console.log(
+            "Клавиша Delete нажата. Родительский div.chapter удален:",
+            chapterDiv
+          );
           chapterDiv.remove();
         }
       } else if (element.classList.contains("player")) {
         // Если под курсором <li class="player">, удаляем элемент
-        console.log("Клавиша Delete нажата. Элемент <li class='player'> удален:", element);
+        console.log(
+          "Клавиша Delete нажата. Элемент <li class='player'> удален:",
+          element
+        );
         element.remove();
       }
     });
   }
 });
-
-
 
 document.addEventListener("keydown", function (event) {
   if (event.key === "[" || event.key === "х") {
@@ -1325,34 +1294,45 @@ document.addEventListener("keydown", function (event) {
     var elementsUnderCursor = document.querySelectorAll(":hover");
 
     // Ищем первый элемент <p> среди элементов под курсором
-    const elementUnderCursor = Array.from(elementsUnderCursor).find(element => element.tagName.toLowerCase() === 'p');
+    const elementUnderCursor = Array.from(elementsUnderCursor).find(
+      (element) => element.tagName.toLowerCase() === "p"
+    );
 
     // Проверяем, найден ли элемент <p> и присваиваем ему класс 'important'
     if (elementUnderCursor) {
-      elementUnderCursor.classList.add('important');
-      console.log('Элементу присвоен класс important:', elementUnderCursor);
+      elementUnderCursor.classList.add("important");
+      console.log("Элементу присвоен класс important:", elementUnderCursor);
 
       // Получаем родительский <div>
       const parentDiv = elementUnderCursor.parentElement;
 
       // Получаем все <p> внутри родительского <div>
-      const allParagraphs = parentDiv.querySelectorAll('p');
+      const allParagraphs = parentDiv.querySelectorAll("p");
 
       // Определяем индекс элемента с классом 'important'
-      const importantIndex = Array.from(allParagraphs).indexOf(elementUnderCursor);
+      const importantIndex =
+        Array.from(allParagraphs).indexOf(elementUnderCursor);
 
       // Проверяем, есть ли предшествующие элементы <p>
       if (importantIndex > 0) {
-        const paragraphsToDelete = Array.from(allParagraphs).slice(0, importantIndex);
+        const paragraphsToDelete = Array.from(allParagraphs).slice(
+          0,
+          importantIndex
+        );
 
         // Выводим в консоль сообщение о нажатии и удаляем предшествующие элементы <p>
-        console.log('Клавиша [ или х нажата. Удаляются предшествующие элементы <p>:', paragraphsToDelete);
+        console.log(
+          "Клавиша [ или х нажата. Удаляются предшествующие элементы <p>:",
+          paragraphsToDelete
+        );
 
-        paragraphsToDelete.forEach(paragraph => {
+        paragraphsToDelete.forEach((paragraph) => {
           paragraph.remove();
         });
       } else {
-        console.log('Клавиша [ или х нажата, но нет предшествующих элементов <p>');
+        console.log(
+          "Клавиша [ или х нажата, но нет предшествующих элементов <p>"
+        );
       }
     }
   }
@@ -1366,7 +1346,9 @@ document.addEventListener("keydown", function (event) {
     var elementsUnderCursor = document.querySelectorAll(":hover");
 
     // Ищем первый элемент <p> среди элементов под курсором
-    const elementUnderCursor = Array.from(elementsUnderCursor).find(element => element.tagName.toLowerCase() === 'p');
+    const elementUnderCursor = Array.from(elementsUnderCursor).find(
+      (element) => element.tagName.toLowerCase() === "p"
+    );
 
     // Проверяем, найден ли элемент <p>
     if (elementUnderCursor) {
@@ -1374,23 +1356,29 @@ document.addEventListener("keydown", function (event) {
       const parentDiv = elementUnderCursor.parentElement;
 
       // Получаем все <p> внутри родительского <div>
-      const allParagraphs = parentDiv.querySelectorAll('p');
+      const allParagraphs = parentDiv.querySelectorAll("p");
 
       // Определяем индекс элемента с классом 'important'
-      const importantIndex = Array.from(allParagraphs).indexOf(elementUnderCursor);
+      const importantIndex =
+        Array.from(allParagraphs).indexOf(elementUnderCursor);
 
       // Проверяем, есть ли следующие элементы <p>
       if (importantIndex < allParagraphs.length - 1) {
-        const paragraphsToDelete = Array.from(allParagraphs).slice(importantIndex + 1);
+        const paragraphsToDelete = Array.from(allParagraphs).slice(
+          importantIndex + 1
+        );
 
         // Выводим в консоль сообщение о нажатии и удаляем следующие элементы <p>
-        console.log('Клавиша [ или ъ нажата. Удаляются следующие элементы <p>:', paragraphsToDelete);
+        console.log(
+          "Клавиша [ или ъ нажата. Удаляются следующие элементы <p>:",
+          paragraphsToDelete
+        );
 
-        paragraphsToDelete.forEach(paragraph => {
+        paragraphsToDelete.forEach((paragraph) => {
           paragraph.remove();
         });
       } else {
-        console.log('Клавиша [ или ъ нажата, но нет следующих элементов <p>');
+        console.log("Клавиша [ или ъ нажата, но нет следующих элементов <p>");
       }
     }
   }
@@ -1402,19 +1390,20 @@ document.addEventListener("keydown", function (event) {
     var elementsUnderCursor = document.querySelectorAll(":hover");
 
     // Ищем первый элемент <p> среди элементов под курсором
-    const elementUnderCursor = Array.from(elementsUnderCursor).find(element => element.tagName.toLowerCase() === 'p');
+    const elementUnderCursor = Array.from(elementsUnderCursor).find(
+      (element) => element.tagName.toLowerCase() === "p"
+    );
 
     // Проверяем, найден ли элемент <p> и присваиваем ему класс 'important'
     if (elementUnderCursor) {
       // Проверяем, не имеет ли элемент уже класс 'important'
-      if (!elementUnderCursor.classList.contains('important')) {
-        elementUnderCursor.classList.add('important');
-        console.log('Элементу присвоен класс important:', elementUnderCursor);
+      if (!elementUnderCursor.classList.contains("important")) {
+        elementUnderCursor.classList.add("important");
+        console.log("Элементу присвоен класс important:", elementUnderCursor);
       }
     }
   }
 });
-
 
 document.addEventListener("keydown", function (event) {
   if (event.altKey) {
@@ -1422,19 +1411,32 @@ document.addEventListener("keydown", function (event) {
     var elementsUnderCursor = document.querySelectorAll(":hover");
 
     // Ищем первый элемент <p class="important"> среди элементов под курсором
-    const currentImportantElement = Array.from(elementsUnderCursor).find(element => element.tagName.toLowerCase() === 'p' && element.classList.contains('important'));
+    const currentImportantElement = Array.from(elementsUnderCursor).find(
+      (element) =>
+        element.tagName.toLowerCase() === "p" &&
+        element.classList.contains("important")
+    );
 
     if (currentImportantElement) {
-      console.log('Текущий <p class="important"> под курсором:', currentImportantElement);
+      console.log(
+        'Текущий <p class="important"> под курсором:',
+        currentImportantElement
+      );
 
       // Находим следующий ближайший <p class="important">
       let nextImportantElement = currentImportantElement.nextElementSibling;
 
-      while (nextImportantElement && !nextImportantElement.classList.contains('important')) {
+      while (
+        nextImportantElement &&
+        !nextImportantElement.classList.contains("important")
+      ) {
         nextImportantElement = nextImportantElement.nextElementSibling;
       }
 
-      console.log('Следующий ближайший <p class="important">:', nextImportantElement);
+      console.log(
+        'Следующий ближайший <p class="important">:',
+        nextImportantElement
+      );
 
       // Если найден следующий важный элемент
       if (nextImportantElement) {
@@ -1442,18 +1444,25 @@ document.addEventListener("keydown", function (event) {
         const elementsBetween = [];
         let currentElement = currentImportantElement.nextElementSibling;
 
-        while (currentElement && currentElement !== nextImportantElement && currentElement.tagName.toLowerCase() === 'p') {
+        while (
+          currentElement &&
+          currentElement !== nextImportantElement &&
+          currentElement.tagName.toLowerCase() === "p"
+        ) {
           elementsBetween.push(currentElement);
           currentElement = currentElement.nextElementSibling;
         }
 
-        console.log('Обычные <p> между текущим и следующим ближайшим <p class="important">:', elementsBetween);
+        console.log(
+          'Обычные <p> между текущим и следующим ближайшим <p class="important">:',
+          elementsBetween
+        );
 
         // Присваиваем класс 'important' элементам, у которых его нет
-        elementsBetween.forEach(element => {
-          if (!element.classList.contains('important')) {
-            element.classList.add('important');
-            console.log('Элементу присвоен класс important:', element);
+        elementsBetween.forEach((element) => {
+          if (!element.classList.contains("important")) {
+            element.classList.add("important");
+            console.log("Элементу присвоен класс important:", element);
           }
         });
       } else {
@@ -1466,21 +1475,45 @@ document.addEventListener("keydown", function (event) {
 });
 
 function exportPDF() {
-  var chatlog = document.getElementById('chatlog');
-  console.log('Есть нажатие'); 
+  previewCSS();
+  var chatlog = document.getElementById("chatlog");
+  // console.log("Есть нажатие");
   html2pdf(chatlog);
+  setTimeout(function () {
+    previewCSS();
+  }, 5000);
 }
 
 function exportHTML() {
-  var element = document.createElement('a');
-  element.setAttribute('href', 'data:text/plain;charset=utf-8,' +
-    encodeURIComponent(document.querySelector("html").innerHTML));
-  element.setAttribute('download', "exported.html");
-
-  element.style.display = 'none';
+  previewCSS();
+  var element = document.createElement("a");
+  element.setAttribute( "href", "data:text/plain;charset=utf-8," + encodeURIComponent(document.querySelector("html").innerHTML) );
+  element.setAttribute("download", "exported.html");
+  element.style.display = "none";
   document.body.appendChild(element);
-
   element.click();
-
   document.body.removeChild(element);
+}
+
+function previewCSS() {
+  // console.log("Есть нажатие");
+
+  // Получаем ссылку на ваш CSS-файл
+  var previewCSS = document.getElementById("previewCSS");
+
+  // Проверяем, найден ли элемент
+  if (previewCSS) {
+    // Проверяем, включен ли CSS-файл
+    if (previewCSS.disabled) {
+      // Если CSS-файл выключен, включаем его
+      previewCSS.disabled = false;
+      console.log("CSS-файл включен");
+    } else {
+      // Если CSS-файл включен, выключаем его
+      previewCSS.disabled = true;
+      console.log("CSS-файл выключен");
+    }
+  } else {
+    console.error('Элемент с id="previewCSS" не найден');
+  }
 }

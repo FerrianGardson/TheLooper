@@ -1,50 +1,71 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>The Looper</title>
 
-<head>
-  <meta charset="utf-8" />
-  <title>The Looper</title>
-  <!-- <link rel="stylesheet" href="./style.css" /> -->
-  <link rel="stylesheet" href="https://cbipope3ka.github.io/TheLooper/style.css">
-  <!-- <link id="cssLink" rel="stylesheet" type="text/css" href="preview.css"> -->
-  <link rel="stylesheet" href="https://cbipope3ka.github.io/TheLooper/preview.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
+    <!-- Внешние ссылки -->
+    <link
+      rel="stylesheet"
+      href="https://cbipope3ka.github.io/TheLooper/style.css"
+    />
+    <link
+      id="previewCSS"
+      rel="stylesheet"
+      type="text/css"
+      href="https://cbipope3ka.github.io/TheLooper/preview.css"
+      disabled
+    />
 
-<body>
-  <div class="nav">
-    <div id="buttons">
+    <!-- Внутренние ссылки -->
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      id="previewCSS"
+      rel="stylesheet"
+      type="text/css"
+      href="./preview.css"
+      disabled
+    />
+  </head>
 
-      <form>
-        <label for="file-input-txt">Загрузить лог (TXT)</label>
-        <input type="file" id="file-input-txt">
-      </form>
+  <body>
+    <div class="nav">
+      <div id="buttons">
+        <form>
+          <label for="file-input-txt">Загрузить лог (TXT)</label>
+          <input type="file" id="file-input-txt" />
+        </form>
 
-      <form>
-        <label for="file-input-html">(HTML)</label>
-        <input type="file" id="file-input-html">
-      </form>
+        <form>
+          <label for="file-input-html">(HTML)</label>
+          <input type="file" id="file-input-html" />
+        </form>
 
-      <div id="keywords">
-        <!--         <input type="text" id="keywordsInput" placeholder="Введите ключевые слова через запятую"
+        <div id="keywords">
+          <!--         <input type="text" id="keywordsInput" placeholder="Введите ключевые слова через запятую"
           onkeypress="handleKeyPress(event)"
           value="Запись, фото, улыбочку, -шепчет, -ООС, -[МИА]"> -->
 
-        <input type="text" id="keywordsInput" placeholder="Введите ключевые слова через запятую"
-          onkeypress="handleKeyPress(event)"
-          value="Фэрриан, Ананита, Кэролай, -ООС, Икар, Шанталь, Тианна, -шепчет, Зверолов, Дерек, Карл, Сэнди, Фг, Аран, Хитрец, Сэверус, Джанетт, Патрульный Бёрд, Самсон, Ларин">
+          <input
+            type="text"
+            id="keywordsInput"
+            placeholder="Введите ключевые слова через запятую"
+            onkeypress="handleKeyPress(event)"
+            value="Фэрриан, Ананита, Кэролай, -ООС, Икар, Шанталь, Тианна, -шепчет, Зверолов, Дерек, Карл, Сэнди, Фг, Аран, Хитрец, Сэверус, Джанетт, Патрульный Бёрд, Самсон, Ларин"
+          />
 
-        <button onclick="applyImportant()">Выделение</button>
-      </div>
-      <button onclick="removeNonImportantParagraphs()">Чистка</button>
-      <button onclick="oocToEmote()">OOC =&gt; Emote</button>
-      <button onclick="removeCollapsed()">Коллапс</button>
-      <button onclick="chapterReverse()">Реверс</button>
-      <button onclick="removePlayers()">Удалить игроков</button>
-      <button onclick="debug()">Дебаг</button>
-      <button onclick="exportPDF()">PDF</button>
-      <button onclick="exportHTML()">HTML</button>
-      <!--  
+          <button onclick="applyImportant()">Выделение</button>
+        </div>
+        <button onclick="removeNonImportantParagraphs()">Чистка</button>
+        <button onclick="oocToEmote()">OOC =&gt; Emote</button>
+        <button onclick="removeCollapsed()">Коллапс</button>
+        <button onclick="chapterReverse()">Реверс</button>
+        <button onclick="removePlayers()">Удалить игроков</button>
+        <button onclick="debug()">Дебаг</button>
+        <button onclick="previewCSS()">Preview</button>
+        <button onclick="exportPDF()">PDF</button>
+        <button onclick="exportHTML()">HTML</button>
+        <!--  
       
       <button onclick="postReplace()">Постреплейс</button>
 
@@ -55,77 +76,85 @@
       <button onclick="emoteToSpeech()">Emote =&gt; Say</button>
       <button onclick="sayToEmote()">Say =&gt; Emote</button>
       <button onclick="killNav()">Kill Nav</button> -->
-      <script>
-        function debug() {
-          // Находим все пустые <p class="important">
-          const emptyImportantParagraphs = document.querySelectorAll('p.important:empty');
+        <script>
+          function debug() {
+            // Находим все пустые <p class="important">
+            const emptyImportantParagraphs =
+              document.querySelectorAll("p.important:empty");
 
-          // Удаляем каждый найденный пустой элемент
-          emptyImportantParagraphs.forEach(element => {
-            element.remove();
-            console.log('Пустой элемент <p class="important"> удален:', element);
-          });
-        }
-
-        function removeCollapsed() {
-          var collapsedDivs = document.querySelectorAll('div.collapsed');
-          collapsedDivs.forEach(function (div) {
-            div.remove();
-          });
-        }
-
-        function removePlayers() {
-          var playersList = document.querySelectorAll('ul.players');
-          playersList.forEach(function (player) {
-            player.remove();
-          });
-        }
-
-        function chapterReverse() {
-          // 2. Отсортировать в обратном порядке детей #chatlog
-          var chatlog = document.getElementById('chatlog');
-          var messages = Array.from(chatlog.children);
-          // Сортировка в обратном порядке
-          messages.reverse();
-          // Удаление детей #chatlog
-          while (chatlog.firstChild) {
-            chatlog.removeChild(chatlog.firstChild);
+            // Удаляем каждый найденный пустой элемент
+            emptyImportantParagraphs.forEach((element) => {
+              element.remove();
+              console.log(
+                'Пустой элемент <p class="important"> удален:',
+                element
+              );
+            });
           }
-          // Вставка отсортированных сообщений
-          messages.forEach(function (message) {
-            chatlog.appendChild(message);
-          });
-        }
 
-        function postReplace() {
-          // Получаем весь HTML-код страницы
-          var updatedHTML = document.documentElement.innerHTML;
+          function removeCollapsed() {
+            var collapsedDivs = document.querySelectorAll("div.collapsed");
+            collapsedDivs.forEach(function (div) {
+              div.remove();
+            });
+          }
 
-          // Выполняем замену "кот" на "кошка" с использованием регулярного выражения
-          updatedHTML = updatedHTML.replace(
-            /<span class=\"emote\"><span class=\"speech\">— /g,
-            '<span class="emote"><span class="speech">'
-          ); // Дефисы в начале реплики
+          function removePlayers() {
+            var playersList = document.querySelectorAll("ul.players");
+            playersList.forEach(function (player) {
+              player.remove();
+            });
+          }
 
-          updatedHTML = updatedHTML.replace(
-            /\|\d\s[-–—]\s\d\((.*)\)/g,
-            '$1'
-          ); // Кривые эмоуты, возможно сбилось из-за дефисов
+          function chapterReverse() {
+            // 2. Отсортировать в обратном порядке детей #chatlog
+            var chatlog = document.getElementById("chatlog");
+            var messages = Array.from(chatlog.children);
+            // Сортировка в обратном порядке
+            messages.reverse();
+            // Удаление детей #chatlog
+            while (chatlog.firstChild) {
+              chatlog.removeChild(chatlog.firstChild);
+            }
+            // Вставка отсортированных сообщений
+            messages.forEach(function (message) {
+              chatlog.appendChild(message);
+            });
+          }
 
-          // Обновляем HTML-код страницы
-          document.documentElement.innerHTML = updatedHTML;
-          chapterCollapse()
-        }
-      </script>
+          function postReplace() {
+            // Получаем весь HTML-код страницы
+            var updatedHTML = document.documentElement.innerHTML;
+
+            // Выполняем замену "кот" на "кошка" с использованием регулярного выражения
+            updatedHTML = updatedHTML.replace(
+              /<span class=\"emote\"><span class=\"speech\">— /g,
+              '<span class="emote"><span class="speech">'
+            ); // Дефисы в начале реплики
+
+            updatedHTML = updatedHTML.replace(/\|\d\s[-–—]\s\d\((.*)\)/g, "$1"); // Кривые эмоуты, возможно сбилось из-за дефисов
+
+            // Обновляем HTML-код страницы
+            document.documentElement.innerHTML = updatedHTML;
+            chapterCollapse();
+          }
+        </script>
+      </div>
     </div>
-  </div>
-  <div id="chatlog"></div>
-  <div class="footer"></div>
+    <div id="chatlog"></div>
+    <div class="footer"></div>
+  </body>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
-    integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="script.js"></script>
-</body>
 
+  <!-- Внешние ссылки -->
+  <script src="https://cbipope3ka.github.io/TheLooper/script.js"></script>
+
+  <!-- Внутренние ссылки -->
+  <script src="script.js"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+    integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
 </html>
