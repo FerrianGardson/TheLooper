@@ -4,26 +4,29 @@
     <meta charset="utf-8" />
     <title>The Looper</title>
 
+    <!-- Внутренние ссылки -->
+    <link
+      class="local style"
+      rel="stylesheet"
+      href="./style.css"
+      type="text/css"
+    />
     <!-- Внешние ссылки -->
     <link
+      class="external style"
       rel="stylesheet"
       href="https://cbipope3ka.github.io/TheLooper/style.css"
+      type="text/css"
+      disabled
     />
+
+    <!-- Превью -->
     <link
       id="previewCSS"
       rel="stylesheet"
       type="text/css"
       href="https://cbipope3ka.github.io/TheLooper/preview.css"
-      disabled
-    />
-
-    <!-- Внутренние ссылки -->
-    <link rel="stylesheet" href="./style.css" />
-    <link
-      id="previewCSS"
-      rel="stylesheet"
       type="text/css"
-      href="./preview.css"
       disabled
     />
   </head>
@@ -31,6 +34,13 @@
   <body>
     <div class="nav">
       <div id="buttons">
+        <button
+          class="isolated"
+          style="width: 100%; height: 3rem"
+          onclick="toggleExternalLinks()"
+        >
+          О НЕТ, ПОЧЕМУ ЖЕ ВСЁ СЛОМАЛОСЬ?!
+        </button>
         <form>
           <label for="file-input-txt">Загрузить лог (TXT)</label>
           <input type="file" id="file-input-txt" />
@@ -62,8 +72,6 @@
         <button onclick="chapterReverse()">Реверс</button>
         <button onclick="removePlayers()">Удалить игроков</button>
         <button onclick="debug()">Дебаг</button>
-        <button onclick="previewCSS()">Preview</button>
-        <button onclick="exportPDF()">PDF</button>
         <button onclick="exportHTML()">HTML</button>
         <!--  
       
@@ -146,9 +154,6 @@
   </body>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Внешние ссылки -->
-  <script src="https://cbipope3ka.github.io/TheLooper/script.js"></script>
-
   <!-- Внутренние ссылки -->
   <script src="script.js"></script>
   <script
@@ -157,4 +162,22 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   ></script>
+
+  <!-- Внешние ссылки -->
+  <script
+    src="https://cbipope3ka.github.io/TheLooper/script.js"
+    disabled
+  ></script>
+
+  <script>
+    // Функция для переключения атрибута disabled у всех внешних ссылок
+    function toggleExternalLinks() {
+      var externalLinks = document.querySelectorAll(".external");
+
+      // Переключаем атрибут disabled у всех внешних ссылок
+      externalLinks.forEach(function (link) {
+        link.toggleAttribute("disabled");
+      });
+    }
+  </script>
 </html>

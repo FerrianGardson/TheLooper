@@ -1474,46 +1474,17 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
-function exportPDF() {
-  previewCSS();
-  var chatlog = document.getElementById("chatlog");
-  // console.log("Есть нажатие");
-  html2pdf(chatlog);
-  setTimeout(function () {
-    previewCSS();
-  }, 5000);
-}
-
 function exportHTML() {
   previewCSS();
   var element = document.createElement("a");
-  element.setAttribute( "href", "data:text/plain;charset=utf-8," + encodeURIComponent(document.querySelector("html").innerHTML) );
+  element.setAttribute(
+    "href",
+    "data:text/plain;charset=utf-8," +
+      encodeURIComponent(document.querySelector("html").innerHTML)
+  );
   element.setAttribute("download", "exported.html");
   element.style.display = "none";
   document.body.appendChild(element);
   element.click();
   document.body.removeChild(element);
-}
-
-function previewCSS() {
-  // console.log("Есть нажатие");
-
-  // Получаем ссылку на ваш CSS-файл
-  var previewCSS = document.getElementById("previewCSS");
-
-  // Проверяем, найден ли элемент
-  if (previewCSS) {
-    // Проверяем, включен ли CSS-файл
-    if (previewCSS.disabled) {
-      // Если CSS-файл выключен, включаем его
-      previewCSS.disabled = false;
-      console.log("CSS-файл включен");
-    } else {
-      // Если CSS-файл включен, выключаем его
-      previewCSS.disabled = true;
-      console.log("CSS-файл выключен");
-    }
-  } else {
-    console.error('Элемент с id="previewCSS" не найден');
-  }
 }

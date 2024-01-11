@@ -18,19 +18,36 @@
   --purple-3: #ae5eff;
 }
 
-.red { color: var(--red); }
-.green { color: var(--green); }
-.blue-1 { color: var(--blue-1); }
-.blue-2 { color: var(--blue-2); }
-.blue-3 { color: var(--blue-3); }
-.yellow { color: var(--yellow); }
-.orange { color: var(--orange); }
-.purple-1 { color: var(--purple-1); }
-.purple-2 { color: var(--purple-2); }
-.purple-3 { color: var(--purple-3); }
-
-
-
+.red {
+  color: var(--red);
+}
+.green {
+  color: var(--green);
+}
+.blue-1 {
+  color: var(--blue-1);
+}
+.blue-2 {
+  color: var(--blue-2);
+}
+.blue-3 {
+  color: var(--blue-3);
+}
+.yellow {
+  color: var(--yellow);
+}
+.orange {
+  color: var(--orange);
+}
+.purple-1 {
+  color: var(--purple-1);
+}
+.purple-2 {
+  color: var(--purple-2);
+}
+.purple-3 {
+  color: var(--purple-3);
+}
 
 * {
   box-sizing: border-box;
@@ -200,9 +217,6 @@ ul.players {
   opacity: 0.2;
   overflow: hidden;
 }
-.chapter.collapsed li:not(:hover) {
-  /* color: rgba(255, 255, 255, 0.35) !important; */
-}
 .chapter.collapsed > h2.date {
   color: rgb(255, 255, 255) !important;
 }
@@ -295,12 +309,11 @@ div#keywords {
 }
 
 input {
-  /* min-width: 1rem!important; */ /* flex-shrink: 1; */ /* width: 100%; */
-  white-space: nowrap; /* Ð—Ð°Ð¿Ñ€ÐµÑ‚ Ð¿ÐµÑ€ÐµÐ½Ð¾ÑÐ° Ñ‚ÐµÐºÑÑ‚Ð° Ð½Ð° Ð½Ð¾Ð²ÑƒÑŽ ÑÑ‚Ñ€Ð¾ÐºÑƒ */
-  overflow: hidden; /* Ð¡ÐºÑ€Ñ‹Ñ‚Ð¸Ðµ Ñ‡Ð°ÑÑ‚Ð¸ Ñ‚ÐµÐºÑÑ‚Ð°, ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ð¹ Ð½Ðµ ÑƒÐ¼ÐµÑ‰Ð°ÐµÑ‚ÑÑ */
+    white-space: nowrap; 
+  overflow: hidden; 
   border: none;
   outline: none;
-  text-overflow: ellipsis; /* ÐžÐºÐ¾Ð½Ñ‡Ð°Ð½Ð¸Ðµ Ñ‚ÐµÐºÑÑ‚Ð° Ð¼Ð½Ð¾Ð³Ð¾Ñ‚Ð¾Ñ‡Ð¸ÐµÐ¼ */
+  text-overflow: ellipsis;
   background: none;
   color: var(--grey);
   font-size: 1rem;
@@ -344,30 +357,8 @@ input:focus-visible {
   color: #d361d3;
 }
 
-#chatlog.debug .night {
-  display: block;
-  background: #ff000045;
-  padding: 1em;
+
+.isolated {
+  display: none;
 }
 
-/* Ð¡Ñ‚Ð¸Ð»ÑŒ Ð´Ð»Ñ Ð²Ñ‹ÐºÐ»ÑŽÑ‡ÐµÐ½Ð½Ð¾Ð³Ð¾ CSS */
-#chatlog.debug p.logline {
-  opacity: 1; /* Ð›ÑŽÐ±Ñ‹Ðµ Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ñ, ÐºÐ¾Ð³Ð´Ð° CSS Ð²Ñ‹ÐºÐ»ÑŽÑ‡ÐµÐ½ */
-}
-
-.time {
-  display: none !important;
-}
-
-#chatlog.debug .nightâ€“transfered {
-  display: block;
-  background: rgba(0, 128, 0, 0.37);
-  padding: 1em;
-}
-
-#chatlog.debug .time {
-  display: block !important;
-  opacity: 0.5;
-  float: left;
-  padding-right: 0.5rem;
-}
