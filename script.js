@@ -7,6 +7,11 @@ function toggleselectedClass(event) {
   }
 }
 
+var dates = document.querySelectorAll(".date");
+dates.forEach((date) => {
+  date.addEventListener("click", toggleContent);
+});
+
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOMContentLoaded");
 
@@ -15,9 +20,6 @@ document.addEventListener("DOMContentLoaded", function () {
   dates.forEach((date) => {
     date.addEventListener("click", toggleContent);
   });
-});
-dates.forEach((date) => {
-  date.addEventListener("click", toggleContent);
 });
 
 function chapterCollapse() {
@@ -45,7 +47,10 @@ function chapterCollapse() {
 
   /* console.log("А первой добавляется expanded"); */
   chapterElements[0].classList.add("expanded");
-  const dates = document.querySelectorAll(".date");
+  dates = document.querySelectorAll(".date");
+  dates.forEach((date) => {
+    date.addEventListener("click", toggleContent);
+  });
 
   /* console.log("Функция chapterCollapse успешно выполнена"); */
 }
@@ -1494,18 +1499,18 @@ function exportHTML() {
 var isAllSellected = false; // Переменная для отслеживания состояния
 
 function selectAll() {
-  console.log("selectAll");
+  console.log('selectAll');
   // Находим все элементы <p> с классом logline
-  var loglineElements = document.querySelectorAll("p.logline");
+  var loglineElements = document.querySelectorAll('p.logline');
 
   // Переключаем состояние и присваиваем/удаляем класс select
   if (isAllSellected) {
     loglineElements.forEach(function (element) {
-      element.classList.remove("selected");
+      element.classList.remove('selected');
     });
   } else {
     loglineElements.forEach(function (element) {
-      element.classList.add("selected");
+      element.classList.add('selected');
     });
   }
 
@@ -1521,7 +1526,10 @@ function debug() {
   // Удаляем каждый найденный пустой элемент
   emptyImportantParagraphs.forEach((element) => {
     element.remove();
-    console.log('Пустой элемент <p class="important"> удален:', element);
+    console.log(
+      'Пустой элемент <p class="important"> удален:',
+      element
+    );
   });
 }
 
@@ -1555,4 +1563,4 @@ function chapterReverse() {
   });
 }
 
-console.log("Скрипт загружен");
+console.log('Скрипт загружен');
