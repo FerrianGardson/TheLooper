@@ -4,7 +4,10 @@
 <head>
   <meta charset="utf-8" />
   <title>The Looper</title>
-  <link rel="stylesheet" href="./style.css" />
+  <!-- <link rel="stylesheet" href="./style.css" /> -->
+  <link rel="stylesheet" href="https://cbipope3ka.github.io/TheLooper/style.css">
+  <!-- <link id="cssLink" rel="stylesheet" type="text/css" href="preview.css"> -->
+  <link rel="stylesheet" href="https://cbipope3ka.github.io/TheLooper/preview.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
@@ -28,7 +31,8 @@
           value="Запись, фото, улыбочку, -шепчет, -ООС, -[МИА]"> -->
 
         <input type="text" id="keywordsInput" placeholder="Введите ключевые слова через запятую"
-          onkeypress="handleKeyPress(event)" value="Фэрриан, Ананита, Кэролай, -ООС, Икар, Шанталь, Тианна, -шепчет, Зверолов, Дерек, Карл, Сэнди, Фг, Аран, Хитрец, Сэверус, Джанетт, Патрульный Бёрд, Самсон, Ларин">
+          onkeypress="handleKeyPress(event)"
+          value="Фэрриан, Ананита, Кэролай, -ООС, Икар, Шанталь, Тианна, -шепчет, Зверолов, Дерек, Карл, Сэнди, Фг, Аран, Хитрец, Сэверус, Джанетт, Патрульный Бёрд, Самсон, Ларин">
 
         <button onclick="applyImportant()">Выделение</button>
       </div>
@@ -38,6 +42,8 @@
       <button onclick="chapterReverse()">Реверс</button>
       <button onclick="removePlayers()">Удалить игроков</button>
       <button onclick="debug()">Дебаг</button>
+      <button onclick="exportPDF()">PDF</button>
+      <button onclick="exportHTML()">HTML</button>
       <!--  
       
       <button onclick="postReplace()">Постреплейс</button>
@@ -50,16 +56,16 @@
       <button onclick="sayToEmote()">Say =&gt; Emote</button>
       <button onclick="killNav()">Kill Nav</button> -->
       <script>
-function debug() {
-  // Находим все пустые <p class="important">
-  const emptyImportantParagraphs = document.querySelectorAll('p.important:empty');
+        function debug() {
+          // Находим все пустые <p class="important">
+          const emptyImportantParagraphs = document.querySelectorAll('p.important:empty');
 
-  // Удаляем каждый найденный пустой элемент
-  emptyImportantParagraphs.forEach(element => {
-    element.remove();
-    console.log('Пустой элемент <p class="important"> удален:', element);
-  });
-}
+          // Удаляем каждый найденный пустой элемент
+          emptyImportantParagraphs.forEach(element => {
+            element.remove();
+            console.log('Пустой элемент <p class="important"> удален:', element);
+          });
+        }
 
         function removeCollapsed() {
           var collapsedDivs = document.querySelectorAll('div.collapsed');
@@ -116,6 +122,9 @@ function debug() {
   <div id="chatlog"></div>
   <div class="footer"></div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+    integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="script.js"></script>
 </body>
 

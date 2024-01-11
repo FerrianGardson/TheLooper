@@ -255,7 +255,7 @@ function divideChapters(text) {
 }
 
 // Новая функция для перемещения .night из более свежей главы в более старую
-function moveNightContent() {
+/* function moveNightContent() {
   const chapters = document.querySelectorAll(".chapter");
   let fresherChapter = null;
   let olderChapter = null;
@@ -290,7 +290,7 @@ function moveNightContent() {
     }
     fresherChapter.chapter.remove();
   }
-}
+} */
 
 // Вспомогательная функция для получения индекса месяца
 function getMonthIndex(monthName) {
@@ -401,7 +401,7 @@ function cleanText() {
   ); // Ваш шёпот
 
   chatlogHTML = chatlogHTML.replace(
-    /<p class="logline say">(\d+|\>\>|[A-z]|&\?*|Zone|%s|Игрок|Для|Текст|Телепорт|С|Получен|Характеристики|Маг.уст:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила:|Ловк:|Инта:|Физ.уст:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|щит|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
+    /<p class="logline say">(\d+|\>\>|[A-z]|&\?*|Zone|%s|Игрок|Для|Всем|Текст|Телепорт|С|Получен|Характеристики|Маг.уст:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила:|Ловк:|Инта:|Физ.уст:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|щит|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
     ""
   ); // Системные сообщения, начинаются с указанных слов
 
@@ -1464,3 +1464,23 @@ document.addEventListener("keydown", function (event) {
     }
   }
 });
+
+function exportPDF() {
+  var chatlog = document.getElementById('chatlog');
+  console.log('Есть нажатие'); 
+  html2pdf(chatlog);
+}
+
+function exportHTML() {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' +
+    encodeURIComponent(document.querySelector("html").innerHTML));
+  element.setAttribute('download', "exported.html");
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
