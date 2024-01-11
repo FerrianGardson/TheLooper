@@ -1475,7 +1475,6 @@ document.addEventListener("keydown", function (event) {
 });
 
 function exportHTML() {
-  previewCSS();
   var element = document.createElement("a");
   element.setAttribute(
     "href",
