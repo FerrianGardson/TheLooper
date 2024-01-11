@@ -1557,3 +1557,5 @@ function chapterReverse() {
     chatlog.appendChild(message);
   });
 }
+
+console.log('Скрипт загружен');

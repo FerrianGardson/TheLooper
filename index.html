@@ -116,22 +116,13 @@
       // Находим существующий script элемент с src "script.js"
       var existingScript = document.querySelector('script[src="script.js"]');
 
-      if (existingScript && existingScript.parentNode) {
-        existingScript.parentNode.replaceChild(
-          Object.assign(document.createElement("script"), {
-            src: "https://cbipope3ka.github.io/TheLooper/script.js",
-            async: true, // Добавляем атрибут async
-          }),
-          existingScript
-        );
-      } else {
-        document.body.appendChild(
-          Object.assign(document.createElement("script"), {
-            src: "https://cbipope3ka.github.io/TheLooper/script.js",
-            async: true, // Добавляем атрибут async
-          })
-        );
-      }
+      existingScript.parentNode.replaceChild(
+        Object.assign(document.createElement("script"), {
+          src: "https://cbipope3ka.github.io/TheLooper/script.js",
+          async: true, // Добавляем атрибут async
+        }),
+        existingScript
+      );
     }
   </script>
 </html>
