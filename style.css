@@ -164,8 +164,9 @@ button:hover,
 label:hover {
   background: linear-gradient(45deg, rgb(255, 191, 0), rgb(62, 43, 0));
   color: var(--black);
-  font-weight: 600;
 }
+
+button, label {font-weight:normal;}
 
 p.dm {
   color: rgb(255, 94, 0);

@@ -1,5 +1,3 @@
-const enterKeyCode = 13;
-
 document.addEventListener("click", toggleselectedClass);
 
 function toggleselectedClass(event) {
@@ -64,7 +62,7 @@ function formatLog() {
   addIdToChapter();
   emoteToSpeech();
   sayToEmote();
-  Filter();
+  // Filter();
   //cleanTextAgain();
   //correctSpelling();
 }
@@ -364,7 +362,7 @@ function cleanText() {
   ); // Ваш шёпот
 
   chatlogHTML = chatlogHTML.replace(
-    /<p class="logline say">(\d+|\>\>|[A-z]|&\?*|ZoneX:|Zone|%s|Игрок|Для|Всем|Текст|Эффект|щит|Телепорт|С|Получен|Характеристики|Маг.уст:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила:|Ловк:|Инта:|Физ.уст:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
+    /<p class="logline say">(\d+|\>\>|[A-z]|&\?*|ZoneX:|Аукцион|Zone|%s|Игрок|Для|Всем|Текст|Эффект|щит|Телепорт|С|Получен|Характеристики|Маг.уст:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила:|Ловк:|Инта:|Физ.уст:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
     ""
   ); // Системные сообщения, начинаются с указанных слов
 
@@ -967,13 +965,6 @@ function combineFunctions() {
   combineEmotes();
 }
 
-function handleKeyPress(event) {
-  if (event.keyCode === enterKeyCode) {
-    // Ваш код для обработки нажатия Enter
-    Filter();
-  }
-}
-
 document
   .getElementById("keywordsInput")
   .addEventListener("keydown", function (event) {
@@ -1028,6 +1019,7 @@ function Filter() {
   });
 
   openselectedChapters();
+  removeCollapsed();
   scrollToNearestselected();
 }
 
@@ -1286,7 +1278,7 @@ document.addEventListener("keydown", function (event) {
 
 document.addEventListener("keydown", function (event) {
   if (event.key === "[" || event.key === "х") {
-    console.log("Есть нажатие на клавишу [ или х");
+    console.log("Есть нажатие на клавишу [");
 
     // Находим все элементы под курсором
     var elementsUnderCursor = document.querySelectorAll(":hover");
@@ -1296,51 +1288,45 @@ document.addEventListener("keydown", function (event) {
       (element) => element.tagName.toLowerCase() === "p"
     );
 
-    // Проверяем, найден ли элемент <p> и присваиваем ему класс 'selected'
+    // Ищем первый элемент <h2> среди элементов под курсором
+    const headingUnderCursor = Array.from(elementsUnderCursor).find(
+      (element) => element.tagName.toLowerCase() === "h2"
+    );
+
     if (elementUnderCursor) {
-      elementUnderCursor.classList.add("selected");
-      console.log("Элементу присвоен класс selected:", elementUnderCursor);
+      // Логика для <p>
+      console.log("Выбран абзац");
       scrollSave(elementUnderCursor);
 
-      // Получаем родительский <div>
-      const parentDiv = elementUnderCursor.parentElement;
+      let previousSiblings = elementUnderCursor.previousElementSibling;
 
-      // Получаем все <p> внутри родительского <div>
-      const allParagraphs = parentDiv.querySelectorAll("p");
+      while (previousSiblings) {
+        const siblingToRemove = previousSiblings;
+        previousSiblings = previousSiblings.previousElementSibling;
+        siblingToRemove.remove();
+      }
+    } else if (headingUnderCursor) {
+      // Логика для <h2>
+      console.log("Выбрана глава");
+      scrollSave(headingUnderCursor);
 
-      // Определяем индекс элемента с классом 'selected'
-      const selectedIndex =
-        Array.from(allParagraphs).indexOf(elementUnderCursor);
+      let previousSiblings =
+        headingUnderCursor.parentNode.previousElementSibling;
 
-      // Проверяем, есть ли предшествующие элементы <p>
-      if (selectedIndex > 0) {
-        const paragraphsToDelete = Array.from(allParagraphs).slice(
-          0,
-          selectedIndex
-        );
-
-        // Выводим в консоль сообщение о нажатии и удаляем предшествующие элементы <p>
-        console.log(
-          "Клавиша [ или х нажата. Удаляются предшествующие элементы <p>:",
-          paragraphsToDelete
-        );
-
-        paragraphsToDelete.forEach((paragraph) => {
-          paragraph.remove();
-        });
-      } else {
-        console.log(
-          "Клавиша [ или х нажата, но нет предшествующих элементов <p>"
-        );
+      while (previousSiblings) {
+        const siblingToRemove = previousSiblings;
+        previousSiblings = previousSiblings.previousElementSibling;
+        siblingToRemove.remove();
       }
     }
-    scrollTo();
+
+    scrollToElement();
   }
 });
 
 document.addEventListener("keydown", function (event) {
   if (event.key === "]" || event.key === "ъ") {
-    console.log("Есть нажатие на клавишу [ или ъ");
+    console.log("Есть нажатие на клавишу ]");
 
     // Находим все элементы под курсором
     var elementsUnderCursor = document.querySelectorAll(":hover");
@@ -1350,37 +1336,38 @@ document.addEventListener("keydown", function (event) {
       (element) => element.tagName.toLowerCase() === "p"
     );
 
-    // Проверяем, найден ли элемент <p>
+    // Ищем первый элемент <h2> среди элементов под курсором
+    const headingUnderCursor = Array.from(elementsUnderCursor).find(
+      (element) => element.tagName.toLowerCase() === "h2"
+    );
+
     if (elementUnderCursor) {
-      // Получаем родительский <div>
-      const parentDiv = elementUnderCursor.parentElement;
+      // Логика для <p>
+      console.log("Выбран абзац");
+      scrollSave(elementUnderCursor);
 
-      // Получаем все <p> внутри родительского <div>
-      const allParagraphs = parentDiv.querySelectorAll("p");
+      let nextSiblings = elementUnderCursor.nextElementSibling;
 
-      // Определяем индекс элемента с классом 'selected'
-      const selectedIndex =
-        Array.from(allParagraphs).indexOf(elementUnderCursor);
+      while (nextSiblings) {
+        const siblingToRemove = nextSiblings;
+        nextSiblings = nextSiblings.nextElementSibling;
+        siblingToRemove.remove();
+      }
+    } else if (headingUnderCursor) {
+      // Логика для <h2>
+      console.log("Выбрана глава");
+      scrollSave(headingUnderCursor);
 
-      // Проверяем, есть ли следующие элементы <p>
-      if (selectedIndex < allParagraphs.length - 1) {
-        const paragraphsToDelete = Array.from(allParagraphs).slice(
-          selectedIndex + 1
-        );
+      let nextSiblings = headingUnderCursor.parentNode.nextElementSibling;
 
-        // Выводим в консоль сообщение о нажатии и удаляем следующие элементы <p>
-        console.log(
-          "Клавиша [ или ъ нажата. Удаляются следующие элементы <p>:",
-          paragraphsToDelete
-        );
-
-        paragraphsToDelete.forEach((paragraph) => {
-          paragraph.remove();
-        });
-      } else {
-        console.log("Клавиша [ или ъ нажата, но нет следующих элементов <p>");
+      while (nextSiblings) {
+        const siblingToRemove = nextSiblings;
+        nextSiblings = nextSiblings.nextElementSibling;
+        siblingToRemove.remove();
       }
     }
+
+    scrollToElement();
   }
 });
 
@@ -1473,7 +1460,7 @@ document.addEventListener("keydown", function (event) {
     } else {
       console.log('Нет текущего <p class="selected"> под курсором');
     }
-    scrollTo();
+    scrollToElement();
   }
 });
 
@@ -1483,15 +1470,7 @@ function scrollSave(element) {
   }
 }
 
-// Пример использования
-// Предположим, у вас есть элемент с id "myElement"
-const myElement = document.getElementById("myElement");
-
-// Вызываем функцию, передавая в нее элемент
-addScrollClass(myElement);
-
-
-function scrollTo() {
+function scrollToElement() {
   document.querySelector(".scroll").scrollIntoView();
   window.scrollBy(
     0,
@@ -1502,8 +1481,6 @@ function scrollTo() {
     .querySelectorAll(".scroll")
     .forEach((element) => element.classList.remove("scroll"));
 }
-
-
 
 function exportHTML() {
   removeEmptyLines();
