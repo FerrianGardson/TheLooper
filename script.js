@@ -364,7 +364,7 @@ function cleanText() {
   ); // Ваш шёпот
 
   chatlogHTML = chatlogHTML.replace(
-    /<p class="logline say">(\d+|\>\>|[A-z]|&\?*|Zone|%s|Игрок|Для|Всем|Текст|Телепорт|С|Получен|Характеристики|Маг.уст:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила:|Ловк:|Инта:|Физ.уст:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|щит|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
+    /<p class="logline say">(\d+|\>\>|[A-z]|&\?*|Zone|%s|Игрок|Для|Всем|Текст|Телепорт|С|Получен|Характеристики|Маг.уст:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила:|Ловк:|Инта:|Физ.уст:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
     ""
   ); // Системные сообщения, начинаются с указанных слов
 
@@ -405,7 +405,10 @@ function cleanText() {
     '<p class="logline emote">$1</p>'
   ); // Эмоуты
 
-  chatlogHTML = chatlogHTML.replace( /<p class="logline emote">(\W+?)\s(.+?)<\/p>/g, '<p class="logline emote"><span class="player">$1</span><span class="emote"> $2</span></p>\n' ); // Авторы эмоутов
+  chatlogHTML = chatlogHTML.replace(
+    /<p class="logline emote">(\W+?)\s(.+?)<\/p>/g,
+    '<p class="logline emote"><span class="player">$1</span><span class="emote"> $2</span></p>\n'
+  ); // Авторы эмоутов
 
   chatlogHTML = chatlogHTML.replace(/\s*?,/g, ","); // Удаляем пробелы перед запятыми
 
@@ -418,8 +421,6 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/<p><\/p>/g, ""); // Пустые абзацы
 
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
-
- 
 
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
@@ -1103,9 +1104,6 @@ function scrollToNearestselected() {
   }
 }
 
-// Пример использования
-scrollToNearestselected();
-
 function removeNonselectedParagraphs() {
   // console.log("removeNonselectedParagraphs");
 
@@ -1472,19 +1470,21 @@ document.addEventListener("keydown", function (event) {
     } else {
       console.log('Нет текущего <p class="selected"> под курсором');
     }
-    console.log("Скроллим");
-    document.querySelector(".scroll").scrollIntoView();
-    window.scrollBy(
-      0,
-      -(document.querySelector(".nav")?.getBoundingClientRect()?.height || 0) -
-        32
-    );
-
-    document
-      .querySelectorAll(".scroll")
-      .forEach((element) => element.classList.remove("scroll"));
+    scrollTo();
   }
 });
+
+function scrollTo() {
+  document.querySelector(".scroll").scrollIntoView();
+  window.scrollBy(
+    0,
+    -(document.querySelector(".nav")?.getBoundingClientRect()?.height || 0) - 32
+  );
+
+  document
+    .querySelectorAll(".scroll")
+    .forEach((element) => element.classList.remove("scroll"));
+}
 
 function exportHTML() {
   removeEmptyLines();
