@@ -396,7 +396,7 @@ function cleanText() {
   ); // Речь, дефисы, а также облачает реплику в классы
 
   chatlogHTML = chatlogHTML.replace(
-    /<p class="logline say">(.+?) кричит:\s*?[—–-]?\s*?(.*?)\n<\/p>/g,
+    /<p class="logline say">(.+?)\sкричит:\s*[ —–-]\s?(.*?)\n<\/p>/g,
     "<p class='logline yell'><span class='player'>$1</span> <span class='speech'>$2</span></p>"
   ); // Крик, дефисы, а также облачает реплику в классы
 
@@ -405,10 +405,7 @@ function cleanText() {
     '<p class="logline emote">$1</p>'
   ); // Эмоуты
 
-  chatlogHTML = chatlogHTML.replace(
-    /<p class="logline emote">(\W+?)\s(.+?)<\/p>/g,
-    '<p class="logline emote"><span class="player">$1</span><span class="emote"> $2</span></p>\n'
-  ); // Авторы эмоутов
+  chatlogHTML = chatlogHTML.replace( /<p class="logline emote">(\W+?)\s(.+?)<\/p>/g, '<p class="logline emote"><span class="player">$1</span><span class="emote"> $2</span></p>\n' ); // Авторы эмоутов
 
   chatlogHTML = chatlogHTML.replace(/\s*?,/g, ","); // Удаляем пробелы перед запятыми
 
@@ -419,6 +416,10 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/\s*?\|+/g, ""); // Двойные ||
 
   chatlogHTML = chatlogHTML.replace(/<p><\/p>/g, ""); // Пустые абзацы
+
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+
+ 
 
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
@@ -593,7 +594,7 @@ function colorizePlayers(playerColorMap) {
   const chapters = document.querySelectorAll(".chapter");
 
   chapters.forEach((chapter) => {
-    const playerSpans = chapter.querySelectorAll(".player");
+    const playerSpans = chapter.querySelectorAll(".logline.say .player");
 
     playerSpans.forEach((span, index) => {
       const playerName = span.textContent.trim();

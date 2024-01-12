@@ -135,7 +135,7 @@ ul.players {
 }
 
 p.logline span.emote,
-p.emote span.emote {
+p.emote span.emote, p.emote {
   color: orange;
 }
 .player {
@@ -363,3 +363,7 @@ input:focus-visible {
 }
 
 .scroll {background:red}
+
+p.emote > span.player {
+  font-weight: unset;
+}
