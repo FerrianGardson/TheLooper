@@ -66,7 +66,7 @@ html {
   min-height: 100vh;
 }
 
-.player {
+.say > .player {
   font-weight: bold;
 }
 .speech {
@@ -137,9 +137,6 @@ ul.players {
 p.logline span.emote,
 p.emote span.emote, p.emote {
   color: orange;
-}
-.player {
-  font-weight: bold;
 }
 .speech {
   color: rgb(255, 255, 255);
@@ -363,7 +360,3 @@ input:focus-visible {
 }
 
 .scroll {background:red}
-
-p.emote > span.player {
-  font-weight: unset;
-}
