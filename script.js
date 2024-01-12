@@ -64,7 +64,7 @@ function formatLog() {
   addIdToChapter();
   emoteToSpeech();
   sayToEmote();
-  selectAll();
+  Filter();
   //cleanTextAgain();
   //correctSpelling();
 }
@@ -364,7 +364,7 @@ function cleanText() {
   ); // Ваш шёпот
 
   chatlogHTML = chatlogHTML.replace(
-    /<p class="logline say">(\d+|\>\>|[A-z]|&\?*|Zone|%s|Игрок|Для|Всем|Текст|Телепорт|С|Получен|Характеристики|Маг.уст:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила:|Ловк:|Инта:|Физ.уст:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
+    /<p class="logline say">(\d+|\>\>|[A-z]|&\?*|ZoneX:|Zone|%s|Игрок|Для|Всем|Текст|Эффект|щит|Телепорт|С|Получен|Характеристики|Маг.уст:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила:|Ловк:|Инта:|Физ.уст:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
     ""
   ); // Системные сообщения, начинаются с указанных слов
 
@@ -376,7 +376,7 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:"); // |Hchannel:PARTY|h[Лидер группы]|h Роуз: => [Лидер группы] Роуз:
 
   chatlogHTML = chatlogHTML.replace(
-    /<p.*?(действие|приглашается|\(|атакует|получает|ставит|добавлено|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*(\n|)<\/p>/gm,
+    /<p.*?(действие|приглашается|\(|атакует|получает|does not wish|к вам|ставит|добавлено|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*(\n|)<\/p>/gm,
     ""
   ); // Игрок %ООС-действие%
 
@@ -681,6 +681,7 @@ function colorizePlayers(playerColorMap) {
 // Пример использования функции с картой цветов
 const playerColorMap = {
   Фэрриан: "blue-3",
+  Роуз: "orange",
   Ананита: "green",
   Жуль: "red",
   Хейвинд: "red",
@@ -969,7 +970,7 @@ function combineFunctions() {
 function handleKeyPress(event) {
   if (event.keyCode === enterKeyCode) {
     // Ваш код для обработки нажатия Enter
-    applyselected();
+    Filter();
   }
 }
 
@@ -978,11 +979,11 @@ document
   .addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
       /* console.log("Нажат Enter в поле заполнения"); */
-      applyselected();
+      Filter();
     }
   });
 
-function applyselected() {
+function Filter() {
   /* console.log("Выделение ключевых слов"); */
 
   // Получаем ключевые слова из поля ввода с учетом слов внутри кавычек
@@ -1299,6 +1300,7 @@ document.addEventListener("keydown", function (event) {
     if (elementUnderCursor) {
       elementUnderCursor.classList.add("selected");
       console.log("Элементу присвоен класс selected:", elementUnderCursor);
+      scrollSave(elementUnderCursor);
 
       // Получаем родительский <div>
       const parentDiv = elementUnderCursor.parentElement;
@@ -1332,6 +1334,7 @@ document.addEventListener("keydown", function (event) {
         );
       }
     }
+    scrollTo();
   }
 });
 
@@ -1420,7 +1423,7 @@ document.addEventListener("keydown", function (event) {
         'Текущий <p class="selected"> под курсором:',
         currentselectedElement
       );
-      currentselectedElement.classList.add("scroll");
+      scrollSave(currentselectedElement);
 
       // Находим следующий ближайший <p class="selected">
       let nextselectedElement = currentselectedElement.nextElementSibling;
@@ -1474,6 +1477,20 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
+function scrollSave(element) {
+  if (element && element.classList) {
+    element.classList.add("scroll");
+  }
+}
+
+// Пример использования
+// Предположим, у вас есть элемент с id "myElement"
+const myElement = document.getElementById("myElement");
+
+// Вызываем функцию, передавая в нее элемент
+addScrollClass(myElement);
+
+
 function scrollTo() {
   document.querySelector(".scroll").scrollIntoView();
   window.scrollBy(
@@ -1485,6 +1502,8 @@ function scrollTo() {
     .querySelectorAll(".scroll")
     .forEach((element) => element.classList.remove("scroll"));
 }
+
+
 
 function exportHTML() {
   removeEmptyLines();
