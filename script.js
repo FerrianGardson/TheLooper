@@ -376,7 +376,7 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:"); // |Hchannel:PARTY|h[Лидер группы]|h Роуз: => [Лидер группы] Роуз:
 
   chatlogHTML = chatlogHTML.replace(
-    /<p.*?>([^\s]+)\s(действие|приглашается|получает|ставит|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*(\n|)<\/p>/gm,
+    /<p.*?(действие|приглашается|атакует|получает|ставит|добавлено|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*(\n|)<\/p>/gm,
     ""
   ); // Игрок %ООС-действие%
 
@@ -1471,18 +1471,18 @@ document.addEventListener("keydown", function (event) {
     } else {
       console.log('Нет текущего <p class="selected"> под курсором');
     }
-  }
-  console.log("Скроллим");
-  document.querySelector(".scroll").scrollIntoView();
-  window.scrollBy(
-    0,
-    -(document.querySelector(".nav")?.getBoundingClientRect()?.height || 0) -
-      32
-  );
+    console.log("Скроллим");
+    document.querySelector(".scroll").scrollIntoView();
+    window.scrollBy(
+      0,
+      -(document.querySelector(".nav")?.getBoundingClientRect()?.height || 0) -
+        32
+    );
 
-  document
-    .querySelectorAll(".scroll")
-    .forEach((element) => element.classList.remove("scroll"));
+    document
+      .querySelectorAll(".scroll")
+      .forEach((element) => element.classList.remove("scroll"));
+  }
 });
 
 function exportHTML() {
