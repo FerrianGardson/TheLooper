@@ -975,8 +975,6 @@ document
   });
 
 function Filter() {
-  /* console.log("Выделение ключевых слов"); */
-
   // Получаем ключевые слова из поля ввода с учетом слов внутри кавычек
   let keywordsInput = document.getElementById("keywordsInput").value;
 
@@ -995,33 +993,56 @@ function Filter() {
     }
   }
 
-  /* console.log("Захваченные переменные:"); */
-  // console.log(keywords);
+  // Выбираем все элементы div.chapter
+  $("div.chapter").each(function () {
+    const chapterId = this.id;
+    console.log(`Chapter ID: ${chapterId}`);
+        scrollSave(this)
 
-  // Добавляем класс 'selected' только для тех элементов, которые соответствуют текущему запросу
-  $("p").each(function () {
-    const text = $(this).text().toLowerCase().replace(/\s+/g, " ");
-    const hasKeyword = keywords.some((keyword) => text.includes(keyword));
+    // Для каждого параграфа внутри div.chapter
+    $(this)
+      .find("p")
+      .each(function () {
+        const text = $(this).text().toLowerCase().replace(/\s+/g, " ");
+        const hasKeyword = keywords.some((keyword) => text.includes(keyword));
+        const splitKeywords = keywords.map((keyword) => keyword.split("-"));
+        const isRemoveKeyword = splitKeywords.some(
+          (pair) => pair.length === 2 && text.includes(pair[1].trim())
+        );
 
-    // Разбиваем слова с минусом и проверяем, если второе слово со знаком минуса
-    const splitKeywords = keywords.map((keyword) => keyword.split("-"));
-    const isRemoveKeyword = splitKeywords.some(
-      (pair) => pair.length === 2 && text.includes(pair[1].trim())
-    );
-
-    if (hasKeyword && !isRemoveKeyword) {
-      /* console.log(`Adding class 'selected' to text: ${text}`); */
-      $(this).addClass("selected");
-    } else if (isRemoveKeyword) {
-      /* console.log(`Removing class 'selected' from text: ${text}`); */
-      $(this).removeClass("selected");
-    }
+        if (hasKeyword && !isRemoveKeyword) {
+          $(this).addClass("selected");
+        } else if (isRemoveKeyword) {
+          $(this).removeClass("selected");
+        }
+      });
+    openselectedChapters();
+    trimChapter($(this));
+    scrollToSaved();
+    debugger;
   });
-
-  openselectedChapters();
   removeCollapsed();
   scrollToNearestselected();
 }
+
+function trimChapter(chapterElement) {
+  const paragraphs = chapterElement.find("p"); // Получаем все параграфы внутри div.chapter
+  const selectedParagraphs = paragraphs.filter(".selected"); // Выбираем только те, у которых есть класс selected
+
+  if (selectedParagraphs.length > 0) {
+    const firstSelectedIndex = paragraphs.index(selectedParagraphs.first());
+    const lastSelectedIndex = paragraphs.index(selectedParagraphs.last());
+
+    // Удаляем все параграфы перед первым выбранным
+    paragraphs.slice(0, firstSelectedIndex).remove();
+
+    // Удаляем все параграфы после последнего выбранного
+    paragraphs.slice(lastSelectedIndex + 1).remove();
+  }
+}
+
+
+
 
 function openselectedChapters() {
   // Найти все элементы с классом .chapter
@@ -1320,7 +1341,7 @@ document.addEventListener("keydown", function (event) {
       }
     }
 
-    scrollToElement();
+    scrollToSaved();
   }
 });
 
@@ -1367,7 +1388,7 @@ document.addEventListener("keydown", function (event) {
       }
     }
 
-    scrollToElement();
+    scrollToSaved();
   }
 });
 
@@ -1460,7 +1481,7 @@ document.addEventListener("keydown", function (event) {
     } else {
       console.log('Нет текущего <p class="selected"> под курсором');
     }
-    scrollToElement();
+    scrollToSaved();
   }
 });
 
@@ -1470,7 +1491,7 @@ function scrollSave(element) {
   }
 }
 
-function scrollToElement() {
+function scrollToSaved() {
   document.querySelector(".scroll").scrollIntoView();
   window.scrollBy(
     0,
