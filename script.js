@@ -45,6 +45,11 @@ function chapterCollapse() {
   /* console.log("Функция chapterCollapse успешно выполнена"); */
 }
 
+function collapseChapters() {
+  $("div.chapter").addClass("collapsed");
+  $("div.chapter").removeClass("expanded");
+}
+
 // Главная функция
 
 function formatLog() {
@@ -997,7 +1002,7 @@ function Filter() {
   $("div.chapter").each(function () {
     const chapterId = this.id;
     console.log(`Chapter ID: ${chapterId}`);
-        scrollSave(this)
+    scrollSave(this);
 
     // Для каждого параграфа внутри div.chapter
     $(this)
@@ -1019,10 +1024,9 @@ function Filter() {
     openselectedChapters();
     trimChapter($(this));
     scrollToSaved();
-    debugger;
   });
   removeCollapsed();
-  scrollToNearestselected();
+  collapseChapters();
 }
 
 function trimChapter(chapterElement) {
@@ -1040,9 +1044,6 @@ function trimChapter(chapterElement) {
     paragraphs.slice(lastSelectedIndex + 1).remove();
   }
 }
-
-
-
 
 function openselectedChapters() {
   // Найти все элементы с классом .chapter
