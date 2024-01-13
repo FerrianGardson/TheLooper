@@ -199,7 +199,7 @@ function wrapChapters() {
     return;
   }
   // Создаем массив для хранения разделов
-  const chapters = [];
+  let chapters = [];
   // Итерируемся по всем элементам h2.date
   for (const date of dates) {
     // Получаем следующий элемент (первый сосед)
@@ -230,7 +230,29 @@ function wrapChapters() {
   // Встраиваем массив chapters в #chatlog
   chatlog.innerHTML = "";
   chatlog.append(...chapters);
+
+  // Находим все элементы div.chapter
+  chapters = document.querySelectorAll("div.chapter");
+
+  // Перебираем каждый элемент div.chapter
+  chapters.forEach((chapter) => {
+    // Создаем новый элемент div.content
+    const contentContainer = document.createElement("div");
+    contentContainer.classList.add("content");
+
+    // Находим все элементы p внутри текущего div.chapter
+    const paragraphs = chapter.querySelectorAll("p");
+
+    // Перебираем каждый элемент p и перемещаем их в div.content
+    paragraphs.forEach((paragraph) => {
+      contentContainer.appendChild(paragraph);
+    });
+
+    // Вставляем div.content после последнего дочернего элемента div.chapter
+    chapter.appendChild(contentContainer);
+  });
 }
+
 
 function collapseChapters() {
   const chapters = document.querySelectorAll("div.chapter");
@@ -354,7 +376,7 @@ function cleanText() {
 
   chatlogHTML = chatlogHTML.replace(/<p.*?(GUID|Fly|\-го уровня).*?<\/p>/g, ""); // Системные сообщения, содержат указанные слова в середине
 
-    // Оформление
+  // Оформление
 
   chatlogHTML = chatlogHTML.replace(/<p.*?>[А-я]+ шепчет:.*?<\/p>\n/g, ""); // Шепчет:
   chatlogHTML = chatlogHTML.replace(
