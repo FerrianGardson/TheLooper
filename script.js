@@ -18,7 +18,8 @@ function formatHTML() {
   combineFunctions();
   emoteToSpeech();
   sayToEmote();
-  //throw new Error("Скрипт прерван");
+  virt();
+  throw new Error("Скрипт прерван");
 }
 
 function correctSpelling() {
@@ -358,37 +359,58 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/кошка/g, "кот"); // Пример
   chatlogHTML = chatlogHTML.replace(/<\/p>/g, "</p>\n"); // Перенос
   chatlogHTML = chatlogHTML.replace(
-    /<p.*?>\s*(Вы|Аукцион|Zone|%s|Игрок|Персонаж|Сохранённый|Для|Всем|Текст|Эффект|щит|Телепорт|С\s|Получен|Характеристики|Маг.уст\:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила\:|Ловк\:|Инта\:|Физ.уст\:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?<\/p>\n/g,
+    /<p.*?>\s*(Вы|Аукцион|Zone|%s|Игрок|Ставка|За|Кожаная|Персонаж|Сохранённый|Для|Всем|Текст|Эффект|щит|Телепорт|С\s|Получен|Характеристики|Маг.уст\:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила\:|Ловк\:|Инта\:|Физ.уст\:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?<\/p>\n/g,
     ""
   ); // Системные сообщения, начинаются с указанных слов
-  chatlogHTML = chatlogHTML.replace(/<p.*?>((?![А-я]).+)<\/p>\n/g, ""); // Системные сообщения, начинаются со служебных символов
+
+  chatlogHTML = chatlogHTML.replace(/<p.*?>([A-z]|\>|\&).*?<\/p>\n/g, ""); // Системные сообщения, начинаются со служебных символов
+
   chatlogHTML = chatlogHTML.replace(
-    /<p.*?(действие|приглашается|\(|атакует|получает|does not wish|к вам|ставит|добавлено|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*?<\/p>\n/g,
+    /<p.*?\s(действие|приглашается|\(|атакует|рассказывает|получает|does not wish|к вам|смотрит на вас|кивает вам|смотрит на вас|ставит|добавлено|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*?<\/p>\n/g,
     ""
   ); // Игрок %ООС-действие%
-  chatlogHTML = chatlogHTML.replace(
-    /<p.*?(GUID|Fly|\d+\–го уровня).*?<\/p>\n/g,
-    ""
-  ); // Системные сообщения, содержат указанные слова в середине
+  chatlogHTML = chatlogHTML.replace(/<p.*?(GUID|Fly|\-го уровня).*?<\/p>/g, ""); // Системные сообщения, содержат указанные слова в середине
   chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:"); // |Hchannel:PARTY|h[Лидер группы]|h Роуз: => [Лидер группы] Роуз:
+
   chatlogHTML = chatlogHTML.replace(
-    /<p.*?>\[(Рейд|Лидер рейда|Лидер группы|Группа|Гильдия)\].*?<\/p>\n/g,
+    /<p.*?>\[(Рейд|Лидер рейда|Гильдия)\].*?<\/p>\n/g,
     ""
-  ); //ООС-каналы
+  ); //ООС-каналы (кроме группы)
+
+  if (!keepOOC) {
+    chatlogHTML = chatlogHTML.replace(
+      /<p.*?>\[(Лидер группы|Группа)\].*?<\/p>\n/g,
+      ""
+    ); //ООС-каналы (группа)
+  }
+
+  chatlogHTML = chatlogHTML.replace(
+    /(<p.*?logline)">\[(?:Группа|Лидер группы)\]\s([А-я]+):\s(.*?)<\/p>\n/g,
+    '$1 emote virt"><span class="player">$2</span><span class="emote">$3</span></p>/n'
+  ); // ООС в Эмоут
+
   chatlogHTML = chatlogHTML.replace(/<p.*?>[А-я]+ шепчет:.*?<\/p>\n/g, ""); // Шепчет:
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?"logline)">(.*)\sговорит:\s(.*?)<\/p>\n/g,
     '$1 say"><span class="player">$2</span><span class="speech">$3</span></p>\n'
   ); // Говорит:
   chatlogHTML = chatlogHTML.replace(
+    /(<p.*?"logline)">(.*)\sкричит:\s(.*?)<\/p>\n/g,
+    '$1 yell"><span class="player">$2</span><span class="speech">$3</span></p>\n'
+  ); // Кричит:
+  chatlogHTML = chatlogHTML.replace(
     /(<p.*?"logline)">([А-я]+)\s(.*?)<\/p>\n/g,
     '$1 emote"><span class="player">$2</span><span class="emote">$3</span></p>\n'
   ); // Эмоут
-  chatlogHTML = chatlogHTML.replace(/>[—–-]\s*/g, ">"); // Тире в начале
-  chatlogHTML = chatlogHTML.replace(/ [–-] ]/g, " — "); // Тире в процессе
+  chatlogHTML = chatlogHTML.replace(/^\s*[—–-]\s*/g, ""); // Тире в начале
+  chatlogHTML = chatlogHTML.replace(/\s[—–-]\s/g, " — "); // Тире в процессе
+  chatlogHTML = chatlogHTML.replace(/\|\d+\-\d+\(([А-я]+)\)/g, "$1"); // смотрит на |3-3(Халвиэль)
+  chatlogHTML = chatlogHTML.replace(/\|[a-z]+/g, ""); // HEX-код
+
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
   // debugger;
+
   document
     .querySelectorAll("#chatlog p:empty")
     .forEach((emptyParagraph) => emptyParagraph.remove()); // Удаление пустых абзацев
@@ -453,6 +475,69 @@ function combineSpeech() {
     if (currentPlayer != previousPlayer) {
       previousPlayer = currentPlayer;
       previousSpeech = currentSpeech;
+      previousLogline = currentLogline;
+      continue;
+    }
+    continue;
+  }
+}
+
+function combineYell() {
+  var currentPlayer = "";
+  var currentYell = "";
+  var currentLogline = "";
+  var previousPlayer = "";
+  var previousYell = "";
+  var previousLogline = "";
+  var combinedYell = "";
+  var currentPlayerElement = "";
+  var currentYellElement = "";
+  var elements = document.querySelectorAll("div.chapter p.logline");
+  var length = elements.length;
+  for (var i = 0; i < length; i++) {
+    var element = elements[i];
+    if (!element.classList.contains("yell")) {
+      currentPlayer = "";
+      currentYell = "";
+      currentLogline = "";
+      previousPlayer = "";
+      previousYell = "";
+      previousLogline = "";
+      continue;
+    } else {
+      currentLogline = element;
+      currentPlayerElement = element.querySelector("span.player");
+      currentPlayer = currentPlayerElement
+        ? currentPlayerElement.textContent
+        : "";
+      currentYellElement = element.querySelector("span.speech");
+      currentYell = currentYellElement ? currentYellElement.textContent : "";
+    }
+    if (!previousYell) {
+      previousYell = currentYell;
+      previousPlayer = currentPlayer;
+      previousLogline = currentLogline;
+      continue;
+    }
+    if (
+      previousPlayer &&
+      previousYell &&
+      currentYell &&
+      currentPlayer == previousPlayer
+    ) {
+      combinedYell = previousYell + " " + currentYell;
+      currentYellElement.textContent = combinedYell;
+      previousLogline.remove();
+      previousLogline = currentLogline;
+      previousYell = combinedYell;
+      previousPlayer = currentPlayer;
+      currentYellElement = "";
+      currentPlayerElement = "";
+      continue;
+    }
+    if (currentPlayer != previousPlayer) {
+      previousPlayer = currentPlayer;
+      previousYell = currentYell;
       previousLogline = currentLogline;
       continue;
     }
@@ -625,7 +710,7 @@ function sayToEmote() {
     let sayText = speech[i].innerHTML;
     // Обрабатываем текст с помощью регулярного выражения
     let updatedText = sayText.replace(
-      /([!?:.,])\s((?:–.+?(?:[!?:]|[!?:.,]\s–\s*|<\/span>)))/g,
+      /([!?:.,])\s((?:—.+?(?:[!?:]|[!?:.,]\s—\s*|<\/span>)))/g,
       '$1 <span class="emote">$2</span>'
     );
     speech[i].innerHTML = updatedText;
@@ -636,38 +721,48 @@ function sayToEmote() {
 }
 
 function emoteToSpeech() {
-  let emotes = "";
-  // Собираем все p.logline.emote
-  emotes = document.querySelectorAll("p.logline.emote");
-  // Индексируем и обрабатываем каждый p.logline.emote
+  // Получаем все элементы p.logline.emote
+  let emotes = document.querySelectorAll("p.logline.emote");
+
+  // Индексируем и обрабатываем каждый элемент p.logline.emote
   for (let i = 0; i < emotes.length; i++) {
     // Получаем текст из HTML-элемента
     let emoteText = emotes[i].innerHTML;
-    // Обрабатываем текст с помощью регулярного выражения (здесь просто пример)
+    console.log(`Исходный текст эмоута[${i}]: ${emoteText}`);
+
+    // Обрабатываем текст с использованием регулярного выражения (пример)
     let updatedEmoteText = emoteText.replace(
-      /(–\s(?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)(?:[,.!?] –|<\/span>))/g, // Баг: Если "- Имя" не в начале эмоута, всё равно подхватывает
+      /(—\s(?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)(?:[,.!?] —|<\/span>))/g,
       '<span class="speech">$1</span>'
     );
-    // Выводим обновленную версию текста
+
+    console.log(`Обновленный текст эмоута[${i}]: ${updatedEmoteText}`);
+
     // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
     emotes[i].innerHTML = updatedEmoteText;
   }
+
   // Находим все span.speech > span.emote
   var speechEmoteElements = document.querySelectorAll(
     "span.speech > span.emote"
   );
+
   // Заменяем символ "–" на "—"
   speechEmoteElements.forEach(function (element) {
     element.innerText = element.innerText.replace(/–/g, "—");
   });
+
   // Находим все span.emote > span.speech
   var emoteSpeechElements = document.querySelectorAll(
     "span.emote > span.speech"
   );
+
   // Заменяем символ "–" на "—"
   emoteSpeechElements.forEach(function (element) {
     element.innerText = element.innerText.replace(/–/g, "—");
   });
+
+  console.log("Функция emoteToSpeech успешно выполнена");
 }
 
 // Добавляем обработчик событий для всего #chatlog
@@ -696,6 +791,7 @@ function toggleCollapse(event) {
 function combineFunctions() {
   combineSpeech();
   combineEmotes();
+  combineYell();
 }
 document
   .getElementById("keywordsInput")
@@ -1043,3 +1139,28 @@ function removeEmptyLines() {
   document.body.innerHTML = cleanedHtml;
 }
 // Вызываем функцию для удаления пустых строк
+
+let keepOOC = true;
+let keepWhisper = false;
+
+const keepOOCCheckbox = document.getElementById("keepOOCCheckbox");
+
+// Обработчик изменения состояния чекбокса
+keepOOCCheckbox.addEventListener("change", function () {
+  // Обновляем значение переменной keepOOC в соответствии с состоянием чекбокса
+  keepOOC = this.checked;
+});
+
+function virt() {
+  // Получаем все элементы p.logline с классом virt
+  const virtLoglines = document.querySelectorAll("p.logline.virt");
+
+  // Итерируем по каждому элементу
+  virtLoglines.forEach((logline) => {
+    // Находим внутри элемента span.player и удаляем его
+    const playerSpan = logline.querySelector("span.player");
+    if (playerSpan) {
+      playerSpan.remove();
+    }
+  });
+}

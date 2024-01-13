@@ -31,6 +31,7 @@
     // chatlogHTML = chatlogHTML.replace(/\n<\//g, '</'); // Багфикс переноса
   
     chatlogHTML = chatlogHTML.replace(/<p><\/p>/g, ""); // Пустые абзацы
+    
     chatlogHTML = chatlogHTML.replace(/\|\d\–\d\((.+?)\)/g, "$1"); // Кривые падежи
   
     chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:"); // |Hchannel:PARTY|h[Лидер группы]|h Роуз: => [Лидер группы] Роуз:

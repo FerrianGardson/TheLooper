@@ -18,6 +18,7 @@
   --purple-1: #4f4789ff;
   --purple-2: #6420ff;
   --purple-3: #ae5eff;
+  --whisper: #d361d3;
 }
 
 .red {
@@ -363,7 +364,7 @@ input:focus-visible {
   color: var(--black);
 }
 .whisper {
-  color: #d361d3;
+  color: var(--whisper);
 }
 
 .isolated {
@@ -387,4 +388,8 @@ input:focus-visible {
 
 span::after {
     content: " ";
+}
+
+.virt > .emote {
+    color: var(--whisper)!important;
 }
