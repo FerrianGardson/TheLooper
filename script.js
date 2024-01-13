@@ -73,10 +73,23 @@ async function handleFileInputTxt(event) {
 function convertTimestamp(timestamp) {
   // Заменяем точку на двоеточие
   const timestampWithColon = timestamp.replace(".", ":");
+  console.log("timestampWithColon:", timestampWithColon);
+
   // Разбиваем таймштамп на части
   const [, month, day, time] = timestampWithColon.match(/^(\d+)\/(\d+)\s(.+)$/);
+  console.log("month:", month);
+  console.log("day:", day);
+  console.log("time:", time);
+
   const [hour, minute, secondMillis] = time.split(":");
+  console.log("hour:", hour);
+  console.log("minute:", minute);
+  console.log("secondMillis:", secondMillis);
+
   const [second, millis = "000"] = secondMillis.split(".");
+  console.log("second:", second);
+  console.log("millis:", millis);
+
   // Формируем стандартный таймштамп
   const isoTimestamp = new Date(
     new Date().getFullYear(),
@@ -87,8 +100,11 @@ function convertTimestamp(timestamp) {
     second,
     millis
   ).toISOString();
+  console.log("isoTimestamp:", isoTimestamp);
+
   return isoTimestamp;
 }
+
 
 function importTxt(text) {
   const logLines = text.split("\n");
@@ -354,7 +370,6 @@ function addColonToEnd() {
 // Чистка от мусора
 
 function cleanText() {
-  console.log("Определение");
   chatlogHTML = document.getElementById("chatlog").innerHTML; // Определение
   chatlogHTML = chatlogHTML.replace(/кошка/g, "кот"); // Пример
   chatlogHTML = chatlogHTML.replace(/<\/p>/g, "</p>\n"); // Перенос
@@ -383,6 +398,8 @@ function cleanText() {
       ""
     ); //ООС-каналы (группа)
   }
+
+  
 
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?logline)">\[(?:Группа|Лидер группы)\]\s([А-я]+):\s(.*?)<\/p>\n/g,
@@ -580,15 +597,13 @@ function combineEmotes() {
       previousEmote = currentEmote;
       previousPlayer = currentPlayer;
       previousLogline = currentLogline;
-      //console.log("Первый эмоут", previousLogline);
-      continue;
+      //      continue;
     }
     if (currentPlayer != previousPlayer) {
       previousPlayer = currentPlayer;
       previousEmote = currentEmote;
       previousLogline = currentLogline;
-      //console.log("Новый игрок", currentPlayer);
-      continue;
+      //      continue;
     }
     if (
       previousPlayer &&
@@ -715,8 +730,7 @@ function sayToEmote() {
     );
     speech[i].innerHTML = updatedText;
     // Выводим обновленную версию текста
-    //console.log(`Say ${i + 1} - Updated Emote: ${updatedText}`);
-    // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
+    //    // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
   }
 }
 
@@ -728,15 +742,12 @@ function emoteToSpeech() {
   for (let i = 0; i < emotes.length; i++) {
     // Получаем текст из HTML-элемента
     let emoteText = emotes[i].innerHTML;
-    console.log(`Исходный текст эмоута[${i}]: ${emoteText}`);
 
     // Обрабатываем текст с использованием регулярного выражения (пример)
     let updatedEmoteText = emoteText.replace(
       /(—\s(?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)(?:[,.!?] —|<\/span>))/g,
       '<span class="speech">$1</span>'
     );
-
-    console.log(`Обновленный текст эмоута[${i}]: ${updatedEmoteText}`);
 
     // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
     emotes[i].innerHTML = updatedEmoteText;
@@ -761,8 +772,6 @@ function emoteToSpeech() {
   emoteSpeechElements.forEach(function (element) {
     element.innerText = element.innerText.replace(/–/g, "—");
   });
-
-  console.log("Функция emoteToSpeech успешно выполнена");
 }
 
 // Добавляем обработчик событий для всего #chatlog
@@ -797,7 +806,6 @@ document
   .getElementById("keywordsInput")
   .addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
-      /* console.log("Нажат Enter в поле заполнения"); */
       Filter();
     }
   });
@@ -1016,14 +1024,11 @@ document.addEventListener("keydown", function (event) {
         elementsBetween.forEach((element) => {
           if (!element.classList.contains("selected")) {
             element.classList.add("selected");
-            console.log("Элементу присвоен класс selected:", element);
           }
         });
       } else {
-        console.log('Нет следующего ближайшего <p class="selected">');
       }
     } else {
-      console.log('Нет текущего <p class="selected"> под курсором');
     }
     scrollToSaved();
   }
@@ -1071,7 +1076,6 @@ function exportHTML() {
 var isAllSellected = false; // Переменная для отслеживания состояния
 
 function selectAll() {
-  console.log("selectAll");
   // Находим все элементы <p> с классом logline
   var loglineElements = document.querySelectorAll("p.logline");
   // Переключаем состояние и присваиваем/удаляем класс select
@@ -1095,7 +1099,6 @@ function debug() {
   // Удаляем каждый найденный пустой элемент
   emptyImportantParagraphs.forEach((element) => {
     element.remove();
-    console.log('Пустой элемент <p class="important"> удален:', element);
   });
   removeEmptyLines();
 }
