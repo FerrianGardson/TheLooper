@@ -126,13 +126,75 @@ async function handleFileInputTxt(event) {
   if (file) {
     // Читаем содержимое файла как текст
     const text = await file.text();
-
     // Рендерим чатлог с текстовым содержимым файла
-    renderChatLog(text);
+    importTxt(text);
   } else {
     console.error("Файл не найден");
   }
 }
+
+function convertTimestamp(timestamp) {
+  console.log(`Input timestamp: ${timestamp}`);
+
+  // Используем регулярное выражение для извлечения даты и времени
+  const match = timestamp.match(/^(\d+\/\d+)\s(\d+:\d+:\d+\.\d+)$/);
+
+  if (!match) {
+    console.error(`Invalid timestamp format: ${timestamp}`);
+    return null;
+  }
+
+  const [, datePart, timePart] = match;
+  console.log(`Parsed date: ${datePart}, Parsed time: ${timePart}`);
+
+  const [month, day] = datePart.split("/");
+  console.log(`Parsed date: month=${month}, day=${day}, time=${timePart}`);
+
+  const [hour, minute, second] = timePart.split(":");
+  console.log(`Parsed time: hour=${hour}, minute=${minute}, second=${second}`);
+
+  const year = new Date().getFullYear();
+  console.log(`Current year: ${year}`);
+
+  const isoTimestamp = `${year}-${month.padStart(2, "0")}-${day.padStart(
+    2,
+    "0"
+  )}T${hour.padStart(2, "0")}:${minute.padStart(2, "0")}:${second.padStart(
+    2,
+    "0"
+  )}.000Z`;
+
+  console.log(`Output ISO timestamp: ${isoTimestamp}`);
+  return isoTimestamp;
+}
+
+
+
+function importTxt(text) {
+  const logLines = text.split("\n");
+  const chatlog = document.querySelector("#chatlog");
+
+  for (const line of logLines) {
+    if (/\d/.test(line)) {
+      const timestampMatch = line.match(/^(\S+\s\S+)/);
+      const timestamp = timestampMatch ? timestampMatch[1] : "";
+      const loglineBody = line.replace(timestamp, "");
+
+      if (timestamp) {
+        const p = document.createElement("p");
+        p.setAttribute("timestamp", convertTimestamp(timestamp));
+        p.className = "logline say";
+        p.textContent = loglineBody;
+
+        chatlog.appendChild(p);
+      }
+    }
+  }
+}
+
+
+
+
 
 async function handleFileInputHtml(event) {
   // Очищаем содержимое div.chatlog перед загрузкой нового файла
@@ -153,9 +215,6 @@ async function handleFileInputHtml(event) {
 
     if (newChatlog) {
       chatlog.innerHTML = newChatlog.innerHTML;
-      // Можно также скопировать дополнительные атрибуты, например, классы или стили,
-      // если они необходимы для правильного отображения
-      chapterCollapse();
     } else {
       console.error("#chatlog не найден в загруженном HTML");
     }
@@ -166,7 +225,7 @@ async function handleFileInputHtml(event) {
 
 function renderChatLog(text) {
   // Разбиваем текст на главы (или что-то подобное)
-  const chapters = divideChapters(text);
+  const chapters = divideChaptersByInterval(text);
 
   // Создаем элементы для каждой главы и добавляем их в чатлог
   for (const [chapterTitle, chapterLines] of Object.entries(chapters)) {
@@ -209,7 +268,7 @@ function createParagraph(text) {
 
 // Разделение на главы
 
-function divideChapters(text) {
+function divideChaptersByDate(text) {
   /* console.log("Разделение на главы");
    */ const logLines = text.trim().split("\n");
   const chapters = {};
@@ -286,7 +345,7 @@ function formatTimestamps() {
   const cleanedHTML = chatlogHTML.replace(
     /(\d{1,2}\/\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}\.\d{1,3}\s+?)/g,
     '<p class="logline say">'
-    /* <p class="time">$1</p> */
+/* <p class="time">$1</p> */
   );
   chatlog.innerHTML = cleanedHTML;
 }
@@ -366,7 +425,7 @@ function cleanText() {
     '<p class="logline whisper">Вы шепчете <span class="player">$1</span>: <span class="speech">$2</span></p>'
   ); // Ваш шёпот
 
-  chatlogHTML = chatlogHTML.replace(
+    chatlogHTML = chatlogHTML.replace(
     /<p class="logline say">(\d+|\>\>|[A-z]|&\?*|ZoneX:|Аукцион|Zone|%s|Игрок|Для|Всем|Текст|Эффект|щит|Телепорт|С|Получен|Характеристики|Маг.уст:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила:|Ловк:|Инта:|Физ.уст:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
     ""
   ); // Системные сообщения, начинаются с указанных слов
