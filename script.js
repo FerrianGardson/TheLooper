@@ -122,7 +122,7 @@ function importTxt(text) {
       if (timestamp) {
         const p = document.createElement("p");
         p.setAttribute("timestamp", convertTimestamp(timestamp));
-        p.className = "logline say";
+        p.className = "logline";
         p.textContent = loglineBody;
 
         chatlog.appendChild(p);
@@ -145,24 +145,29 @@ function splitSessions() {
       if (prevTimestamp) {
         const timeDifference = currentTimestamp - prevTimestamp;
 
-        if (timeDifference > 4 * 60 * 60 * 1000) {
-          console.log("Time difference greater than 4 hours. Adding date header.");
+        if (timeDifference > 1 * 60 * 60 * 1000) {
           const dateHeader = document.createElement("h2");
           dateHeader.className = "date";
           dateHeader.textContent = getFormattedDate(timestamp);
           paragraph.parentNode.insertBefore(dateHeader, paragraph);
         }
       } else {
-        console.log("First timestamp. Adding date header.");
         const dateHeader = document.createElement("h2");
         dateHeader.className = "date";
         dateHeader.textContent = getFormattedDate(timestamp);
         paragraph.parentNode.insertBefore(dateHeader, paragraph);
       }
+
+      // Добавляем содержимое пустого абзаца, если таковой имеется
+      if (!paragraph.textContent.trim()) {
+        paragraph.textContent = "ПУСТОЙ АБЗАЦ";
+      }
+
       prevTimestamp = currentTimestamp;
     }
   });
 }
+
 
 // ... (ваш остальной код)
 
@@ -388,9 +393,8 @@ function addColonToEnd() {
 // Чистка от мусора
 
 function cleanText() {
-  //console.log("Чистка от мусора");
 
-  let chatlogHTML = document.getElementById("chatlog").innerHTML; // Определение
+  chatlogHTML = document.getElementById("chatlog").innerHTML; // Определение
 
   chatlogHTML = chatlogHTML.replace(/кошка/g, "кот"); // Пример
 
@@ -470,25 +474,12 @@ function cleanText() {
 
   chatlogHTML = chatlogHTML.replace(/\s*?\|+/g, ""); // Двойные ||
 
-  chatlogHTML = chatlogHTML.replace(/<p><\/p>/g, ""); // Пустые абзацы
-
-  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
   // debugger;
 }
 
-function cleanTextAgain() {
-  //console.log("Чистка от мусора");
-
-  let chatlogHTML = document.getElementById("chatlog").innerHTML; // Определение
-
-  chatlogHTML = chatlogHTML.replace(/<p><\/p>/g, ""); // Пустые абзацы
-
-  // Вывод для дебага
-  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
-}
 
 // Объединение чатбоксов
 
