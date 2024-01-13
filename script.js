@@ -73,22 +73,13 @@ async function handleFileInputTxt(event) {
 function convertTimestamp(timestamp) {
   // Заменяем точку на двоеточие
   const timestampWithColon = timestamp.replace(".", ":");
-  console.log("timestampWithColon:", timestampWithColon);
 
   // Разбиваем таймштамп на части
   const [, month, day, time] = timestampWithColon.match(/^(\d+)\/(\d+)\s(.+)$/);
-  console.log("month:", month);
-  console.log("day:", day);
-  console.log("time:", time);
 
   const [hour, minute, secondMillis] = time.split(":");
-  console.log("hour:", hour);
-  console.log("minute:", minute);
-  console.log("secondMillis:", secondMillis);
 
   const [second, millis = "000"] = secondMillis.split(".");
-  console.log("second:", second);
-  console.log("millis:", millis);
 
   // Формируем стандартный таймштамп
   const isoTimestamp = new Date(
@@ -100,11 +91,9 @@ function convertTimestamp(timestamp) {
     second,
     millis
   ).toISOString();
-  console.log("isoTimestamp:", isoTimestamp);
 
   return isoTimestamp;
 }
-
 
 function importTxt(text) {
   const logLines = text.split("\n");
@@ -372,39 +361,26 @@ function addColonToEnd() {
 function cleanText() {
   chatlogHTML = document.getElementById("chatlog").innerHTML; // Определение
   chatlogHTML = chatlogHTML.replace(/кошка/g, "кот"); // Пример
+
   chatlogHTML = chatlogHTML.replace(/<\/p>/g, "</p>\n"); // Перенос
+
+  // Системные сообщения
+
   chatlogHTML = chatlogHTML.replace(
-    /<p.*?>\s*(Вы|Аукцион|Zone|%s|Игрок|Ставка|За|Кожаная|Персонаж|Сохранённый|Для|Всем|Текст|Эффект|щит|Телепорт|С\s|Получен|Характеристики|Маг.уст\:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила\:|Ловк\:|Инта\:|Физ.уст\:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?<\/p>\n/g,
+    /<p.*?>\s*(Вы|Аукцион|%s|Игрок|Ставка|За|Кожаная|Персонаж|Сохранённый|Для|Всем|Текст|Эффект|щит|Телепорт|С\s|Получен|Характеристики|Маг.уст\:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила\:|Ловк\:|Инта\:|Физ.уст\:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?<\/p>\n/g,
     ""
   ); // Системные сообщения, начинаются с указанных слов
 
-  chatlogHTML = chatlogHTML.replace(/<p.*?>([A-z]|\>|\&).*?<\/p>\n/g, ""); // Системные сообщения, начинаются со служебных символов
+  chatlogHTML = chatlogHTML.replace(/<p.*?>([A-z]|\>|\&|\(|\d).*?<\/p>\n/g, ""); // Системные сообщения, начинаются со служебных символов
 
   chatlogHTML = chatlogHTML.replace(
     /<p.*?\s(действие|приглашается|\(|атакует|рассказывает|получает|does not wish|к вам|смотрит на вас|кивает вам|смотрит на вас|ставит|добавлено|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*?<\/p>\n/g,
     ""
   ); // Игрок %ООС-действие%
+
   chatlogHTML = chatlogHTML.replace(/<p.*?(GUID|Fly|\-го уровня).*?<\/p>/g, ""); // Системные сообщения, содержат указанные слова в середине
-  chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:"); // |Hchannel:PARTY|h[Лидер группы]|h Роуз: => [Лидер группы] Роуз:
 
-  chatlogHTML = chatlogHTML.replace(
-    /<p.*?>\[(Рейд|Лидер рейда|Гильдия)\].*?<\/p>\n/g,
-    ""
-  ); //ООС-каналы (кроме группы)
-
-  if (!keepOOC) {
-    chatlogHTML = chatlogHTML.replace(
-      /<p.*?>\[(Лидер группы|Группа)\].*?<\/p>\n/g,
-      ""
-    ); //ООС-каналы (группа)
-  }
-
-  
-
-  chatlogHTML = chatlogHTML.replace(
-    /(<p.*?logline)">\[(?:Группа|Лидер группы)\]\s([А-я]+):\s(.*?)<\/p>\n/g,
-    '$1 emote virt"><span class="player">$2</span><span class="emote">$3</span></p>/n'
-  ); // ООС в Эмоут
+    // Оформление
 
   chatlogHTML = chatlogHTML.replace(/<p.*?>[А-я]+ шепчет:.*?<\/p>\n/g, ""); // Шепчет:
   chatlogHTML = chatlogHTML.replace(
@@ -419,10 +395,34 @@ function cleanText() {
     /(<p.*?"logline)">([А-я]+)\s(.*?)<\/p>\n/g,
     '$1 emote"><span class="player">$2</span><span class="emote">$3</span></p>\n'
   ); // Эмоут
-  chatlogHTML = chatlogHTML.replace(/^\s*[—–-]\s*/g, ""); // Тире в начале
-  chatlogHTML = chatlogHTML.replace(/\s[—–-]\s/g, " — "); // Тире в процессе
+
+  // Вирт
+
+  chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:"); // |Hchannel:PARTY|h[Лидер группы]|h Роуз: => [Лидер группы] Роуз:
+
+  if (!keepOOC) {
+    chatlogHTML = chatlogHTML.replace(
+      /<p.*?>\[(Лидер группы|Группа)\].*?<\/p>\n/g,
+      ""
+    ); //ООС-каналы (группа)
+  }
+
+  chatlogHTML = chatlogHTML.replace(
+    /(<p.*?logline)">\[(?:Группа|Лидер группы)\]\s*([А-я]+):\s*(.*?)<\/p>/g,
+    '$1 emote virt"><span class="player">$2</span><span class="emote">$3</span></p>'
+  ); // ООС в Эмоут
+
+  chatlogHTML = chatlogHTML.replace(
+    /<p.*?>\[(Рейд|Лидер рейда|Гильдия)\].*?<\/p>\n/g,
+    ""
+  ); //ООС-каналы (кроме группы)
+
+  // Прочее
+
+  chatlogHTML = chatlogHTML.replace(/[—–-]\s/g, "— "); // Тире в процессе
   chatlogHTML = chatlogHTML.replace(/\|\d+\-\d+\(([А-я]+)\)/g, "$1"); // смотрит на |3-3(Халвиэль)
   chatlogHTML = chatlogHTML.replace(/\|[a-z]+/g, ""); // HEX-код
+  chatlogHTML = chatlogHTML.replace(/speech">\s*[—–-]\s*/g, 'speech">'); // Тире в начале
 
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
@@ -597,13 +597,13 @@ function combineEmotes() {
       previousEmote = currentEmote;
       previousPlayer = currentPlayer;
       previousLogline = currentLogline;
-      //      continue;
+      continue;
     }
     if (currentPlayer != previousPlayer) {
       previousPlayer = currentPlayer;
       previousEmote = currentEmote;
       previousLogline = currentLogline;
-      //      continue;
+      continue;
     }
     if (
       previousPlayer &&
@@ -624,6 +624,7 @@ function combineEmotes() {
     continue;
   }
 }
+
 // Список игроков
 
 function colorizePlayers(playerColorMap) {
@@ -718,7 +719,7 @@ const playerColorMap = {
 function sayToEmote() {
   let speech = "";
   // Собираем все p.logline.say
-  speech = document.querySelectorAll("p.say");
+  speech = document.querySelectorAll("p.say, p.yell");
   // Индексируем и обрабатываем каждый p.logline.say
   for (let i = 0; i < speech.length; i++) {
     // Получаем текст из HTML-элемента

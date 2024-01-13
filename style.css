@@ -393,3 +393,12 @@ span::after {
 .virt > .emote {
     color: var(--whisper)!important;
 }
+
+.yell span.emote {
+  font-weight: normal;
+}
+
+span.fix {
+  opacity: 0.5;
+  font-weight: 100;
+}
