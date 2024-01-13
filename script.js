@@ -207,55 +207,37 @@ function splitSessions() {
   });
 }
 
-function wrapContentInChapter() {
-  console.log("Чаптер");
-  const dateHeaders = document.querySelectorAll("h2.date");
+function getFormattedDate(timestamp) {
+  const date = new Date(timestamp);
+  const monthNames = [
+    "января",
+    "февраля",
+    "марта",
+    "апреля",
+    "мая",
+    "июня",
+    "июля",
+    "августа",
+    "сентября",
+    "октября",
+    "ноября",
+    "декабря",
+  ];
 
-  dateHeaders.forEach((dateHeader) => {
-    const contentDiv = getNextSiblingByClass(dateHeader, "content");
-    if (contentDiv) {
-      const timestamp = getTimestampFromContent(contentDiv);
-      const chapterDiv = document.createElement("div");
-      chapterDiv.className = "chapter";
-      chapterDiv.setAttribute("timestamp", timestamp);
-
-      // Обернуть h2.date и .content внутри .chapter
-      wrapElementsInParent(chapterDiv, dateHeader, contentDiv);
-    }
-  });
+  const formattedDate = `Запись от ${date.getDate()} ${
+    monthNames[date.getMonth()]
+  }, ${padZero(date.getHours())}:${padZero(date.getMinutes())}`;
+  return formattedDate;
 }
 
-function getNextSiblingByClass(element, className) {
-  let sibling = element.nextElementSibling;
-  while (sibling) {
-    if (sibling.classList.contains(className)) {
-      return sibling;
-    }
-    sibling = sibling.nextElementSibling;
-  }
-  return null;
+function padZero(number) {
+  return number.toString().padStart(2, "0");
 }
 
-function getTimestampFromContent(contentDiv) {
-  const paragraph = contentDiv.querySelector("p.logline.say");
-  if (paragraph) {
-    return paragraph.getAttribute("timestamp");
-  }
-  return null;
-}
-
-function wrapElementsInParent(parent, ...elements) {
-  const firstElement = elements[0];
-  // Создаем копии элементов для вставки внутрь родительского элемента
-  const clonedElements = elements.map((element) => element.cloneNode(true));
-  // Очищаем первоначальный контент
-  firstElement.innerHTML = "";
-
-  clonedElements.forEach((clonedElement) => {
-    parent.appendChild(clonedElement);
-  });
-  // Вставляем обернутые элементы перед первым элементом
-  firstElement.parentNode.insertBefore(parent, firstElement);
+function getTimeDifference(timestamp1, timestamp2) {
+  const date1 = new Date(timestamp1);
+  const date2 = new Date(timestamp2);
+  return Math.abs(date2 - date1);
 }
 
 function wrapParagraphsInContentDiv() {
@@ -292,38 +274,10 @@ function insertContentDiv(contentDiv, nextElement) {
   container.insertBefore(contentDiv, nextElement);
 }
 
-function getFormattedDate(timestamp) {
-  const date = new Date(timestamp);
-  const monthNames = [
-    "января",
-    "февраля",
-    "марта",
-    "апреля",
-    "мая",
-    "июня",
-    "июля",
-    "августа",
-    "сентября",
-    "октября",
-    "ноября",
-    "декабря",
-  ];
 
-  const formattedDate = `Запись от ${date.getDate()} ${
-    monthNames[date.getMonth()]
-  }, ${padZero(date.getHours())}:${padZero(date.getMinutes())}`;
-  return formattedDate;
-}
 
-function padZero(number) {
-  return number.toString().padStart(2, "0");
-}
 
-function getTimeDifference(timestamp1, timestamp2) {
-  const date1 = new Date(timestamp1);
-  const date2 = new Date(timestamp2);
-  return Math.abs(date2 - date1);
-}
+// КОНЕЦ
 
 async function handleFileInputHtml(event) {
   // Очищаем содержимое div.chatlog перед загрузкой нового файла
