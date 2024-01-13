@@ -66,6 +66,7 @@ html {
   padding: 4rem;
   padding-top: 12rem;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 .say > .player {
