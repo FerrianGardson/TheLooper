@@ -10,8 +10,9 @@ function toggleselectedClass(event) {
 // Главная функция
 
 function formatHTML() {
-  let chatlogHTML = document.getElementById("chatlog").innerHTML;
   splitSessions();
+  // throw new Error("Скрипт прерван");
+  wrapChapters();
   // cleanText();
   // yourEmotes();
   // colorizePlayers(playerColorMap);
@@ -138,30 +139,34 @@ function splitSessions() {
 
   paragraphs.forEach((paragraph) => {
     const timestamp = paragraph.getAttribute("timestamp");
+
     if (timestamp) {
+      const currentTimestamp = new Date(timestamp);
       if (prevTimestamp) {
-        const timeDifference = getTimeDifference(prevTimestamp, timestamp);
-        // console.log( `Time difference between ${prevTimestamp} and ${timestamp}: ${timeDifference} milliseconds` );
+        const timeDifference = currentTimestamp - prevTimestamp;
+
         if (timeDifference > 4 * 60 * 60 * 1000) {
-          // console.log(`Adding <h2> between ${prevTimestamp} and ${timestamp}`);
-          // Если разница больше 4 часов, добавляем <h2> с датой
+          console.log("Time difference greater than 4 hours. Adding date header.");
           const dateHeader = document.createElement("h2");
           dateHeader.className = "date";
           dateHeader.textContent = getFormattedDate(timestamp);
           paragraph.parentNode.insertBefore(dateHeader, paragraph);
         }
       } else {
-        // Вставляем <h2> перед первым таймштампом
+        console.log("First timestamp. Adding date header.");
         const dateHeader = document.createElement("h2");
         dateHeader.className = "date";
         dateHeader.textContent = getFormattedDate(timestamp);
         paragraph.parentNode.insertBefore(dateHeader, paragraph);
       }
-      prevTimestamp = timestamp;
+      prevTimestamp = currentTimestamp;
     }
   });
-  wrapChapters();
 }
+
+// ... (ваш остальной код)
+
+
 
 function getFormattedDate(timestamp) {
   const date = new Date(timestamp);
@@ -939,19 +944,13 @@ function toggleCollapse(event) {
 
   if (chapter) {
     // Выводим в консоль лог текущего состояния "collapsed" до переключения
-    console.log(
-      "Текущее состояние 'collapsed':",
-      chapter.classList.contains("collapsed")
-    );
+    // console.log( "Текущее состояние 'collapsed':", chapter.classList.contains("collapsed") );
 
     // Переключаем класс "collapsed"
     chapter.classList.toggle("collapsed");
 
     // Выводим в консоль лог состояния "collapsed" после переключения
-    console.log(
-      "Новое состояние 'collapsed':",
-      chapter.classList.contains("collapsed")
-    );
+    // console.log( "Новое состояние 'collapsed':", chapter.classList.contains("collapsed") );
   } else {
     console.error(
       "Не найден элемент с классом 'chapter' в родительской цепочке."
