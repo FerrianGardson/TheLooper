@@ -7,49 +7,6 @@ function toggleselectedClass(event) {
   }
 }
 
-var dates = document.querySelectorAll(".date");
-dates.forEach((date) => {
-  date.addEventListener("click", toggleContent);
-});
-
-function chapterCollapse() {
-  // Сворачиваем главы
-  /* console.log("Начало функции chapterCollapse"); */
-
-  const chapterElements = document.querySelectorAll(".chapter");
-
-  // Удаляем классы expanded и collapsed у всех элементов
-  chapterElements.forEach((chapterElement) => {
-    chapterElement.classList.remove("expanded", "collapsed");
-  });
-
-  if (chapterElements.length === 1) {
-    /* console.log("Есть только одна глава, разворачиваем"); */
-    chapterElements[0].classList.add("expanded");
-  } else {
-    /* console.log("Больше одной главы, сворачиваем все кроме первой"); */
-    chapterElements.forEach((chapterElement, index) => {
-      if (index !== 0) {
-        chapterElement.classList.add("collapsed");
-      }
-    });
-  }
-
-  /* console.log("А первой добавляется expanded"); */
-  chapterElements[0].classList.add("expanded");
-  dates = document.querySelectorAll(".date");
-  dates.forEach((date) => {
-    date.addEventListener("click", toggleContent);
-  });
-
-  /* console.log("Функция chapterCollapse успешно выполнена"); */
-}
-
-function collapseChapters() {
-  $("div.chapter").addClass("collapsed");
-  $("div.chapter").removeClass("expanded");
-}
-
 // Главная функция
 
 function formatHTML() {
@@ -303,8 +260,15 @@ function wrapChapters() {
     // Создаем массив для хранения элементов раздела
     const chapterElements = [date];
 
+    // Запоминаем timestamp первого p в массиве
+    let firstPTimestamp = null;
+
     // Цикл добавления элементов в раздел
     while (nextElement && nextElement.tagName === "P") {
+      if (!firstPTimestamp) {
+        // Запоминаем timestamp первого p
+        firstPTimestamp = nextElement.getAttribute("timestamp");
+      }
       chapterElements.push(nextElement);
       nextElement = nextElement.nextElementSibling;
     }
@@ -312,20 +276,21 @@ function wrapChapters() {
     // Создаем div.chapter и добавляем в него элементы раздела
     const chapterDiv = document.createElement("div");
     chapterDiv.classList.add("chapter");
+    chapterDiv.setAttribute("timestamp", firstPTimestamp);
+    chapterDiv.classList.add("collapsed");
     chapterDiv.append(...chapterElements);
 
     // Добавляем div.chapter в массив
     chapters.push(chapterDiv);
 
     // Выводим в консоль лог div.chapter
-    console.log("div.chapter:", chapterDiv);
+    // console.log("div.chapter:", chapterDiv);
   }
 
   // Встраиваем массив chapters в #chatlog
-  chatlog.innerHTML = '';
+  chatlog.innerHTML = "";
   chatlog.append(...chapters);
 }
-
 
 // КОНЕЦ
 
@@ -368,119 +333,6 @@ function renderChatLog(text) {
 
   // Дополнительные операции форматирования лога
   formatLog();
-}
-
-// Создание глав
-
-function createChapterElement(chapterTitle, chapterLines) {
-  const chapter = document.createElement("div");
-  chapter.classList.add("chapter", "expanded");
-
-  const chapterHeader = document.createElement("h2");
-  chapterHeader.classList.add("date");
-  chapterHeader.textContent = chapterTitle;
-  chapter.appendChild(chapterHeader);
-
-  const chapterContent = document.createElement("div");
-  chapterContent.classList.add("content");
-
-  chapterLines.forEach((line) => {
-    chapterContent.appendChild(createParagraph(line));
-  });
-
-  chapter.appendChild(chapterContent);
-
-  return chapter;
-}
-
-function createParagraph(text) {
-  const paragraph = document.createElement("p");
-  paragraph.textContent = text;
-  return paragraph;
-}
-
-// Разделение на главы
-
-function divideChaptersByDate(text) {
-  /* console.log("Разделение на главы");
-   */ const logLines = text.trim().split("\n");
-  const chapters = {};
-
-  logLines.forEach((line) => {
-    const match = line.match(/^(\d+?)\/(\d+?)\s/);
-    if (match) {
-      const month = parseInt(match[1]);
-      const day = parseInt(match[2]);
-      let date = new Date();
-      date.setUTCMonth(month - 1);
-      date.setUTCDate(day);
-
-      const monthNames = [
-        "января",
-        "февраля",
-        "марта",
-        "апреля",
-        "мая",
-        "июня",
-        "июля",
-        "августа",
-        "сентября",
-        "октября",
-        "ноября",
-        "декабря",
-      ];
-      const monthName = monthNames[date.getUTCMonth()];
-      const chapterTitle = `Запись от ${date.getUTCDate()} ${monthName}`;
-
-      if (!chapters[chapterTitle]) {
-        chapters[chapterTitle] = [];
-      }
-      chapters[chapterTitle].push(line);
-    }
-  });
-
-  // Изменили строку ниже: меняем порядок глав в объекте chapters
-  const reversedChapters = Object.fromEntries(
-    Object.entries(chapters).reverse()
-  );
-
-  return reversedChapters;
-}
-
-// Новая функция для перемещения .night из более свежей главы в более старую
-// function moveNightContent() { const chapters = document.querySelectorAll(".chapter"); let fresherChapter = null; let olderChapter = null; chapters.forEach((chapter) => { const chapterTitleElement = chapter.querySelector(".date"); if (chapterTitleElement) { const chapterTitle = chapterTitleElement.textContent; const match = chapterTitle.match(/(\d+?) ([а-я]+?)$/i); if (match) { const day = parseInt(match[1]); const month = getMonthIndex(match[2]); const chapterDate = new Date(0, month, day); if (!fresherChapter || chapterDate > fresherChapter.date) { olderChapter = fresherChapter; fresherChapter = { chapter, date: chapterDate }; } else if (!olderChapter || chapterDate > olderChapter.date) { olderChapter = { chapter, date: chapterDate }; } } } }); if (fresherChapter && olderChapter) { const nightContainer = fresherChapter.chapter.querySelector(".night"); if (nightContainer) { olderChapter.chapter .querySelector(".content") .appendChild(createParagraph(nightContainer.innerHTML)); } fresherChapter.chapter.remove(); } }
-
-// Вспомогательная функция для получения индекса месяца
-function getMonthIndex(monthName) {
-  const monthNames = [
-    "января",
-    "февраля",
-    "марта",
-    "апреля",
-    "мая",
-    "июня",
-    "июля",
-    "августа",
-    "сентября",
-    "октября",
-    "ноября",
-    "декабря",
-  ];
-  return monthNames.indexOf(monthName.toLowerCase());
-}
-
-// Удаление таймштампов
-
-function formatTimestamps() {
-  /* console.log("Удаление таймштампов"); */
-  const chatlog = document.getElementById("chatlog");
-  const chatlogHTML = chatlog.innerHTML;
-  const cleanedHTML = chatlogHTML.replace(
-    /(\d{1,2}\/\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}\.\d{1,3}\s+?)/g,
-    '<p class="logline say">'
-    /* <p class="time">$1</p> */
-  );
-  chatlog.innerHTML = cleanedHTML;
 }
 
 // Список игроков
@@ -1073,33 +925,41 @@ function removeEmptyChapters() {
   });
 }
 
-/* document.addEventListener("DOMContentLoaded", function () {
-  let chatlogElement = document.getElementById("chatlog");
-  transferNightLines(chatlogElement);
-}); */
-
-function toggleContent(event) {
-  // Функция сворачивания
-  /* console.log("Начало функции toggleContent"); */
-  const chapter = event.target.closest(".chapter");
-  const content = chapter.querySelector(".content");
-
-  if (chapter.classList.contains("collapsed")) {
-    chapter.classList.remove("collapsed");
-    chapter.classList.add("expanded");
-    content.style.maxHeight = content.scrollHeight + "px";
-  } else {
-    chapter.classList.remove("expanded");
-    chapter.classList.add("collapsed");
-    content.style.maxHeight = null;
+// Добавляем обработчик событий для всего #chatlog
+chatlog.addEventListener("click", function (event) {
+  // Проверяем, был ли клик на элементе с классом "date"
+  if (event.target.classList.contains("date")) {
+    toggleCollapse(event);
   }
+});
 
-  /* console.log("Функция toggleContent успешно выполнена"); */
+function toggleCollapse(event) {
+  // Получаем родителя (предполагаем, что он имеет класс "chapter")
+  const chapter = event.target.closest(".chapter");
+
+  if (chapter) {
+    // Выводим в консоль лог текущего состояния "collapsed" до переключения
+    console.log(
+      "Текущее состояние 'collapsed':",
+      chapter.classList.contains("collapsed")
+    );
+
+    // Переключаем класс "collapsed"
+    chapter.classList.toggle("collapsed");
+
+    // Выводим в консоль лог состояния "collapsed" после переключения
+    console.log(
+      "Новое состояние 'collapsed':",
+      chapter.classList.contains("collapsed")
+    );
+  } else {
+    console.error(
+      "Не найден элемент с классом 'chapter' в родительской цепочке."
+    );
+  }
 }
 
 function combineFunctions() {
-  // Удаляем пустые элементы
-  $("div.chapter.expanded p.logline.emote:empty").remove();
   combineSpeech();
   combineEmotes();
 }
@@ -1296,7 +1156,6 @@ function oocToEmote() {
     }
   });
 
-  removeEmptyParagraphs();
   combineEmotes();
   emoteToSpeech();
   removeDashAtStart();
@@ -1316,24 +1175,6 @@ function removeDashAtStart() {
     // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
     emotes[i].innerHTML = updatedEmoteText;
   }
-}
-
-function removeEmptyParagraphs() {
-  // Находим элементы с классом "chapter expanded"
-  var chapters = document.querySelectorAll(".chapter.expanded");
-
-  // Проходимся по каждому найденному элементу
-  chapters.forEach(function (chapter) {
-    // Находим все параграфы внутри элемента
-    var paragraphs = chapter.querySelectorAll("p");
-
-    // Проходимся по каждому параграфу и удаляем его, если он пустой
-    paragraphs.forEach(function (paragraph) {
-      if (paragraph.innerHTML.trim() === "") {
-        paragraph.parentNode.removeChild(paragraph);
-      }
-    });
-  });
 }
 
 // Удаления логлайна по Delete
