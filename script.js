@@ -55,8 +55,6 @@ function collapseChapters() {
 function formatHTML() {
   let chatlogHTML = document.getElementById("chatlog").innerHTML;
   splitSessions();
-  wrapParagraphsInContentDiv();
-  wrapContentInChapter();
   // cleanText();
   // yourEmotes();
   // colorizePlayers(playerColorMap);
@@ -188,7 +186,7 @@ function splitSessions() {
         const timeDifference = getTimeDifference(prevTimestamp, timestamp);
         // console.log( `Time difference between ${prevTimestamp} and ${timestamp}: ${timeDifference} milliseconds` );
         if (timeDifference > 4 * 60 * 60 * 1000) {
-          console.log(`Adding <h2> between ${prevTimestamp} and ${timestamp}`);
+          // console.log(`Adding <h2> between ${prevTimestamp} and ${timestamp}`);
           // Если разница больше 4 часов, добавляем <h2> с датой
           const dateHeader = document.createElement("h2");
           dateHeader.className = "date";
@@ -205,6 +203,7 @@ function splitSessions() {
       prevTimestamp = timestamp;
     }
   });
+  wrapChapters();
 }
 
 function getFormattedDate(timestamp) {
@@ -274,7 +273,58 @@ function insertContentDiv(contentDiv, nextElement) {
   container.insertBefore(contentDiv, nextElement);
 }
 
+function wrapChapters() {
+  // Получаем элемент с id #chatlog
+  const chatlog = document.querySelector("#chatlog");
 
+  // Проверяем, что #chatlog существует
+  if (!chatlog) {
+    console.error("Элемент #chatlog не найден.");
+    return;
+  }
+
+  // Находим все элементы h2.date
+  const dates = chatlog.querySelectorAll("h2.date");
+
+  // Проверяем, что есть хотя бы один элемент h2.date
+  if (!dates.length) {
+    console.error("Не найдены элементы h2.date.");
+    return;
+  }
+
+  // Создаем массив для хранения разделов
+  const chapters = [];
+
+  // Итерируемся по всем элементам h2.date
+  for (const date of dates) {
+    // Получаем следующий элемент (первый сосед)
+    let nextElement = date.nextElementSibling;
+
+    // Создаем массив для хранения элементов раздела
+    const chapterElements = [date];
+
+    // Цикл добавления элементов в раздел
+    while (nextElement && nextElement.tagName === "P") {
+      chapterElements.push(nextElement);
+      nextElement = nextElement.nextElementSibling;
+    }
+
+    // Создаем div.chapter и добавляем в него элементы раздела
+    const chapterDiv = document.createElement("div");
+    chapterDiv.classList.add("chapter");
+    chapterDiv.append(...chapterElements);
+
+    // Добавляем div.chapter в массив
+    chapters.push(chapterDiv);
+
+    // Выводим в консоль лог div.chapter
+    console.log("div.chapter:", chapterDiv);
+  }
+
+  // Встраиваем массив chapters в #chatlog
+  chatlog.innerHTML = '';
+  chatlog.append(...chapters);
+}
 
 
 // КОНЕЦ
