@@ -52,24 +52,21 @@ function collapseChapters() {
 
 // Главная функция
 
-function formatLog() {
+function formatHTML() {
   let chatlogHTML = document.getElementById("chatlog").innerHTML;
-  // console.log("Запускаю допфункции");
-  formatTimestamps();
-  // transferNightLines(document.body);
-  cleanText();
-  yourEmotes();
-  colorizePlayers(playerColorMap);
-  addCommaOrDot();
-  addColonToEnd();
-  combineFunctions();
-  chapterCollapse();
-  addIdToChapter();
-  emoteToSpeech();
-  sayToEmote();
-  // Filter();
-  //cleanTextAgain();
-  //correctSpelling();
+  splitSessions();
+  wrapParagraphsInContentDiv();
+  wrapContentInChapter();
+  // cleanText();
+  // yourEmotes();
+  // colorizePlayers(playerColorMap);
+  // addCommaOrDot();
+  // addColonToEnd();
+  // combineFunctions();
+  // chapterCollapse();
+  // addIdToChapter();
+  // emoteToSpeech();
+  // sayToEmote();
 }
 
 function correctSpelling() {
@@ -134,41 +131,27 @@ async function handleFileInputTxt(event) {
 }
 
 function convertTimestamp(timestamp) {
-  console.log(`Input timestamp: ${timestamp}`);
+  // Заменяем точку на двоеточие
+  const timestampWithColon = timestamp.replace(".", ":");
 
-  // Используем регулярное выражение для извлечения даты и времени
-  const match = timestamp.match(/^(\d+\/\d+)\s(\d+:\d+:\d+\.\d+)$/);
+  // Разбиваем таймштамп на части
+  const [, month, day, time] = timestampWithColon.match(/^(\d+)\/(\d+)\s(.+)$/);
+  const [hour, minute, secondMillis] = time.split(":");
+  const [second, millis = "000"] = secondMillis.split(".");
 
-  if (!match) {
-    console.error(`Invalid timestamp format: ${timestamp}`);
-    return null;
-  }
+  // Формируем стандартный таймштамп
+  const isoTimestamp = new Date(
+    new Date().getFullYear(),
+    month - 1,
+    day,
+    hour,
+    minute,
+    second,
+    millis
+  ).toISOString();
 
-  const [, datePart, timePart] = match;
-  console.log(`Parsed date: ${datePart}, Parsed time: ${timePart}`);
-
-  const [month, day] = datePart.split("/");
-  console.log(`Parsed date: month=${month}, day=${day}, time=${timePart}`);
-
-  const [hour, minute, second] = timePart.split(":");
-  console.log(`Parsed time: hour=${hour}, minute=${minute}, second=${second}`);
-
-  const year = new Date().getFullYear();
-  console.log(`Current year: ${year}`);
-
-  const isoTimestamp = `${year}-${month.padStart(2, "0")}-${day.padStart(
-    2,
-    "0"
-  )}T${hour.padStart(2, "0")}:${minute.padStart(2, "0")}:${second.padStart(
-    2,
-    "0"
-  )}.000Z`;
-
-  console.log(`Output ISO timestamp: ${isoTimestamp}`);
   return isoTimestamp;
 }
-
-
 
 function importTxt(text) {
   const logLines = text.split("\n");
@@ -190,11 +173,157 @@ function importTxt(text) {
       }
     }
   }
+
+  formatHTML();
 }
 
+function splitSessions() {
+  const paragraphs = document.querySelectorAll("p.logline.say");
+  let prevTimestamp = null;
 
+  paragraphs.forEach((paragraph) => {
+    const timestamp = paragraph.getAttribute("timestamp");
+    if (timestamp) {
+      if (prevTimestamp) {
+        const timeDifference = getTimeDifference(prevTimestamp, timestamp);
+        // console.log( `Time difference between ${prevTimestamp} and ${timestamp}: ${timeDifference} milliseconds` );
+        if (timeDifference > 4 * 60 * 60 * 1000) {
+          console.log(`Adding <h2> between ${prevTimestamp} and ${timestamp}`);
+          // Если разница больше 4 часов, добавляем <h2> с датой
+          const dateHeader = document.createElement("h2");
+          dateHeader.className = "date";
+          dateHeader.textContent = getFormattedDate(timestamp);
+          paragraph.parentNode.insertBefore(dateHeader, paragraph);
+        }
+      } else {
+        // Вставляем <h2> перед первым таймштампом
+        const dateHeader = document.createElement("h2");
+        dateHeader.className = "date";
+        dateHeader.textContent = getFormattedDate(timestamp);
+        paragraph.parentNode.insertBefore(dateHeader, paragraph);
+      }
+      prevTimestamp = timestamp;
+    }
+  });
+}
 
+function wrapContentInChapter() {
+  console.log("Чаптер");
+  const dateHeaders = document.querySelectorAll("h2.date");
 
+  dateHeaders.forEach((dateHeader) => {
+    const contentDiv = getNextSiblingByClass(dateHeader, "content");
+    if (contentDiv) {
+      const timestamp = getTimestampFromContent(contentDiv);
+      const chapterDiv = document.createElement("div");
+      chapterDiv.className = "chapter";
+      chapterDiv.setAttribute("timestamp", timestamp);
+
+      // Обернуть h2.date и .content внутри .chapter
+      wrapElementsInParent(chapterDiv, dateHeader, contentDiv);
+    }
+  });
+}
+
+function getNextSiblingByClass(element, className) {
+  let sibling = element.nextElementSibling;
+  while (sibling) {
+    if (sibling.classList.contains(className)) {
+      return sibling;
+    }
+    sibling = sibling.nextElementSibling;
+  }
+  return null;
+}
+
+function getTimestampFromContent(contentDiv) {
+  const paragraph = contentDiv.querySelector("p.logline.say");
+  if (paragraph) {
+    return paragraph.getAttribute("timestamp");
+  }
+  return null;
+}
+
+function wrapElementsInParent(parent, ...elements) {
+  const firstElement = elements[0];
+  // Создаем копии элементов для вставки внутрь родительского элемента
+  const clonedElements = elements.map((element) => element.cloneNode(true));
+  // Очищаем первоначальный контент
+  firstElement.innerHTML = "";
+
+  clonedElements.forEach((clonedElement) => {
+    parent.appendChild(clonedElement);
+  });
+  // Вставляем обернутые элементы перед первым элементом
+  firstElement.parentNode.insertBefore(parent, firstElement);
+}
+
+function wrapParagraphsInContentDiv() {
+  const paragraphs = document.querySelectorAll("p.logline.say, h2.date");
+  let currentContentDiv = null;
+
+  paragraphs.forEach((element) => {
+    if (element.tagName.toLowerCase() === "h2") {
+      // Если встретили h2.date, закрываем текущий div.content
+      if (currentContentDiv) {
+        insertContentDiv(currentContentDiv, element);
+        currentContentDiv = null;
+      }
+    } else {
+      if (!currentContentDiv) {
+        // Создаем новый div.content, если еще не создан
+        currentContentDiv = document.createElement("div");
+        currentContentDiv.className = "content";
+      }
+
+      // Перемещаем элемент внутрь текущего div.content
+      currentContentDiv.appendChild(element);
+    }
+  });
+
+  // Если остался открытый div.content, вставляем его в конец
+  if (currentContentDiv) {
+    insertContentDiv(currentContentDiv, null);
+  }
+}
+
+function insertContentDiv(contentDiv, nextElement) {
+  const container = nextElement ? nextElement.parentNode : document.body;
+  container.insertBefore(contentDiv, nextElement);
+}
+
+function getFormattedDate(timestamp) {
+  const date = new Date(timestamp);
+  const monthNames = [
+    "января",
+    "февраля",
+    "марта",
+    "апреля",
+    "мая",
+    "июня",
+    "июля",
+    "августа",
+    "сентября",
+    "октября",
+    "ноября",
+    "декабря",
+  ];
+
+  const formattedDate = `Запись от ${date.getDate()} ${
+    monthNames[date.getMonth()]
+  }, ${padZero(date.getHours())}:${padZero(date.getMinutes())}`;
+  return formattedDate;
+}
+
+function padZero(number) {
+  return number.toString().padStart(2, "0");
+}
+
+function getTimeDifference(timestamp1, timestamp2) {
+  const date1 = new Date(timestamp1);
+  const date2 = new Date(timestamp2);
+  return Math.abs(date2 - date1);
+}
 
 async function handleFileInputHtml(event) {
   // Очищаем содержимое div.chatlog перед загрузкой нового файла
@@ -345,7 +474,7 @@ function formatTimestamps() {
   const cleanedHTML = chatlogHTML.replace(
     /(\d{1,2}\/\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}\.\d{1,3}\s+?)/g,
     '<p class="logline say">'
-/* <p class="time">$1</p> */
+    /* <p class="time">$1</p> */
   );
   chatlog.innerHTML = cleanedHTML;
 }
@@ -425,7 +554,7 @@ function cleanText() {
     '<p class="logline whisper">Вы шепчете <span class="player">$1</span>: <span class="speech">$2</span></p>'
   ); // Ваш шёпот
 
-    chatlogHTML = chatlogHTML.replace(
+  chatlogHTML = chatlogHTML.replace(
     /<p class="logline say">(\d+|\>\>|[A-z]|&\?*|ZoneX:|Аукцион|Zone|%s|Игрок|Для|Всем|Текст|Эффект|щит|Телепорт|С|Получен|Характеристики|Маг.уст:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила:|Ловк:|Инта:|Физ.уст:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?\n<\/p>/gs,
     ""
   ); // Системные сообщения, начинаются с указанных слов
@@ -772,32 +901,6 @@ function yourEmotes() {
   });
 }
 
-/* function colorizePlayers() {
-  const playerColors = {};
-  const playerSpans = document.querySelectorAll(".player");
-
-  playerSpans.forEach((span, i) => {
-    const playerName = span.textContent.trim();
-    const colorClass = playerColors[playerName] || (playerColors[playerName] = getColorClass(i));
-
-    // Удаление предыдущих классов цвета и атрибута style
-        span.removeAttribute("style");
-
-    // Добавление нового класса цвета
-    span.classList.add(colorClass);
-  });
-
-  const playerList = document.querySelector("ul.players");
-  const emptyPlayers = Array.from(playerList.querySelectorAll("li")).filter(li => !li.textContent.trim());
-  emptyPlayers.forEach(li => li.remove());
-
-  function getColorClass(index) {
-    const colors = ["red", "green", "blue-1", "blue-2", "blue-3", "yellow", "orange", "purple-1", "purple-2", "purple-3"];
-    return colors[index % colors.length];
-  }
-}
- */
-
 // Кнопки DM и OOC
 
 function toggleVisibility(className) {
@@ -950,38 +1053,6 @@ function emoteToSpeech() {
   });
 }
 
-/* function transferNightLines(rootElement) {
-  function nightTransfer(chapters) {
-    chapters.forEach(function (chapter, i) {
-      const dateElement = chapter.querySelector(".date");
-      let nightElement = chapter.querySelector(".night");
-
-      if (!dateElement || !nightElement) {
-        // Или нет date, или нет night.
-        return;
-      }
-      const currentDate = dateElement.textContent.trim();
-      nightElement.classList.remove("night");
-      nightElement.classList.add("night-transfered");
-
-      let nextChapter = chapters[i + 1];
-      if (!nextChapter) {
-        // Нет следующей главы.
-        return;
-      }
-      const nextDateElement = nextChapter.querySelector(".date");
-      const nextChapterContent = nextChapter.querySelector(".content");
-      if (!nextDateElement || !nextChapterContent) {
-      }
-
-      nextChapterContent.appendChild(nightElement);
-    });
-  }
-  let chatlogElement = document.getElementById("chatlog");
-  nightTransfer(chatlogElement.querySelectorAll(".chapter"));
-  removeEmptyChapters();
-} */
-
 function removeEmptyChapters() {
   // Находим все элементы с классом "chapter"
   const chapterElements = document.querySelectorAll(".chapter");
@@ -1122,12 +1193,6 @@ function openselectedChapters() {
       chapter.classList.remove("collapsed");
       chapter.classList.add("expanded");
     }
-
-    // Вывести переменные на каждой итерации для отладки
-    /* console.log("Iteration:", i);
- console.log("Chapter:", chapter);
- console.log("Classes after update:", chapter.className);
- console.log("--------------------------"); */
   }
 }
 
@@ -1194,51 +1259,6 @@ function removeNonselectedParagraphs() {
   });
   removeCollapsed();
 }
-
-/* function addRecordClassToMIALoglines() {
- console.log("addRecordClassToMIALoglines");
- var loglines = document.querySelectorAll("p.logline");
-
- loglines.forEach(function (logline) {
- var speech = logline.querySelector("span.speech");
- if (speech && speech.textContent.includes("МИА")) {
- logline.classList.add("record");
- }
- });
-} */
-
-// Сворачивание
-
-/* function setupChapterCollapse() {
- console.log("setupChapterCollapse");
-
- const chapterElements = document.querySelectorAll(".chapter");
- 
- if (chapterElements.length === 1) {
- // Если есть только одна глава, делаем её expanded
- chapterElements[0].classList.add("expanded");
- console.log("Только одна глава, expanded");
- } else {
- // Иначе применяем collapsed для всех, кроме первой
- chapterElements.forEach((chapterElement, index) => {
- if (index === 0) {
- chapterElement.classList.add("expanded");
- console.log("Что-то пошло не так");
- } else {
- chapterElement.classList.add("collapsed");
- console.log("Что-то пошло не так №2");
- }
- });
- }
-} */
-
-/* function setupToggleHandlers() {
- console.log("setupToggleHandlers");
- const dates = document.querySelectorAll(".date");
- dates.forEach((date) => {
- date.addEventListener("click", toggleContent);
- });
-} */
 
 // Добавьте вызов setupToggleHandlers() в нужном месте, например, в конце вашего скрипта.
 
