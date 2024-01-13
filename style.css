@@ -230,9 +230,6 @@ h2.date:hover {
 }
 .chapter.collapsed {
   height: 12rem;
-  overflow: hidden;
-  transition: height 0.3s ease 0s;
-  /* padding-bottom: 6rem; */
 }
 
 .collapsed > h2::after {
@@ -385,4 +382,8 @@ input:focus-visible {
   -webkit-mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: top;
+}
+
+span::after {
+    content: " ";
 }

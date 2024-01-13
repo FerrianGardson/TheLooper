@@ -12,21 +12,17 @@ function toggleselectedClass(event) {
 function formatHTML() {
   cleanText();
   splitSessions();
-  
   wrapChapters();
+  yourEmotes();
+  colorizePlayers(playerColorMap);
+  addCommaOrDot();
+  addColonToEnd();
+  combineFunctions();
+  chapterCollapse();
+  addIdToChapter();
+  emoteToSpeech();
+  sayToEmote();
   throw new Error("Скрипт прерван");
-
-
-
-  // yourEmotes();
-  // colorizePlayers(playerColorMap);
-  // addCommaOrDot();
-  // addColonToEnd();
-  // combineFunctions();
-  // chapterCollapse();
-  // addIdToChapter();
-  // emoteToSpeech();
-  // sayToEmote();
 }
 
 function correctSpelling() {
@@ -427,14 +423,50 @@ function cleanText() {
   console.log("Определение");
   chatlogHTML = document.getElementById("chatlog").innerHTML; // Определение
   chatlogHTML = chatlogHTML.replace(/кошка/g, "кот"); // Пример
-  chatlogHTML = chatlogHTML.replace(/<\/p>/gm, "</p>\n"); // Пример
+  chatlogHTML = chatlogHTML.replace(/<\/p>/g, "</p>\n"); // Перенос
+  chatlogHTML = chatlogHTML.replace(
+    /<p.*?>\s*(\d+|\>\>|[A-z]|&\?*|Вы|ZoneX:|Аукцион|Zone|%s|Игрок|Для|Всем|Текст|Эффект|щит|Телепорт|С|Получен|Характеристики|Маг.уст:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила:|Ловк:|Инта:|Физ.уст:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?<\/p>\n/g,
+    ""
+  ); // Системные сообщения, начинаются с указанных слов
+
+  chatlogHTML = chatlogHTML.replace(
+    /<p.*?(действие|приглашается|\(|атакует|получает|does not wish|к вам|ставит|добавлено|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*?<\/p>\n/g,
+    ""
+  ); // Игрок %ООС-действие%
+
+  chatlogHTML = chatlogHTML.replace(
+    /<p.*?(GUID|Fly|\d+\–го уровня).*?<\/p>\n/g,
+    ""
+  ); // Системные сообщения, содержат указанные слова в середине
+  chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:"); // |Hchannel:PARTY|h[Лидер группы]|h Роуз: => [Лидер группы] Роуз:
+  chatlogHTML = chatlogHTML.replace(
+    /<p.*?>\[(Рейд|Лидер рейда|Лидер группы|Группа|Гильдия)\].*?<\/p>\n/g,
+    ""
+  ); //ООС-каналы
+
+  chatlogHTML = chatlogHTML.replace(/<p.*?>[А-я]+ шепчет:.*?<\/p>\n/g, ""); // Шепчет:
+
+  chatlogHTML = chatlogHTML.replace(
+    /(<p.*?"logline)">(.*)\sговорит:\s(.*?)<\/p>\n/g,
+    '$1 say"><span class="player">$2</span><span class="speech">$3</span></p>\n'
+  ); // Говорит:
+
+  chatlogHTML = chatlogHTML.replace(
+    /(<p.*?"logline)">([А-я]+)\s(.*?)<\/p>\n/g,
+    '$1 emote"><span class="player">$2</span><span class="emote">$3</span></p>\n'
+  ); // Эмоут
+
+  chatlogHTML = chatlogHTML.replace(/>[—–-]\s*/g, ">"); // Тире в начале
+  chatlogHTML = chatlogHTML.replace(/ [–-] ]/g, " — "); // Тире в процессе
 
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
   // debugger;
+
+  document
+    .querySelectorAll("#chatlog p:empty")
+    .forEach((emptyParagraph) => emptyParagraph.remove()); // Удаление пустых абзацев
 }
-
-
 
 // Объединение чатбоксов
 
@@ -656,7 +688,7 @@ function colorizePlayers(playerColorMap) {
       playerList.appendChild(playerItem);
     });
 
-    chapter.insertBefore(playerList, chapter.firstChild);
+    chapter.insertBefore(playerList, chapter.firstChild.nextSibling);
   });
 
   function getColorClass(index) {
