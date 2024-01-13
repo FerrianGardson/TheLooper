@@ -178,32 +178,6 @@ function getTimeDifference(timestamp1, timestamp2) {
   return Math.abs(date2 - date1);
 }
 
-function wrapParagraphsInContentDiv() {
-  const paragraphs = document.querySelectorAll("p.logline.say, h2.date");
-  let currentContentDiv = null;
-  paragraphs.forEach((element) => {
-    if (element.tagName.toLowerCase() === "h2") {
-      // Если встретили h2.date, закрываем текущий div.content
-      if (currentContentDiv) {
-        insertContentDiv(currentContentDiv, element);
-        currentContentDiv = null;
-      }
-    } else {
-      if (!currentContentDiv) {
-        // Создаем новый div.content, если еще не создан
-        currentContentDiv = document.createElement("div");
-        currentContentDiv.className = "content";
-      }
-      // Перемещаем элемент внутрь текущего div.content
-      currentContentDiv.appendChild(element);
-    }
-  });
-  // Если остался открытый div.content, вставляем его в конец
-  if (currentContentDiv) {
-    insertContentDiv(currentContentDiv, null);
-  }
-}
-
 function insertContentDiv(contentDiv, nextElement) {
   const container = nextElement ? nextElement.parentNode : document.body;
   container.insertBefore(contentDiv, nextElement);
