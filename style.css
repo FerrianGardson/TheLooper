@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;900&display=swap");
 
 :root {
   --grey: #808080;
@@ -64,7 +64,7 @@ html {
 #chatlog {
   background: rgba(0, 0, 0, 0.32);
   padding: 4rem;
-  padding-top: 8rem;
+  padding-top: 12rem;
   min-height: 100vh;
 }
 
@@ -75,9 +75,6 @@ html {
   color: rgb(255, 255, 255);
 }
 
-h2 {
-  font-size: 3em;
-}
 h2:not(:first-of-type) {
   margin-top: 6em;
 }
@@ -137,7 +134,8 @@ ul.players {
 }
 
 p.logline span.emote,
-p.emote span.emote, p.emote {
+p.emote span.emote,
+p.emote {
   color: orange;
 }
 .speech {
@@ -152,9 +150,10 @@ body {
 }
 h2 {
   font-family: "Roboto";
-  font-weight:bold;
+  font-weight: bold;
   width: fit-content;
-  line-height: 1em;
+  line-height: 100%;
+  font-size: 3rem;
 }
 h2:not(:first-of-type) {
   margin-top: 6em;
@@ -166,7 +165,10 @@ label:hover {
   color: var(--black);
 }
 
-button, label {font-weight:normal;}
+button,
+label {
+  font-weight: normal;
+}
 
 p.dm {
   color: rgb(255, 94, 0);
@@ -227,15 +229,23 @@ h2.date:hover {
   cursor: pointer;
 }
 .chapter.collapsed {
-  height: 200px;
+  height: 12rem;
   overflow: hidden;
   transition: height 0.3s ease 0s;
+  /* padding-bottom: 6rem; */
 }
-.chapter.expanded {
-  height: fit-content;
-  overflow: hidden;
-  transition: height 0.3s ease 0s;
+
+.collapsed > h2::after {
+  content: "Кликните на заголовок, чтобы развернуть...";
+  font-size: 1rem;
+  line-height: 1rem;
+  display: block;
+  /* text-align: right; */
+  font-weight: 100;
+  opacity: 0.5;
+  margin-bottom: 1rem;
 }
+
 form {
   display: flex;
 }
@@ -310,8 +320,8 @@ div#keywords {
 }
 
 input {
-    white-space: nowrap; 
-  overflow: hidden; 
+  white-space: nowrap;
+  overflow: hidden;
   border: none;
   outline: none;
   text-overflow: ellipsis;
@@ -358,9 +368,21 @@ input:focus-visible {
   color: #d361d3;
 }
 
-
 .isolated {
   display: none;
 }
 
-.scroll {background:red}
+.scroll {
+  background: red;
+}
+
+.collapsed {
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 75%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: top;
+}
