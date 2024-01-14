@@ -253,7 +253,6 @@ function wrapChapters() {
   });
 }
 
-
 function collapseChapters() {
   const chapters = document.querySelectorAll("div.chapter");
   chapters.forEach((chapter) => {
@@ -946,7 +945,6 @@ document.addEventListener("keydown", function (event) {
     );
     if (elementUnderCursor) {
       // Логика для <p>
-      scrollSave(elementUnderCursor);
       let nextSiblings = elementUnderCursor.nextElementSibling;
       while (nextSiblings) {
         const siblingToRemove = nextSiblings;
@@ -963,7 +961,6 @@ document.addEventListener("keydown", function (event) {
         siblingToRemove.remove();
       }
     }
-    scrollToSaved();
   }
 });
 document.addEventListener("keydown", function (event) {
