@@ -19,7 +19,9 @@
       type="text/css"
       disabled
     />
-    <style>@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;900&display=swap");</style>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;900&display=swap");
+    </style>
   </head>
 
   <body>
@@ -32,59 +34,34 @@
     </button>
     <div class="nav">
       <div id="buttons">
-        <form>
+        <form class="tumbler">
           <label for="file-input-txt">Загрузить лог (TXT)</label>
           <input type="file" id="file-input-txt" />
         </form>
-        <label>
-          <input type="checkbox" id="keepOOCCheckbox" checked>OOC
-        </label>
-        
-
-        <form>
-          <button for="file-input-html">(HTML)</button>
-          <input type="file" id="file-input-html" />
-        </form>
-
-        <div id="keywords">
-          <!--         <input type="text" id="keywordsInput" placeholder="Введите ключевые слова через запятую"
-            onkeypress="handleKeyPress(event)"
-            value="Запись, фото, улыбочку, -шепчет, -ООС, -[МИА]"> -->
-
-          <!--           <input
-            type="text"
-            id="keywordsInput"
-            placeholder="Введите ключевые слова через запятую"
-            onkeypress="handleKeyPress(event)"
-            value="Фэрриан, Ананита, Кэролай, -ООС, Икар, Шанталь, Тианна, -шепчет, Зверолов, Дерек, Карл, Сэнди, Фг, Аран, Хитрец, Сэверус, Джанетт, Патрульный Бёрд, Самсон, Ларин"
-          /> -->
-
+        <div class="tumbler">
+          <input type="checkbox" id="keepGroupCheckbox" checked="" /><label
+            for="keepGroupCheckbox"
+          >
+            OOC
+          </label>
+        </div>
+        <div id="filter">
           <input
             type="text"
             id="keywordsInput"
             placeholder="Введите ключевые слова через запятую"
-            value=" , -ООС, -шепч"
+            value="Дилижанс"
           />
-
-          <button onclick="Filter()">Фильтр</button>
+          <button onclick="logFilter()">Фильтр</button>
+          <button onclick="filterTrimEverything()">Обрезка</button>
         </div>
         <button onclick="removeNonselectedParagraphs()">Чистка</button>
-        <button onclick="oocToEmote()">OOC =&gt; Emote</button>
         <button onclick="removeCollapsed()">Коллапс</button>
         <button onclick="chapterReverse()">Реверс</button>
         <button onclick="removePlayers()">Удалить игроков</button>
-        <button onclick="debug()">Дебаг</button>
         <button onclick="selectAll()">Выбрать всё</button>
         <button onclick="toggleChapters()">Свернуть</button>
-        <button onclick="exportHTML()">HTML</button>
-        <!--  
-        <button onclick="postReplace()">Постреплейс</button>
-        <button onclick="combineFunctions()">Чатбоксы</button>
-        <button onclick="toggleVisibility('dm')">DM</button>
-        <button onclick="toggleVisibility('ooc')">OOC</button>
-        <button onclick="emoteToSpeech()">Emote =&gt; Say</button>
-        <button onclick="sayToEmote()">Say =&gt; Emote</button>
-        <button onclick="killNav()">Kill Nav</button> -->
+        <button onclick="exportHTML()">Сохранить</button>
       </div>
     </div>
     <div id="chatlog"></div>

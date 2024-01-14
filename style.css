@@ -17,6 +17,7 @@
   --purple-2: #6420ff;
   --purple-3: #ae5eff;
   --whisper: #d361d3;
+  --border-color: rgba(255, 255, 255, 0.26);
 }
 
 .red {
@@ -159,8 +160,7 @@ h2:not(:first-of-type) {
   margin-top: 6em;
 }
 
-button:hover,
-label:hover {
+button:hover, .tumbler:hover {
   background: linear-gradient(45deg, rgb(255, 191, 0), rgb(62, 43, 0));
   color: var(--black);
 }
@@ -174,11 +174,7 @@ p.dm {
   color: rgb(255, 94, 0);
   font-weight: bold;
 }
-button,
-label,
-textarea,
-input,
-#keywords {
+button, .tumbler {
   cursor: pointer;
   font-size: 1rem;
   height: 2.5em !important;
@@ -186,8 +182,8 @@ input,
   white-space: nowrap;
   min-width: fit-content;
   overflow: hidden;
-  background: rgba(0, 0, 0, 0.37);
-  border: 1px solid rgba(255, 255, 255, 0.26);
+  background: rgb(0 0 0 / 37%);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   color: rgba(255, 255, 255, 0.46);
   font-family: "roboto", sans-serif;
@@ -238,8 +234,7 @@ h2.date:hover {
   font-size: 1rem;
   line-height: 1rem;
   display: block;
-  /* text-align: right; */
-  font-weight: 100;
+    font-weight: 100;
   opacity: 0.5;
   margin-bottom: 1rem;
 }
@@ -262,18 +257,15 @@ p.logline.announcment > span.player {
 
 p.logline.yell > .speech {
   color: inherit;
-  /* text-transform: uppercase; */
-}
+  }
 
 p.logline {
   opacity: 0.6;
 }
 
 p.selected {
-  /* display: block; */
-  opacity: 1;
-  /* margin: 0.5em 0; */
-}
+    opacity: 1;
+  }
 
 .ooc {
   color: #6fb5ff;
@@ -301,23 +293,14 @@ input:hover {
   color: white;
 }
 
-input {
-  width: -webkit-fill-available;
-}
-
-div#keywords {
+div#filter {
   display: flex;
-  /* gap: 0.5rem; */
-  /* width: -webkit-fill-available; */
-  min-width: 1em;
-  padding: 0;
-  flex-shrink: 1;
-  flex-grow: 1;
+  border-radius: 8px;
+                border: 1px solid var(--border-color);
   overflow: hidden;
-  border: 1px solid var(--grey);
 }
 
-input {
+input[type="text"] {
   white-space: nowrap;
   overflow: hidden;
   border: none;
@@ -326,10 +309,7 @@ input {
   background: none;
   color: var(--grey);
   font-size: 1rem;
-  padding-left: 1rem; /* padding-top: 12px; */
-  width: -webkit-fill-available; /* vertical-align: middle; */ /* margin: 15px; */
-  background: white; /* box-shadow: inset 0 0 8px rgb(0 0 0 / 55%); */
-  -webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
+  padding-left: 1rem;   width: -webkit-fill-available;   background: white;   -webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
   -moz-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
   box-shadow: 0px 0px 10px 3px rgb(34 60 80 / 64%) inset;
 }
@@ -338,11 +318,8 @@ input#keywordsInput:focus-within {
   border: 0;
 }
 
-#keywords button {
-  padding: 0px 1rem;
-  height: auto !important;
-  /* margin: 9px; */
-  border-radius: 0;
+#keywords > * {
+        border-radius: 0;
   border: 0;
 }
 
@@ -354,10 +331,6 @@ input:hover {
   color: var(--dark-grey);
 }
 
-input#keywordsInput {
-  border-radius: 0;
-  /* outline: none; */
-}
 
 input:focus-visible {
   color: var(--black);
@@ -406,23 +379,33 @@ p {
     margin: 0.5rem 0;
 }
 
-/* Стилизация чекбокса */
-input[type="checkbox"] {
-    width: 1rem;
-    height: 1rem;
-    position: relative;
-    top: 2px;
-    margin-right: 0.5rem;
+.tumbler > input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  }
+
+.tumbler > input::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 17px;
+  vertical-align: bottom;
+  border: 1px solid #4b4442;
+    border-radius: 2px;
+          box-shadow: 0px 0px 6px 6px rgba(0, 0, 0, 0.25) inset;
+  background: #0f0401;
 }
 
-/* Цвет фона чекбокса */
-input[type="checkbox"]::before {
-  background-color: #3498db; /* Синий цвет, можно изменить на нужный */
+.tumbler > input:checked::before {
+  background-color: var(--orange);
 }
 
-/* Цвет галочки при выборе чекбокса */
-input[type="checkbox"]:checked::before {
-  background-color: #2ecc71; /* Зеленый цвет, можно изменить на нужный */
+.tumbler, .tumbler * {
+    cursor: pointer;
 }
 
-
+#filter > * {
+    border: none;
+    border-radius: 0;
+}

@@ -47,12 +47,10 @@ function correctSpelling() {
 // Загрузка файла
 // Получаем элементы DOM
 const fileInputTxt = document.getElementById("file-input-txt");
-const fileInputHtml = document.getElementById("file-input-html");
 const chatlog = document.getElementById("chatlog");
 // Добавляем слушатель события на изменение input файла (TXT)
 fileInputTxt.addEventListener("change", handleFileInputTxt);
 // Добавляем слушатель события на изменение input файла (HTML)
-fileInputHtml.addEventListener("change", handleFileInputHtml);
 // Функции
 async function handleFileInputTxt(event) {
   // Очищаем содержимое div.chatlog перед загрузкой нового файла
@@ -71,6 +69,7 @@ async function handleFileInputTxt(event) {
 }
 
 function convertTimestamp(timestamp) {
+  console.log(timestamp);
   // Заменяем точку на двоеточие
   const timestampWithColon = timestamp.replace(".", ":");
 
@@ -278,28 +277,6 @@ function toggleChapters() {
   isCollapsed = !isCollapsed;
 }
 // КОНЕЦ
-async function handleFileInputHtml(event) {
-  // Очищаем содержимое div.chatlog перед загрузкой нового файла
-  chatlog.innerHTML = "";
-  // Получаем файл из события
-  const file = event.target.files[0];
-  // Проверяем, что файл существует
-  if (file) {
-    // Читаем содержимое файла как текст
-    const htmlText = await file.text();
-    // Извлекаем #chatlog из HTML и заменяем текущий #chatlog
-    const parser = new DOMParser();
-    const htmlDocument = parser.parseFromString(htmlText, "text/html");
-    const newChatlog = htmlDocument.getElementById("chatlog");
-    if (newChatlog) {
-      chatlog.innerHTML = newChatlog.innerHTML;
-    } else {
-      console.error("#chatlog не найден в загруженном HTML");
-    }
-  } else {
-    console.error("Файл не найден");
-  }
-}
 
 function renderChatLog(text) {
   // Разбиваем текст на главы (или что-то подобное)
@@ -369,7 +346,7 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/<p.*?>([A-z]|\>|\&|\(|\d).*?<\/p>\n/g, ""); // Системные сообщения, начинаются со служебных символов
 
   chatlogHTML = chatlogHTML.replace(
-    /<p.*?\s(действие|приглашается|\(|атакует|рассказывает|получает|does not wish|к вам|смотрит на вас|кивает вам|смотрит на вас|ставит|добавлено|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*?<\/p>\n/g,
+    /<p.*?\s(действие|приглашается|\(|атакует|рассказывает|is Away|получает|does not wish|к вам|смотрит на вас|кивает вам|смотрит на вас|ставит|добавлено|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*?<\/p>\n/g,
     ""
   ); // Игрок %ООС-действие%
 
@@ -395,7 +372,7 @@ function cleanText() {
 
   chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:"); // |Hchannel:PARTY|h[Лидер группы]|h Роуз: => [Лидер группы] Роуз:
 
-  if (!keepOOC) {
+  if (!keepGroup) {
     chatlogHTML = chatlogHTML.replace(
       /<p.*?>\[(Лидер группы|Группа)\].*?<\/p>\n/g,
       ""
@@ -802,11 +779,11 @@ document
   .getElementById("keywordsInput")
   .addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
-      Filter();
+      logFilter();
     }
   });
 
-function Filter() {
+function logFilter() {
   // Получаем ключевые слова из поля ввода с учетом слов внутри кавычек
   let keywordsInput = document.getElementById("keywordsInput").value;
   // Используем регулярное выражение для поиска слов внутри кавычек с игнорированием регистра
@@ -842,7 +819,7 @@ function Filter() {
         }
       });
     openselectedChapters();
-    trimChapter($(this));
+    // trimChapter($(this));
     scrollToSaved();
   });
   removeCollapsed();
@@ -1137,17 +1114,6 @@ function removeEmptyLines() {
 }
 // Вызываем функцию для удаления пустых строк
 
-let keepOOC = true;
-let keepWhisper = false;
-
-const keepOOCCheckbox = document.getElementById("keepOOCCheckbox");
-
-// Обработчик изменения состояния чекбокса
-keepOOCCheckbox.addEventListener("change", function () {
-  // Обновляем значение переменной keepOOC в соответствии с состоянием чекбокса
-  keepOOC = this.checked;
-});
-
 function virt() {
   // Получаем все элементы p.logline с классом virt
   const virtLoglines = document.querySelectorAll("p.logline.virt");
@@ -1160,4 +1126,32 @@ function virt() {
       playerSpan.remove();
     }
   });
+}
+
+// Тумблер keepGroup
+
+const keepGroupCheckbox = document.getElementById("keepGroupCheckbox");
+let keepGroup = true;
+
+// Обработчик изменения состояния чекбокса
+keepGroupCheckbox.addEventListener("change", function () {
+  // Обновляем значение переменной keepGroup в соответствии с состоянием чекбокса
+  keepGroup = this.checked;
+});
+
+//
+
+function filterTrimEverything() {
+  // Найти все div с классом "chapter"
+  var chapters = document.querySelectorAll('div.chapter');
+
+  // Проверить, есть ли хотя бы один div с классом "chapter"
+  if (chapters.length > 0) {
+      // Пройтись по всем найденным div и применить trimChapter
+      chapters.forEach(function(chapter) {
+          trimChapter($(chapter));
+      });
+  } else {
+      console.log('На странице нет div с классом "chapter".');
+  }
 }
