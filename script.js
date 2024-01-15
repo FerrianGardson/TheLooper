@@ -797,6 +797,7 @@ function combineFunctions() {
 
 
 function logFilter() {
+  document.querySelectorAll('.selected').forEach(element => element.classList.remove('selected'));
   // Получаем ключевые слова из поля ввода с учетом слов внутри кавычек
   let keywordsInput = document.getElementById("keywordsInput").value;
   // Используем регулярное выражение для поиска слов внутри кавычек с игнорированием регистра
@@ -1015,8 +1016,6 @@ function filterTrimEverything() {
   }
 }
 
-document.addEventListener("click", toggleselectedClass);
-
 document
   .getElementById("keywordsInput")
   .addEventListener("keydown", function (event) {
@@ -1088,6 +1087,9 @@ document.addEventListener("keydown", function (event) {
     scrollToSaved();
   }
 });
+
+// Обработчики
+
 document.addEventListener("keydown", function (event) {
   if (event.key === "]" || event.key === "ъ") {
     // Находим все элементы под курсором
@@ -1186,9 +1188,23 @@ document.addEventListener("keydown", function (event) {
 });
 
 // Добавляем обработчик событий для всего #chatlog
-chatlog.addEventListener("click", function (event) {
+document.addEventListener("click", function (event) {
   // Проверяем, был ли клик на элементе с классом "date"
   if (event.target.classList.contains("date")) {
     toggleCollapse(event);
   }
 });
+
+document.addEventListener("click", toggleselectedClass);
+
+// Конец
+
+function clearChatlog() {
+  // Получаем ссылку на элемент div#chatlog
+  var chatlog = document.getElementById('chatlog');
+
+  // Очищаем содержимое элемента
+  chatlog.innerHTML = '';
+}
+
+// Конец

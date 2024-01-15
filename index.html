@@ -34,6 +34,7 @@
     </button>
     <div class="nav">
       <div id="buttons">
+        <button onclick="clearChatlog()">Очистка</button>
         <form class="tumbler">
           <label for="file-input-txt">Импорт</label>
           <input type="file" id="file-input-txt" />
@@ -54,8 +55,9 @@
           />
           <button onclick="logFilter()">Фильтр</button>
           <button onclick="filterTrimEverything()">Обрезка</button>
+          <button onclick="removeNonselectedParagraphs()">Чистка</button>
         </div>
-        <button onclick="removeNonselectedParagraphs()">Чистка</button>
+
         <button onclick="removeCollapsed()">Коллапс</button>
         <button onclick="chapterReverse()">Реверс</button>
         <button onclick="removePlayers()">Удалить игроков</button>
