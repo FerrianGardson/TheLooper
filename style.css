@@ -409,3 +409,7 @@ p {
     border: none;
     border-radius: 0;
 }
+
+ul.players.npc {
+  opacity: 0.25;
+}
