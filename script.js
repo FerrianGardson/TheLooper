@@ -794,23 +794,7 @@ function combineFunctions() {
   combineYell();
 }
 
-document.addEventListener("click", toggleselectedClass);
 
-document
-  .getElementById("keywordsInput")
-  .addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-      logFilter();
-    }
-  });
-
-// Добавляем обработчик событий для всего #chatlog
-chatlog.addEventListener("click", function (event) {
-  // Проверяем, был ли клик на элементе с классом "date"
-  if (event.target.classList.contains("date")) {
-    toggleCollapse(event);
-  }
-});
 
 function logFilter() {
   // Получаем ключевые слова из поля ввода с учетом слов внутри кавычек
@@ -881,6 +865,173 @@ function openselectedChapters() {
     }
   }
 }
+
+
+function scrollSave(element) {
+  if (element && element.classList) {
+    element.classList.add("scroll");
+  }
+}
+
+function scrollToSaved() {
+  document.querySelector(".scroll").scrollIntoView();
+  window.scrollBy(
+    0,
+    -(document.querySelector(".nav")?.getBoundingClientRect()?.height || 0) - 32
+  );
+  document
+    .querySelectorAll(".scroll")
+    .forEach((element) => element.classList.remove("scroll"));
+}
+
+function scrollToStart() {
+  window.scrollTo({
+    top: 0,
+  });
+}
+
+function exportHTML() {
+  removeEmptyLines();
+  isAllSellected = false;
+  selectAll();
+  var element = document.createElement("a");
+  element.setAttribute(
+    "href",
+    "data:text/plain;charset=utf-8," +
+      encodeURIComponent(document.querySelector("html").innerHTML)
+  );
+  element.setAttribute("download", "exported.html");
+  element.style.display = "none";
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+}
+var isAllSellected = false; // Переменная для отслеживания состояния
+
+function selectAll() {
+  // Находим все элементы <p> с классом logline
+  var loglineElements = document.querySelectorAll("p.logline");
+  // Переключаем состояние и присваиваем/удаляем класс select
+  if (isAllSellected) {
+    loglineElements.forEach(function (element) {
+      element.classList.remove("selected");
+    });
+  } else {
+    loglineElements.forEach(function (element) {
+      element.classList.add("selected");
+    });
+  }
+  // Инвертируем состояние
+  isAllSellected = !isAllSellected;
+}
+
+function debug() {
+  // Находим все пустые <p class="important">
+  const emptyImportantParagraphs =
+    document.querySelectorAll("p.important:empty");
+  // Удаляем каждый найденный пустой элемент
+  emptyImportantParagraphs.forEach((element) => {
+    element.remove();
+  });
+  removeEmptyLines();
+}
+
+function removeCollapsed() {
+  var collapsedDivs = document.querySelectorAll("div.collapsed");
+  collapsedDivs.forEach(function (div) {
+    div.remove();
+  });
+}
+
+function removePlayers() {
+  var playersList = document.querySelectorAll("ul.players");
+  playersList.forEach(function (player) {
+    player.remove();
+  });
+}
+
+function chapterReverse() {
+  // 2. Отсортировать в обратном порядке детей #chatlog
+  var chatlog = document.getElementById("chatlog");
+  var messages = Array.from(chatlog.children);
+  // Сортировка в обратном порядке
+  messages.reverse();
+  // Удаление детей #chatlog
+  while (chatlog.firstChild) {
+    chatlog.removeChild(chatlog.firstChild);
+  }
+  // Вставка отсортированных сообщений
+  messages.forEach(function (message) {
+    chatlog.appendChild(message);
+  });
+}
+
+function removeEmptyLines() {
+  // Получаем тело HTML
+  var bodyHtml = document.body.innerHTML;
+  // Удаляем пустые строки с использованием регулярного выражения
+  var cleanedHtml = bodyHtml.replace(/^\s*[\r\n]/gm, "");
+  // Устанавливаем очищенное HTML обратно в тело документа
+  document.body.innerHTML = cleanedHtml;
+}
+// Вызываем функцию для удаления пустых строк
+
+function virt() {
+  // Получаем все элементы p.logline с классом virt
+  const virtLoglines = document.querySelectorAll("p.logline.virt");
+
+  // Итерируем по каждому элементу
+  virtLoglines.forEach((logline) => {
+    // Находим внутри элемента span.player и удаляем его
+    // const playerSpan = logline.querySelector("span.player"); if (playerSpan) { playerSpan.remove(); }
+  });
+}
+
+// Тумблер keepGroup
+
+const keepGroupCheckbox = document.getElementById("keepGroupCheckbox");
+let keepGroup = true;
+
+// Обработчик изменения состояния чекбокса
+keepGroupCheckbox.addEventListener("change", function () {
+  // Обновляем значение переменной keepGroup в соответствии с состоянием чекбокса
+  keepGroup = this.checked;
+});
+
+//
+
+function filterTrimEverything() {
+  // Найти все div с классом "chapter"
+  var chapters = document.querySelectorAll("div.chapter");
+
+  // Проверить, есть ли хотя бы один div с классом "chapter"
+  if (chapters.length > 0) {
+    // Пройтись по всем найденным div и применить trimChapter
+    chapters.forEach(function (chapter) {
+      trimChapter($(chapter));
+    });
+  } else {
+    console.log('На странице нет div с классом "chapter".');
+  }
+}
+
+document.addEventListener("click", toggleselectedClass);
+
+document
+  .getElementById("keywordsInput")
+  .addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      logFilter();
+    }
+  });
+
+// Добавляем обработчик событий для всего #chatlog
+chatlog.addEventListener("click", function (event) {
+  // Проверяем, был ли клик на элементе с классом "date"
+  if (event.target.classList.contains("date")) {
+    toggleCollapse(event);
+  }
+});
 
 document.addEventListener("keydown", function (event) {
   if (event.key === "Delete") {
@@ -1041,151 +1192,3 @@ chatlog.addEventListener("click", function (event) {
     toggleCollapse(event);
   }
 });
-
-function scrollSave(element) {
-  if (element && element.classList) {
-    element.classList.add("scroll");
-  }
-}
-
-function scrollToSaved() {
-  document.querySelector(".scroll").scrollIntoView();
-  window.scrollBy(
-    0,
-    -(document.querySelector(".nav")?.getBoundingClientRect()?.height || 0) - 32
-  );
-  document
-    .querySelectorAll(".scroll")
-    .forEach((element) => element.classList.remove("scroll"));
-}
-
-function scrollToStart() {
-  window.scrollTo({
-    top: 0,
-  });
-}
-
-function exportHTML() {
-  removeEmptyLines();
-  isAllSellected = false;
-  selectAll();
-  var element = document.createElement("a");
-  element.setAttribute(
-    "href",
-    "data:text/plain;charset=utf-8," +
-      encodeURIComponent(document.querySelector("html").innerHTML)
-  );
-  element.setAttribute("download", "exported.html");
-  element.style.display = "none";
-  document.body.appendChild(element);
-  element.click();
-  document.body.removeChild(element);
-}
-var isAllSellected = false; // Переменная для отслеживания состояния
-
-function selectAll() {
-  // Находим все элементы <p> с классом logline
-  var loglineElements = document.querySelectorAll("p.logline");
-  // Переключаем состояние и присваиваем/удаляем класс select
-  if (isAllSellected) {
-    loglineElements.forEach(function (element) {
-      element.classList.remove("selected");
-    });
-  } else {
-    loglineElements.forEach(function (element) {
-      element.classList.add("selected");
-    });
-  }
-  // Инвертируем состояние
-  isAllSellected = !isAllSellected;
-}
-
-function debug() {
-  // Находим все пустые <p class="important">
-  const emptyImportantParagraphs =
-    document.querySelectorAll("p.important:empty");
-  // Удаляем каждый найденный пустой элемент
-  emptyImportantParagraphs.forEach((element) => {
-    element.remove();
-  });
-  removeEmptyLines();
-}
-
-function removeCollapsed() {
-  var collapsedDivs = document.querySelectorAll("div.collapsed");
-  collapsedDivs.forEach(function (div) {
-    div.remove();
-  });
-}
-
-function removePlayers() {
-  var playersList = document.querySelectorAll("ul.players");
-  playersList.forEach(function (player) {
-    player.remove();
-  });
-}
-
-function chapterReverse() {
-  // 2. Отсортировать в обратном порядке детей #chatlog
-  var chatlog = document.getElementById("chatlog");
-  var messages = Array.from(chatlog.children);
-  // Сортировка в обратном порядке
-  messages.reverse();
-  // Удаление детей #chatlog
-  while (chatlog.firstChild) {
-    chatlog.removeChild(chatlog.firstChild);
-  }
-  // Вставка отсортированных сообщений
-  messages.forEach(function (message) {
-    chatlog.appendChild(message);
-  });
-}
-
-function removeEmptyLines() {
-  // Получаем тело HTML
-  var bodyHtml = document.body.innerHTML;
-  // Удаляем пустые строки с использованием регулярного выражения
-  var cleanedHtml = bodyHtml.replace(/^\s*[\r\n]/gm, "");
-  // Устанавливаем очищенное HTML обратно в тело документа
-  document.body.innerHTML = cleanedHtml;
-}
-// Вызываем функцию для удаления пустых строк
-
-function virt() {
-  // Получаем все элементы p.logline с классом virt
-  const virtLoglines = document.querySelectorAll("p.logline.virt");
-
-  // Итерируем по каждому элементу
-  virtLoglines.forEach((logline) => {
-    // Находим внутри элемента span.player и удаляем его
-    // const playerSpan = logline.querySelector("span.player"); if (playerSpan) { playerSpan.remove(); }
-  });
-}
-
-// Тумблер keepGroup
-
-const keepGroupCheckbox = document.getElementById("keepGroupCheckbox");
-let keepGroup = true;
-
-// Обработчик изменения состояния чекбокса
-keepGroupCheckbox.addEventListener("change", function () {
-  // Обновляем значение переменной keepGroup в соответствии с состоянием чекбокса
-  keepGroup = this.checked;
-});
-
-//
-
-function filterTrimEverything() {
-  // Найти все div с классом "chapter"
-  var chapters = document.querySelectorAll("div.chapter");
-
-  // Проверить, есть ли хотя бы один div с классом "chapter"
-  if (chapters.length > 0) {
-    // Пройтись по всем найденным div и применить trimChapter
-    chapters.forEach(function (chapter) {
-      trimChapter($(chapter));
-    });
-  } else {
-    console.log('На странице нет div с классом "chapter".');
-  }
-}
