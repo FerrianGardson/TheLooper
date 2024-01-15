@@ -1,5 +1,3 @@
-document.addEventListener("click", toggleselectedClass);
-
 function toggleselectedClass(event) {
   var paragraph = event.target.closest("p");
   if (paragraph) {
@@ -95,7 +93,6 @@ function handleFileInput(event) {
     console.error("Файл не найден");
   }
 }
-
 
 function convertTimestamp(timestamp) {
   console.log(timestamp);
@@ -776,14 +773,6 @@ function emoteToSpeech() {
   });
 }
 
-// Добавляем обработчик событий для всего #chatlog
-chatlog.addEventListener("click", function (event) {
-  // Проверяем, был ли клик на элементе с классом "date"
-  if (event.target.classList.contains("date")) {
-    toggleCollapse(event);
-  }
-});
-
 function toggleCollapse(event) {
   // Получаем родителя (предполагаем, что он имеет класс "chapter")
   const chapter = event.target.closest(".chapter");
@@ -804,6 +793,9 @@ function combineFunctions() {
   combineEmotes();
   combineYell();
 }
+
+document.addEventListener("click", toggleselectedClass);
+
 document
   .getElementById("keywordsInput")
   .addEventListener("keydown", function (event) {
@@ -811,6 +803,14 @@ document
       logFilter();
     }
   });
+
+// Добавляем обработчик событий для всего #chatlog
+chatlog.addEventListener("click", function (event) {
+  // Проверяем, был ли клик на элементе с классом "date"
+  if (event.target.classList.contains("date")) {
+    toggleCollapse(event);
+  }
+});
 
 function logFilter() {
   // Получаем ключевые слова из поля ввода с учетом слов внутри кавычек
@@ -1034,6 +1034,14 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
+// Добавляем обработчик событий для всего #chatlog
+chatlog.addEventListener("click", function (event) {
+  // Проверяем, был ли клик на элементе с классом "date"
+  if (event.target.classList.contains("date")) {
+    toggleCollapse(event);
+  }
+});
+
 function scrollSave(element) {
   if (element && element.classList) {
     element.classList.add("scroll");
@@ -1149,7 +1157,7 @@ function virt() {
 
   // Итерируем по каждому элементу
   virtLoglines.forEach((logline) => {
-    // Находим внутри элемента span.player и удаляем его 
+    // Находим внутри элемента span.player и удаляем его
     // const playerSpan = logline.querySelector("span.player"); if (playerSpan) { playerSpan.remove(); }
   });
 }
@@ -1169,15 +1177,15 @@ keepGroupCheckbox.addEventListener("change", function () {
 
 function filterTrimEverything() {
   // Найти все div с классом "chapter"
-  var chapters = document.querySelectorAll('div.chapter');
+  var chapters = document.querySelectorAll("div.chapter");
 
   // Проверить, есть ли хотя бы один div с классом "chapter"
   if (chapters.length > 0) {
-      // Пройтись по всем найденным div и применить trimChapter
-      chapters.forEach(function(chapter) {
-          trimChapter($(chapter));
-      });
+    // Пройтись по всем найденным div и применить trimChapter
+    chapters.forEach(function (chapter) {
+      trimChapter($(chapter));
+    });
   } else {
-      console.log('На странице нет div с классом "chapter".');
+    console.log('На странице нет div с классом "chapter".');
   }
 }
