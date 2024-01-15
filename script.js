@@ -44,29 +44,58 @@ function correctSpelling() {
     });
   });
 }
-// Загрузка файла
-// Получаем элементы DOM
-const fileInputTxt = document.getElementById("file-input-txt");
-const chatlog = document.getElementById("chatlog");
-// Добавляем слушатель события на изменение input файла (TXT)
-fileInputTxt.addEventListener("change", handleFileInputTxt);
-// Добавляем слушатель события на изменение input файла (HTML)
-// Функции
-async function handleFileInputTxt(event) {
+// Обработка .txt файлов
+async function handleTxtFile(file) {
   // Очищаем содержимое div.chatlog перед загрузкой нового файла
   chatlog.innerHTML = "";
-  // Получаем файл из события
+
+  // Читаем содержимое файла как текст
+  const text = await file.text();
+
+  // Рендерим чатлог с текстовым содержимым файла
+  importTxt(text);
+}
+
+// Обработка .html файлов
+async function handleHtmlFile(file) {
+  // Получаем содержимое файла как текст
+  const htmlText = await file.text();
+
+  // Ищем элемент с id "chatlog" в HTML-тексте
+  const parser = new DOMParser();
+  const htmlDocument = parser.parseFromString(htmlText, "text/html");
+  const newChatlog = htmlDocument.getElementById("chatlog");
+
+  // Проверяем, что элемент с id "chatlog" найден в HTML-тексте
+  if (newChatlog) {
+    // Заменяем текущий chatlog новым элементом
+    chatlog.innerHTML = newChatlog.innerHTML;
+  } else {
+    console.error("Элемент #chatlog не найден в HTML файле");
+  }
+}
+
+// Загрузка файла
+const fileInputTxt = document.getElementById("file-input-txt");
+fileInputTxt.addEventListener("change", handleFileInput);
+
+function handleFileInput(event) {
   const file = event.target.files[0];
-  // Проверяем, что файл существует
+
   if (file) {
-    // Читаем содержимое файла как текст
-    const text = await file.text();
-    // Рендерим чатлог с текстовым содержимым файла
-    importTxt(text);
+    // Проверяем тип файла
+    if (file.name.endsWith(".txt")) {
+      handleTxtFile(file);
+    } else if (file.name.endsWith(".html")) {
+      handleHtmlFile(file);
+    } else {
+      console.error("Неподдерживаемый тип файла");
+    }
   } else {
     console.error("Файл не найден");
   }
 }
+
 
 function convertTimestamp(timestamp) {
   console.log(timestamp);
