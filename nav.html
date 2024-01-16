@@ -1,105 +1,99 @@
-<div id="buttons">
-  <form>
-    <label for="file-input-txt">Загрузить лог (TXT)</label>
+<div class="buttons cut">
+  <div
+    class="tumbler input checkbox tooltip"
+    tooltip="Если включен, то импортирует в том числе ваши отписи в групповом чате ;)"
+  >
+    <input type="checkbox" id="keepGroupCheckbox" checked="" /><label
+      for="keepGroupCheckbox"
+      >Вирт</label
+    >
+  </div>
+  <form
+    class="important tumbler input tooltip"
+    tooltip="Открыть WoWChatLog.txt из папки Logs. Также позволяет открывать уже экспортированные отсюда HTML-файлы."
+  >
+    <label for="file-input-txt">Импорт</label>
     <input type="file" id="file-input-txt" />
   </form>
 
-  <form>
-    <label for="file-input-html">(HTML)</label>
-    <input type="file" id="file-input-html" />
-  </form>
-
-  <div id="keywords">
-    <!--         <input type="text" id="keywordsInput" placeholder="Введите ключевые слова через запятую"
-        onkeypress="handleKeyPress(event)"
-        value="Запись, фото, улыбочку, -шепчет, -ООС, -[МИА]"> -->
-
+  <button
+    onclick="exportHTML()"
+    class="tooltip"
+    tooltip="Сохраняет страницу в виде HTML-файла, который вы можете скинуть друзьям. Его можно открыть как напрямую из папки «Загрузки», так и повторно импортировать на сайте через кнопку «Импорт»."
+  >
+    Сохранить</button
+  ><button
+    onclick="toggleChapters()"
+    class="tooltip"
+    tooltip="Свернуть или развернуть все главы, чтобы целиком пройтись по тексту или только пробежаться по верхам в поисках нужного отыгрыша."
+  >
+    Свернуть
+  </button>
+  <div id="filter">
     <input
       type="text"
       id="keywordsInput"
       placeholder="Введите ключевые слова через запятую"
-      onkeypress="handleKeyPress(event)"
-      value="Фэрриан, Ананита, Кэролай, -ООС, Икар, Шанталь, Тианна, -шепчет, Зверолов, Дерек, Карл, Сэнди, Фг, Аран, Хитрец, Сэверус, Джанетт, Патрульный Бёрд, Самсон, Ларин"
+      value="Дилижанс"
     />
-
-    <button onclick="applyImportant()">Выделение</button>
+    <button
+      onclick="logFilter()"
+      class="tooltip left"
+      tooltip="Выделить только строки, содержащие ключевые слова через запятую. Например: «Фэрриан, Ананита»."
+    >
+      Фильтр
+    </button>
+    <button
+      onclick="filterTrimEverything()"
+      class="tooltip left"
+      tooltip="Обрезает края каждой главы так, чтобы она начиналась и заканчивалась выделенными строками."
+    >
+      Обрезка
+    </button>
+    <button
+      onclick="removeNonselectedParagraphs()"
+      class="tooltip left"
+      tooltip="Удаляет все строки, с которых было снято выделение. Чтобы выделить или снять выделение, щёлкните по строке левой кнопкой мыши."
+    >
+      Чистка
+    </button>
   </div>
-  <button onclick="removeNonImportantParagraphs()">Чистка</button>
-  <button onclick="oocToEmote()">OOC =&gt; Emote</button>
-  <button onclick="removeCollapsed()">Коллапс</button>
-  <button onclick="chapterReverse()">Реверс</button>
-  <button onclick="removePlayers()">Удалить игроков</button>
-  <button onclick="debug()">Дебаг</button>
-  <button onclick="exportHTML()">HTML</button>
-  <!--  
-    
-    <button onclick="postReplace()">Постреплейс</button>
 
-    <button onclick="combineFunctions()">Чатбоксы</button>
-    
-    <button onclick="toggleVisibility('dm')">DM</button>
-    <button onclick="toggleVisibility('ooc')">OOC</button>
-    <button onclick="emoteToSpeech()">Emote =&gt; Say</button>
-    <button onclick="sayToEmote()">Say =&gt; Emote</button>
-    <button onclick="killNav()">Kill Nav</button> -->
-  <script>
-    function debug() {
-      // Находим все пустые <p class="important">
-      const emptyImportantParagraphs =
-        document.querySelectorAll("p.important:empty");
+  <button
+    onclick="chapterReverse()"
+    class="tooltip"
+    tooltip="Влияет на то, в какой хронологии расположены отыгрыши — с самого первого или самого последнего."
+  >
+    Сортировка
+  </button>
+  <button onclick="debug()" class="tooltip" tooltip="Не нажимать, убьёт.">
+    Дебаг
+  </button>
 
-      // Удаляем каждый найденный пустой элемент
-      emptyImportantParagraphs.forEach((element) => {
-        element.remove();
-        console.log('Пустой элемент <p class="important"> удален:', element);
-      });
-    }
-
-    function removeCollapsed() {
-      var collapsedDivs = document.querySelectorAll("div.collapsed");
-      collapsedDivs.forEach(function (div) {
-        div.remove();
-      });
-    }
-
-    function removePlayers() {
-      var playersList = document.querySelectorAll("ul.players");
-      playersList.forEach(function (player) {
-        player.remove();
-      });
-    }
-
-    function chapterReverse() {
-      // 2. Отсортировать в обратном порядке детей #chatlog
-      var chatlog = document.getElementById("chatlog");
-      var messages = Array.from(chatlog.children);
-      // Сортировка в обратном порядке
-      messages.reverse();
-      // Удаление детей #chatlog
-      while (chatlog.firstChild) {
-        chatlog.removeChild(chatlog.firstChild);
-      }
-      // Вставка отсортированных сообщений
-      messages.forEach(function (message) {
-        chatlog.appendChild(message);
-      });
-    }
-
-    function postReplace() {
-      // Получаем весь HTML-код страницы
-      var updatedHTML = document.documentElement.innerHTML;
-
-      // Выполняем замену "кот" на "кошка" с использованием регулярного выражения
-      updatedHTML = updatedHTML.replace(
-        /<span class=\"emote\"><span class=\"speech\">— /g,
-        '<span class="emote"><span class="speech">'
-      ); // Дефисы в начале реплики
-
-      updatedHTML = updatedHTML.replace(/\|\d\s[-–—]\s\d\((.*)\)/g, "$1"); // Кривые эмоуты, возможно сбилось из-за дефисов
-
-      // Обновляем HTML-код страницы
-      document.documentElement.innerHTML = updatedHTML;
-      chapterCollapse();
-    }
-  </script>
+  <button
+    onclick="removeCollapsed()"
+    class="tooltip"
+    tooltip="Удаляет все главы кроме развёрнутых."
+  >
+    Главы</button
+  ><button
+    onclick="removePlayers()"
+    class="tooltip"
+    tooltip="Удаляет списки игроков под каждой главой. Если вы хотите удалить кого-то конкретного — просто наведитесь на него мышью и нажмите Del на клавиатуре."
+  >
+    Игроков
+  </button>
+  <button
+    onclick="clearChatlog()"
+    class="tooltip"
+    tooltip="Удаляет всё кроме выделенных строк."
+  >
+    Невыделенное</button
+  ><button
+    onclick="selectAll()"
+    class="tooltip"
+    tooltip="Выделяет или снимает выделение со всех строк. Можно отдельно кликать на строки и выделять или снимать выделение. Кнопка «Очистка» оставит только выделенные части."
+  >
+    Выделить всё
+  </button>
 </div>

@@ -49,13 +49,15 @@ body {
   --link: #00a6ff;
   --hover: #c0ddff;
   --header: Morpheus;
-  --p: 'Montserrat';
+  --p:
+  'Montserrat';
   --border: 3px solid #000000;
   --shadow: 0px 1px 3px 3px rgb(0 0 0 / 33%);
   --shadow-inset: 0px 0px 50px -4px rgb(0 0 0) inset;
   --shadow-big: 0px 0px 21px 21px rgb(0 0 0 / 27%);
   --emote: var(
   --orange);
+  --glass: #0e0e0e;
 }
 
 :root {
@@ -177,7 +179,7 @@ html {
   /* background: rgba(0, 0, 0, 0.32); */
   padding: 4rem;
   /* padding-top: 12rem; */
-  min-height: 100vh;
+  /* min-height: 100vh; */
   overflow: hidden;
   /* padding: 1.5rem !important; */
   color: var(--text) !important;
@@ -187,7 +189,7 @@ html {
     var(--post-image-repeat), var(--post-color) !important;
   background-blend-mode: hard-light;
   max-width: 1090px;
-  margin: 6rem auto;
+  margin: 9rem auto;
   /* padding-top: 200px; */
   /* margin-top: 12rem; */
 }
@@ -201,7 +203,7 @@ button:hover {
   background: linear-gradient(45deg, white, rgba(255, 255, 255, 0.32));
   color: black;
 }
-div#buttons {
+div.buttons {
   display: flex;
   left: 24px;
   top: 24px;
@@ -254,7 +256,6 @@ button,
   padding: 0.5em 1em;
   white-space: nowrap;
   min-width: fit-content;
-  overflow: hidden;
   background: rgb(0 0 0 / 37%);
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -304,12 +305,10 @@ div#filter {
   display: flex;
   border-radius: 8px;
   border: 1px solid var(--border-color);
-  overflow: hidden;
 }
 
 input[type="text"] {
   white-space: nowrap;
-  overflow: hidden;
   border: none;
   outline: none;
   text-overflow: ellipsis;
@@ -354,6 +353,7 @@ input:focus-visible {
 }
 
 .collapsed {
+  /* Webkit browsers (Chrome, Safari) */
   -webkit-mask-image: linear-gradient(
     180deg,
     rgba(255, 255, 255, 1) 75%,
@@ -362,7 +362,18 @@ input:focus-visible {
   -webkit-mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: top;
+
+  /* Standard CSS for mask properties */
+  mask-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 75%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  mask-position: top;
 }
+
 
 
 .tumbler > input {
@@ -373,14 +384,15 @@ input:focus-visible {
 
 .tumbler > input::before {
   content: "";
-  display: inline-block;
+  display: block;
   width: 18px;
-  height: 17px;
-  vertical-align: bottom;
+  height: 18px;
+  /* vertical-align: bottom; */
   border: 1px solid #4b4442;
   border-radius: 2px;
   box-shadow: 0px 0px 6px 6px rgba(0, 0, 0, 0.25) inset;
   background: #0f0401;
+  /* margin-right: 6px; */
 }
 
 .tumbler > input:checked::before {
@@ -404,7 +416,7 @@ input:focus-visible {
 
 .tumbler.input> label {
     padding: 0.5rem 1rem;
-    vertical-align: initial;
+    display: block;
 }
 
 .collapsed > h2::after {
@@ -437,3 +449,68 @@ p.logline:not(.selected) {
     opacity: 0.5;
 }
 
+.buttons.cut:hover {
+    height: auto;
+}
+
+.buttons > *:not(.important):not(:hover) {
+    opacity: 0.25;
+}
+
+.tooltip {
+  position: relative;
+  box-sizing: border-box;
+}
+.tooltip:after,
+.tooltip:before {
+  visibility: hidden;
+  position: absolute;
+  left: 50%;
+  box-sizing: border-box;
+  z-index: 1;
+}
+.tooltip:after {
+  content: attr(tooltip);
+  background: var(--glass);
+  top: 100%;
+  margin-top: 22px;
+  padding: 10px;
+  color: #fff;
+  line-height: 1.5;
+  /* width: 250px; */
+  /* margin-left: -125px; */
+  /* border-radius: 4px; */
+}
+.tooltip:before {
+  content: "";
+  top: 100%;
+  margin-top: 6px;
+  /* margin-left: 44px; */
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid var(--glass);
+}
+.tooltip:hover:after,
+.tooltip:hover:before {
+  /* transition: all 400ms ease 200ms; */
+  visibility: visible;
+}
+.tooltip:hover:after {
+  margin-top: 15px;
+}
+
+.input.checkbox {
+    display: flex;
+    align-content: center;
+    align-items: center;
+}
+
+
+.checkbox > label {
+    padding-left: 0!important;
+}
+
+.checkbox > input {
+    padding-left: 1rem;
+    padding-right: 0.5rem;
+}
