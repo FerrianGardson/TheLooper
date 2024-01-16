@@ -122,7 +122,7 @@ body {
   margin-bottom: 4px;
 }
 
-.say > .player {
+.say > .player, .virt > .player {
   font-weight: bold;
 }
 

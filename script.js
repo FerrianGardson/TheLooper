@@ -11,8 +11,6 @@ function formatHTML() {
   splitSessions();
   wrapChapters();
   colorizePlayers(playerColorMap);
-  addCommaOrDot();
-  addColonToEnd();
   combineFunctions();
   emoteToSpeech();
   sayToEmote();
@@ -348,7 +346,7 @@ function addCommaOrDot() {
 function addColonToEnd() {
   // Находим все элементы с классом "logline", исключая "emote" и "whisper"
   const loglines = document.querySelectorAll(
-    ".logline:not(.emote):not(.whisper)"
+    ".logline.say, .logline.virt, .logline.yell"
   );
   // Проходимся по каждому элементу с классом "logline"
   loglines.forEach((logline) => {
@@ -636,7 +634,7 @@ function colorizePlayers(playerColorMap) {
   const playerColors = {};
   const chapters = document.querySelectorAll(".chapter");
   chapters.forEach((chapter) => {
-    const playerSpans = chapter.querySelectorAll(".logline.say .player");
+    const playerSpans = chapter.querySelectorAll(".logline.say .player, .logline.virt .player");
     playerSpans.forEach((span, index) => {
       const playerName = span.textContent.trim();
       let colorClass;
@@ -706,6 +704,8 @@ function colorizePlayers(playerColorMap) {
     ];
     return colors[index % colors.length];
   }
+  addCommaOrDot();
+  addColonToEnd();
 }
 // Пример использования функции с картой цветов
 const playerColorMap = {
@@ -823,7 +823,6 @@ function logFilter() {
   // Выбираем все элементы div.chapter
   $("div.chapter").each(function () {
     const timestamp = $(this).attr("timestamp"); // Получаем значение атрибута timestamp
-    scrollSave(this);
     // Для каждого параграфа внутри div.chapter
     $(this)
       .find("p")
@@ -842,9 +841,10 @@ function logFilter() {
       });
     openselectedChapters();
     // trimChapter($(this));
-    scrollToSaved();
   });
   removeCollapsed();
+  selected = [];
+  scrollToSelect()
 }
 
 function trimChapter(chapterElement) {
@@ -937,7 +937,7 @@ function selectAll() {
 }
 
 function debug() {
-  addListeners();
+  scrollToSelect();
 }
 
 function removeCollapsed() {
@@ -953,7 +953,6 @@ function removePlayers() {
     player.remove();
   });
 }
-
 
 var isReversed = false;
 function chapterReverse() {
@@ -1212,3 +1211,52 @@ function clearChatlog() {
 }
 
 // Конец
+
+// Внешний массив
+let selected = [];
+// Переменная текущей позиции
+let currentPosition = null;
+
+function scrollToSelect() {
+  // Если массив или позиция пустая
+  if (!selected.length || currentPosition === null) {
+    // Наполняем массив всеми p.selected со страницы
+    selected = Array.from(document.querySelectorAll('p.selected'));
+
+    // Если есть элементы в массиве, перемещаемся на первый индекс скроллом
+    if (selected.length > 0) {
+      selected[0].scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+      
+      // Запоминаем текущую позицию
+      currentPosition = 0;
+    }
+  } else {
+    // Перемещаемся на +1 от текущей позиции скроллом
+    const nextIndex = (currentPosition + 1) % selected.length;
+    selected[nextIndex].scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    });
+
+    // Запоминаем новую позицию как текущую
+    currentPosition = nextIndex;
+  }
+}
+
+// Пример использования
+// Вызовите функцию scrollToSelect, например, при нажатии на кнопку или другое событие
+
+
+// Объединяем Event Listener для клавиш f и а
+document.addEventListener('keydown', function(event) {
+  // Проверяем, что курсор клавиатуры не находится внутри input-а
+  const isCursorNotInInput = !document.activeElement || document.activeElement.tagName.toLowerCase() !== 'input';
+
+  // Клавиша f или а и курсор не в input-е
+  if ((event.key === 'f' || event.key === 'а') && isCursorNotInInput) {
+    scrollToSelect();
+  }
+});
