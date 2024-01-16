@@ -187,7 +187,7 @@ function getFormattedDate(timestamp) {
     "ноября",
     "декабря",
   ];
-  const formattedDate = `Запись от ${date.getDate()} ${
+  const formattedDate = `${date.getDate()} ${
     monthNames[date.getMonth()]
   }, ${padZero(date.getHours())}:${padZero(date.getMinutes())}`;
   return formattedDate;
@@ -292,12 +292,14 @@ function expandChapters() {
     chapter.classList.remove("collapsed");
   });
 }
-let isCollapsed = true;
+let isCollapsed = false;
 
 function toggleChapters() {
   if (isCollapsed) {
+    console.log('expandChapters();');
     expandChapters();
   } else {
+    console.log('collapseChapters();');
     collapseChapters();
   }
   isCollapsed = !isCollapsed;
@@ -780,6 +782,7 @@ function toggleCollapse(event) {
     // Выводим в консоль лог текущего состояния "collapsed" до переключения
     // Переключаем класс "collapsed"
     chapter.classList.toggle("collapsed");
+    console.log('Toggle Collapsed');
     // Выводим в консоль лог состояния "collapsed" после переключения
   } else {
     console.error(
@@ -927,14 +930,8 @@ function selectAll() {
 }
 
 function debug() {
-  // Находим все пустые <p class="important">
-  const emptyImportantParagraphs =
-    document.querySelectorAll("p.important:empty");
-  // Удаляем каждый найденный пустой элемент
-  emptyImportantParagraphs.forEach((element) => {
-    element.remove();
-  });
-  removeEmptyLines();
+  addListeners();
+
 }
 
 function removeCollapsed() {
@@ -1024,14 +1021,6 @@ document
     }
   });
 
-// Добавляем обработчик событий для всего #chatlog
-chatlog.addEventListener("click", function (event) {
-  // Проверяем, был ли клик на элементе с классом "date"
-  if (event.target.classList.contains("date")) {
-    toggleCollapse(event);
-  }
-});
-
 document.addEventListener("keydown", function (event) {
   if (event.key === "Delete") {
     var elementsUnderCursor = document.querySelectorAll(":hover");
@@ -1052,6 +1041,7 @@ document.addEventListener("keydown", function (event) {
     });
   }
 });
+
 document.addEventListener("keydown", function (event) {
   if (event.key === "[" || event.key === "х") {
     // Находим все элементы под курсором
@@ -1065,26 +1055,26 @@ document.addEventListener("keydown", function (event) {
       (element) => element.tagName.toLowerCase() === "h2"
     );
     if (elementUnderCursor) {
-      // Логика для <p>
       scrollSave(elementUnderCursor);
+      // Логика для <p>
       let previousSiblings = elementUnderCursor.previousElementSibling;
       while (previousSiblings) {
         const siblingToRemove = previousSiblings;
         previousSiblings = previousSiblings.previousElementSibling;
         siblingToRemove.remove();
       }
+      scrollToSaved();
     } else if (headingUnderCursor) {
       // Логика для <h2>
       scrollSave(headingUnderCursor);
-      let previousSiblings =
-        headingUnderCursor.parentNode.previousElementSibling;
+      let previousSiblings = headingUnderCursor.parentNode.previousElementSibling;
       while (previousSiblings) {
         const siblingToRemove = previousSiblings;
         previousSiblings = previousSiblings.previousElementSibling;
         siblingToRemove.remove();
       }
+      scrollToSaved();
     }
-    scrollToSaved();
   }
 });
 
@@ -1122,6 +1112,7 @@ document.addEventListener("keydown", function (event) {
     }
   }
 });
+
 document.addEventListener("keydown", function (event) {
   if (event.shiftKey) {
     // Находим все элементы под курсором
@@ -1191,6 +1182,7 @@ document.addEventListener("keydown", function (event) {
 document.addEventListener("click", function (event) {
   // Проверяем, был ли клик на элементе с классом "date"
   if (event.target.classList.contains("date")) {
+    console.log('Клик по дате');
     toggleCollapse(event);
   }
 });

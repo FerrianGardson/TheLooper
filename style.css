@@ -107,16 +107,16 @@ p.dm {
 }
 
 .players {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
-  list-style: none;
+  /* display: flex; */
+  /* flex-flow: row wrap; */
+  /* justify-content: flex-start; */
+  /* list-style: none; */
 }
 .players li {
   margin-right: 4px;
 }
 ul.players {
-  margin-bottom: 0.5em;
+  /* margin-bottom: 0.5em; */
 }
 .content.hidden {
   display: block;
@@ -202,7 +202,7 @@ button,
 }
 
 ul.players {
-  margin-bottom: 0.5em;
+  /* margin-bottom: 0.5em; */
 }
 .content.hidden {
   display: block;
@@ -228,7 +228,7 @@ h2.date:hover {
   cursor: pointer;
 }
 .chapter.collapsed {
-  height: 12rem;
+  height: 24rem;
 }
 
 form {
@@ -353,7 +353,7 @@ input:focus-visible {
 }
 
 span::after {
-  content: " ";
+  /* content: " "; */
 }
 
 .virt > .emote {
@@ -409,8 +409,17 @@ ul.players.npc {
   opacity: 0.25;
 }
 
+.tumbler.input {
+    padding: 0;
+}
+
+.tumbler.input> label {
+    padding: 0.5rem 1rem;
+    vertical-align: initial;
+}
+
 .collapsed > h2::after {
-  content: "Кликните на заголовок, чтобы развернуть...";
+  content: "ÐšÐ»Ð¸ÐºÐ½Ð¸Ñ‚Ðµ Ð½Ð° Ð·Ð°Ð³Ð¾Ð»Ð¾Ð²Ð¾Ðº, Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ñ€Ð°Ð·Ð²ÐµÑ€Ð½ÑƒÑ‚ÑŒ...";
   font-size: 1rem;
   line-height: 1rem;
   display: block;
