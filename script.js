@@ -634,7 +634,9 @@ function colorizePlayers(playerColorMap) {
   const playerColors = {};
   const chapters = document.querySelectorAll(".chapter");
   chapters.forEach((chapter) => {
-    const playerSpans = chapter.querySelectorAll(".logline.say .player, .logline.virt .player");
+    const playerSpans = chapter.querySelectorAll(
+      ".logline.say .player, .logline.virt .player"
+    );
     playerSpans.forEach((span, index) => {
       const playerName = span.textContent.trim();
       let colorClass;
@@ -802,12 +804,21 @@ function combineFunctions() {
   combineYell();
 }
 
+let keywordsInput = null;
+
 function logFilter() {
+  // Получаем ключевые слова из поля ввода с учетом слов внутри кавычек
+  previousInput = keywordsInput;
+  keywordsInput = document.getElementById("keywordsInput").value;
+  // Если ввод прежний, переходим к ближайшему следующему совпадению
+  if (keywordsInput === previousInput) {
+    scrollToSelect();
+    return;
+  }
+  // Снимаем выделение  
   document
     .querySelectorAll(".selected")
     .forEach((element) => element.classList.remove("selected"));
-  // Получаем ключевые слова из поля ввода с учетом слов внутри кавычек
-  let keywordsInput = document.getElementById("keywordsInput").value;
   // Используем регулярное выражение для поиска слов внутри кавычек с игнорированием регистра
   let regex = /«([^»]+?)»|([^,]+?)(?:,\s*|$)/gi;
   // Массив для хранения найденных ключевых слов
@@ -844,7 +855,7 @@ function logFilter() {
   });
   removeCollapsed();
   selected = [];
-  scrollToSelect()
+  scrollToSelect();
 }
 
 function trimChapter(chapterElement) {
@@ -1221,15 +1232,15 @@ function scrollToSelect() {
   // Если массив или позиция пустая
   if (!selected.length || currentPosition === null) {
     // Наполняем массив всеми p.selected со страницы
-    selected = Array.from(document.querySelectorAll('p.selected'));
+    selected = Array.from(document.querySelectorAll("p.selected"));
 
     // Если есть элементы в массиве, перемещаемся на первый индекс скроллом
     if (selected.length > 0) {
       selected[0].scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
+        behavior: "smooth",
+        block: "center",
       });
-      
+
       // Запоминаем текущую позицию
       currentPosition = 0;
     }
@@ -1237,8 +1248,8 @@ function scrollToSelect() {
     // Перемещаемся на +1 от текущей позиции скроллом
     const nextIndex = (currentPosition + 1) % selected.length;
     selected[nextIndex].scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
+      behavior: "smooth",
+      block: "center",
     });
 
     // Запоминаем новую позицию как текущую
@@ -1249,14 +1260,15 @@ function scrollToSelect() {
 // Пример использования
 // Вызовите функцию scrollToSelect, например, при нажатии на кнопку или другое событие
 
-
 // Объединяем Event Listener для клавиш f и а
-document.addEventListener('keydown', function(event) {
+document.addEventListener("keydown", function (event) {
   // Проверяем, что курсор клавиатуры не находится внутри input-а
-  const isCursorNotInInput = !document.activeElement || document.activeElement.tagName.toLowerCase() !== 'input';
+  const isCursorNotInInput =
+    !document.activeElement ||
+    document.activeElement.tagName.toLowerCase() !== "input";
 
   // Клавиша f или а и курсор не в input-е
-  if ((event.key === 'f' || event.key === 'а') && isCursorNotInInput) {
+  if ((event.key === "f" || event.key === "а") && isCursorNotInInput) {
     scrollToSelect();
   }
 });
