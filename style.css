@@ -1,4 +1,4 @@
-/* Кастомные шрифты: */
+/* ÐšÐ°ÑÑ‚Ð¾Ð¼Ð½Ñ‹Ðµ ÑˆÑ€Ð¸Ñ„Ñ‚Ñ‹: */
 
 @font-face {
   src: url("https://cdn.glitch.global/a5c42250-1d0c-4282-a0b8-b5da29f85db0/Morpheus%20Cyr.ttf?v=1701629126289");
@@ -30,7 +30,7 @@
   font-family: Lino;
 }
 
-/* Шаблон (минималистичный) */
+/* Ð¨Ð°Ð±Ð»Ð¾Ð½ (Ð¼Ð¸Ð½Ð¸Ð¼Ð°Ð»Ð¸ÑÑ‚Ð¸Ñ‡Ð½Ñ‹Ð¹) */
 
 body {
   --background-color: #0000008c;
@@ -200,8 +200,8 @@ h2:not(:first-of-type) {
 }
 
 button:hover {
-  background: linear-gradient(45deg, white, rgba(255, 255, 255, 0.32));
-  color: black;
+  /* background: linear-gradient(45deg, white, rgba(255, 255, 255, 0.32)); */
+  /* color: black; */
 }
 div.buttons {
   display: flex;
@@ -236,8 +236,7 @@ h2:not(:first-of-type) {
   margin-top: 6em;
 }
 
-button:hover,
-.tumbler:hover {
+button:hover:not(.no-hover), .tumbler:hover {
   background: linear-gradient(45deg, rgb(255, 191, 0), rgb(62, 43, 0));
   color: var(--black);
 }
@@ -288,7 +287,7 @@ input[type="file"] {
   position: fixed;
   top: 0;
   backdrop-filter: blur(3px);
-  padding: 1rem 4rem;
+  padding: 1rem 1rem;
   z-index: 1;
 }
 
@@ -305,6 +304,9 @@ div#filter {
   display: flex;
   border-radius: 8px;
   border: 1px solid var(--border-color);
+  height: fit-content;
+  flex-direction: row;
+  gap: 0;
 }
 
 input[type="text"] {
@@ -420,7 +422,7 @@ input:focus-visible {
 }
 
 .collapsed > h2::after {
-  content: "Читать целиком...";
+  content: "Ð§Ð¸Ñ‚Ð°Ñ‚ÑŒ Ñ†ÐµÐ»Ð¸ÐºÐ¾Ð¼...";
   font-size: 1rem;
   line-height: 1rem;
   display: block;
@@ -454,7 +456,7 @@ p.logline:not(.selected) {
 }
 
 .buttons > *:not(.important):not(:hover) {
-    opacity: 0.25;
+    /* opacity: 0.25; */
 }
 
 .tooltip {
@@ -513,4 +515,32 @@ p.logline:not(.selected) {
 .checkbox > input {
     padding-left: 1rem;
     padding-right: 0.5rem;
+}
+
+.speech {
+  color: var(--text);
+}
+
+.hide.group:not(:hover) > .hide {
+    display: none;
+}
+
+.hide.group {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+}
+
+.hide.group:hover .replace {
+    opacity: 0.25;
+    cursor: unset;
+}
+
+div#filter {
+}
+
+.nav > .buttons {
+    width: fit-content;
+    margin: auto;
+    min-width: 1090px;
 }

@@ -296,14 +296,19 @@ let isCollapsed = false;
 
 function toggleChapters() {
   if (isCollapsed) {
-    console.log('expandChapters();');
+    console.log("expandChapters();");
     expandChapters();
   } else {
-    console.log('collapseChapters();');
+    console.log("collapseChapters();");
     collapseChapters();
   }
   isCollapsed = !isCollapsed;
+
+  // Используйте querySelector для получения одиночного элемента
+  let button = document.querySelector('[onclick="toggleChapters()"]');
+  button.textContent = isCollapsed ? "Развернуть" : "Свернуть";
 }
+
 // КОНЕЦ
 
 function renderChatLog(text) {
@@ -782,7 +787,7 @@ function toggleCollapse(event) {
     // Выводим в консоль лог текущего состояния "collapsed" до переключения
     // Переключаем класс "collapsed"
     chapter.classList.toggle("collapsed");
-    console.log('Toggle Collapsed');
+    console.log("Toggle Collapsed");
     // Выводим в консоль лог состояния "collapsed" после переключения
   } else {
     console.error(
@@ -797,10 +802,10 @@ function combineFunctions() {
   combineYell();
 }
 
-
-
 function logFilter() {
-  document.querySelectorAll('.selected').forEach(element => element.classList.remove('selected'));
+  document
+    .querySelectorAll(".selected")
+    .forEach((element) => element.classList.remove("selected"));
   // Получаем ключевые слова из поля ввода с учетом слов внутри кавычек
   let keywordsInput = document.getElementById("keywordsInput").value;
   // Используем регулярное выражение для поиска слов внутри кавычек с игнорированием регистра
@@ -870,7 +875,6 @@ function openselectedChapters() {
   }
 }
 
-
 function scrollSave(element) {
   if (element && element.classList) {
     element.classList.add("scroll");
@@ -910,6 +914,7 @@ function exportHTML() {
   element.click();
   document.body.removeChild(element);
 }
+
 var isAllSellected = false; // Переменная для отслеживания состояния
 
 function selectAll() {
@@ -926,12 +931,13 @@ function selectAll() {
     });
   }
   // Инвертируем состояние
+  let button = document.querySelector('[onclick="selectAll()"]');
+  button.textContent = isAllSellected ? "Выделить всё" : "Убрать всё";
   isAllSellected = !isAllSellected;
 }
 
 function debug() {
   addListeners();
-
 }
 
 function removeCollapsed() {
@@ -948,6 +954,8 @@ function removePlayers() {
   });
 }
 
+
+var isReversed = false;
 function chapterReverse() {
   // 2. Отсортировать в обратном порядке детей #chatlog
   var chatlog = document.getElementById("chatlog");
@@ -962,6 +970,9 @@ function chapterReverse() {
   messages.forEach(function (message) {
     chatlog.appendChild(message);
   });
+  let button = document.querySelector('[onclick="chapterReverse()"]');
+  button.textContent = isReversed ? "Сначала старое" : "Сначала новое";
+  isReversed = !isReversed;
 }
 
 function removeEmptyLines() {
@@ -1067,7 +1078,8 @@ document.addEventListener("keydown", function (event) {
     } else if (headingUnderCursor) {
       // Логика для <h2>
       scrollSave(headingUnderCursor);
-      let previousSiblings = headingUnderCursor.parentNode.previousElementSibling;
+      let previousSiblings =
+        headingUnderCursor.parentNode.previousElementSibling;
       while (previousSiblings) {
         const siblingToRemove = previousSiblings;
         previousSiblings = previousSiblings.previousElementSibling;
@@ -1182,7 +1194,7 @@ document.addEventListener("keydown", function (event) {
 document.addEventListener("click", function (event) {
   // Проверяем, был ли клик на элементе с классом "date"
   if (event.target.classList.contains("date")) {
-    console.log('Клик по дате');
+    console.log("Клик по дате");
     toggleCollapse(event);
   }
 });
@@ -1193,10 +1205,10 @@ document.addEventListener("click", toggleselectedClass);
 
 function clearChatlog() {
   // Получаем ссылку на элемент div#chatlog
-  var chatlog = document.getElementById('chatlog');
+  var chatlog = document.getElementById("chatlog");
 
   // Очищаем содержимое элемента
-  chatlog.innerHTML = '';
+  chatlog.innerHTML = "";
 }
 
 // Конец
