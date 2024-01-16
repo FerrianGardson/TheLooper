@@ -377,7 +377,7 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/<p.*?>([A-z]|\>|\&|\(|\d).*?<\/p>\n/g, ""); // Системные сообщения, начинаются со служебных символов
 
   chatlogHTML = chatlogHTML.replace(
-    /<p.*?\s(действие|приглашается|\(|атакует|рассказывает|is Away|получает|does not wish|к вам|смотрит на вас|кивает вам|смотрит на вас|ставит|добавлено|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*?<\/p>\n/g,
+    /<p.*?\s(действие|приглашается|\(|атакует|рассказывает|is Away|получает|не имеет ауры|does not wish|к вам|смотрит на вас|кивает вам|смотрит на вас|ставит|добавлено|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*?<\/p>\n/g,
     ""
   ); // Игрок %ООС-действие%
 
@@ -1288,7 +1288,7 @@ function pasteImg() {
 }
 
 document.addEventListener("keydown", function (event) {
-  if (event.key === "i" && event.ctrlKey) {
+  if (event.key === "ArrowRight") {
     pasteImg();
   }
 });
@@ -1311,7 +1311,7 @@ function pasteText() {
       textElement.textContent = "Текст для вставки";
 
       paperDiv.appendChild(textElement);
-      loglineElement.insertAdjacentElement("afterend", paperDiv);
+      loglineElement.insertAdjacentElement("beforebegin", paperDiv);
 
       console.log("Text inserted successfully.");
       break; // Прекращаем перебор после первого соответствующего элемента
@@ -1321,8 +1321,45 @@ function pasteText() {
 
 
 document.addEventListener("keydown", function (event) {
-  if (event.key === "i" && event.altKey) {
+  if (event.key === "ArrowLeft") {
     pasteText();
   }
 });
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "ArrowUp") {
+    var contentContainer = document.querySelector(".content");
+    var elementUnderCursor = document.querySelector(".content :hover");
+
+    if (elementUnderCursor && contentContainer.contains(elementUnderCursor)) {
+      // Проверяем, что элемент находится внутри .chapter
+
+      var previousElement = elementUnderCursor.previousElementSibling;
+
+      if (previousElement) {
+        // Если есть предыдущий сосед, перемещаем текущий элемент перед ним
+        contentContainer.insertBefore(elementUnderCursor, previousElement);
+      }
+    }
+  }
+});
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "ArrowDown") {
+    var contentContainer = document.querySelector(".content");
+    var elementUnderCursor = document.querySelector(".content :hover");
+
+    if (elementUnderCursor && contentContainer.contains(elementUnderCursor)) {
+      // Проверяем, что элемент находится внутри .chapter
+
+      var nextElement = elementUnderCursor.nextElementSibling;
+
+      if (nextElement) {
+        // Если есть следующий сосед, перемещаем текущий элемент после него
+        contentContainer.insertBefore(nextElement, elementUnderCursor);
+      }
+    }
+  }
+});
+
 
