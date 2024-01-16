@@ -1,22 +1,81 @@
-:root {
-  --grey: #808080;
-  --light-grey: #c2c2c2;
-  --dark-grey: #434343;
-  --black: #212121;
+/* Кастомные шрифты: */
+
+@font-face {
+  src: url("https://cdn.glitch.global/a5c42250-1d0c-4282-a0b8-b5da29f85db0/Morpheus%20Cyr.ttf?v=1701629126289");
+  font-family: "Morpheus";
+}
+
+@font-face {
+  src: url("https://cdn.glitch.global/a400509b-3b32-45c4-9119-c4c2c4268fed/Medieval%20English.ttf?v=1682767950745");
+  font-family: "Medieval English";
+}
+
+@font-face {
+  src: url("https://cdn.glitch.com/e4cffeea-a4e8-403a-9938-d212bfa86c8d%2FMinionProCapt.otf?v=1614586272022");
+  font-family: "Minion Pro Capt";
+}
+
+@font-face {
+  src: url("https://cdn.glitch.com/a5c42250-1d0c-4282-a0b8-b5da29f85db0%2FMISTRAL.TTF?v=1580113058987");
+  font-family: "Mistral";
+}
+
+@font-face {
+  src: url("https://cdn.glitch.global/a5c42250-1d0c-4282-a0b8-b5da29f85db0/Redonda-script-Two.ttf?v=1702226734268");
+  font-family: "Redonda";
+}
+
+@font-face {
+  src: url("https://cdn.glitch.com/a5c42250-1d0c-4282-a0b8-b5da29f85db0%2FRDRLino-Regular.ttf?v=1627658531260");
+  font-family: Lino;
+}
+
+/* Шаблон (минималистичный) */
+
+body {
+  --background-color: #0000008c;
+  --background-image: url(
+  https://i.postimg.cc/xT6fNTQm/Dragon-s-Crown-fantasy-art-1208380.jpg);
+  --post-color: #000000bd;
+  --post-image-repeat: url(
+  https://i.postimg.cc/dt7gPNPP/image.png);
+  --post-image-non-repeat: none;
+  --frame: url(
+  https://i.postimg.cc/YqJzfHgv/4.png);
+  --info: #ffffff0a;
+  --text: #ffffffd9;
+  --header-color: #ffffff;
+  --text-shadow: 3px 3px 2px black;
+  --link: #00a6ff;
+  --hover: #c0ddff;
+  --header: Morpheus;
+  --p: 'Montserrat';
+  --border: 3px solid #000000;
+  --shadow: 0px 1px 3px 3px rgb(0 0 0 / 33%);
+  --shadow-inset: 0px 0px 50px -4px rgb(0 0 0) inset;
+  --shadow-big: 0px 0px 21px 21px rgb(0 0 0 / 27%);
+  --emote: var(
+  --orange);
 }
 
 :root {
   --red: #dd403aff;
   --green: #00ac48;
+  --blue: var(--blue-1);
   --blue-1: #43c59eff;
   --blue-2: #5398beff;
   --blue-3: #0a74ec;
   --yellow: #ffd914;
   --orange: #f18f01ff;
+  --purple: var(--purple-1);
   --purple-1: #4f4789ff;
   --purple-2: #6420ff;
   --purple-3: #ae5eff;
   --whisper: #d361d3;
+  --grey: #808080;
+  --light-grey: #c2c2c2;
+  --dark-grey: #434343;
+  --black: #212121;
   --border-color: rgba(255, 255, 255, 0.26);
 }
 
@@ -26,7 +85,7 @@
 .green {
   color: var(--green);
 }
-.blue-1 {
+.blue-1, .blue {
   color: var(--blue-1);
 }
 .blue-2 {
@@ -41,7 +100,7 @@
 .orange {
   color: var(--orange);
 }
-.purple-1 {
+.purple-1, .purple {
   color: var(--purple-1);
 }
 .purple-2 {
@@ -49,6 +108,59 @@
 }
 .purple-3 {
   color: var(--purple-3);
+}
+
+.emote {
+  color: var(--emote);
+  text-transform: none;
+  font-weight: initial;
+}
+
+.logline {
+  margin-bottom: 4px;
+}
+
+.say > .player {
+  font-weight: bold;
+}
+
+.yell span.speech, .yell .player {
+  color: var(--red);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.players > li, .npc > li {
+  display: inline-block;
+  margin-right: 0.3em;
+  font-weight: bold;
+}
+
+.player {
+  margin-right: 0.5rem;
+  background: none;
+}
+
+ul.npc > li {
+  opacity: 0.25;
+}
+
+ul.npc > li:hover {
+  opacity: 1;
+}
+
+.players, .npc {
+  display: inline-block;
+  flex-wrap: wrap;
+  /* margin-bottom: 1rem; */
+}
+
+p.logline {
+  margin: 1rem 0;
+}
+
+.virt > .emote {
+  color: var(--whisper) !important;
 }
 
 * {
@@ -62,19 +174,24 @@ html {
 }
 
 #chatlog {
-  background: rgba(0, 0, 0, 0.32);
+  /* background: rgba(0, 0, 0, 0.32); */
   padding: 4rem;
-  padding-top: 12rem;
+  /* padding-top: 12rem; */
   min-height: 100vh;
   overflow: hidden;
+  /* padding: 1.5rem !important; */
+  color: var(--text) !important;
+  /* font-family: var(--p); */
+  border-radius: 8px;
+  background: var(--post-image-non-repeat) top center no-repeat,
+    var(--post-image-repeat), var(--post-color) !important;
+  background-blend-mode: hard-light;
+  max-width: 1090px;
+  margin: 6rem auto;
+  /* padding-top: 200px; */
+  /* margin-top: 12rem; */
 }
 
-.say > .player {
-  font-weight: bold;
-}
-.speech {
-  color: rgb(255, 255, 255);
-}
 
 h2:not(:first-of-type) {
   margin-top: 6em;
@@ -94,63 +211,20 @@ div#buttons {
   flex-direction: row;
   flex-wrap: wrap;
 }
-.yell {
-  color: red;
-  font-weight: bold;
-}
+
 .chapter:not(:first-child) {
   margin-top: 2em;
 }
-p.dm {
-  color: rgb(255, 94, 0);
-  font-weight: bold;
-}
-
-.players {
-  /* display: flex; */
-  /* flex-flow: row wrap; */
-  /* justify-content: flex-start; */
-  /* list-style: none; */
-}
-.players li {
-  margin-right: 4px;
-}
-ul.players {
-  /* margin-bottom: 0.5em; */
-}
-.content.hidden {
-  display: block;
-  max-height: 190px;
-  opacity: 0.21;
-  overflow: hidden;
-}
-.hidden {
-  display: none;
-}
-.content.hidden {
-  display: block;
-  max-height: 190px;
-  opacity: 0.2;
-  overflow: hidden;
-}
-
-p.logline span.emote,
-p.emote span.emote,
-p.emote {
-  color: orange;
-}
-.speech {
-  color: rgb(255, 255, 255);
-}
 
 body {
-  background: url("https://media.discordapp.net/attachments/1095798939418116276/1095807195368652830/image.png")
-    right top no-repeat fixed rgb(26, 12, 1);
   color: white;
-  font-family: "Roboto", sans-serif;
+  font-family: var(--p), sans-serif;
+  background: var(--background-image) no-repeat fixed center, var(--background-color);
+  background-size:cover;
+  background-blend-mode:multiply;
 }
 h2 {
-  font-family: "Roboto";
+  font-family: var(--header);
   font-weight: bold;
   width: fit-content;
   line-height: 100%;
@@ -171,10 +245,7 @@ label {
   font-weight: normal;
 }
 
-p.dm {
-  color: rgb(255, 94, 0);
-  font-weight: bold;
-}
+
 button,
 .tumbler {
   cursor: pointer;
@@ -190,35 +261,7 @@ button,
   color: rgba(255, 255, 255, 0.46);
   font-family: "roboto", sans-serif;
 }
-.players,
-.npc {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
-  list-style: none;
-}
-.players li {
-  margin-right: 4px;
-}
 
-ul.players {
-  /* margin-bottom: 0.5em; */
-}
-.content.hidden {
-  display: block;
-  max-height: 190px;
-  opacity: 0.21;
-  overflow: hidden;
-}
-.hidden {
-  display: none;
-}
-.content.hidden {
-  display: block;
-  max-height: 190px;
-  opacity: 0.2;
-  overflow: hidden;
-}
 .chapter.collapsed > h2.date {
   color: rgb(255, 255, 255) !important;
 }
@@ -238,39 +281,11 @@ input[type="file"] {
   display: none;
 }
 
-p.logline.announcment * {
-  font-weight: bold;
-  color: #ff6a00 !important;
-}
-
-p.logline.announcment > span.player {
-  display: none;
-}
-
-p.logline.yell > .speech {
-  color: inherit;
-}
-
-p.logline {
-  opacity: 0.6;
-}
-
-p.selected {
-  opacity: 1;
-}
-
-.ooc {
-  color: #6fb5ff;
-}
-
-p.record .speech {
-  color: #ffd914;
-}
-
 .nav {
   width: 100vw;
-  background: #00000073;
+  background: #000000ad;
   position: fixed;
+  top: 0;
   backdrop-filter: blur(3px);
   padding: 1rem 4rem;
   z-index: 1;
@@ -329,9 +344,6 @@ input:hover {
 input:focus-visible {
   color: var(--black);
 }
-.whisper {
-  color: var(--whisper);
-}
 
 .isolated {
   display: none;
@@ -352,26 +364,6 @@ input:focus-visible {
   -webkit-mask-position: top;
 }
 
-span::after {
-  /* content: " "; */
-}
-
-.virt > .emote {
-  color: var(--whisper) !important;
-}
-
-.yell span.emote {
-  font-weight: normal;
-}
-
-span.fix {
-  opacity: 0.5;
-  font-weight: 100;
-}
-
-p {
-  margin: 0.5rem 0;
-}
 
 .tumbler > input {
   appearance: none;
@@ -392,7 +384,7 @@ p {
 }
 
 .tumbler > input:checked::before {
-  background-color: var(--orange);
+  background-color: var(--green);
 }
 
 .tumbler,
@@ -405,9 +397,6 @@ p {
   border-radius: 0;
 }
 
-ul.players.npc {
-  opacity: 0.25;
-}
 
 .tumbler.input {
     padding: 0;
@@ -419,7 +408,7 @@ ul.players.npc {
 }
 
 .collapsed > h2::after {
-  content: "ÐšÐ»Ð¸ÐºÐ½Ð¸Ñ‚Ðµ Ð½Ð° Ð·Ð°Ð³Ð¾Ð»Ð¾Ð²Ð¾Ðº, Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ñ€Ð°Ð·Ð²ÐµÑ€Ð½ÑƒÑ‚ÑŒ...";
+  content: "Читать целиком...";
   font-size: 1rem;
   line-height: 1rem;
   display: block;
@@ -428,10 +417,23 @@ ul.players.npc {
   margin-bottom: 1rem;
 }
 
-ul.npc > li {
-  opacity: 0.25;
+.frame, div#chatlog {
+    border-image-repeat: repeat repeat !important;
+    border-image-source: var(--frame) !important;
+    border-image-slice: 80 !important;
+    border-image-width: 28px !important;
+    border-radius: 16px;
+    /* background: var(--info) !important; */
+    /* padding: 3rem !important; */
+    box-shadow: var(--shadow-inset) !important;
+    /* margin: 2rem 0; */
 }
 
-ul.npc > li:hover {
-  opacity: 1;
+.chapter:not(.collapsed) > h2.date {
+    margin-bottom: 1rem;
 }
+
+p.logline:not(.selected) {
+    opacity: 0.5;
+}
+
