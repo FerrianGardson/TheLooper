@@ -422,13 +422,14 @@ input:focus-visible {
 }
 
 .collapsed > h2::after {
-  content: "Ð§Ð¸Ñ‚Ð°Ñ‚ÑŒ Ñ†ÐµÐ»Ð¸ÐºÐ¾Ð¼...";
+  content: "Кликни, чтобы развернуть...";
   font-size: 1rem;
   line-height: 1rem;
   display: block;
   font-weight: 100;
   opacity: 0.5;
   margin-bottom: 1rem;
+  margin-top: 6px;
 }
 
 .frame, div#chatlog {
