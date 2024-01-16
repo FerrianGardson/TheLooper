@@ -1067,7 +1067,10 @@ document.addEventListener("keydown", function (event) {
 });
 
 document.addEventListener("keydown", function (event) {
-  if (event.key === "[" && event.ctrlKey || event.key === "х" && event.ctrlKey) {
+  if (
+    (event.key === "[" && event.ctrlKey) ||
+    (event.key === "х" && event.ctrlKey)
+  ) {
     // Находим все элементы под курсором
     var elementsUnderCursor = document.querySelectorAll(":hover");
     // Ищем первый элемент <p> среди элементов под курсором
@@ -1106,7 +1109,10 @@ document.addEventListener("keydown", function (event) {
 // Обработчики
 
 document.addEventListener("keydown", function (event) {
-  if (event.key === "]" && event.ctrlKey || event.key === "ъ" && event.ctrlKey) {
+  if (
+    (event.key === "]" && event.ctrlKey) ||
+    (event.key === "ъ" && event.ctrlKey)
+  ) {
     // Находим все элементы под курсором
     var elementsUnderCursor = document.querySelectorAll(":hover");
     // Ищем первый элемент <p> среди элементов под курсором
@@ -1319,47 +1325,37 @@ function pasteText() {
   }
 }
 
-
 document.addEventListener("keydown", function (event) {
   if (event.key === "ArrowLeft") {
     pasteText();
   }
 });
 
-document.addEventListener("keydown", function(event) {
-  if (event.key === "ArrowUp") {
-    var contentContainer = document.querySelector(".content");
-    var elementUnderCursor = document.querySelector(".content :hover");
+document.addEventListener("keydown", function (event) {
+  if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+    var contentContainers = document.querySelectorAll(".content");
 
-    if (elementUnderCursor && contentContainer.contains(elementUnderCursor)) {
-      // Проверяем, что элемент находится внутри .chapter
+    contentContainers.forEach(function (contentContainer) {
+      var elementUnderCursor = contentContainer.querySelector(":hover");
 
-      var previousElement = elementUnderCursor.previousElementSibling;
+      if (elementUnderCursor && contentContainer.contains(elementUnderCursor)) {
+        var targetSibling = (event.key === "ArrowUp") ? "previousElementSibling" : "nextElementSibling";
+        var siblingElement = elementUnderCursor[targetSibling];
 
-      if (previousElement) {
-        // Если есть предыдущий сосед, перемещаем текущий элемент перед ним
-        contentContainer.insertBefore(elementUnderCursor, previousElement);
+        if (siblingElement) {
+          if (event.key === "ArrowUp") {
+            contentContainer.insertBefore(elementUnderCursor, siblingElement);
+          } else {
+            var nextSibling = siblingElement.nextElementSibling;
+            if (nextSibling) {
+              contentContainer.insertBefore(elementUnderCursor, nextSibling);
+            } else {
+              contentContainer.appendChild(elementUnderCursor);
+            }
+          }
+        }
       }
-    }
+    });
   }
 });
-
-document.addEventListener("keydown", function(event) {
-  if (event.key === "ArrowDown") {
-    var contentContainer = document.querySelector(".content");
-    var elementUnderCursor = document.querySelector(".content :hover");
-
-    if (elementUnderCursor && contentContainer.contains(elementUnderCursor)) {
-      // Проверяем, что элемент находится внутри .chapter
-
-      var nextElement = elementUnderCursor.nextElementSibling;
-
-      if (nextElement) {
-        // Если есть следующий сосед, перемещаем текущий элемент после него
-        contentContainer.insertBefore(nextElement, elementUnderCursor);
-      }
-    }
-  }
-});
-
 
