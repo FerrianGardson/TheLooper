@@ -34,14 +34,11 @@
 
 body {
   --background-color: #0000008c;
-  --background-image: url(
-  https://i.postimg.cc/xT6fNTQm/Dragon-s-Crown-fantasy-art-1208380.jpg);
+  --background-image: url(https://i.postimg.cc/xT6fNTQm/Dragon-s-Crown-fantasy-art-1208380.jpg);
   --post-color: #000000bd;
-  --post-image-repeat: url(
-  https://i.postimg.cc/dt7gPNPP/image.png);
+  --post-image-repeat: url(https://i.postimg.cc/dt7gPNPP/image.png);
   --post-image-non-repeat: none;
-  --frame: url(
-  https://i.postimg.cc/YqJzfHgv/4.png);
+  --frame: url(https://i.postimg.cc/YqJzfHgv/4.png);
   --info: #ffffff0a;
   --text: #ffffffd9;
   --header-color: #ffffff;
@@ -49,14 +46,12 @@ body {
   --link: #00a6ff;
   --hover: #c0ddff;
   --header: Morpheus;
-  --p:
-  'Montserrat';
+  --p: "Montserrat";
   --border: 3px solid #000000;
   --shadow: 0px 1px 3px 3px rgb(0 0 0 / 33%);
   --shadow-inset: 0px 0px 50px -4px rgb(0 0 0) inset;
   --shadow-big: 0px 0px 21px 21px rgb(0 0 0 / 27%);
-  --emote: var(
-  --orange);
+  --emote: var(--orange);
   --glass: #0e0e0e;
 }
 
@@ -87,7 +82,8 @@ body {
 .green {
   color: var(--green);
 }
-.blue-1, .blue {
+.blue-1,
+.blue {
   color: var(--blue-1);
 }
 .blue-2 {
@@ -102,7 +98,8 @@ body {
 .orange {
   color: var(--orange);
 }
-.purple-1, .purple {
+.purple-1,
+.purple {
   color: var(--purple-1);
 }
 .purple-2 {
@@ -122,17 +119,20 @@ body {
   margin-bottom: 4px;
 }
 
-.say > .player, .virt > .player {
+.say > .player,
+.virt > .player {
   font-weight: bold;
 }
 
-.yell span.speech, .yell .player {
+.yell span.speech,
+.yell .player {
   color: var(--red);
   font-weight: bold;
   text-transform: uppercase;
 }
 
-.players > li, .npc > li {
+.players > li,
+.npc > li {
   display: inline-block;
   margin-right: 0.3em;
   font-weight: bold;
@@ -151,7 +151,8 @@ ul.npc > li:hover {
   opacity: 1;
 }
 
-.players, .npc {
+.players,
+.npc {
   display: inline-block;
   flex-wrap: wrap;
   /* margin-bottom: 1rem; */
@@ -194,7 +195,6 @@ html {
   /* margin-top: 12rem; */
 }
 
-
 h2:not(:first-of-type) {
   margin-top: 6em;
 }
@@ -221,9 +221,10 @@ div.buttons {
 body {
   color: white;
   font-family: var(--p), sans-serif;
-  background: var(--background-image) no-repeat fixed center, var(--background-color);
-  background-size:cover;
-  background-blend-mode:multiply;
+  background: var(--background-image) no-repeat fixed center,
+    var(--background-color);
+  background-size: cover;
+  background-blend-mode: multiply;
 }
 h2 {
   font-family: var(--header);
@@ -236,7 +237,8 @@ h2:not(:first-of-type) {
   margin-top: 6em;
 }
 
-button:hover:not(.no-hover), .tumbler:hover {
+button:hover:not(.no-hover),
+.tumbler:hover {
   background: linear-gradient(45deg, rgb(255, 191, 0), rgb(62, 43, 0));
   color: var(--black);
 }
@@ -245,7 +247,6 @@ button,
 label {
   font-weight: normal;
 }
-
 
 button,
 .tumbler {
@@ -376,8 +377,6 @@ input:focus-visible {
   mask-position: top;
 }
 
-
-
 .tumbler > input {
   appearance: none;
   -webkit-appearance: none;
@@ -411,14 +410,13 @@ input:focus-visible {
   border-radius: 0;
 }
 
-
 .tumbler.input {
-    padding: 0;
+  padding: 0;
 }
 
-.tumbler.input> label {
-    padding: 0.5rem 1rem;
-    display: block;
+.tumbler.input > label {
+  padding: 0.5rem 1rem;
+  display: block;
 }
 
 .collapsed > h2::after {
@@ -432,32 +430,33 @@ input:focus-visible {
   margin-top: 6px;
 }
 
-.frame, div#chatlog {
-    border-image-repeat: repeat repeat !important;
-    border-image-source: var(--frame) !important;
-    border-image-slice: 80 !important;
-    border-image-width: 28px !important;
-    border-radius: 16px;
-    /* background: var(--info) !important; */
-    /* padding: 3rem !important; */
-    box-shadow: var(--shadow-inset) !important;
-    /* margin: 2rem 0; */
+.frame,
+div#chatlog {
+  border-image-repeat: repeat repeat !important;
+  border-image-source: var(--frame) !important;
+  border-image-slice: 80 !important;
+  border-image-width: 28px !important;
+  border-radius: 16px;
+  /* background: var(--info) !important; */
+  /* padding: 3rem !important; */
+  box-shadow: var(--shadow-inset) !important;
+  /* margin: 2rem 0; */
 }
 
 .chapter:not(.collapsed) > h2.date {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 p.logline:not(.selected) {
-    opacity: 0.5;
+  opacity: 0.5;
 }
 
 .buttons.cut:hover {
-    height: auto;
+  height: auto;
 }
 
 .buttons > *:not(.important):not(:hover) {
-    /* opacity: 0.25; */
+  /* opacity: 0.25; */
 }
 
 .tooltip {
@@ -503,19 +502,18 @@ p.logline:not(.selected) {
 }
 
 .input.checkbox {
-    display: flex;
-    align-content: center;
-    align-items: center;
+  display: flex;
+  align-content: center;
+  align-items: center;
 }
 
-
 .checkbox > label {
-    padding-left: 0!important;
+  padding-left: 0 !important;
 }
 
 .checkbox > input {
-    padding-left: 1rem;
-    padding-right: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 0.5rem;
 }
 
 .speech {
@@ -523,25 +521,71 @@ p.logline:not(.selected) {
 }
 
 .hide.group:not(:hover) > .hide {
-    display: none;
+  display: none;
 }
 
 .hide.group {
-    display: flex;
-    gap: 0.5rem;
-    flex-direction: column;
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
 }
 
 .hide.group:hover .replace {
-    opacity: 0.25;
-    cursor: unset;
+  opacity: 0.25;
+  cursor: unset;
 }
 
 div#filter {
 }
 
 .nav > .buttons {
-    width: fit-content;
-    margin: auto;
-    min-width: 1090px;
+  width: fit-content;
+  margin: auto;
+  min-width: 1090px;
+}
+
+.paper {
+  background: url(https://i.postimg.cc/dt7gPNPP/image.png) top center,
+    linear-gradient(180deg, rgb(153 133 96) 0%, rgb(101 86 58) 100%)!important;
+  border-radius: 8px;
+  background-blend-mode: overlay;
+  overflow: hidden;
+  box-shadow: var(--shadow-inset);
+  padding: 2rem 2rem;
+  margin-bottom: 2rem;
+  color: #ffffff;
+  border: 1px solid transparent;
+  text-shadow: var(--text-shadow);
+  margin-bottom: 1em !important;
+  font-family: 'Medieval English';
+  font-size: 1.4rem;
+  line-height: 140%;
+}
+
+.paper.img {
+  padding: 0!important;
+  -webkit-mask-size: 100%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: top;
+
+  /* Для совместимости браузеров */
+  mask-image: linear-gradient(
+    138deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.5) 25%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.5) 75%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  mask-size: 100%;
+  mask-repeat: no-repeat;
+  mask-position: top;
+  margin: 0 !important;
+  /* mix-blend-mode: luminosity; */
+}
+
+.paper > img {
+    mix-blend-mode: luminosity;
+    width: -webkit-fill-available;
+    vertical-align: bottom;
 }

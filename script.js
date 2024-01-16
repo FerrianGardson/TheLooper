@@ -815,7 +815,7 @@ function logFilter() {
     scrollToSelect();
     return;
   }
-  // Снимаем выделение  
+  // Снимаем выделение
   document
     .querySelectorAll(".selected")
     .forEach((element) => element.classList.remove("selected"));
@@ -1058,13 +1058,16 @@ document.addEventListener("keydown", function (event) {
       } else if (element.classList.contains("player")) {
         // Если под курсором <li class="player">, удаляем элемент
         element.remove();
+      } else if (element.classList.contains("paper")) {
+        // Если под курсором .paper, удаляем элемент
+        element.remove();
       }
     });
   }
 });
 
 document.addEventListener("keydown", function (event) {
-  if (event.key === "[" || event.key === "х") {
+  if (event.key === "[" && event.ctrlKey || event.key === "х" && event.ctrlKey) {
     // Находим все элементы под курсором
     var elementsUnderCursor = document.querySelectorAll(":hover");
     // Ищем первый элемент <p> среди элементов под курсором
@@ -1103,7 +1106,7 @@ document.addEventListener("keydown", function (event) {
 // Обработчики
 
 document.addEventListener("keydown", function (event) {
-  if (event.key === "]" || event.key === "ъ") {
+  if (event.key === "]" && event.ctrlKey || event.key === "ъ" && event.ctrlKey) {
     // Находим все элементы под курсором
     var elementsUnderCursor = document.querySelectorAll(":hover");
     // Ищем первый элемент <p> среди элементов под курсором
@@ -1153,7 +1156,7 @@ document.addEventListener("keydown", function (event) {
   }
 });
 document.addEventListener("keydown", function (event) {
-  if (event.altKey) {
+  if (event.altKey && event.ctrlKey) {
     // Находим все элементы под курсором
     var elementsUnderCursor = document.querySelectorAll(":hover");
     document.querySelectorAll("p:empty").forEach((element) => element.remove());
@@ -1257,18 +1260,69 @@ function scrollToSelect() {
   }
 }
 
-// Пример использования
-// Вызовите функцию scrollToSelect, например, при нажатии на кнопку или другое событие
+function pasteImg() {
+  console.log("Trying to paste image...");
 
-// Объединяем Event Listener для клавиш f и а
+  const elementsUnderCursor = document.querySelectorAll(":hover");
+
+  for (const element of elementsUnderCursor) {
+    const loglineElement = element.closest("p.logline");
+
+    if (loglineElement) {
+      console.log("Found p.logline element, inserting image...");
+
+      const imgDiv = document.createElement("div");
+      imgDiv.className = "paper img";
+
+      const imgElement = document.createElement("img");
+      imgElement.src =
+        "https://i.postimg.cc/K8TcrhbQ/Wo-WScrn-Shot-010724-050024.png"; // Замените на ваш способ получения ссылки на изображение
+
+      imgDiv.appendChild(imgElement);
+      loglineElement.insertAdjacentElement("afterend", imgDiv);
+
+      console.log("Image inserted successfully.");
+      break; // Прекращаем перебор после первого соответствующего элемента
+    }
+  }
+}
+
 document.addEventListener("keydown", function (event) {
-  // Проверяем, что курсор клавиатуры не находится внутри input-а
-  const isCursorNotInInput =
-    !document.activeElement ||
-    document.activeElement.tagName.toLowerCase() !== "input";
-
-  // Клавиша f или а и курсор не в input-е
-  if ((event.key === "f" || event.key === "а") && isCursorNotInInput) {
-    scrollToSelect();
+  if (event.key === "i" && event.ctrlKey) {
+    pasteImg();
   }
 });
+
+function pasteText() {
+  console.log("Trying to paste text...");
+
+  const elementsUnderCursor = document.querySelectorAll(":hover");
+
+  for (const element of elementsUnderCursor) {
+    const loglineElement = element.closest("p.logline");
+
+    if (loglineElement) {
+      console.log("Found p.logline element, inserting text...");
+
+      const paperDiv = document.createElement("div");
+      paperDiv.className = "paper";
+
+      const textElement = document.createElement("p");
+      textElement.textContent = "Текст для вставки";
+
+      paperDiv.appendChild(textElement);
+      loglineElement.insertAdjacentElement("afterend", paperDiv);
+
+      console.log("Text inserted successfully.");
+      break; // Прекращаем перебор после первого соответствующего элемента
+    }
+  }
+}
+
+
+document.addEventListener("keydown", function (event) {
+  if (event.key === "i" && event.altKey) {
+    pasteText();
+  }
+});
+
