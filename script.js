@@ -15,6 +15,8 @@ function formatHTML() {
   emoteToSpeech();
   sayToEmote();
   virt();
+  addSpaceToEndOfPlayers();
+  chapterReverse();
   throw new Error("Скрипт прерван");
 }
 
@@ -290,7 +292,7 @@ function expandChapters() {
     chapter.classList.remove("collapsed");
   });
 }
-let isCollapsed = false;
+let isCollapsed = true;
 
 function toggleChapters() {
   if (isCollapsed) {
@@ -300,6 +302,7 @@ function toggleChapters() {
     console.log("collapseChapters();");
     collapseChapters();
   }
+
   isCollapsed = !isCollapsed;
 
   // Используйте querySelector для получения одиночного элемента
@@ -364,13 +367,12 @@ function addColonToEnd() {
 function cleanText() {
   chatlogHTML = document.getElementById("chatlog").innerHTML; // Определение
   chatlogHTML = chatlogHTML.replace(/кошка/g, "кот"); // Пример
-
   chatlogHTML = chatlogHTML.replace(/<\/p>/g, "</p>\n"); // Перенос
 
   // Системные сообщения
 
   chatlogHTML = chatlogHTML.replace(
-    /<p.*?>\s*(Вы|Аукцион|%s|Игрок|Ставка|За|Существо|Кожаная|Персонаж|Сохранённый|Для|Всем|Текст|Эффект|щит|Телепорт|С\s|Получен|Характеристики|Маг.уст\:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила\:|Ловк\:|Инта\:|Физ.уст\:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?<\/p>\n/g,
+    /<p.*?>\s*(Аукцион|%s|Игрок|Ставка|За|Существо|Кожаная|Персонаж|Сохранённый|Для|Всем|Текст|Эффект|щит|Телепорт|С\s|Получен|Характеристики|Маг.уст\:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила\:|Ловк\:|Инта\:|Физ.уст\:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Результат\:|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|Начислено|Камень|Результат|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем).*?<\/p>\n/g,
     ""
   ); // Системные сообщения, начинаются с указанных слов
 
@@ -633,82 +635,71 @@ function combineEmotes() {
 function colorizePlayers(playerColorMap) {
   const playerColors = {};
   const chapters = document.querySelectorAll(".chapter");
+  
   chapters.forEach((chapter) => {
-    const playerSpans = chapter.querySelectorAll(
-      ".logline.say .player, .logline.virt .player"
-    );
+    const playerSpans = chapter.querySelectorAll(".logline.say .player, .logline.virt .player");
+    
     playerSpans.forEach((span, index) => {
       const playerName = span.textContent.trim();
       let colorClass;
+      
+      // Добавлен код для обработки имен из нескольких слов
+      const playerNameParts = playerName.split(" ");
       if (playerColorMap[playerName]) {
         colorClass = playerColorMap[playerName];
+      } else if (playerColorMap[playerNameParts[0]]) {
+        colorClass = playerColorMap[playerNameParts[0]];
       } else {
-        colorClass =
-          playerColors[playerName] ||
-          (playerColors[playerName] = getColorClass(index));
+        colorClass = playerColors[playerName] || (playerColors[playerName] = getColorClass(index));
       }
+      
       span.classList.remove(
-        "red",
-        "green",
-        "blue-1",
-        "blue-2",
-        "blue-3",
-        "yellow",
-        "orange",
-        "purple-1",
-        "purple-2",
-        "purple-3"
+        "red", "green", "blue-1", "blue-2", "blue-3", "yellow", "orange", "purple-1", "purple-2", "purple-3"
       );
       span.classList.add(colorClass);
     });
+    
     const uniquePlayers = new Set(
       Array.from(playerSpans).map((span) => span.textContent.trim())
     );
+    
     const playerList = document.createElement("ul");
     playerList.classList.add("players");
+    
     Array.from(uniquePlayers).forEach((uniquePlayerName, index) => {
       const playerItem = document.createElement("li");
       playerItem.textContent = uniquePlayerName;
       playerItem.className = "player";
+      
+      // Добавлен код для обработки имен из нескольких слов
+      const uniquePlayerNameParts = uniquePlayerName.split(" ");
       const colorClass =
         playerColorMap[uniquePlayerName] ||
+        playerColorMap[uniquePlayerNameParts[0]] ||
         playerColors[uniquePlayerName] ||
         getColorClass(index);
+      
       playerItem.classList.remove(
-        "red",
-        "green",
-        "blue-1",
-        "blue-2",
-        "blue-3",
-        "yellow",
-        "orange",
-        "purple-1",
-        "purple-2",
-        "purple-3"
+        "red", "green", "blue-1", "blue-2", "blue-3", "yellow", "orange", "purple-1", "purple-2", "purple-3"
       );
       playerItem.classList.add(colorClass);
       playerList.appendChild(playerItem);
     });
+    
     chapter.insertBefore(playerList, chapter.firstChild.nextSibling);
   });
+  
   function getColorClass(index) {
     const colors = [
-      "red",
-      "green",
-      "blue-1",
-      "blue-2",
-      "blue-3",
-      "yellow",
-      "orange",
-      "purple-1",
-      "purple-2",
-      "purple-3",
+      "red", "green", "blue-1", "blue-2", "blue-3", "yellow", "orange", "purple-1", "purple-2", "purple-3"
     ];
     return colors[index % colors.length];
   }
+  
   addCommaOrDot();
   addColonToEnd();
 }
+
 // Пример использования функции с картой цветов
 const playerColorMap = {
   Фэрриан: "blue-3",
@@ -721,7 +712,16 @@ const playerColorMap = {
   Лезинг: "orange",
   Сырорезка: "yellow",
   Санриэль: "yellow",
+  Дерек: "red",
+  Хильда: "blue",
+  Гардсон: "blue",
+  Кэролай: "red",
+  Сахаджи: "yellow",
+  Винтеза: "green",
+  Сэнди: "yellow",
+  Хьюз: "yellow"
 };
+
 
 function sayToEmote() {
   let speech = "";
@@ -1339,7 +1339,10 @@ document.addEventListener("keydown", function (event) {
       var elementUnderCursor = contentContainer.querySelector(":hover");
 
       if (elementUnderCursor && contentContainer.contains(elementUnderCursor)) {
-        var targetSibling = (event.key === "ArrowUp") ? "previousElementSibling" : "nextElementSibling";
+        var targetSibling =
+          event.key === "ArrowUp"
+            ? "previousElementSibling"
+            : "nextElementSibling";
         var siblingElement = elementUnderCursor[targetSibling];
 
         if (siblingElement) {
@@ -1359,3 +1362,29 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
+function addSpaceToEndOfPlayers() {
+  // Находим все элементы <p> с классом "logline"
+  var loglineParagraphs = document.querySelectorAll("p.logline");
+
+  // Проходимся по каждому элементу <p>
+  loglineParagraphs.forEach(function (paragraph) {
+    // Находим все <span> с классом "player" внутри текущего <p>
+    var playerSpans = paragraph.querySelectorAll("span.player");
+
+    // Проходимся по каждому элементу <span> с классом "player"
+    playerSpans.forEach(function (playerSpan) {
+      // Добавляем пробел в конец содержимого элемента <span>
+      playerSpan.textContent += " ";
+    });
+  });
+}
+
+function removeUnselectedLoglines() {
+  // Находим все элементы <p> с классом "logline" без класса "selected"
+  var unselectedLoglines = document.querySelectorAll('p.logline:not(.selected)');
+
+  // Проходимся по каждому найденному элементу и удаляем его
+  unselectedLoglines.forEach(function (logline) {
+    logline.remove();
+  });
+}
