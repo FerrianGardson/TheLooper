@@ -376,7 +376,12 @@ function cleanText() {
     ""
   ); // Системные сообщения, начинаются с указанных слов
 
-  chatlogHTML = chatlogHTML.replace(/<p.*?>([A-z]|\>|\&|\(|\d).*?<\/p>\n/g, ""); // Системные сообщения, начинаются со служебных символов
+  chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:"); // |Hchannel:PARTY|h[Лидер группы]|h Роуз: => [Лидер группы] Роуз:
+
+  chatlogHTML = chatlogHTML.replace(
+    /<p.*?>([A-Za-z]|\>|\&|\(|\d).*?<\/p>\n/g,
+    ""
+  ); // Системные сообщения, начинаются со служебных символов
 
   chatlogHTML = chatlogHTML.replace(
     /<p.*?\s(действие|приглашается|\(|атакует|рассказывает|is Away|получает|не имеет ауры|does not wish|к вам|смотрит на вас|кивает вам|смотрит на вас|ставит|добавлено|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*?<\/p>\n/g,
@@ -403,8 +408,6 @@ function cleanText() {
 
   // Вирт
 
-  chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:"); // |Hchannel:PARTY|h[Лидер группы]|h Роуз: => [Лидер группы] Роуз:
-
   if (!keepGroup) {
     chatlogHTML = chatlogHTML.replace(
       /<p.*?>\[(Лидер группы|Группа)\].*?<\/p>\n/g,
@@ -417,10 +420,24 @@ function cleanText() {
     '$1 emote virt"><span class="player">$2</span><span class="emote">$3</span></p>'
   ); // ООС в Эмоут
 
-  chatlogHTML = chatlogHTML.replace(
-    /<p.*?>\[(Рейд|Лидер рейда|Гильдия)\].*?<\/p>\n/g,
-    ""
-  ); //ООС-каналы (кроме группы)
+  chatlogHTML = chatlogHTML.replace(/<p.*?>\[(Гильдия)\].*?<\/p>\n/g, ""); //ООС-каналы (гильдия)
+
+  if (!keepRaid) {
+    chatlogHTML = chatlogHTML.replace(
+      /<p.*?>\[(Рейд|Лидер рейда)\].*?<\/p>\n/g,
+      ""
+    ); //ООС-каналы (рейд)
+  }
+
+  if (!keepRaidWarning) {
+    chatlogHTML = chatlogHTML.replace(
+      /<p.*?>\[(Объявление рейду)\].*?<\/p>\n/g,
+      ""
+    ); //ООС-каналы (рейд)
+  }
+
+  chatlogHTML = chatlogHTML.replace(/(<p.*?)">(\[(Лидер рейда|Рейд)\].*?<\/p>)/g, '$1 raid">$2'); // Окраска рейда
+  chatlogHTML = chatlogHTML.replace(/(<p.*?)">(\[(Объявление рейду)\].*?<\/p>)/g, '$1 raid warning">$2'); // Окраска рейда
 
   // Прочее
 
@@ -635,14 +652,16 @@ function combineEmotes() {
 function colorizePlayers(playerColorMap) {
   const playerColors = {};
   const chapters = document.querySelectorAll(".chapter");
-  
+
   chapters.forEach((chapter) => {
-    const playerSpans = chapter.querySelectorAll(".logline.say .player, .logline.virt .player");
-    
+    const playerSpans = chapter.querySelectorAll(
+      ".logline.say .player, .logline.virt .player"
+    );
+
     playerSpans.forEach((span, index) => {
       const playerName = span.textContent.trim();
       let colorClass;
-      
+
       // Добавлен код для обработки имен из нескольких слов
       const playerNameParts = playerName.split(" ");
       if (playerColorMap[playerName]) {
@@ -650,27 +669,38 @@ function colorizePlayers(playerColorMap) {
       } else if (playerColorMap[playerNameParts[0]]) {
         colorClass = playerColorMap[playerNameParts[0]];
       } else {
-        colorClass = playerColors[playerName] || (playerColors[playerName] = getColorClass(index));
+        colorClass =
+          playerColors[playerName] ||
+          (playerColors[playerName] = getColorClass(index));
       }
-      
+
       span.classList.remove(
-        "red", "green", "blue-1", "blue-2", "blue-3", "yellow", "orange", "purple-1", "purple-2", "purple-3"
+        "red",
+        "green",
+        "blue-1",
+        "blue-2",
+        "blue-3",
+        "yellow",
+        "orange",
+        "purple-1",
+        "purple-2",
+        "purple-3"
       );
       span.classList.add(colorClass);
     });
-    
+
     const uniquePlayers = new Set(
       Array.from(playerSpans).map((span) => span.textContent.trim())
     );
-    
+
     const playerList = document.createElement("ul");
     playerList.classList.add("players");
-    
+
     Array.from(uniquePlayers).forEach((uniquePlayerName, index) => {
       const playerItem = document.createElement("li");
       playerItem.textContent = uniquePlayerName;
       playerItem.className = "player";
-      
+
       // Добавлен код для обработки имен из нескольких слов
       const uniquePlayerNameParts = uniquePlayerName.split(" ");
       const colorClass =
@@ -678,24 +708,42 @@ function colorizePlayers(playerColorMap) {
         playerColorMap[uniquePlayerNameParts[0]] ||
         playerColors[uniquePlayerName] ||
         getColorClass(index);
-      
+
       playerItem.classList.remove(
-        "red", "green", "blue-1", "blue-2", "blue-3", "yellow", "orange", "purple-1", "purple-2", "purple-3"
+        "red",
+        "green",
+        "blue-1",
+        "blue-2",
+        "blue-3",
+        "yellow",
+        "orange",
+        "purple-1",
+        "purple-2",
+        "purple-3"
       );
       playerItem.classList.add(colorClass);
       playerList.appendChild(playerItem);
     });
-    
+
     chapter.insertBefore(playerList, chapter.firstChild.nextSibling);
   });
-  
+
   function getColorClass(index) {
     const colors = [
-      "red", "green", "blue-1", "blue-2", "blue-3", "yellow", "orange", "purple-1", "purple-2", "purple-3"
+      "red",
+      "green",
+      "blue-1",
+      "blue-2",
+      "blue-3",
+      "yellow",
+      "orange",
+      "purple-1",
+      "purple-2",
+      "purple-3",
     ];
     return colors[index % colors.length];
   }
-  
+
   addCommaOrDot();
   addColonToEnd();
 }
@@ -719,9 +767,8 @@ const playerColorMap = {
   Сахаджи: "yellow",
   Винтеза: "green",
   Сэнди: "yellow",
-  Хьюз: "yellow"
+  Хьюз: "yellow",
 };
-
 
 function sayToEmote() {
   let speech = "";
@@ -909,17 +956,109 @@ function scrollToStart() {
   });
 }
 
+function translit(word) {
+  var answer = "";
+  var converter = {
+    а: "a",
+    б: "b",
+    в: "v",
+    г: "g",
+    д: "d",
+    е: "e",
+    ё: "e",
+    ж: "zh",
+    з: "z",
+    и: "i",
+    й: "y",
+    к: "k",
+    л: "l",
+    м: "m",
+    н: "n",
+    о: "o",
+    п: "p",
+    р: "r",
+    с: "s",
+    т: "t",
+    у: "u",
+    ф: "f",
+    х: "h",
+    ц: "c",
+    ч: "ch",
+    ш: "sh",
+    щ: "sch",
+    ь: "",
+    ы: "y",
+    ъ: "",
+    э: "e",
+    ю: "yu",
+    я: "ya",
+
+    А: "A",
+    Б: "B",
+    В: "V",
+    Г: "G",
+    Д: "D",
+    Е: "E",
+    Ё: "E",
+    Ж: "Zh",
+    З: "Z",
+    И: "I",
+    Й: "Y",
+    К: "K",
+    Л: "L",
+    М: "M",
+    Н: "N",
+    О: "O",
+    П: "P",
+    Р: "R",
+    С: "S",
+    Т: "T",
+    У: "U",
+    Ф: "F",
+    Х: "H",
+    Ц: "C",
+    Ч: "Ch",
+    Ш: "Sh",
+    Щ: "Sch",
+    Ь: "",
+    Ы: "Y",
+    Ъ: "",
+    Э: "E",
+    Ю: "Yu",
+    Я: "Ya",
+  };
+
+  for (var i = 0; i < word.length; ++i) {
+    if (converter[word[i]] == undefined) {
+      answer += word[i];
+    } else {
+      answer += converter[word[i]];
+    }
+  }
+
+  return answer;
+}
+
 function exportHTML() {
+  removeCollapsed();
   removeEmptyLines();
-  isAllSellected = false;
-  selectAll();
+
+  // Получаем содержимое первого найденного h2.date
+  var pageTitle = document.querySelector("h2.date");
+  var fileName = pageTitle
+    ? translit(pageTitle.textContent.trim())
+    : "exported";
+
   var element = document.createElement("a");
   element.setAttribute(
     "href",
     "data:text/plain;charset=utf-8," +
       encodeURIComponent(document.querySelector("html").innerHTML)
   );
-  element.setAttribute("download", "exported.html");
+
+  // Используем название файла на основе содержимого h2.date
+  element.setAttribute("download", fileName + ".html");
+
   element.style.display = "none";
   document.body.appendChild(element);
   element.click();
@@ -1015,6 +1154,30 @@ let keepGroup = true;
 keepGroupCheckbox.addEventListener("change", function () {
   // Обновляем значение переменной keepGroup в соответствии с состоянием чекбокса
   keepGroup = this.checked;
+});
+
+// Тумблер keepRaid
+
+const keepRaidCheckbox = document.getElementById("keepRaidCheckbox");
+let keepRaid = false;
+
+// Обработчик изменения состояния чекбокса
+keepRaidCheckbox.addEventListener("change", function () {
+  // Обновляем значение переменной keepRaid в соответствии с состоянием чекбокса
+  keepRaid = this.checked;
+});
+
+// Тумблер keepRaidWarning
+
+const keepRaidWarningCheckbox = document.getElementById(
+  "keepRaidWarningCheckbox"
+);
+let keepRaidWarning = false;
+
+// Обработчик изменения состояния чекбокса
+keepRaidWarningCheckbox.addEventListener("change", function () {
+  // Обновляем значение переменной keepRaidWarning в соответствии с состоянием чекбокса
+  keepRaidWarning = this.checked;
 });
 
 //
@@ -1381,7 +1544,9 @@ function addSpaceToEndOfPlayers() {
 
 function removeUnselectedLoglines() {
   // Находим все элементы <p> с классом "logline" без класса "selected"
-  var unselectedLoglines = document.querySelectorAll('p.logline:not(.selected)');
+  var unselectedLoglines = document.querySelectorAll(
+    "p.logline:not(.selected)"
+  );
 
   // Проходимся по каждому найденному элементу и удаляем его
   unselectedLoglines.forEach(function (logline) {

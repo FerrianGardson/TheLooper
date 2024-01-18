@@ -220,7 +220,7 @@ input:focus-visible {
 }
 
 .tumbler > input:checked::before {
-  background-color: var(--green);
+  background: var(--green);
 }
 
 .tumbler,
@@ -649,4 +649,31 @@ h2:not(:first-of-type) {
 }
 .purple-3 {
   color: var(--purple-3);
+}
+
+.raid {
+  color: var(--red);
+}
+
+.warning {
+  font-weight:bold;
+}
+
+/* Конец */
+
+
+input#keepGroupCheckbox:checked::before {
+    background: var(--blue-2);
+}
+
+input#keepRaidCheckbox:checked::before {
+    background: var(--orange);
+}
+
+input#keepRaidWarningCheckbox:checked::before {
+    background: var(--red);
+}
+
+.chapter {
+  margin: 6rem 0;
 }

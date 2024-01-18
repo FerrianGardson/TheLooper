@@ -44,11 +44,29 @@
           </form>
           <div
             class="tumbler input checkbox tooltip hide"
-            tooltip="Если включен, то импортирует в том числе ваши отписи в групповом чате ;)"
+            tooltip="Если включен, то импортирует в том числе ваши отписи в групповом чате"
           >
             <input type="checkbox" id="keepGroupCheckbox" checked="" /><label
               for="keepGroupCheckbox"
-              >Вирт</label
+              >Группа</label
+            >
+          </div>
+          <div
+            class="tumbler input checkbox tooltip hide"
+            tooltip="Если включен, то импортирует в том числе ваши отписи в рейд-чате"
+          >
+            <input type="checkbox" id="keepRaidCheckbox" /><label
+              for="keepRaidCheckbox"
+              >Рейд</label
+            >
+          </div>
+          <div
+            class="tumbler input checkbox tooltip hide"
+            tooltip="Если включен, то импортирует в том числе объявления в рейд"
+          >
+            <input type="checkbox" id="keepRaidWarningCheckbox" /><label
+              for="keepRaidWarningCheckbox"
+              >Объявления</label
             >
           </div>
         </div>
@@ -97,16 +115,15 @@
           >
             Обрезка
           </button>
+        </div>
+        <div class="hide group">
+          <button class="show replace no-hover">Удалить</button>
           <button
             onclick="removeUnselectedLoglines()"
             class="tooltip hide"
             tooltip="Удаляет все строки, с которых было снято выделение. Чтобы выделить или снять выделение, щёлкните по строке левой кнопкой мыши."
           >
-            Чистка
-          </button>
-        </div>
-        <div class="hide group">
-          <button class="show replace no-hover">Удалить</button
+            Строки</button
           ><button
             onclick="removeCollapsed()"
             class="tooltip hide"
@@ -9083,4 +9100,5 @@
       );
     }
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/transliteration@2.0.0/dist/transliteration.min.js"></script>
 </html>
