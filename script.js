@@ -436,15 +436,21 @@ function cleanText() {
     ); //ООС-каналы (рейд)
   }
 
-  chatlogHTML = chatlogHTML.replace(/(<p.*?)">(\[(Лидер рейда|Рейд)\].*?<\/p>)/g, '$1 raid">$2'); // Окраска рейда
-  chatlogHTML = chatlogHTML.replace(/(<p.*?)">(\[(Объявление рейду)\].*?<\/p>)/g, '$1 raid warning">$2'); // Окраска рейда
+  chatlogHTML = chatlogHTML.replace(
+    /(<p.*?)">(\[(Лидер рейда|Рейд)\].*?<\/p>)/g,
+    '$1 raid">$2'
+  ); // Окраска рейда
+  chatlogHTML = chatlogHTML.replace(
+    /(<p.*?)">(\[(Объявление рейду)\].*?<\/p>)/g,
+    '$1 raid warning">$2'
+  ); // Окраска рейда
 
   // Прочее
 
   chatlogHTML = chatlogHTML.replace(/[—–-]\s/g, "— "); // Тире в процессе
   chatlogHTML = chatlogHTML.replace(/\|\d+\-\d+\(([А-я]+)\)/g, "$1"); // смотрит на |3-3(Халвиэль)
   chatlogHTML = chatlogHTML.replace(/\|[a-z]+/g, ""); // HEX-код
-  chatlogHTML = chatlogHTML.replace(/speech">\s*[—–-]\s*/g, 'speech">'); // Тире в начале
+  // chatlogHTML = chatlogHTML.replace(/speech">\s*[—–-]\s*/g, 'speech">'); // Тире в начале
 
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
@@ -779,10 +785,8 @@ function sayToEmote() {
     // Получаем текст из HTML-элемента
     let sayText = speech[i].innerHTML;
     // Обрабатываем текст с помощью регулярного выражения
-    let updatedText = sayText.replace(
-      /([!?:.,])\s((?:—.+?(?:[!?:]|[!?:.,]\s—\s*|<\/span>)))/g,
-      '$1 <span class="emote">$2</span>'
-    );
+    let updatedText = sayText.replace(/([!?:.,])\s((?:—.+?(?:[!?:]|[!?:.,]\s—\s*|<\/span>)))/g,'$1 <span class="emote">$2</span>');
+    updatedText = updatedText.replace(/<\/span><span class="speech">\s*[—–-]\s*/g, '</span><span class="speech">'); // Тире в начале
     speech[i].innerHTML = updatedText;
     // Выводим обновленную версию текста
     //    // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
@@ -1040,7 +1044,7 @@ function translit(word) {
 }
 
 function exportHTML() {
-/*   removeCollapsed(); */
+  /*   removeCollapsed(); */
   removeEmptyLines();
 
   // Получаем содержимое первого найденного h2.date
