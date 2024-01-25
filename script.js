@@ -1040,7 +1040,7 @@ function translit(word) {
 }
 
 function exportHTML() {
-  removeCollapsed();
+/*   removeCollapsed(); */
   removeEmptyLines();
 
   // Получаем содержимое первого найденного h2.date
@@ -1244,6 +1244,7 @@ document.addEventListener("keydown", function (event) {
     const headingUnderCursor = Array.from(elementsUnderCursor).find(
       (element) => element.tagName.toLowerCase() === "h2"
     );
+
     if (elementUnderCursor) {
       scrollSave(elementUnderCursor);
       // Логика для <p>

@@ -573,7 +573,7 @@ p.logline {
   margin: 1rem 0;
 }
 
-.virt > .emote {
+.virt > .emote, .virt, .whisper {
   color: var(--whisper) !important;
 }
 
@@ -659,7 +659,7 @@ h2:not(:first-of-type) {
   font-weight:bold;
 }
 
-/* Конец */
+/* Конец  */
 
 
 input#keepGroupCheckbox:checked::before {
@@ -674,6 +674,6 @@ input#keepRaidWarningCheckbox:checked::before {
     background: var(--red);
 }
 
-.chapter {
+.chapter:not(:first-of-type) {
   margin: 6rem 0;
 }
