@@ -785,13 +785,13 @@ function sayToEmote() {
     // Получаем текст из HTML-элемента
     let sayText = speech[i].innerHTML;
     // Обрабатываем текст с помощью регулярного выражения
-    //sayText = sayText.replace(/([!?:.,])\s((?:—.+?(?:[!?:]|[!?:.,]\s—\s*|<\/span>)))/g,'$1 <span class="emote">$2</span>'); // Старая замена
+//sayText = sayText.replace(/([!?:.,])\s((?:—.+?(?:[!?:]|[!?:.,]\s—\s*|<\/span>)))/g,'$1 <span class="emote">$2</span>'); // Старая замена
     // sayText = sayText.replace(/([!?.,:])(\s—\s.*?[!?.,:]\s—\s)/g,'$1<span class="emote">$2</span>'); // Новая замена
     sayText = sayText.replace(/([!?.,:])(\s—\s.*?[!?.,:](\s—\s|<\/span>))/g,'$1<span class="emote">$2</span>'); // Новая замена
     sayText = sayText.replace(/<\/span><span class="speech">\s*[—–-]\s*/g, '</span><span class="speech">'); // Тире в начале
-    speech[i].innerHTML = sayText;
+speech[i].innerHTML = sayText;
     // Выводим обновленную версию текста
-    //    // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
+    speech[i].innerHTML = sayText;
   }
 }
 
