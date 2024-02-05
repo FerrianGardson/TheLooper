@@ -149,7 +149,7 @@ function splitSessions() {
       const currentTimestamp = new Date(timestamp);
       if (prevTimestamp) {
         const timeDifference = currentTimestamp - prevTimestamp;
-        if (timeDifference > 15 * 60 * 1000) {
+        if (timeDifference > 0.5 * 60 * 60 * 1000) {
           const dateHeader = document.createElement("h2");
           dateHeader.className = "date";
           dateHeader.textContent = getFormattedDate(timestamp);
