@@ -403,24 +403,6 @@ body {
   --glass: #0e0e0e;
 }
 
-.paper {
-  background: url(https://i.postimg.cc/dt7gPNPP/image.png) top center,
-    linear-gradient(180deg, rgb(153 133 96) 0%, rgb(101 86 58) 100%) !important;
-  border-radius: 8px;
-  background-blend-mode: overlay;
-  overflow: hidden;
-  box-shadow: var(--shadow-inset);
-  padding: 2rem 2rem;
-  color: #ffffff;
-  border: 1px solid transparent;
-  text-shadow: var(--text-shadow);
-  margin-bottom: 1em !important;
-  font-family: "Medieval English";
-  font-size: 1.4rem;
-  line-height: 140%;
-  margin: 1rem 0;
-}
-
 .paper > img {
   mix-blend-mode: luminosity;
   width: -webkit-fill-available;
@@ -657,6 +639,10 @@ h2:not(:first-of-type) {
 
 .warning {
   font-weight:bold;
+}
+
+p.story span.speech {
+  color: var(--orange);
 }
 
 /* Конец  */

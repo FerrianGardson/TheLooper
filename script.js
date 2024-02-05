@@ -408,11 +408,6 @@ function cleanText() {
     '$1 emote"><span class="player">$2</span><span class="emote">$3</span></p>\n'
   ); // Эмоут
 
-  chatlogHTML = chatlogHTML.replace(
-    /(<p.*?"logline)">([А-я]+):\s(.*?)<\/p>/g,
-    '$1 story"><span class="player">$2</span><span class="speech">$3</p>\n'
-  ); // Эмоут
-
   // Вирт
 
   if (!keepGroup) {
@@ -443,14 +438,17 @@ function cleanText() {
     ); //ООС-каналы (рейд)
   }
 
-  chatlogHTML = chatlogHTML.replace(
+//  chatlogHTML = chatlogHTML.replace(/(<p.*?"logline)">([А-я]+):\s(.*?)<\/p>/g,'$1 story"><span class="player">$2</span><span class="speech">$3</p>\n'); // Стори
+  chatlogHTML = chatlogHTML.replace(/(<p.*?"logline)">(.*?):\s(.*?)<\/p>/g,'$1 story"><span class="player">$2</span><span class="speech">$3</p>\n'); // Стори v2
+
+/*   chatlogHTML = chatlogHTML.replace(
     /(<p.*?)">(\[(Лидер рейда|Рейд)\].*?<\/p>)/g,
     '$1 raid">$2'
   ); // Окраска рейда
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?)">(\[(Объявление рейду)\].*?<\/p>)/g,
     '$1 raid warning">$2'
-  ); // Окраска рейда
+  ); // Окраска рейда */
 
   // Прочее
 
@@ -458,7 +456,7 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/\|\d+\-\d+\((.*?)\)/g, "$1"); // смотрит на |3-3(Халвиэль)
   chatlogHTML = chatlogHTML.replace(/\|[a-z]+/g, ""); // HEX-код
   // chatlogHTML = chatlogHTML.replace(/speech">\s*[—–-]\s*/g, 'speech">'); // Тире в начале
-  chatlogHTML = chatlogHTML.replace(/\[Объявление рейду\].*?\: /g, ""); // Объявления рейду
+  // chatlogHTML = chatlogHTML.replace(/\[Объявление рейду\].*?\: /g, ""); // Объявления рейду
   chatlogHTML = chatlogHTML.replace(/&nbsp;/g, " "); // &nbsp;
 
   // Вывод для дебага
@@ -683,7 +681,7 @@ function combineStory() {
       previousPlayer = "";
       previousStory = "";
       previousLogline = "";
-      continue;
+            continue;
     } else {
       currentLogline = element;
       currentPlayerElement = element.querySelector("span.player");
@@ -708,21 +706,26 @@ function combineStory() {
       combinedStory = previousStory + " " + currentStory;
       currentStoryElement.textContent = combinedStory;
       previousLogline.remove();
+      currentLogline.querySelector("span.player").remove();
+      console.log(currentLogline);
       previousLogline = currentLogline;
       previousStory = combinedStory;
       previousPlayer = currentPlayer;
       currentStoryElement = "";
       currentPlayerElement = "";
-      continue;
+            continue;
     }
     if (currentPlayer != previousPlayer) {
       previousPlayer = currentPlayer;
       previousStory = currentStory;
       previousLogline = currentLogline;
-      continue;
+            continue;
     }
     continue;
   }
+  
+  // Удалить игрока из всех одиночных сторилайнов
+  document.querySelectorAll("p.logline.story span.player").forEach(element => element.remove());
 }
 
 // Список игроков
@@ -1257,7 +1260,7 @@ keepRaidCheckbox.addEventListener("change", function () {
 const keepRaidWarningCheckbox = document.getElementById(
   "keepRaidWarningCheckbox"
 );
-let keepRaidWarning = false;
+let keepRaidWarning = true;
 
 // Обработчик изменения состояния чекбокса
 keepRaidWarningCheckbox.addEventListener("change", function () {
