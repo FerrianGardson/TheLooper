@@ -438,10 +438,13 @@ function cleanText() {
     ); //ООС-каналы (рейд)
   }
 
-//  chatlogHTML = chatlogHTML.replace(/(<p.*?"logline)">([А-я]+):\s(.*?)<\/p>/g,'$1 story"><span class="player">$2</span><span class="speech">$3</p>\n'); // Стори
-  chatlogHTML = chatlogHTML.replace(/(<p.*?"logline)">(.*?):\s(.*?)<\/p>/g,'$1 story"><span class="player">$2</span><span class="speech">$3</p>\n'); // Стори v2
+  //  chatlogHTML = chatlogHTML.replace(/(<p.*?"logline)">([А-я]+):\s(.*?)<\/p>/g,'$1 story"><span class="player">$2</span><span class="speech">$3</p>\n'); // Стори
+  chatlogHTML = chatlogHTML.replace(
+    /(<p.*?"logline)">(.*?):\s(.*?)<\/p>/g,
+    '$1 story"><span class="player">$2</span><span class="speech">$3</p>\n'
+  ); // Стори v2
 
-/*   chatlogHTML = chatlogHTML.replace(
+  /*   chatlogHTML = chatlogHTML.replace(
     /(<p.*?)">(\[(Лидер рейда|Рейд)\].*?<\/p>)/g,
     '$1 raid">$2'
   ); // Окраска рейда
@@ -681,7 +684,7 @@ function combineStory() {
       previousPlayer = "";
       previousStory = "";
       previousLogline = "";
-            continue;
+      continue;
     } else {
       currentLogline = element;
       currentPlayerElement = element.querySelector("span.player");
@@ -713,19 +716,21 @@ function combineStory() {
       previousPlayer = currentPlayer;
       currentStoryElement = "";
       currentPlayerElement = "";
-            continue;
+      continue;
     }
     if (currentPlayer != previousPlayer) {
       previousPlayer = currentPlayer;
       previousStory = currentStory;
       previousLogline = currentLogline;
-            continue;
+      continue;
     }
     continue;
   }
-  
+
   // Удалить игрока из всех одиночных сторилайнов
-  document.querySelectorAll("p.logline.story span.player").forEach(element => element.remove());
+  document
+    .querySelectorAll("p.logline.story span.player")
+    .forEach((element) => element.remove());
 }
 
 // Список игроков
@@ -1223,14 +1228,13 @@ function removeEmptyLines() {
 // Вызываем функцию для удаления пустых строк
 
 function virt() {
-  // Получаем все элементы p.logline с классом virt
-  const virtLoglines = document.querySelectorAll("p.logline.virt");
-
-  // Итерируем по каждому элементу
-  virtLoglines.forEach((logline) => {
-    // Находим внутри элемента span.player и удаляем его
-    // const playerSpan = logline.querySelector("span.player"); if (playerSpan) { playerSpan.remove(); }
+  document.querySelectorAll("p.virt").forEach(element => {
+    const firstSpeechElement = element.querySelector("span.speech:first-child");
+    if (firstSpeechElement) {
+      firstSpeechElement.textContent = firstSpeechElement.textContent.replace("— ", "");
+    }
   });
+  
 }
 
 // Тумблер keepGroup
