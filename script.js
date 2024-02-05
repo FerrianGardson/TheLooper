@@ -452,6 +452,7 @@ function cleanText() {
         chatlogHTML = chatlogHTML.replace(/\|[a-z]+/g, ""); // HEX-код
         // chatlogHTML = chatlogHTML.replace(/speech">\s*[—–-]\s*/g, 'speech">'); // Тире в начале
         chatlogHTML = chatlogHTML.replace(/\[Объявление рейду\].*?\: /g, ""); // Объявления рейду
+        chatlogHTML = chatlogHTML.replace(/&nbsp;/g, " "); // &nbsp;
         
         // Вывод для дебага
         document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
@@ -789,7 +790,7 @@ function sayToEmote() {
 //sayText = sayText.replace(/([!?:.,])\s((?:—.+?(?:[!?:]|[!?:.,]\s—\s*|<\/span>)))/g,'$1 <span class="emote">$2</span>'); // Старая замена
     // sayText = sayText.replace(/([!?.,:])(\s—\s.*?[!?.,:]\s—\s)/g,'$1<span class="emote">$2</span>'); // Новая замена
     sayText = sayText.replace(/([!?.,:])(\s—\s.*?[!?.,:](\s—\s|<\/span>))/g,'$1<span class="emote">$2</span>'); // Новая замена
-    sayText = sayText.replace(/<\/span><span class="speech">\s*[—–-]\s*/g, '</span><span class="speech">'); // Тире в начале
+        sayText = sayText.replace(/<\/span><span class="speech">\s*[—–-]\s*/g, '</span><span class="speech">'); // Тире в начале
 speech[i].innerHTML = sayText;
     // Выводим обновленную версию текста
     speech[i].innerHTML = sayText;
