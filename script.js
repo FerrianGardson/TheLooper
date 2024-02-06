@@ -14,9 +14,9 @@ function formatHTML() {
   combineFunctions();
   emoteToSpeech();
   sayToEmote();
-  virt();
   addSpaceToEndOfPlayers();
   chapterReverse();
+  virt();
   throw new Error("Скрипт прерван");
 }
 
@@ -891,16 +891,17 @@ function emoteToSpeech() {
     let emoteText = emotes[i].innerHTML;
 
     // Обрабатываем текст с использованием регулярного выражения (пример)
+    // let updatedEmoteText = emoteText.replace(/(—\s(?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)(?:[,.!?] —|<\/span>))/g,'<span class="speech">$1</span>');
     let updatedEmoteText = emoteText.replace(
-      /(—\s(?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)(?:[,.!?] —|<\/span>))/g,
-      '<span class="speech">$1</span>'
+      /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[,.!?])(?: —|<\/span>))/g,
+      '<span class="dash">— </span><span class="speech">$2</span><span class="dash"> —</span>'
     );
 
     // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
     emotes[i].innerHTML = updatedEmoteText;
   }
 
-  // Находим все span.speech > span.emote
+  /*   // Находим все span.speech > span.emote
   var speechEmoteElements = document.querySelectorAll(
     "span.speech > span.emote"
   );
@@ -918,7 +919,7 @@ function emoteToSpeech() {
   // Заменяем символ "–" на "—"
   emoteSpeechElements.forEach(function (element) {
     element.innerText = element.innerText.replace(/–/g, "—");
-  });
+  }); */
 }
 
 function toggleCollapse(event) {
@@ -1228,13 +1229,11 @@ function removeEmptyLines() {
 // Вызываем функцию для удаления пустых строк
 
 function virt() {
-  document.querySelectorAll("p.virt").forEach(element => {
-    const firstSpeechElement = element.querySelector("span.speech:first-child");
-    if (firstSpeechElement) {
-      firstSpeechElement.textContent = firstSpeechElement.textContent.replace("— ", "");
-    }
+  document.querySelectorAll("p.virt").forEach((element) => {
+    // element.innerHTML = element.innerHTML.replace( /("player.*?)<span class="dash">— <\/span>/g, "$1" );
+    element.innerHTML = element.innerHTML.replace( /(<span class="emote">)<span class="dash">— <\/span>/g, "$1" );
+    element.innerHTML = element.innerHTML.replace( /<span class="dash">( —|— )<\/span><\/span>/g, "</span>" );
   });
-  
 }
 
 // Тумблер keepGroup
