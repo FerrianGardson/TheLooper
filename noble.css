@@ -439,6 +439,14 @@ a[href="/storyline/17037"] {
   margin: 2rem 0;
 }
 
+.post {
+  border-image-repeat: repeat repeat !important;
+  border-image-source: var(--frame) !important;
+  border-image-slice: 80 !important;
+  border-image-width: var(--frame-width) !important;
+  border-radius: 16px;
+}
+
 .row.information-block,
 .post .col-sm-10,
 .post .col-sm-2,
@@ -706,8 +714,7 @@ h3 {
   font-weight: bold;
 }
 
-.yell span.speech,
-.yell .player {
+.yell span.speech {
   color: var(--red);
   font-weight: bold;
   text-transform: uppercase;
@@ -830,8 +837,9 @@ p.story .speech {
 }
 
 h2.date {
-  color: white;
-  font-size: 3rem !important; /* display: none; */
+  color: white!important;
+  font-size: 3rem !important;
+  /* display: none; */
 }
 
 .chapter:not(:first-of-type) > h2.date {
@@ -846,12 +854,7 @@ h2.date {
 
 /* Фикс для отчётов */
 
-.post > div > div:nth-of-type(2) {
-  padding: 1rem !important;
-  border-image: none !important;
-  background: none !important;
-  box-shadow: none !important;
-}
+
 
 .wp-block.default.no-border.binded-chars {
   margin-left: 1rem !important;
@@ -885,4 +888,31 @@ h2.date {
     padding: 4rem !important;
     margin: 2rem -2rem !important;
   }
+}
+
+/* Прочее */
+
+.yell span.player {
+  color: var(--red);
+  font-weight: bold;
+}
+
+/* Шестой взвод */
+
+body {
+  --background-color: #00000000;
+  --background-image: url(
+  https://i.postimg.cc/VsbyHZm3/Wo-WScrn-Shot-020424-142836.png);
+  --background-image: url(
+  https://i.postimg.cc/15QSM048/image.png);
+  --post-color: #0e2a61;
+  --post-image: url(
+  https://i.imgur.com/EXNQ8cT.png);
+  --frame: url(
+  https://i.postimg.cc/YqJzfHgv/4.png);
+  --info: #00000070;
+  --header-color: #ffd100;
+  --link: #ffd100;
+  --hover: #ffe56e;
+  --header: Morpheus;
 }
