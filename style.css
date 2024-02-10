@@ -461,11 +461,6 @@ body {
   padding: 0;
 }
 
-h3 {
-  /* margin-bottom: 1rem; */
-  /* font-family: var(--header); */
-}
-
 .speech {
   color: var(--text);
 }
@@ -578,6 +573,7 @@ ul.npc > li:hover {
 
 p.logline {
   margin: 1rem 0;
+  color: var(--emote);
 }
 
 .virt > .emote, .virt, .whisper {
