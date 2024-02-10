@@ -388,9 +388,7 @@ function cleanText() {
     ""
   ); // Игрок %ООС-действие%
 
-  
-
-/*   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+  /*   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
   throw new Error("Скрипт прерван"); */
 
   chatlogHTML = chatlogHTML.replace(/<p.*?(GUID|Fly|\-го уровня).*?<\/p>/g, ""); // Системные сообщения, содержат указанные слова в середине
@@ -1227,8 +1225,14 @@ function removeEmptyLines() {
 function virt() {
   document.querySelectorAll("p.virt").forEach((element) => {
     // element.innerHTML = element.innerHTML.replace( /("player.*?)<span class="dash">— <\/span>/g, "$1" );
-    element.innerHTML = element.innerHTML.replace( /(<span class="emote">)<span class="dash">— <\/span>/g, "$1" );
-    element.innerHTML = element.innerHTML.replace( /<span class="dash">( —|— )<\/span><\/span>/g, "</span>" );
+    element.innerHTML = element.innerHTML.replace(
+      /(<span class="emote">)<span class="dash">— <\/span>/g,
+      "$1"
+    );
+    element.innerHTML = element.innerHTML.replace(
+      /<span class="dash">( —|— )<\/span><\/span>/g,
+      "</span>"
+    );
   });
 }
 
@@ -1314,9 +1318,6 @@ document.addEventListener("keydown", function (event) {
       }
     });
   }
-});
-
-document.addEventListener("keydown", function (event) {
   if (
     (event.key === "[" && event.ctrlKey) ||
     (event.key === "х" && event.ctrlKey)
@@ -1355,11 +1356,6 @@ document.addEventListener("keydown", function (event) {
       scrollToSaved();
     }
   }
-});
-
-// Обработчики
-
-document.addEventListener("keydown", function (event) {
   if (
     (event.key === "]" && event.ctrlKey) ||
     (event.key === "ъ" && event.ctrlKey)
@@ -1393,9 +1389,6 @@ document.addEventListener("keydown", function (event) {
       }
     }
   }
-});
-
-document.addEventListener("keydown", function (event) {
   if (event.shiftKey) {
     // Находим все элементы под курсором
     var elementsUnderCursor = document.querySelectorAll(":hover");
@@ -1411,8 +1404,6 @@ document.addEventListener("keydown", function (event) {
       }
     }
   }
-});
-document.addEventListener("keydown", function (event) {
   if (event.altKey && event.ctrlKey) {
     // Находим все элементы под курсором
     var elementsUnderCursor = document.querySelectorAll(":hover");
