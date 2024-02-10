@@ -68,6 +68,7 @@ body {
     var(--background-color);
   background-size: cover;
   background-blend-mode: multiply;
+  overflow: unset!important;
 }
 
 h2 {
