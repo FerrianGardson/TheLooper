@@ -1297,6 +1297,8 @@ document
   });
 
 document.addEventListener("keydown", function (event) {
+  // Удалить абзац
+
   if (event.key === "Delete") {
     var elementsUnderCursor = document.querySelectorAll(":hover");
     elementsUnderCursor.forEach((element) => {
@@ -1318,6 +1320,32 @@ document.addEventListener("keydown", function (event) {
       }
     });
   }
+
+  // Заключить абзац в .paper
+
+  if (!event.altKey && event.key === "ArrowLeft") {
+    // Получаем все элементы, над которыми находится курсор
+    var elementsUnderCursor = document.querySelectorAll(":hover");
+
+    // Находим абзацы среди элементов под курсором и добавляем класс 'paper'
+    elementsUnderCursor.forEach(function (element) {
+      if (element.tagName === "P") {
+        if (element.classList.contains("paper")) {
+          element.classList.remove("paper"); // Если класс уже есть, убираем его
+        } else {
+          element.classList.add("paper"); // Если класса нет, добавляем его
+        }
+      }
+    });
+  }
+
+  // Вставить .paper
+
+  if (event.altKey && event.key === "ArrowLeft") {
+    pasteText();
+  }
+
+  // Стереть до
   if (
     (event.key === "[" && event.ctrlKey) ||
     (event.key === "х" && event.ctrlKey)
@@ -1566,12 +1594,6 @@ function pasteText() {
     }
   }
 }
-
-document.addEventListener("keydown", function (event) {
-  if (event.key === "ArrowLeft") {
-    pasteText();
-  }
-});
 
 document.addEventListener("keydown", function (event) {
   if (event.key === "ArrowUp" || event.key === "ArrowDown") {

@@ -55,7 +55,7 @@
             class="tumbler input checkbox tooltip hide"
             tooltip="Если включен, то импортирует в том числе ваши отписи в рейд-чате"
           >
-            <input type="checkbox" id="keepRaidCheckbox"/><label
+            <input type="checkbox" id="keepRaidCheckbox" /><label
               for="keepRaidCheckbox"
               >Рейд</label
             >
@@ -64,10 +64,11 @@
             class="tumbler input checkbox tooltip hide"
             tooltip="Если включен, то импортирует в том числе объявления в рейд"
           >
-            <input type="checkbox" id="keepRaidWarningCheckbox" checked=""/><label
-              for="keepRaidWarningCheckbox"
-              >Объявления</label
-            >
+            <input
+              type="checkbox"
+              id="keepRaidWarningCheckbox"
+              checked=""
+            /><label for="keepRaidWarningCheckbox">Объявления</label>
           </div>
         </div>
 
@@ -160,596 +161,604 @@
       </div>
     </div>
     <div id="chatlog">
-      <div class="chapter" timestamp="2024-01-09T17:09:24.000Z">
-        <h2 class="date">Демонстрация: 9 января, 22:09</h2>
-        <ul class="players">
-          <li class="player orange">Роуз,</li>
-          <li class="player orange">Овааль,</li>
-          <li class="player purple-3">Тианна,</li>
-          <li class="player blue-3">Кэролай.</li>
-        </ul>
+      <div class="chapter">
+        <h2 class="date">
+          «Гномий Глас»: Интервью с Алланисом Манном, мэром Златоземья!
+        </h2>
         <div class="content">
+          <div class="paper img">
+            <img
+              src="https://i.postimg.cc/Zqb8QdqV/image.png"
+              class="fr-fic fr-dii"
+              alt="image.png"
+            />
+          </div>
           <div class="paper">
             <h3>Управление</h3>
-            <p>ЛКМ — выделить строку / снять выделение.</p>
-            <p>DEL — удалить строку, картинку или главу.</p>
-            <p>← — вставить заготовку для текста.</p>
-            <p>→ — вставить заготовку для картинки.</p>
-            <p>↑ — переместить объект под курсором вверх.</p>
-            <p>↓ — переместить объект под курсором вниз.</p>
+            <p class="selected">
+              <span class="key">ЛКМ</span> — выделить строку / снять выделение.
+            </p>
+            <p>
+              <span class="key">DEL</span> — удалить строку, картинку или главу.
+            </p>
+            <p><span class="key">←</span> — превратить абзац в вырезку.</p>
+            <p><span class="key">→</span> — вставить заготовку для картинки.</p>
+            <p>
+              <span class="key">↑</span> — переместить объект под курсором
+              вверх.
+            </p>
+            <p>
+              <span class="key">↓</span> — переместить объект под курсором вниз.
+            </p>
           </div>
-          <p
-            timestamp="2024-01-09T17:09:24.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Тианна </span
-            ><span class="emote"
-              >изредка поправляла края шифонового платка тонкими пальцами. Иной
-              же, свободной дланью, держала струящуюся эссенцию роскошества. А
-              взор, между тем, блуждал по деревьям, которые сгибались под
-              тяжестью зимних шуб.</span
-            >
-          </p>
-          <p timestamp="2024-01-09T17:12:51.000Z" class="logline say selected">
-            <span class="player orange">Роуз: </span
+          <p class="logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
             ><span class="speech"
-              >Умоляю, только не говорите мне, что у вас какие-то проблемы,
-              милочка, требующие внимания стражи — хотя бы в эти праздничные
-              дни, хотя бы в этой тихой провинции, и хотя бы в отношение
-              прекрасных дам даже у преступников должно быть хоть какое-то
-              чувство меры!
-              <span class="emote">— сокрушённо покачал головой:</span> — И кто
-              же тот мерзавец, что вас оскорбил или нагло приставал?</span
+              >Конечно, только странички мне не запачкай. Чего нужно? Хочешь
+              вступить в дружину этого злачного города? Боюсь у меня нет столько
+              гоблинских банок что-бы склепать тебе доспехи.</span
             >
           </p>
-          <p
-            timestamp="2024-01-09T17:16:24.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Тианна </span
-            ><span class="emote"
-              >усмехнулась, позволив бровям взмыть выше обычного, —
-              <span class="speech"
-                >И отчего же, дорогуша, вам подумалось, что я в беде? Стало
-                быть, смутило мужское платье? Так я весьма умело сажусь в седло,
-                недавеча вернулась с прогулки. Представляете, леди Бонфина таки
-                не удержалась и упала! Лишь благодаря этой суете, поверьте, я
-                сумела избежать этого совершенно неуместного прощального
-                ужина.</span
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech"
+              >Нет. Я Джулианна Франческа Златошпун, основатель, генеральный
+              деректор, выпускающий редактор и репортёр периодического издания
+              «Гномий Глас». Ты можешь знать меня по таким исключительным
+              материалам, как хроники битвы в Мёртвых Копях с Ван Клиффом
+              <a href="https://noblegarden.net/novel/38427"
+                >(выпущена сегодня, вот экземпляр)</a
+              >, битве с Рагнаросом под Чёрной Горой в сентябре
+              <a href="https://noblegarden.net/novel/37898">(вот тоже держи)</a>
+              и войне всех против всех и мужицком дожде в Пиратской Бухте
+              полгода назад
+              <a href="https://noblegarden.net/novel/36574"
+                >(тоже на, первый блин комом, но пойдёт).</a
               ></span
             >
           </p>
-
-          <p
-            timestamp="2024-01-09T17:17:54.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Кэролай </span
+          <p class="logline emote selected">
+            <span class="player">Сырорезка&nbsp;</span
             ><span class="emote"
-              >выглянула с молотком в проеме, завидела Тианну и спряталась за
-              дверью.</span
+              >материализовала рядом с собой крупную сумку с бумагами и
+              принялась выкладывать сложенные газеты прямо поверх какой-то там
+              маловажной книжки перед собеседником.</span
             >
           </p>
-          <p timestamp="2024-01-09T17:21:13.000Z" class="logline say selected">
-            <span class="player orange">Роуз: </span
-            ><span class="speech"
-              >Но разве же не очевидно — вы не стражник, не оборванец и не
-              посыльный. Напрашивается лишь два простейших варианта — вы либо
-              приходитесь супругой одного из здешних офицеров, дожидающейся
-              благоверного со смены или принёсшего ему выпечку, либо некие
-              печальные обстоятельства заставили вас посетить это место ради
-              обращения. И что-то кольца и корзинки с имбирными пряниками я у
-              вас не наблюдаю!</span
+          <p class="logline emote selected">
+            <span class="player">Алланис Манн&nbsp;</span
+            ><span class="emote"
+              >принял кучку газет, бегло промчавшись по заголовку каждого из
+              них.</span
             >
           </p>
-          <p
-            timestamp="2024-01-09T17:22:27.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Овааль </span
-            ><span class="emote">спешилась, подъехав к нужному месту.</span>
-          </p>
-          <p timestamp="2024-01-09T17:23:13.000Z" class="logline say selected">
-            <span class="player orange">Овааль: </span
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
             ><span class="speech"
-              >Кхм.. уважаемые.
-              <span class="emote"
-                >— Эльфийка окликнула двоицу — Где я могу найти леди
-                Кэролай?</span
-              >..</span
+              >Вот. И я собираю самые свежие и самые вкусные материалы обо всех
+              и обо всём. И я слышала, что у вас тут в Златоземье людей казнят
+              направо и налево,<span class="emote"
+                >&nbsp;— кивнула вокруг: —&nbsp;</span
+              >И хочу знать всё. Начиная с истории основания Златоземья.
+              Да-да.</span
             >
           </p>
-          <p timestamp="2024-01-09T17:24:03.000Z" class="logline say selected">
-            <span class="player purple-3">Тианна: </span
+          <p class="logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
             ><span class="speech"
-              >Голубчик мой, да вы весьма проницательны. А как владеете вы
-              словом! Хотите знать, как я оказалась здесь? Ах, все началось с
-              досадной неловкости, когда сэр Самсон, командир этого взвода,
-              пригласил меня в путешествие по Калимдору. Затем случилась
-              совершенно нечаянная оплошность с моей стороны,
-              <span class="emote"
-                >— дворянка осеклась и взглянула на Оваль с изумлением.</span
+              >Ага, хочешь собрать с меня сведений, что-бы растрезвонить обо
+              всём каждому уголку Азерота? И ты думаешь я соглашусь на это?
+              Ладно, я согласен. Но мне нужны конкретные вопросы, для конкретных
+              ответов.</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech">Хорошо. Когда было основано Златоземье?</span>
+          </p>
+          <p class="logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
+            ><span class="speech">Тридцать семь лет назад.</span>
+          </p>
+          <p class="logline emote selected">
+            <span class="player">Алланис Манн&nbsp;</span
+            ><span class="emote"
+              >достав из-за пазухи флягу, выпил немного вина, сбив пепел
+              папиросы.</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech"
+              >25 минус 37... 12 год до ОТП. Отлично. Кто был первым мэром
+              Златоземья и его приемниками вплоть до сего дня?</span
+            >
+          </p>
+          <p class="logline selected">
+            Алланис Манн, кажется, понемногу трезвеет.
+          </p>
+          <p class="logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
+            ><span class="speech"
+              >Первым Мэром был Пайк Де Майл, следом пошёл старик Йенна, после
+              него уже был добряк Трой. Дальше просто прелесный Байс Кивитс, ну
+              и пару дней уже как я, Амалис Манн. А, забыл, между Йеной и Троем
+              был ещё рыбак Динго.</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech"
+              >Отлично. В чём заключалась политика рыбака Динго?</span
+            >
+          </p>
+          <p class="logline emote selected">
+            <span class="player">Камлер&nbsp;</span
+            ><span class="emote">оглядывается.</span>
+          </p>
+          <p class="logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
+            ><span class="speech"
+              >Селедь в каждый дом — вот его девиз. Каждое открытие рыбного
+              сезона он объявлял состизание рыбаков, в котором тот кто наловил
+              больше селеди получал месячное жалование капитана стражи, вместо
+              него самого. Правда каждый раз побеждал сам Динго, потому что
+              использовал чудо-сандали, которые помогали ему ходить
+              по-воде.</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player orange">Камлер:&nbsp;</span
+            ><span class="speech"
+              >Мне послышалось или кто то сказал селедь?</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
+            ><span class="speech">Тебе не послышалось.</span>
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech">МИА, запись. Выделить!</span>
+          </p>
+          <p class="logline say selected">
+            <span class="player orange">Камлер:&nbsp;</span
+            ><span class="speech">О, эм, ты селёдку раздаёшь тут?</span>
+          </p>
+          <p class="logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
+            ><span class="speech"
+              >Нет, просто вспоминаю её неповторимый вкус.</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player orange">Камлер:&nbsp;</span
+            ><span class="speech"
+              >Да... Я бы тоже щас с пивасиком лупанул селёдочки, но не
+              судьба... Всё пробухал, а помочь некому, даже работы нет в этой
+              дыре!</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
+            ><span class="speech"
+              >Как Динго ушёл, так больше селедь и не ловят, да.</span
+            >
+          </p>
+          <p class="logline emote selected">
+            <span class="player">Алланис Манн&nbsp;</span
+            ><span class="emote">кивает Камлер.</span>
+          </p>
+          <p class="logline say selected">
+            <span class="player orange">Камлер:&nbsp;</span
+            ><span class="speech">Какой Дико? Это кто?</span>
+          </p>
+          <p class="logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
+            ><span class="speech">Есть ещё вопросы?</span>
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech"
+              >Да. Как тебя, ещё раз, зовут? Аланис? С одной или двумя «л»*
+              *?</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
+            ><span class="speech">Две.</span>
+          </p>
+          <p class="logline say selected">
+            <span class="player orange">Камлер:&nbsp;</span
+            ><span class="speech"
+              >Э-э... Короче идите на кол! Жлобы! Твари! Сволочи!</span
+            >
+          </p>
+          <p class="logline emote selected">
+            <span class="player">Камлер&nbsp;</span
+            ><span class="emote">плюнул себе под ноги</span>
+          </p>
+          <p class="logline emote selected">
+            <span class="player">Алланис Манн&nbsp;</span
+            ><span class="emote">машет на прощание Камлер. До свидания!</span>
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech"
+              >Алланис Манн. Точно,<span class="emote"
+                >&nbsp;— обернулась: —&nbsp;</span
+              >Хорошего денёчка!<span class="emote"
+                >&nbsp;— обернулась обратно: —&nbsp;</span
+              >Как и когда ты вступил в полномочия мэра Златоземья? Кто,
+              говоришь, был до тебя? Как ты сменил его? Это была победа в
+              состязаниях по рыбалке? Или выигранная картёжная партия? Или
+              кровавый переворот?</span
+            >
+          </p>
+          <p class="logline say paper selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
+            ><span class="speech"
+              >Три дня назад я встал на пост мэра. Вступил хорошо, спасибо что
+              интересуешься. До меня был Байс Кивитс. Мы играли с ним в правду
+              или действие, он выбрал действие и я сказал ему уйти с поста и
+              оставить меня своим приемником, так всё и случилось.</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech"
+              >Вот поэтому я играю только на деньги или раздевание.</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
+            ><span class="speech"
+              >Он славный парень, но не умеет останавливаться.</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech"
+              >Хорошо,<span class="emote"
+                >&nbsp;— сделала пометку в невидимом блокноте: —&nbsp;</span
+              >Каков твой политический курс? Все эти виселицы и колодки вокруг с
+              ним как-то связаны?</span
+            >
+          </p>
+          <p class="paper logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
+            ><span class="speech"
+              >Мой политический курс заключается в том что-бы полностью
+              перестроить город, и добавить в каждый дом минимум по шесть
+              этажей. Я выбираю программу доступного жилья. А все эти виселици и
+              колодки вокруг это моя рекламная компания, тело в петле что сразу
+              за мной вообще плюшевое... Всё это потому что я продолжил игру с
+              Байсом, и выбрал действие. Он задал тон главной площади.</span
+            >
+          </p>
+          <p class="logline emote selected">
+            <span class="player">Алланис Манн&nbsp;</span
+            ><span class="emote"
+              >выпил ещё немного вина, продолжая тянуть папиросу.</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech"
+              >Ах, а я уже было подумала, что настоящее! Но мухи очень
+              реалистичные. Вы его для этого мёдом намазали, да?<span
+                class="emote"
+                >&nbsp;— сделала пометку: —&nbsp;</span
+              >А как именно планируется добавить по шесть этажей к каждому
+              дому?</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
+            ><span class="speech"
+              >Нет, мы просто взяли пчелиный улий, вокруг него из шерсти и ткани
+              собрали труп, а каждую из пчёлок отловили, и покрасили в чёрный.
+              Они прошли уроки Тераморского горлового пения, их им проводил
+              мастер Гвидо, и теперь их и правда не отличить от настоящих. А
+              насчёт домов... Я ещё обсуждаю это с инженерами, но мы точно
+              начнём с того что снимем им крышу, или пойдём от обратного и
+              пророем тонель на пять этажей в низ.</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech"
+              >Звучит как признак хороших инженерных задатков,<span
+                class="emote"
+                >&nbsp;— кивнула: —&nbsp;</span
+              >Ещё я слышала о наборе людей, совмещающих полномочия стражников и
+              сборщиков налогов. На что пойдут эти налоги помимо их содержания и
+              расширения жилплощади?</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player orange">Нерцог:&nbsp;</span
+            ><span class="speech"
+              >Ба-а-а... Сколько слышал о гномах, но всегда думал, что они
+              смогли изобрести для себя хотя-бы... Стулья!...<span class="emote"
+                >&nbsp;— Усмехнулся гоблин, осматривая двойню оценивающим
+                взглядом.</span
               ></span
             >
           </p>
-          <p timestamp="2024-01-09T17:24:04.000Z" class="logline say selected">
-            <span class="player orange">Роуз: </span
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
             ><span class="speech"
-              >Бал'а даш, маланоре!
-              <span class="emote"
-                >— отсалютовал эльфийке, коснувшись кончиками пальцев края
-                шляпы:</span
-              >
-              — Не имею ни единой догадки, к превеликому сожалению. Я здесь лишь
-              редкий гость.</span
+              >Телепортироваться проще, чем сотворить трёхметровый стул!</span
             >
           </p>
-          <p timestamp="2024-01-09T17:24:48.000Z" class="logline say selected">
-            <span class="player purple-3">Тианна: </span
+          <p class="logline emote selected">
+            <span class="player">Нерцог&nbsp;</span
+            ><span class="emote">смеется над вами.</span>
+          </p>
+          <p class="logline say selected">
+            <span class="player orange">Нерцог:&nbsp;</span
             ><span class="speech"
-              >Леди Овааль? Но что же вы делаете тут, в Приозерье?</span
+              >Видимо, гоблинский потент "стула большого и длинного" — даже не
+              нарушается маленькой породией на людей. Славно! Славно... Кхм-кхм.
+              Я вас прервал, полагаю? О чем тут идет речь?</span
             >
           </p>
-          <p
-            timestamp="2024-01-09T17:26:54.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Тианна </span
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech"
+              >О политике нового мэра Златоземья, уважаемого Аллониса
+              Манна!</span
+            >
+          </p>
+          <p class="paper logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
+            ><span class="speech"
+              >Мы так-же решили запустить план по ожелтевению всего Элвинского
+              Леса. Мы потратим деньги на закупку семян солнечных цветков.
+              Каждый квадратный метр свободной от застройки земли будет засажен
+              двадцатью тремя солнечными цветками.</span
+            >
+          </p>
+          <p class="logline emote selected">
+            <span class="player">Нерцог&nbsp;</span
             ><span class="emote"
-              >до неприличия усердно вытягивала шею, чтобы разглядеть одежды
-              калдорай.</span
+              >вопросительно поднимает бровь и смотрит на Алланис Манн.</span
             >
           </p>
-          <p timestamp="2024-01-09T17:28:00.000Z" class="logline say selected">
-            <span class="player orange">Овааль: </span
+          <p class="logline say selected">
+            <span class="player orange">Нерцог:&nbsp;</span
+            ><span class="speech">Кхм... Это он?</span>
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
             ><span class="speech"
-              >Ишну'дал'диб.
-              <span class="emote"
-                >— Кивнула, приветствуюя — Очень жаль, я бы хотела принести свои
-                извинения леди Кэролай, за случившееся недавно у нашей рощи. -
-                Посмотрела на Тианну — Леди Тианна, рада вас видеть в добром
-                здравие. — </span
-              >Кивнула девушке — Я прибыва с Восточные Королевства еще пару
-              недель назад, по скольку оказала достойную помощь ордену стражей в
-              войне с демоническими травями и порождениями Скверны.. я тут из
-              Западного Края, куда я прибыла для помощи в решение проблем со
-              стихийными бедствиями там.. а тут, как я уже сказала, хочу
-              принести свои извинения леди Кэролай и обсудить случай с пропажей
-              людей, как я поняла из объяснений гонца, которого отправили мне из
-              рощи в Западный Край. приветствуя*</span
+              >Солнечные цветки... А, подсолнухи! Они собирают и накапливают
+              солнечную энергию! Да, это очень хорошая идея, особенно если
+              расходовать её на остальные энергия для защиты от нежити!</span
             >
           </p>
-          <p
-            timestamp="2024-01-09T17:28:57.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Кэролай </span
+          <p class="logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
+            ><span class="speech">Да, рад знакомству, мой зелёный друг.</span>
+          </p>
+          <p class="logline emote selected">
+            <span class="player">Нерцог&nbsp;</span
+            ><span class="emote">кивает Алланис Манн.</span>
+          </p>
+          <p class="logline say selected">
+            <span class="player orange">Нерцог:&nbsp;</span
+            ><span class="speech"
+              >О политике. Два главный вопроса. У вас можно свободно торговать,
+              а также носить маски с оружием?</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech"
+              >Я слышала, что эта практика уже активно испытывается в Лордероне.
+              Или это не сейчас, а будет через пять лет...</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
+            ><span class="speech"
+              >Можно! Это было первое что я разрешил взойдя на пост. Глашатай
+              ещё не разнёс весть? Есть ещё что-то, что вас интересует?</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech"
+              >Да. Главная политика заключается в сборе средств, строительстве
+              этажей и расскаде подсолнухов. Что-то ещё? Каким вы видите
+              Златоземье в ближайшие десять лет?</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player orange">Нерцог:&nbsp;</span
+            ><span class="speech"
+              >Ты думаешь, мне есть дело до глашатаев? Тогда, главная ошибка
+              мэра — брать интервью:" А" — от гномки. А "Б" — на открытом
+              воздухе, а не в своем особняке, попивая смесь из дорого алкоголя и
+              зелья удачи. Но, не суть. Думаю, вам нужна шляпа. Красивая и
+              мужественная. А не... Шапочка беспризорника.</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech"
+              >Кстати, да! Могу сделать отличную шляпу взамен!</span
+            >
+          </p>
+          <p class="logline emote selected">
+            <span class="player">Нерцог&nbsp;</span
             ><span class="emote"
-              >вываливается с сумками, неуклюже скрипя дверью и протискиваясь
-              через щель с ними.</span
+              >поднимает бровь и вопросительно смотрит на вас. хмуро глядит на
+              вас.</span
             >
           </p>
-          <p timestamp="2024-01-09T17:29:25.000Z" class="logline say selected">
-            <span class="player purple-3">Тианна: </span
+          <p class="logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
             ><span class="speech"
-              >И вы правы, голубушка моя! Ведь стоит единожды дать пищу опасным
-              сплетням, так они, как мор, разлетятся по миру. Мисс Кэролай
-              Эстер, к которой вы так спешите, пребывает, судя по скрипу и
-              неловким движениям, аккурат позади!</span
+              >Хм-м-м-м, это сильный вопрос. В целом я хочу видеть его жёлтым,
+              много-верхне-подземно-этажным, а так-же увеличить количество
+              пчело-мухо-трупов в двенадцать раз. Спасибо, но я откажусь. Эта
+              шапка всегда напоминает мне о низшей прослойке общества, о которой
+              я бесконечно беспокоюсь.</span
             >
           </p>
-          <p timestamp="2024-01-09T17:30:12.000Z" class="logline say selected">
-            <span class="player orange">Роуз: </span
+          <p class="logline say selected">
+            <span class="player orange">Нерцог:&nbsp;</span
             ><span class="speech"
-              >Леди Тианна? <span class="emote">— хмыкнул:</span> — Вы меня
-              разыгрываете. Из тех заслуг и почестей, что мне описали в
-              отношение мэтра Эремон, она должна быть старше раза в три. Эта
-              юная леди в лучшем случае могла бы быть её ученицей!</span
+              >Я могу КУПИТЬ для тебя отличную шляпу, и отдать тебе ее, целой,
+              невредимой, после перевозки этой чертовщины из самого Кул-Тираса.
+              Знаешь, там треуголки не просто "Носят", а красят.</span
             >
           </p>
-          <p
-            timestamp="2024-01-09T17:31:08.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Кэролай </span
+          <p class="logline emote selected">
+            <span class="player">Нерцог&nbsp;</span
             ><span class="emote"
-              >кивает Тианне, покачиваясь влево и вправо с груженым рюкзаком за
-              спиной и кивает ей, жестом щелкнув возле своего лба. ||
-              <span class="speech"
-                >— Свет вас хранит, леди Тианна. Вас и... —</span
-              >
-              молвила Эстер, глянув на незнакомца в шляпе. Кэролай шмыгнула
-              носом и глянула на ночную эльфику, резко поумерив улыбку и
-              скрестила руки на уровне груди.
-              <span class="speech">— Всех, да.</span></span
+              >вопросительно поднимает бровь и смотрит на Алланис Манн.</span
             >
           </p>
-          <p timestamp="2024-01-09T17:32:03.000Z" class="logline say selected">
-            <span class="player orange">Роуз: </span
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
             ><span class="speech"
-              >И вас!
-              <span class="emote">— коснулся края шляпы вновь.</span></span
+              >О! Человек, сделавший сам себя! И предпочитающий помнить, откуда
+              он родом, и о собратьях по несчастью и происхождению!</span
             >
           </p>
-          <p timestamp="2024-01-09T17:32:48.000Z" class="logline say selected">
-            <span class="player purple-3">Тианна: </span
+          <p class="logline say selected">
+            <span class="player orange">Нерцог:&nbsp;</span
             ><span class="speech"
-              >Боюсь представить, голубчик, что обо мне говорили. А все эти
-              заслуги, поверьте, всего лишь келейная договоренность. Я не так
-              хороша,
-              <span class="emote"
-                >— взмахнув пальцами кокетливым образом, улыбнулась Кэролай в
-                приветствии.</span
+              >А еще нам, гоблинам, говорят, что МЫ странные. Но не суть.
+              Давайте, интервью... И все такое.</span
+            >
+          </p>
+          <p class="logline emote selected">
+            <span class="player">Алланис Манн&nbsp;</span
+            ><span class="emote"
+              >многозначительно закивал в след словам гномки.</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech"
+              >Хорошо. Аллонис Манн, новый амбициозный мэр Златоземья,
+              заполучивший свой уважаемый пост не подкупом, шантажом или
+              переворотом, а игрой в «правду или действие»... Человек низкого
+              происхождения из черни с высокими планами отстроить Златоземье до
+              шести этажей вверх или вниз, и озолотить весь Элвинн подсолнухами.
+              Что вы хотите пожелать или напутствовать читателям «Гномьего
+              Гласа» под конец нашего интервью?</span
+            >
+          </p>
+          <p class="paper logline say selected">
+            <span class="player purple-2">Алланис Манн:&nbsp;</span
+            ><span class="speech"
+              >Хочу пожелать и напутствовать читателям "Гномьего Гласа"
+              следующие слова: Мойте руки с мылом и слушайтесь маму.</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech"
+              >Я бы не сказала лучше! Долгих и славных лет мэрствования!</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player orange">Нерцог:&nbsp;</span
+            ><span class="speech"
+              >Кхм-кхм. Мэр. Так-же посоветуйте своим жителям покупать товары
+              "Ржав и Ко".</span
+            >
+          </p>
+          <p class="logline emote selected">
+            <span class="player">Нерцог&nbsp;</span
+            ><span class="emote">кивает Алланис Манн.</span>
+          </p>
+          <p class="logline say selected">
+            <span class="player orange">Нерцог:&nbsp;</span
+            ><span class="speech"
+              >Точнее... Читателям Гномьего Гласа. Да-да.</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech"
+              >МИА, запись. Конец интервью. Но за вознаграждение можно включить
+              рекламу. Сколько ты дашь за неё?</span
+            >
+          </p>
+          <p class="logline emote selected">
+            <span class="player">Сырорезка&nbsp;</span
+            ><span class="emote"
+              >щёлкнула пальцами и телепортировалась вниз.</span
+            >
+          </p>
+          <p class="logline emote selected">
+            <span class="player">Алланис Манн&nbsp;</span
+            ><span class="emote"
+              >встав с места, оставил на столе всё как есть. Поправив шапку и
+              выбросив окурок, пошёл куда-то в даль. машет рукой всем на
+              прощание. До свидания!</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player orange">Нерцог:&nbsp;</span
+            ><span class="speech"
+              >Кхм... Платят мне... Хм... Семь монет серебром, за одно
+              упоминание... Давай, десяток серебра. За твои красивые очки,
+              детка, я готов докинуть одну монетку. Хоть у кого-то тут есть
+              чувство стиля.</span
+            >
+          </p>
+          <p class="logline emote selected">
+            <span class="player">Нерцог&nbsp;</span
+            ><span class="emote"
+              >улыбается вам. смотрел на гномку... Крайне насмешливо и с неким
+              превосходством. Уж что-что, а Нерцог был крайне здоровым гоблином.
+              Не ровня своим сороодичам. И даже сложно сказать... Почему он
+              гоблин, а не хобгоблин.</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
+            ><span class="speech"
+              >Спасибо! Значит, одиннадцать серебряных. И реклама в этом же
+              выпуске объёмом до 255 символов, включая пробелы и знаки
+              препинания!</span
+            >
+          </p>
+          <p class="logline say selected">
+            <span class="player orange">Нерцог:&nbsp;</span
+            ><span class="speech"
+              >БЕЗ пробелом и знаков препинания. И тогда, может, мы сойдемся на
+              чем-то большем.<span class="emote"
+                >&nbsp;— Усмехнулся гоблин, как похабно и неприятно,
+                двусмысленно усмехаются гоблины. А после, потянув руку под
+                гербовую накидку одного из картелей... Протянул денежки гномке
+                столь богатым движением, что напоминал магната, а не
+                обыкновенного вышибалу.</span
               ></span
             >
           </p>
-          <p timestamp="2024-01-09T17:33:14.000Z" class="logline say selected">
-            <span class="player orange">Овааль: </span
+          <p class="logline say selected">
+            <span class="player yellow">Сырорезка:&nbsp;</span
             ><span class="speech"
-              >Отлично..
-              <span class="emote"
-                >— Перевела взгляд на Кэролай — Леди.. ишну'дал'диб. — </span
-              >Подошла к девушке — Я спешила сюда, как только могла, дабы
-              принести вам свои извинения.. а если быть точнее, извинения
-              часовой, за не подобающее союзнице и ночной эльфийке часовой
-              поведение.. гонец сообщил мне о всей ситуации и я бы хотела
-              обговорить ее с вами, оказав свою помощь.</span
+              >Превосходно, благодарю за пожертвование! МИА, запись рекламы! Я
+              вся внимание!</span
             >
           </p>
-          <p
-            timestamp="2024-01-09T17:33:20.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Овааль </span
-            ><span class="emote">кланяется Кэролай.</span>
-          </p>
-          <p
-            timestamp="2024-01-09T17:35:41.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Кэролай </span
-            ><span class="emote"
-              >надула щеки и слабо кивает, моргнув одним здоровым глазом, глядя
-              на эльфийку. Эстер подняла голову и смотрит на высокую эльфийку
-              ревнительно, раздувая свои щеки. Та была непомерно высокой для
-              этой невысокой жрицы. ||
-              <span class="speech"
-                >— Да, пустяки, еще бы немного, я бы сломя голову побежала за
-                стены к преступникам и подвергла бы себя страшной опасности. С
-                кем не бывает, леди Мириаэль. —</span
-              >
-              протянула Эстер и опустила руки, прикрыв свой один неприкрытый
-              повязкой глаз. Рыжая "табуретка" шмыгнула носом тихонько и
-              приоткрыла глаз.
-              <span class="speech"
-                >— На эту тему придется с Самсоном Коннели поговорить. Он,
-                примерно, через полчаса или час должен подъехать в ставку для
-                дел.</span
-              ></span
-            >
-          </p>
-          <p timestamp="2024-01-09T17:38:02.000Z" class="logline say selected">
-            <span class="player orange">Овааль: </span
+          <p class="paper logline say selected">
+            <span class="player orange">Нерцог:&nbsp;</span
             ><span class="speech"
-              >Что-ж, я благодарю вас за понимание леди.
-              <span class="emote"
-                >— Кивнула девушка — Но все-же, часовые что стояли на посту,
-                должны были в любом случае оказать помощь вам.. — </span
-              >Кивнула эльфийка — Самсон? Ох, давно я его не видела.. что-ж,
-              тогда буду ждать, а после уже думать, чем-бы я могла вам помочь в
-              данной ситуации.</span
-            >
-          </p>
-          <p timestamp="2024-01-09T17:38:56.000Z" class="logline say selected">
-            <span class="player blue-3">Кэролай: </span
-            ><span class="speech"
-              >Да ладно... подумаешь, какая-то неизвестная малявкаиз лесу
-              выбегает с криками. Всякий напряжется и будет задавать вопросы.
-              <span class="emote"
-                >— протянула Эстер, отведя взгляд в сторону.</span
-              ></span
-            >
-          </p>
-          <p timestamp="2024-01-09T17:40:45.000Z" class="logline say selected">
-            <span class="player orange">Овааль: </span
-            ><span class="speech"
-              >Возможно вы правы, но извинения свои, принести я была просто
-              обязана.
-              <span class="emote"
-                >— Кивнула Мириаэль собеседнице вновь - Тогда, раз мы
-                разобрались.. что очень хорошо, стоит приступить к ожиданию
-                Самсона.</span
-              ></span
-            >
-          </p>
-          <p timestamp="2024-01-09T17:41:14.000Z" class="logline say selected">
-            <span class="player orange">Роуз: </span
-            ><span class="speech"
-              >О, перестаньте, напускная скромность вам не к лицу. Если только
-              вы не разыгрываете смертельную игру против своих недоброжелателей
-              и не скрываете свой потенциал, чтобы усыпить их бдительность и
-              застать врасплох,
-              <span class="emote"
-                >— в этот раз уже снял шляпу и прижал к груди:</span
-              >
-              — Граф Чарльз Фокстрот, рад знакомству с вами воочию, баронесса
-              Эремон. Я прибыл в этот сонныый край, чтобы выразить почтение
-              вашей известности в магических кругах. И смиренно просить вас о
-              том, чтобы вы оказали мне честь взять меня в свои ученики. Или
-              хотя бы стать моим частным репетитором.</span
-            >
-          </p>
-          <p
-            timestamp="2024-01-09T17:41:52.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Тианна </span
-            ><span class="emote"
-              >тотчас просияла, услышав лишь одно слово!</span
-            >
-          </p>
-          <p timestamp="2024-01-09T17:41:54.000Z" class="logline say selected">
-            <span class="player blue-3">Кэролай: </span
-            ><span class="speech"
-              >Да. Верно. Не извиняйтесь за подчиненных, если они виноваты.
-              <span class="emote"
-                >— проговорила важно Эстер, по-прежнему "дуя" свои щеки. Эстер
-                кивнула Мириаэль и развернулась, покачиваясь с напичканной
-                донельзя поклажей за спиной, обратно, по лестнице.</span
-              ></span
-            >
-          </p>
-          <p
-            timestamp="2024-01-09T17:42:59.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Кэролай </span
-            ><span class="emote"
-              >остановилась на крыльце, обернувшись на Мириаэль.</span
-            >
-          </p>
-          <p timestamp="2024-01-09T17:44:07.000Z" class="logline say selected">
-            <span class="player blue-3">Кэролай: </span
-            ><span class="speech"
-              >Вы... будете ждать на морозе, леди Мириаэль? Показать вам, потом,
-              по случаю, что такое некроз и объяснить почему его тяжелее всего
-              лечить? <span class="emote">— вопросила Кэролай. — </span>Вернее,
-              невозможно.</span
-            >
-          </p>
-          <p timestamp="2024-01-09T17:45:01.000Z" class="logline say selected">
-            <span class="player orange">Роуз: </span
-            ><span class="speech"
-              >О, вы называете это морозом. Вам доводилось бывать в Альтераке,
-              голубушка?</span
-            >
-          </p>
-          <p timestamp="2024-01-09T17:45:28.000Z" class="logline say selected">
-            <span class="player blue-3">Кэролай: </span
-            ><span class="speech"
-              >Я проходила через него из Лордерона.
-              <span class="emote"
-                >— бросила спокойно, глянув на Роуза.</span
-              ></span
-            >
-          </p>
-          <p timestamp="2024-01-09T17:45:36.000Z" class="logline say selected">
-            <span class="player orange">Овааль: </span
-            ><span class="speech"
-              >Что вы леди, я прекрасно знаю, что это.. и мне ни капли не
-              холодно, не переживайте за меня.
-              <span class="emote"
-                >— Покачала головой — Энергия что кружит вокруг меня, она
-                согревает и этого мне вполне достаточно.</span
-              ></span
-            >
-          </p>
-          <p timestamp="2024-01-09T17:47:02.000Z" class="logline say selected">
-            <span class="player purple-3">Тианна: </span
-            ><span class="speech"
-              >Естественное право каждой девушки, граф Чарльз, пококетничать с
-              незванным красавцем! Право, вы весьма хороши собой, эдакий
-              донжуан. Вам впору брать женщин походя, как пить вино. И не могла
-              предположить, что вам интересно изучать магическое искусство!
-              <span class="emote"
-                >— Прикусив пленительные губы, дворянка чуть шире улыбнулась, — </span
-              >и все же я согласна, вы мне симпатичны.</span
-            >
-          </p>
-          <p
-            timestamp="2024-01-09T17:48:15.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Кэролай </span
-            ><span class="emote"
-              >повела бровью и взглянула на Тианну, часто моргая одним глазом.
-              Эстер закатила глаз и посмотрела в небо, как счастье — что оно
-              сегодня голубое. Эстер взглянула на Овааль и развела ручками,
-              слегка покачнувшись. ||
-              <span class="speech"
-                >— Ладно, леди Мириаэль. Заходите лучше в помещение. —</span
-              >
-              молвила жрица спокойно и, развернувшись, ступила за двери.</span
-            >
-          </p>
-          <p
-            timestamp="2024-01-09T17:50:03.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Овааль </span
-            ><span class="emote"
-              >взглянула на сову, что стремитлась к Овааль, после чего вытянула
-              длань, на которую та села.
-              <span class="speech"
-                >— Хм-м, совушка часовой Аиер Крыло Ночи.. - Задумалась девушка,
-                после чего направила длань к совушке, что ухукала без остановки,
-                пытаясь наладить связь с животным и понять, что-же оно говорит.
-                Услышав все что нужно было, эльфийка широко раскрыла глаза.
-                —</span
-              >
-              О Ужас..
-              <span class="speech"
-                >— Приподняла взгляд на Кэролай, проговаривая — Леди! Мне срочно
-                нужно в рощу, мерзкие гноллы.. я прошу простить, но передайте
-                Самсону, что я приду к следующий раз и обязательно обговорю все
-                с ним, приглядите за моим конем.. —</span
-              >
-              Девушка взмахнула дланью, после чего энергия природы окутала
-              девушку, меняя ее истинный облик, на облик совы. После чего улетая
-              в сторону Крепости Каменной Стражи, а точнее водопаду.
-              <span class="speech">— Уху!</span></span
-            >
-          </p>
-          <p timestamp="2024-01-09T17:50:32.000Z" class="logline say selected">
-            <span class="player orange">Роуз: </span
-            ><span class="speech"
-              >Благодарю покорнейше вас за согласие и похвалу, миледи,
-              <span class="emote"
-                >— отвесив почтительно-театральный поклон и взмахнув перед собою
-                шляпой, с улыбкой нахлобучил её обратно на голову, а затем
-                осёкся и проводил взглядом пернатое создание.</span
-              ></span
-            >
-          </p>
-          <p
-            timestamp="2024-01-09T17:50:52.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Кэролай </span
-            ><span class="emote"
-              >обернулась обратно, но уже проводила взглядом пеструю и огромную
-              сову с изумленным взглядом.</span
-            >
-          </p>
-          <p timestamp="2024-01-09T17:51:13.000Z" class="logline say selected">
-            <span class="player blue-3">Кэролай: </span
-            ><span class="speech">Угу...</span>
-          </p>
-          <p timestamp="2024-01-09T17:51:21.000Z" class="logline say selected">
-            <span class="player orange">Роуз: </span
-            ><span class="speech">Уху...</span>
-          </p>
-          <p timestamp="2024-01-09T17:52:41.000Z" class="logline say selected">
-            <span class="player purple-3">Тианна: </span
-            ><span class="speech"
-              >Словом, голубчик, мне совершенно все равно скаредный вы или нет,
-              <span class="emote">— благодушно отмахнулась леди, — </span>но
-              прежде дайте мне ответ на один вопрос. Вы человек свободный? Не
-              довлеет над вами угроза в виде ревнивой супруги?</span
-            >
-          </p>
-          <p timestamp="2024-01-09T17:56:15.000Z" class="logline say selected">
-            <span class="player orange">Роуз: </span
-            ><span class="speech"
-              >Зависит от того, что вас сподвигло на вопрос — предосторожность
-              то, или прощупываете почву?
-              <span class="emote">— усмехнулся в усы:</span> — И к сожалению, и
-              к счастью свободен, как альбатрос среди утёсов, как сорванный с
-              ветвей листок.</span
-            >
-          </p>
-          <p
-            timestamp="2024-01-09T17:56:29.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Роуз </span
-            ><span class="emote"
-              >оглянувшись вниз, поинтересовался невзначай:</span
-            >
-          </p>
-          <p
-            timestamp="2024-01-09T17:56:56.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Тианна </span
-            ><span class="emote"
-              >малозаметным жестом, словно то был аккорд в симфонии, поправила
-              изящными пальцами меховой палантин. И как только на вопрос был дан
-              ответ, ее губы, словно бутон розы, расцвели в улыбке.</span
-            >
-          </p>
-          <p timestamp="2024-01-09T17:57:41.000Z" class="logline say selected">
-            <span class="player orange">Роуз: </span
-            ><span class="speech"
-              >Вы уже ужинали? Хотя неважно. Я всё равно угощу вас хотя бы
-              глинтвейном, желаете вы того или воспротивитесь. Здесь ведь
-              научились его подавать?</span
-            >
-          </p>
-          <p timestamp="2024-01-09T18:00:08.000Z" class="logline say selected">
-            <span class="player purple-3">Тианна: </span
-            ><span class="speech"
-              >Едва ли мне подвластно с вами прогуляться в данный час,
-              <span class="emote"
-                >— бросив кроткий взгляд на часы, что опоясывали запястье,
-                молвила с тенью тоски дворянка, — </span
-              >сейчас вернется сэр Самсон, этот умудренный житейским опытом
-              командир! Невыносимо сознавать, что ради построения мне придется
-              перенести нашу трапезу и променад!</span
-            >
-          </p>
-          <p timestamp="2024-01-09T18:06:59.000Z" class="logline say selected">
-            <span class="player orange">Роуз: </span
-            ><span class="speech"
-              >Вы так любите смотреть на построения и парады? Увы, в солдатиков
-              давно я наигрался, но будет ваша воля — и историям о доблести с
-              отвагой не сочтёте вы конца и края,
-              <span class="emote"
-                >— усмехнулся и подался вперёд, чтобы протянуть открытую ладонь
-                и принять руку баронессы:</span
-              >
-              — Что ж, здесь придётся вас оставить. И буду лишь смиренно
-              дожидаться вас в таверне, как голодный морской волк выхода на море
-              и погонь за призом.</span
-            >
-          </p>
-          <p timestamp="2024-01-09T18:10:28.000Z" class="logline say selected">
-            <span class="player purple-3">Тианна: </span
-            ><span class="speech"
-              >И вас вовсе не смутит, если хмельное зелье затмит меня? Вам ведь
-              ведомо, граф Чарльз,
-              <span class="emote"
-                >— с достоинством протянула точеную кисть баронесса и слегка
-                согнула ту, — </span
-              >когда чувства раскалены, опрометчиво было бы подводить их к
-              действиям мерку логики.</span
-            >
-          </p>
-          <p timestamp="2024-01-09T18:17:34.000Z" class="logline say selected">
-            <span class="player orange">Роуз: </span
-            ><span class="speech"
-              >Увольте, хмель?
-              <span class="emote">— легко коснулся кисти той губами:</span> —
-              Сам по себе я пьян и без вина, когда заходит речь о красоте или
-              угрозе. Когда вскипает кровь и поглощает жажда жить. Но сколько же
-              вас можно мучать на морозе — придётся мне вас всё же
-              отпустить.</span
-            >
-          </p>
-          <p
-            timestamp="2024-01-09T18:18:56.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Роуз </span
-            ><span class="emote"
-              >весьма довольный импровизированным куплетом, подобранным за
-              секунды молчаливого припадания к кисти, выпрямился и ещё раз
-              отсалютовал в поклоне, коснувшись края шляпы.</span
-            >
-          </p>
-          <p
-            timestamp="2024-01-09T18:19:41.000Z"
-            class="logline emote selected"
-          >
-            <span class="player">Тианна </span
-            ><span class="emote"
-              >торжественно опустила свое изящное тело в реверансе — символе
-              изящества и уважения, небольшой, но важный жест, подчеркивающий
-              высокую родословную и благообразие, был весьма уместен!
-              <span class="speech"
-                >— Голубчик, да вы еще и стихотворец! Как только я освобожусь,
-                то сразу же приду. кланяется вам.</span
-              ></span
+              >РжавКо и Компания! Лучшие товары из всех гоблинских товаров.
+              Прибывайте в Шестермуть, знакомьтесь со всем величайшим каталогом
+              сами! Клянусь, мой отец лично закупался там. И после того, как был
+              прикован к катающемуся креслу, купив знаменитую лечащую мазь — он
+              начал ходить!</span
             >
           </p>
         </div>
