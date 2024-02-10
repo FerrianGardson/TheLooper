@@ -1,0 +1,45 @@
+/* Сырорезка v1 */
+
+body {
+  --link: var(--yellow);
+  --hover: var(--link);
+  --header-color: var(--link);
+  --background-color: #000000c7;
+  --background-image: url(https://i.postimg.cc/667v51TF/image.png);
+  --header: RDR;
+}
+
+a[href="/charlist/36524"] {
+  order: 1;
+}
+
+/* Сырорезка v2  */
+
+body {
+  --link: #ff7500;
+  --hover: var(--link);
+  --header-color: #bd6d43;
+  --header: RDR;
+  --post-color: #f6dfb7d4;
+  --text-color: #bd6d43;
+  --text-shadow: none;
+  --shadow: none;
+  --frame: none;
+  --yellow: #ff7500;
+}
+
+.paper {
+  background: url(https://i.postimg.cc/dt7gPNPP/image.png) top center,
+    linear-gradient(180deg, rgb(217 192 153) 0%, rgb(195 172 137) 100%) !important;
+  box-shadow: inset 0 0 10px 0px black;
+  box-shadow: none;
+  border: 0;
+}
+
+.post {
+  box-shadow: none !important;
+}
+
+a[href="/charlist/36524"] {
+  order: 1;
+}
