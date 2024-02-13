@@ -14,9 +14,13 @@ function formatHTML() {
   combineFunctions();
   emoteToSpeech();
   sayToEmote();
-  addSpaceToEndOfPlayers();
   chapterReverse();
   virt();
+  removeDMPlayers();
+  replaceSurnames();
+  addCommaOrDot();
+  addColonToEnd();
+  addSpaceToEndOfPlayers();
   throw new Error("Скрипт прерван");
 }
 
@@ -149,7 +153,7 @@ function splitSessions() {
       const currentTimestamp = new Date(timestamp);
       if (prevTimestamp) {
         const timeDifference = currentTimestamp - prevTimestamp;
-        if (timeDifference > 0.5 * 60 * 60 * 1000) {
+        if (timeDifference > 1 * 60 * 60 * 1000) {
           const dateHeader = document.createElement("h2");
           dateHeader.className = "date";
           dateHeader.textContent = getFormattedDate(timestamp);
@@ -323,11 +327,12 @@ function renderChatLog(text) {
   // Дополнительные операции форматирования лога
   formatLog();
 }
+
 // Список игроков
 
 function addCommaOrDot() {
   // Находим все элементы с классом "players"
-  const playersContainers = document.querySelectorAll(".players");
+  const playersContainers = document.querySelectorAll(".players, .npc");
   // Проходимся по каждому элементу с классом "players"
   playersContainers.forEach((container) => {
     // Находим элементы с классом "player" внутри текущего контейнера
@@ -372,7 +377,7 @@ function cleanText() {
   // Системные сообщения
 
   chatlogHTML = chatlogHTML.replace(
-    /<p.*?>\s*((Аукцион|%s|ОШИБКА:|Было|Магическая|Удалено|Удалена|Номер|Игрок|Ставка|За|Существо|Кожаная|Персонаж|Сохранённый|Для|Всем|Текст|Эффект|щит|Телепорт|С\s|Получен|Характеристики|Маг.уст\:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила\:|Ловк\:|Инта\:|Физ.уст\:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|У|Ваше|Начислено|Камень|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем)\s.*?|(Результат\:|Персонаж))<\/p>\n/g,
+    /<p.*?>\s*((Аукцион|%s|ОШИБКА:|Было|Сегодня|Значок|Вы|Магическая|Удалено|Удалена|Номер|Игрок|Ставка|За|Существо|Кожаная|Персонаж|Сохранённый|Для|Всем|Текст|Эффект|щит|Телепорт|С\s|Получен|Характеристики|Маг.уст\:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила\:|Ловк\:|Инта\:|Физ.уст\:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|У|Ваше|Начислено|Камень|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем)\s.*?|(Результат\:|Персонаж))<\/p>\n/g,
     ""
   ); // Системные сообщения, начинаются с указанных слов
 
@@ -776,6 +781,42 @@ function colorizePlayers(playerColorMap) {
     const playerList = document.createElement("ul");
     playerList.classList.add("players");
 
+    const npcList = document.createElement("ul");
+    npcList.classList.add("npc");
+
+    const npcNames = {
+      "Гоблин-телохранитель": true,
+      Гнолл: true,
+      Баззерс: true,
+      Охранник: true,
+      Стражник: true,
+      Богачка: true,
+      Богач: true,
+      Рыбак: true,
+      Бедняк: true,
+      Рыболов: true,
+      Повар: true,
+      Богач: true,
+      Богач: true,
+      Богач: true,
+      Богач: true,
+      Богач: true,
+      Богач: true,
+      Богач: true,
+      "Гоблин-телохранитель": true,
+      "Гоблин-телохранитель": true,
+      "Гоблин-телохранитель": true,
+      "Гоблин-телохранитель": true,
+      "Гоблин-телохранитель": true,
+      "Гоблин-телохранитель": true,
+      "Гоблин-телохранитель": true,
+      "Гоблин-телохранитель": true,
+      "Гоблин-телохранитель": true,
+      "Гоблин-телохранитель": true,
+      "Гоблин-телохранитель": true,
+      // Добавьте другие имена NPC сюда
+    };
+
     Array.from(uniquePlayers).forEach((uniquePlayerName, index) => {
       const playerItem = document.createElement("li");
       playerItem.textContent = uniquePlayerName;
@@ -802,9 +843,14 @@ function colorizePlayers(playerColorMap) {
         "purple-3"
       );
       playerItem.classList.add(colorClass);
-      playerList.appendChild(playerItem);
-    });
 
+      if (npcNames[uniquePlayerName] || uniquePlayerNameParts.length > 1) {
+        npcList.appendChild(playerItem);
+      } else {
+        playerList.appendChild(playerItem);
+      }
+    });
+    chapter.insertBefore(npcList, chapter.firstChild.nextSibling);
     chapter.insertBefore(playerList, chapter.firstChild.nextSibling);
   });
 
@@ -823,12 +869,26 @@ function colorizePlayers(playerColorMap) {
     ];
     return colors[index % colors.length];
   }
-
-  addCommaOrDot();
-  addColonToEnd();
 }
 
-// Пример использования функции с картой цветов
+function removeDMPlayers() {
+  const dmsMap = {
+    "Фг": true,
+    "Кей": true,
+    // Добавьте другие имена DM сюда
+  };
+
+  const playerItems = document.querySelectorAll(".player");
+  playerItems.forEach((playerItem) => {
+    const playerName = playerItem.textContent.trim();
+    if (dmsMap[playerName]) {
+      playerItem.parentNode.removeChild(playerItem);
+    }
+  });
+}
+
+
+// Карта цветов
 const playerColorMap = {
   Фэрриан: "blue-3",
   Роуз: "orange",
@@ -849,6 +909,54 @@ const playerColorMap = {
   Сэнди: "yellow",
   Хьюз: "yellow",
 };
+
+function replaceSurnames() {
+  const playerSpans = document.querySelectorAll(".player");
+  const surnameMap = {
+    Фэрриан: "Фэрриан Гардсон",
+    Дезертир: "Герман Шульц",
+    Ошберт: "Осберт Осбертсон",
+    Роуз: "Арчибальд Роуз",
+    Плут: "Винсент Сазерлэнд",
+    Ананита: "Ананита Астор",
+    Хофманн: "Карл Хофманн",
+    Штрих: "Олдиус Лоне",
+    Асмелт: "Асмелт Фьюри",
+    Бель: "Бель Сеймур",
+    Бернд: "Бернд Дженкинс",
+    Мариам: "Мариам Метревели",
+    Кристофер: "Кристофер Стротман",
+    Эндэрд: "Киллиан Эндэрд",
+    Готт: "Готт Айландер",
+    Алрой: "Алрой Джонсон",
+    Брандур: "Брандур Сталехват",
+    Браен: "Браен Бёрк",
+    Маларон: "Мал’арон Берёзовый Лист",
+    Шенн: "Шенн Вельт",
+    Джэф: "Джэфри Майер",
+    Пачек: "Офелия Пачек",
+    Иван: "Иван де Жильбер",
+    Мидас: "Мидас Грейт",
+    Хауэр: "Старшина Хауэр",
+    Кейти: "Кейти Сазерлэнд",
+    Дезертир: "Герман Шульц",
+    Дезертир: "Герман Шульц",
+    Дезертир: "Герман Шульц",
+    Дезертир: "Герман Шульц",
+    Дезертир: "Герман Шульц",
+    Дезертир: "Герман Шульц",
+    Дезертир: "Герман Шульц",
+    // Добавьте другие сопоставления сюда
+  };
+
+  playerSpans.forEach((span) => {
+    const playerName = span.textContent.trim();
+    const fullName = surnameMap[playerName];
+    if (fullName) {
+      span.textContent = fullName;
+    }
+  });
+}
 
 function sayToEmote() {
   let speech = "";

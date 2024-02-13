@@ -349,6 +349,7 @@ p.logline:not(.selected) {
     margin: 120px auto;
     max-width: 1090px;
     overflow: hidden;
+    display:block!important;
 }
 
 .post > div > div {
