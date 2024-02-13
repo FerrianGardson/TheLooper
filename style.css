@@ -52,6 +52,8 @@ body {
   background-size: cover;
   background-blend-mode: multiply;
   overflow: unset!important;
+  /* height: unset!important; */
+  /* margin: unset!important; */
 }
 
 h2 {
@@ -118,6 +120,7 @@ input[type="file"] {
   backdrop-filter: blur(3px);
   padding: 1rem 1rem;
   z-index: 1;
+  /* margin-bottom: 6rem; */
 }
 
 textarea {
@@ -345,4 +348,14 @@ p.logline:not(.selected) {
     padding: 0!important;
     margin: 120px auto;
     max-width: 1090px;
+    overflow: hidden;
+}
+
+.post > div > div {
+    margin: 0;
+}
+
+.footer {
+    margin-top: 6rem!important;
+    height: 1px;
 }
