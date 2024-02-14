@@ -21,6 +21,7 @@ function formatHTML() {
   addCommaOrDot();
   addColonToEnd();
   addSpaceToEndOfPlayers();
+  addTimeToChapter();
   throw new Error("Скрипт прерван");
 }
 
@@ -193,9 +194,12 @@ function getFormattedDate(timestamp) {
   ];
   const formattedDate = `${date.getDate()} ${
     monthNames[date.getMonth()]
-  }, ${padZero(date.getHours())}:${padZero(date.getMinutes())}`;
+  }, `;
   return formattedDate;
 }
+
+// Старые таймштампы в h2.date
+// ${padZero(date.getHours())}:${padZero(date.getMinutes())}
 
 function padZero(number) {
   return number.toString().padStart(2, "0");
@@ -796,8 +800,8 @@ function colorizePlayers(playerColorMap) {
       Бедняк: true,
       Рыболов: true,
       Повар: true,
-      Богач: true,
-      Богач: true,
+      Бармен: true,
+      Разнорабочий: true,
       Богач: true,
       Богач: true,
       Богач: true,
@@ -1762,3 +1766,43 @@ function removeUnselectedLoglines() {
     logline.remove();
   });
 }
+
+
+function addTimeToChapter() {
+  const chapters = document.querySelectorAll(".chapter");
+  chapters.forEach((chapter) => {
+    const dateHeader = chapter.querySelector("h2.date");
+    const firstParagraph = chapter.querySelector("p[timestamp]:first-of-type");
+    const lastParagraph = chapter.querySelector("p:last-of-type");
+
+    if (dateHeader && firstParagraph && lastParagraph) {
+      const startTime = new Date(firstParagraph.getAttribute("timestamp"));
+      const endTime = new Date(lastParagraph.getAttribute("timestamp"));
+
+      const startTimeFormatted = startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const endTimeFormatted = endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      const durationTime = endTime - startTime;
+      const durationHours = Math.floor(durationTime / (1000 * 60 * 60));
+      const durationMinutes = Math.floor((durationTime % (1000 * 60 * 60)) / (1000 * 60));
+
+      const startTimeSpan = document.createElement("span");
+      startTimeSpan.classList.add("starttime");
+      startTimeSpan.textContent = startTimeFormatted;
+      dateHeader.appendChild(startTimeSpan);
+
+      const endTimeSpan = document.createElement("span");
+      endTimeSpan.classList.add("endtime");
+      endTimeSpan.textContent = endTimeFormatted;
+      dateHeader.appendChild(endTimeSpan);
+
+      const durationTimeSpan = document.createElement("span");
+      durationTimeSpan.classList.add("durationtime");
+      durationTimeSpan.textContent = ` (${durationHours}ч ${durationMinutes}мин)`;
+      dateHeader.appendChild(durationTimeSpan);
+    }
+  });
+}
+
+
+
