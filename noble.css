@@ -861,6 +861,10 @@ h2.date {
   margin-left: 1rem !important;
 }
 
+.emote > .speech {
+  color: var(--text-color)!important;
+}
+
 /* Брейкпойнт */
 
 @media (max-width: 768px) {
@@ -1019,3 +1023,6 @@ span.badge.like-num {
     box-shadow: none!important;
 }
 
+.emote > .speech {
+    color: var(--text-color)!important;
+}

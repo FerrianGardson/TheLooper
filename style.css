@@ -361,3 +361,6 @@ p.logline:not(.selected) {
     height: 1px;
 }
 
+.chapter {
+  overflow: hidden;
+}

@@ -459,7 +459,7 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/[—–-]\s/g, "— "); // Тире в процессе
   chatlogHTML = chatlogHTML.replace(/\|\d+\-\d+\((.*?)\)/g, "$1"); // смотрит на |3-3(Халвиэль)
   chatlogHTML = chatlogHTML.replace(/\|[a-z]+/g, ""); // HEX-код
-  chatlogHTML = chatlogHTML.replace(/speech">\s*[—–-]\s*/g, 'speech">'); // Тире в начале
+  // chatlogHTML = chatlogHTML.replace(/speech">\s*[—–-]\s*/g, 'speech">'); // Тире в начале
   // chatlogHTML = chatlogHTML.replace(/\[Объявление рейду\].*?\: /g, ""); // Объявления рейду
   chatlogHTML = chatlogHTML.replace(/&nbsp;/g, " "); // &nbsp;
 
@@ -711,7 +711,7 @@ function combineStory() {
       currentStoryElement.textContent = combinedStory;
       previousLogline.remove();
       currentLogline.querySelector("span.player").remove();
-      console.log(currentLogline);
+      // console.log(currentLogline);
       previousLogline = currentLogline;
       previousStory = combinedStory;
       previousPlayer = currentPlayer;
@@ -1032,7 +1032,7 @@ function toggleCollapse(event) {
     // Выводим в консоль лог текущего состояния "collapsed" до переключения
     // Переключаем класс "collapsed"
     chapter.classList.toggle("collapsed");
-    console.log("Toggle Collapsed");
+    // console.log("Toggle Collapsed");
     // Выводим в консоль лог состояния "collapsed" после переключения
   } else {
     console.error(
@@ -1613,7 +1613,7 @@ document.addEventListener("click", function (event) {
     event.target.classList.contains("date") ||
     event.target.closest(".date")
   ) {
-    console.log("Клик по дате или её дочернему элементу");
+    // console.log("Клик по дате или её дочернему элементу");
     toggleCollapse(event);
   }
 });
@@ -1838,7 +1838,7 @@ function addTimeToChapter() {
       endTimeSpan.remove();
     }
   });
-  removeShortChapters();
+  //removeShortChapters();
   calculateTotalDuration();
 }
 
