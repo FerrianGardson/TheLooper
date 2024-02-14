@@ -154,7 +154,7 @@ function splitSessions() {
       const currentTimestamp = new Date(timestamp);
       if (prevTimestamp) {
         const timeDifference = currentTimestamp - prevTimestamp;
-        if (timeDifference > 1 * 60 * 60 * 1000) {
+        if (timeDifference > 1 * 60 * 60 * 1000 || timeDifference < 0) {
           const dateHeader = document.createElement("h2");
           dateHeader.className = "date";
           dateHeader.textContent = getFormattedDate(timestamp);
@@ -192,9 +192,7 @@ function getFormattedDate(timestamp) {
     "ноября",
     "декабря",
   ];
-  const formattedDate = `${date.getDate()} ${
-    monthNames[date.getMonth()]
-  }, `;
+  const formattedDate = `${date.getDate()} ${monthNames[date.getMonth()]}, `;
   return formattedDate;
 }
 
@@ -877,8 +875,8 @@ function colorizePlayers(playerColorMap) {
 
 function removeDMPlayers() {
   const dmsMap = {
-    "Фг": true,
-    "Кей": true,
+    Фг: true,
+    Кей: true,
     // Добавьте другие имена DM сюда
   };
 
@@ -890,7 +888,6 @@ function removeDMPlayers() {
     }
   });
 }
-
 
 // Карта цветов
 const playerColorMap = {
@@ -1116,6 +1113,25 @@ function trimChapter(chapterElement) {
     // Удаляем все параграфы после последнего выбранного
     paragraphs.slice(lastSelectedIndex + 1).remove();
   }
+  addTimeToChapter();
+}
+
+function removeShortChapters() {
+  const chapters = document.querySelectorAll(".chapter");
+  chapters.forEach((chapter) => {
+    const durationTimeSpan = chapter.querySelector(".durationtime");
+    if (durationTimeSpan) {
+      const durationAttribute = durationTimeSpan.getAttribute("duration");
+      const [hours, minutes] = durationAttribute.split(":").map(Number);
+      const totalMinutes = hours * 60 + minutes;
+      if (totalMinutes < 60) {
+        console.log(
+          `Удаляется chapter с длительностью ${hours} часов ${minutes} минут.`
+        );
+        chapter.remove();
+      }
+    }
+  });
 }
 
 function openselectedChapters() {
@@ -1591,11 +1607,13 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
-// Добавляем обработчик событий для всего #chatlog
 document.addEventListener("click", function (event) {
-  // Проверяем, был ли клик на элементе с классом "date"
-  if (event.target.classList.contains("date")) {
-    console.log("Клик по дате");
+  // Проверяем, был ли клик на элементе с классом "date" или на его дочерних элементах
+  if (
+    event.target.classList.contains("date") ||
+    event.target.closest(".date")
+  ) {
+    console.log("Клик по дате или её дочернему элементу");
     toggleCollapse(event);
   }
 });
@@ -1767,7 +1785,6 @@ function removeUnselectedLoglines() {
   });
 }
 
-
 function addTimeToChapter() {
   const chapters = document.querySelectorAll(".chapter");
   chapters.forEach((chapter) => {
@@ -1776,15 +1793,27 @@ function addTimeToChapter() {
     const lastParagraph = chapter.querySelector("p:last-of-type");
 
     if (dateHeader && firstParagraph && lastParagraph) {
+      // Удаляем .starttime и .durationtime, если они уже существуют
+      dateHeader.querySelector(".starttime")?.remove();
+      dateHeader.querySelector(".durationtime")?.remove();
+
       const startTime = new Date(firstParagraph.getAttribute("timestamp"));
       const endTime = new Date(lastParagraph.getAttribute("timestamp"));
 
-      const startTimeFormatted = startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      const endTimeFormatted = endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const startTimeFormatted = startTime.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      const endTimeFormatted = endTime.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
 
       const durationTime = endTime - startTime;
       const durationHours = Math.floor(durationTime / (1000 * 60 * 60));
-      const durationMinutes = Math.floor((durationTime % (1000 * 60 * 60)) / (1000 * 60));
+      const durationMinutes = Math.floor(
+        (durationTime % (1000 * 60 * 60)) / (1000 * 60)
+      );
 
       const startTimeSpan = document.createElement("span");
       startTimeSpan.classList.add("starttime");
@@ -1799,10 +1828,34 @@ function addTimeToChapter() {
       const durationTimeSpan = document.createElement("span");
       durationTimeSpan.classList.add("durationtime");
       durationTimeSpan.textContent = ` (${durationHours}ч ${durationMinutes}мин)`;
+      durationTimeSpan.setAttribute(
+        "duration",
+        `${durationHours}:${durationMinutes}`
+      );
       dateHeader.appendChild(durationTimeSpan);
+
+      // Удаляем .endtime
+      endTimeSpan.remove();
     }
   });
+  removeShortChapters();
+  calculateTotalDuration();
 }
 
+function calculateTotalDuration() {
+  let totalHours = 0;
+  let totalMinutes = 0;
 
+  const durationTimeSpans = document.querySelectorAll(".durationtime");
+  durationTimeSpans.forEach((span) => {
+    const durationAttribute = span.getAttribute("duration");
+    const [hours, minutes] = durationAttribute.split(":").map(Number);
+    totalHours += hours;
+    totalMinutes += minutes;
+  });
 
+  totalHours += Math.floor(totalMinutes / 60);
+  totalMinutes %= 60;
+
+  console.log(`Суммарно наиграно ${totalHours}ч ${totalMinutes}мин`);
+}
