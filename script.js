@@ -10,6 +10,7 @@ function formatHTML() {
   cleanText();
   splitSessions();
   wrapChapters();
+  scrollToStart();
   colorizePlayers(playerColorMap);
   combineFunctions();
   emoteToSpeech();
@@ -157,13 +158,15 @@ function splitSessions() {
         if (timeDifference > 1 * 60 * 60 * 1000 || timeDifference < 0) {
           const dateHeader = document.createElement("h2");
           dateHeader.className = "date";
-          dateHeader.textContent = getFormattedDate(timestamp);
+          const formattedDate = getFormattedDate(timestamp);
+          dateHeader.innerHTML = `<span class="title">Запись</span> <span class="day">${formattedDate}</span>`;
           paragraph.parentNode.insertBefore(dateHeader, paragraph);
         }
       } else {
         const dateHeader = document.createElement("h2");
         dateHeader.className = "date";
-        dateHeader.textContent = getFormattedDate(timestamp);
+        const formattedDate = getFormattedDate(timestamp);
+        dateHeader.innerHTML = `<span class="title">Запись</span> <span class="day">${formattedDate}</span>`;
         paragraph.parentNode.insertBefore(dateHeader, paragraph);
       }
       // Добавляем содержимое пустого абзаца, если таковой имеется
@@ -459,7 +462,7 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/[—–-]\s/g, "— "); // Тире в процессе
   chatlogHTML = chatlogHTML.replace(/\|\d+\-\d+\((.*?)\)/g, "$1"); // смотрит на |3-3(Халвиэль)
   chatlogHTML = chatlogHTML.replace(/\|[a-z]+/g, ""); // HEX-код
-  // chatlogHTML = chatlogHTML.replace(/speech">\s*[—–-]\s*/g, 'speech">'); // Тире в начале
+  chatlogHTML = chatlogHTML.replace(/speech">\s*[—–-]\s*/g, 'speech">'); // Тире в начале
   // chatlogHTML = chatlogHTML.replace(/\[Объявление рейду\].*?\: /g, ""); // Объявления рейду
   chatlogHTML = chatlogHTML.replace(/&nbsp;/g, " "); // &nbsp;
 
@@ -664,6 +667,7 @@ function combineEmotes() {
       previousEmote = currentEmote;
       previousLogline = currentLogline;
       previousTimeStamp = currentTimeStamp;
+      //currentTimeStamp = "";
       continue;
     }
 
@@ -691,6 +695,8 @@ function combineEmotes() {
       currentPlayerElement = "";
       continue;
     }
+
+    previousPlayer = "";
 
     continue;
   }

@@ -87,10 +87,7 @@ body.body-bg-8 {
   line-height: 140%;
 }
 
-.post {
-  /* font-size: var(--text-size); */
-  /* line-height: 1.2em; */
-}
+
 
 .post * {
   font-size: inherit !important;
@@ -835,11 +832,7 @@ p.story .speech {
   color: var(--emote) !important;
 }
 
-h2.date {
-  color: white!important;
-  font-size: 3rem !important;
-  /* display: none; */
-}
+
 
 .chapter:not(:first-of-type) > h2.date {
   margin-top: 6rem !important;
@@ -897,11 +890,6 @@ h2.date {
 
 
 /* Комменты */
-
-div.wrapper-main > section:nth-child(2),
-div.wrapper-main > section:nth-child(3) {
-    /* display: none; */
-}
 
 div.wrapper-main > section:nth-child(4) {padding-top: 0;margin-top: 4rem;}
 
@@ -1037,7 +1025,17 @@ h2.date {
 }
 
 h2.date span {
-  font-size: 2rem!important;
-  opacity: 0.5;
-  display: inline-block;
+  font-size: 1.4rem!important;
+  /* line-height: 100%; */
+  /* opacity: 0.5; */
+  /* display: inline-block; */
+}
+
+span.title {
+    width: 100%;
+}
+
+h2.date span.title {
+    display: block;
+    font-size: 2rem!important;
 }
