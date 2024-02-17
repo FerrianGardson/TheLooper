@@ -604,19 +604,23 @@ function combineYell() {
   }
 }
 
+function resetEmotes() {
+  currentPlayer = "";
+  currentEmote = "";
+  currentLogline = "";
+  currentTimeStamp = "";
+  previousPlayer = "";
+  previousEmote = "";
+  previousLogline = "";
+  previousTimeStamp = "";
+  combinedEmote = "";
+  currentPlayerElement = "";
+  currentEmoteElement = "";
+}
+
 function combineEmotes() {
   // Инициализация переменных
-  var currentPlayer = "";
-  var currentEmote = "";
-  var currentLogline = "";
-  var currentTimeStamp = "";
-  var previousPlayer = "";
-  var previousEmote = "";
-  var previousLogline = "";
-  var previousTimeStamp = "";
-  var combinedEmote = "";
-  var currentPlayerElement = "";
-  var currentEmoteElement = "";
+  resetEmotes();
 
   // Получаем все элементы p.logline внутри div.chapter
   var elements = document.querySelectorAll("div.chapter p.logline");
@@ -629,24 +633,17 @@ function combineEmotes() {
     // Проверяем, содержит ли текущий элемент класс "emote"
     if (!element.classList.contains("emote")) {
       // Если нет, сбрасываем значения переменных
-      currentEmote = "";
-      currentPlayer = "";
-      previousPlayer = "";
-      previousLogline = "";
-      previousEmote = "";
-      currentLogline = "";
-      currentTimeStamp = "";
-      previousTimeStamp = "";
+      resetEmotes();
       continue;
     } else {
       // Если содержит, сохраняем нужные значения
       currentLogline = element;
       currentTimeStamp = element.getAttribute("timestamp");
       currentPlayerElement = element.querySelector("span.player");
+      currentEmoteElement = element.querySelector("span.emote");
       currentPlayer = currentPlayerElement
         ? currentPlayerElement.textContent
         : "";
-      currentEmoteElement = element.querySelector("span.emote");
       currentEmote = currentEmoteElement ? currentEmoteElement.textContent : "";
     }
 
@@ -673,15 +670,14 @@ function combineEmotes() {
 
     // Проверяем условие слияния эмоутов
     if (
-      previousPlayer &&
-      previousEmote &&
       currentEmote &&
       currentPlayer == previousPlayer &&
+      // Между сообщениями должно быть меньше 1 секунды для слияния
       Math.abs(
         new Date(currentTimeStamp).getTime() -
           new Date(previousTimeStamp).getTime()
       ) <=
-        2 * 1000
+        1 * 1000
     ) {
       // Если условие выполнено, объединяем эмоуты и удаляем предыдущий элемент
       combinedEmote = previousEmote + " " + currentEmote;
@@ -695,10 +691,8 @@ function combineEmotes() {
       currentPlayerElement = "";
       continue;
     }
-
+    // Сброс предыдущего игрока после завершения итераций
     previousPlayer = "";
-
-    continue;
   }
 }
 
