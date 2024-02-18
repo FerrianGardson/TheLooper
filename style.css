@@ -7,11 +7,13 @@
 html {
   font-size: 18px;
   line-height: 1.5em;
+  --glass: #000000ad;
 }
 
 .chapter a {
-    color: yellow;
+    color: var(--orange);
     text-decoration: none;
+    font-weight: bold;
 }
 
 span.key {
@@ -22,7 +24,7 @@ span.key {
     display: inline-block;
     margin: 4px;
     text-align: center;
-    border: 1px solid white;
+    border: 1px solid var(--text-color);
 }
 
 h2:not(:first-of-type) {
@@ -100,7 +102,7 @@ h2.date:hover {
 }
 .chapter.collapsed {
   height: 24rem;
-  opacity: 0.5;
+  /* opacity: 0.5; */
 }
 
 form {
@@ -112,7 +114,7 @@ input[type="file"] {
 
 .nav {
   width: 100vw;
-  background: #000000ad;
+  background: var(--glass);
   position: fixed;
   top: 0;
   backdrop-filter: blur(3px);
@@ -137,6 +139,8 @@ div#filter {
   height: fit-content;
   flex-direction: row;
   gap: 0;
+  overflow: hidden;
+  border-radius: 8px;
 }
 
 input[type="text"] {
@@ -261,7 +265,8 @@ input:focus-visible {
 }
 
 p.logline:not(.selected) {
-  opacity: 0.5;
+  /* opacity: 0.5; */
+  filter: saturate(0.0);
 }
 
 .buttons.cut:hover {
@@ -284,26 +289,27 @@ p.logline:not(.selected) {
   content: attr(tooltip);
   background: var(--glass);
   top: 100%;
-  margin-top: 22px;
+  margin-top: 26px;
   padding: 10px;
   color: #fff;
   line-height: 1.5;
+  border-radius: 0 8px 8px 8px;
 }
 .tooltip:before {
   content: "";
   top: 100%;
-  margin-top: 6px;
-
-  border-left: 10px solid transparent;
+  margin-top: 16px;
+  /* border-left: 10px solid transparent; */
   border-right: 10px solid transparent;
   border-bottom: 10px solid var(--glass);
+  height: 10px;
 }
 .tooltip:hover:after,
 .tooltip:hover:before {
   visibility: visible;
 }
 .tooltip:hover:after {
-  margin-top: 15px;
+  /* margin-top: 15px; */
 }
 
 .input.checkbox {
@@ -313,7 +319,7 @@ p.logline:not(.selected) {
 }
 
 .checkbox > label {
-  padding-left: 0 !important;
+  /* padding-left: 0 !important; */
 }
 
 .checkbox > input {
@@ -348,6 +354,7 @@ p.logline:not(.selected) {
     max-width: 1090px;
     overflow: hidden;
     display:block!important;
+    overflow: visible;
 }
 
 .post > div > div {
@@ -361,4 +368,5 @@ p.logline:not(.selected) {
 
 .chapter {
   overflow: hidden;
+  padding-bottom: 4rem;
 }

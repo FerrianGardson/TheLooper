@@ -117,7 +117,7 @@ function convertTimestamp(timestamp) {
     new Date().getFullYear(),
     month - 1,
     day,
-    hour,
+    parseInt(hour) + 5, // Увеличиваем часы на 5
     minute,
     second,
     millis
@@ -125,6 +125,7 @@ function convertTimestamp(timestamp) {
 
   return isoTimestamp;
 }
+
 
 function importTxt(text) {
   const logLines = text.split("\n");
@@ -618,6 +619,22 @@ function resetEmotes() {
   currentEmoteElement = "";
 }
 
+function saveCurrentValues(element) {
+  currentLogline = element;
+  currentTimeStamp = element.getAttribute("timestamp");
+  currentPlayerElement = element.querySelector("span.player");
+  currentEmoteElement = element.querySelector("span.emote");
+  currentPlayer = currentPlayerElement ? currentPlayerElement.textContent : "";
+  currentEmote = currentEmoteElement ? currentEmoteElement.textContent : "";
+}
+
+function updatePreviousValues() {
+  previousEmote = currentEmote;
+  previousPlayer = currentPlayer;
+  previousLogline = currentLogline;
+  previousTimeStamp = currentTimeStamp;
+}
+
 function combineEmotes() {
   // Инициализация переменных
   resetEmotes();
@@ -635,64 +652,49 @@ function combineEmotes() {
       // Если нет, сбрасываем значения переменных
       resetEmotes();
       continue;
-    } else {
-      // Если содержит, сохраняем нужные значения
-      currentLogline = element;
-      currentTimeStamp = element.getAttribute("timestamp");
-      currentPlayerElement = element.querySelector("span.player");
-      currentEmoteElement = element.querySelector("span.emote");
-      currentPlayer = currentPlayerElement
-        ? currentPlayerElement.textContent
-        : "";
-      currentEmote = currentEmoteElement ? currentEmoteElement.textContent : "";
     }
-
+    // Если содержит, сохраняем нужные значения
+    saveCurrentValues(element);
+    console.log(currentEmote);
+    if (!currentEmote) {
+      continue;
+    }
     // Проверяем, есть ли предыдущее значение эмоута
     if (!previousEmote) {
-      // Если нет, сохраняем текущие значения
-      previousEmote = currentEmote;
-      previousPlayer = currentPlayer;
-      previousLogline = currentLogline;
-      previousTimeStamp = currentTimeStamp;
+      updatePreviousValues();
       continue;
     }
 
     // Проверяем, одинаков ли текущий игрок с предыдущим
     if (currentPlayer != previousPlayer) {
-      // Если нет, сохраняем текущие значения
-      previousPlayer = currentPlayer;
-      previousEmote = currentEmote;
-      previousLogline = currentLogline;
-      previousTimeStamp = currentTimeStamp;
-      //currentTimeStamp = "";
+      updatePreviousValues();
       continue;
     }
 
+    dt = Math.abs(
+      new Date(currentTimeStamp).getTime() -
+        new Date(previousTimeStamp).getTime()
+    );
     // Проверяем условие слияния эмоутов
     if (
-      currentEmote &&
-      currentPlayer == previousPlayer &&
-      // Между сообщениями должно быть меньше 1 секунды для слияния
-      Math.abs(
-        new Date(currentTimeStamp).getTime() -
-          new Date(previousTimeStamp).getTime()
-      ) <=
-        1 * 1000
+      // Между сообщениями должно быть меньше 2 секунды для слияния
+      dt >
+      2 * 1000
     ) {
-      // Если условие выполнено, объединяем эмоуты и удаляем предыдущий элемент
-      combinedEmote = previousEmote + " " + currentEmote;
-      currentEmoteElement.textContent = combinedEmote;
-      previousLogline.remove();
-      previousLogline = currentLogline;
-      previousEmote = combinedEmote;
-      previousPlayer = currentPlayer;
-      previousTimeStamp = currentTimeStamp;
-      currentEmoteElement = "";
-      currentPlayerElement = "";
+      updatePreviousValues();
       continue;
     }
-    // Сброс предыдущего игрока после завершения итераций
-    previousPlayer = "";
+    // Если условие выполнено, объединяем эмоуты и удаляем предыдущий элемент
+    combinedEmote = previousEmote + " " + currentEmote;
+    currentEmoteElement.textContent = combinedEmote;
+    previousLogline.remove();
+    previousLogline = currentLogline;
+    previousEmote = combinedEmote;
+    previousPlayer = currentPlayer;
+    previousTimeStamp = currentTimeStamp;
+    currentEmoteElement = "";
+    currentPlayerElement = "";
+    continue;
   }
 }
 
