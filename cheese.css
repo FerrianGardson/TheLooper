@@ -5,54 +5,54 @@
 }
 
 @font-face {
-    src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/Kill-Switch-Cyr_0.ttf?v=1707755646149");
+  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/Kill-Switch-Cyr_0.ttf?v=1707755646149");
   font-family: mow1;
 }
 
 @font-face {
-    src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/rumraisincyrillic.otf?v=1707755646607");
+  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/rumraisincyrillic.otf?v=1707755646607");
   font-family: mow2;
 }
 
 @font-face {
-    src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/segoescript.ttf?v=1707755647120");
+  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/segoescript.ttf?v=1707755647120");
   font-family: mow3;
 }
 
 @font-face {
-    src: url("https://cdn.glitch.global/b3e68faa-873e-4c9f-b0e4-8b1a287d6f5a/prestige-normal_%5Ballfont.ru%5D.ttf?v=1660986441745");
+  src: url("https://cdn.glitch.global/b3e68faa-873e-4c9f-b0e4-8b1a287d6f5a/prestige-normal_%5Ballfont.ru%5D.ttf?v=1660986441745");
   font-family: mow4;
 }
 
 @font-face {
-    src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/zai%20Triumph%20Typewriter%20Regular.ttf?v=1707885275330");
+  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/zai%20Triumph%20Typewriter%20Regular.ttf?v=1707885275330");
   font-family: mow5;
 }
 
 @font-face {
-    src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/ofont.ru_Candara.ttf?v=1707886185353");
+  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/ofont.ru_Candara.ttf?v=1707886185353");
   font-family: mow6;
 }
 
 @font-face {
-    src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/ofont.ru_Impact.ttf?v=1707761081314");
+  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/ofont.ru_Impact.ttf?v=1707761081314");
   font-family: mow7;
 }
 
 .body-bg-8,
 body {
-    background-image: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/Untit%D0%BC%D0%B8%D0%BC%D0%B2%D1%8Bled-1.png?v=1707976770609) !important;
+  background-image: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/Untit%D0%BC%D0%B8%D0%BC%D0%B2%D1%8Bled-1.png?v=1707976770609) !important;
   background-size: 50% !important;
   background-repeat: repeat !important;
   background-color: #c97744 !important;
 }
 
 .bg-base-img {
-    background: #0000;
+  background: #0000;
 }
 
 .post {
-    background: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/%D0%BE%D0%B1%D1%80%D0%B5%D0%B7%D0%BA%D0%B8.png?v=1707890032311),
+  background: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/%D0%BE%D0%B1%D1%80%D0%B5%D0%B7%D0%BA%D0%B8.png?v=1707890032311),
     url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/copy.png?v=1707976771341),
     url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/f6fde9ac7fccfaae.jpg?v=1707755645582) !important;
   background-repeat: no-repeat, no-repeat, repeat-y !important;
@@ -63,7 +63,8 @@ body {
   width: 1090px !important;
 }
 
-.container.auto,                                 .figure.wp-block-body {
+.container.auto,
+.figure.wp-block-body {
   padding: 0 !important;
 }
 
@@ -76,7 +77,7 @@ h2.article-title {
 }
 
 h2:nth-of-type(2) {
-    display: none;
+  display: none;
 }
 
 .col-md-12 .info-list {
@@ -98,7 +99,7 @@ h2:nth-of-type(2) {
 }
 
 .binded-chars .wp-block-body {
-    position: relative;
+  position: relative;
   left: -390px;
   top: 17px;
 }
@@ -222,7 +223,7 @@ p.mia {
 }
 
 h2.title_text {
-    margin: 30px 0 15px 0 !important;
+  margin: 30px 0 15px 0 !important;
 }
 
 .comment-list .comment-count,
@@ -299,7 +300,7 @@ p.avt {
   text-align: right;
   font-family: mow1;
   color: #e1834a !important;
-      }
+}
 
 .map {
   float: right;
@@ -416,7 +417,7 @@ ul.players {
   --black: #212121;
   --emote: var(--orange);
   --text-color: #7f5146;
-  --hover:#fc5c45;
+  --hover: #fc5c45;
 }
 
 .red {
@@ -478,8 +479,8 @@ ul.players {
 .emote {
   color: var(--emote);
   text-transform: none;
-    font-family: "mow6";
-  }
+  font-family: "mow6";
+}
 
 p.story .speech {
   color: var(--emote) !important;
@@ -495,9 +496,8 @@ p.story .speech {
 }
 
 .yell .player {
-    font-weight: bold;
-  
-  }
+  font-weight: bold;
+}
 
 .content > .mia {
   padding-left: 28%;
@@ -519,43 +519,28 @@ p.mia {
   margin-bottom: 0px;
 }
 
-.content > .transcript ~ .transcript {
-  margin: 0 0 10px;
-  padding: 20px 30px 25px;
-}
-
-.transcript {
-  border: 6px double #860;
-  border-image-source: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/%D0%BE%D0%B1%D1%80%D1%8B%D0%B2%D0%BE%D0%BA.png?v=1707759623528);
-  border-image-slice: 30 30 30 fill;
-  border-image-repeat: stretch repeat;
-  border-image-width: 20px 20px 20px;
-    padding: 15px 30px 20px;
-  padding: 2rem;
-}
-
 .record {
   background: #faecca6b;
   border-radius: 8px;
   display: flex;
-          flex-direction: row;
+  flex-direction: row;
   padding: 0.5rem 1rem;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
   width: fit-content;
 }
 
 .record p {
-    font-family: mow7;
+  font-family: mow7;
   color: #9f8473;
   display: flex;
-      align-items: center;
+  align-items: center;
 }
 
 .record p span {
   font-family: "mow3";
-        color: #312f2d;
+  color: #312f2d;
   margin: 0 1rem;
-      }
+}
 
 .transcript .speech,
 .paper .speech {
@@ -578,18 +563,22 @@ p.mia {
   background-position-x: 19% !important;
 }
 
-.chapter .paper:not(.img) {
-  border: 6px double #860;
-  border-image-source: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/%D0%BE%D0%B1%D1%80%D1%8B%D0%B2%D0%BE%D0%BA.png?v=1707759623528);
-  border-image-slice: 30 30 30 fill;
-  border-image-repeat: stretch repeat;
-  border-image-width: 20px 20px 20px;
-  margin: 0 20px 20px;
+.chapter .paper:not(.img),
+.transcript {
   padding: 3rem;
-  transform: rotate(1deg);
+  /* transform: rotate(1deg); */
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  border-image-source: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/%D0%BE%D0%B1%D1%80%D1%8B%D0%B2%D0%BE%D0%BA2.png?v=1708321338084);
+  border-image-slice: 30 30 30;
+  border-image-repeat: stretch repeat;
+  border-image-width: 20px 20px 20px;
+  margin: 3rem 0;
+  padding: 2rem;
+  background: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/404c4184-6fff-4117-92c2-8f62f73b9ce1_scroll_middle_52.jpg?v=1708321337238);
+  border-image-outset: 13px !important;
+  color: var(--text-color);
 }
 
 .paper.logline.say.selected .speech {
@@ -892,7 +881,7 @@ h2.date span.title {
 }
 
 .footer_paper {
-    display: flex;
+  display: flex;
   justify-content: flex-end;
   align-content: flex-start;
   flex-wrap: wrap;
@@ -911,7 +900,7 @@ p.logline {
   margin: 1rem 0;
   color: var(--emote);
   font-family: "mow6";
-  }
+}
 
 .paper.say:nth-of-type(2n) {
   transform: rotate(-2deg) !important;
@@ -935,12 +924,16 @@ p.logline {
   background: red;
 }
 
-
 .spoiler {
-      height: 6rem;
+  height: 6rem;
   overflow: hidden;
 }
 
 .col-md-3.right-block {
-    display: none;
+  display: none;
+}
+
+.mia_img_tr {
+  margin-left: 30% !important;
+  margin-top: -140px !important;
 }
