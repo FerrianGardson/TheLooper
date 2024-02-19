@@ -1,4 +1,5 @@
 let combineDelay = 2 * 1000;
+let timeZoneDifference = 1;
 
 function toggleselectedClass(event) {
   var paragraph = event.target.closest("p");
@@ -119,7 +120,7 @@ function convertTimestamp(timestamp) {
     new Date().getFullYear(),
     month - 1,
     day,
-    parseInt(hour) + 5, // Увеличиваем часы на 5
+    parseInt(hour) + timeZoneDifference, // Добавляем пять часов
     minute,
     second,
     millis
@@ -1233,197 +1234,6 @@ function filterTrimEverything() {
   }
 }
 
-document
-  .getElementById("keywordsInput")
-  .addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-      logFilter();
-    }
-  });
-
-document.addEventListener("keydown", function (event) {
-  // Удалить абзац
-
-  if (event.key === "Delete") {
-    var elementsUnderCursor = document.querySelectorAll(":hover");
-    elementsUnderCursor.forEach((element) => {
-      if (element.classList.contains("logline")) {
-        // Выводим в консоль сообщение о нажатии и удаляем элемент
-        element.remove();
-      } else if (element.classList.contains("date")) {
-        // Если под курсором <h2 class="date">, удаляем родительский div.chapter
-        const chapterDiv = element.closest("div.chapter");
-        if (chapterDiv) {
-          chapterDiv.remove();
-        }
-      } else if (element.classList.contains("player")) {
-        // Если под курсором <li class="player">, удаляем элемент
-        element.remove();
-      } else if (element.classList.contains("paper")) {
-        // Если под курсором .paper, удаляем элемент
-        element.remove();
-      }
-    });
-  }
-
-  // Заключить абзац в .paper
-
-  if (!event.altKey && event.key === "ArrowLeft") {
-    // Получаем все элементы, над которыми находится курсор
-    var elementsUnderCursor = document.querySelectorAll(":hover");
-
-    // Находим абзацы среди элементов под курсором и добавляем класс 'paper'
-    elementsUnderCursor.forEach(function (element) {
-      if (element.tagName === "P") {
-        if (element.classList.contains("paper")) {
-          element.classList.remove("paper"); // Если класс уже есть, убираем его
-        } else {
-          element.classList.add("paper"); // Если класса нет, добавляем его
-        }
-      }
-    });
-  }
-
-  // Вставить .paper
-
-  if (event.altKey && event.key === "ArrowLeft") {
-    pasteText();
-  }
-
-  // Стереть до
-  if (
-    (event.key === "[" && event.ctrlKey) ||
-    (event.key === "х" && event.ctrlKey)
-  ) {
-    // Находим все элементы под курсором
-    var elementsUnderCursor = document.querySelectorAll(":hover");
-    // Ищем первый элемент <p> среди элементов под курсором
-    const elementUnderCursor = Array.from(elementsUnderCursor).find(
-      (element) => element.tagName.toLowerCase() === "p"
-    );
-    // Ищем первый элемент <h2> среди элементов под курсором
-    const headingUnderCursor = Array.from(elementsUnderCursor).find(
-      (element) => element.tagName.toLowerCase() === "h2"
-    );
-
-    if (elementUnderCursor) {
-      scrollSave(elementUnderCursor);
-      // Логика для <p>
-      let previousSiblings = elementUnderCursor.previousElementSibling;
-      while (previousSiblings) {
-        const siblingToRemove = previousSiblings;
-        previousSiblings = previousSiblings.previousElementSibling;
-        siblingToRemove.remove();
-      }
-      scrollToSaved();
-    } else if (headingUnderCursor) {
-      // Логика для <h2>
-      scrollSave(headingUnderCursor);
-      let previousSiblings =
-        headingUnderCursor.parentNode.previousElementSibling;
-      while (previousSiblings) {
-        const siblingToRemove = previousSiblings;
-        previousSiblings = previousSiblings.previousElementSibling;
-        siblingToRemove.remove();
-      }
-      scrollToSaved();
-    }
-  }
-  if (
-    (event.key === "]" && event.ctrlKey) ||
-    (event.key === "ъ" && event.ctrlKey)
-  ) {
-    // Находим все элементы под курсором
-    var elementsUnderCursor = document.querySelectorAll(":hover");
-    // Ищем первый элемент <p> среди элементов под курсором
-    const elementUnderCursor = Array.from(elementsUnderCursor).find(
-      (element) => element.tagName.toLowerCase() === "p"
-    );
-    // Ищем первый элемент <h2> среди элементов под курсором
-    const headingUnderCursor = Array.from(elementsUnderCursor).find(
-      (element) => element.tagName.toLowerCase() === "h2"
-    );
-    if (elementUnderCursor) {
-      // Логика для <p>
-      let nextSiblings = elementUnderCursor.nextElementSibling;
-      while (nextSiblings) {
-        const siblingToRemove = nextSiblings;
-        nextSiblings = nextSiblings.nextElementSibling;
-        siblingToRemove.remove();
-      }
-    } else if (headingUnderCursor) {
-      // Логика для <h2>
-      scrollSave(headingUnderCursor);
-      let nextSiblings = headingUnderCursor.parentNode.nextElementSibling;
-      while (nextSiblings) {
-        const siblingToRemove = nextSiblings;
-        nextSiblings = nextSiblings.nextElementSibling;
-        siblingToRemove.remove();
-      }
-    }
-  }
-  if (event.shiftKey) {
-    // Находим все элементы под курсором
-    var elementsUnderCursor = document.querySelectorAll(":hover");
-    // Ищем первый элемент <p> среди элементов под курсором
-    const elementUnderCursor = Array.from(elementsUnderCursor).find(
-      (element) => element.tagName.toLowerCase() === "p"
-    );
-    // Проверяем, найден ли элемент <p> и присваиваем ему класс 'selected'
-    if (elementUnderCursor) {
-      // Проверяем, не имеет ли элемент уже класс 'selected'
-      if (!elementUnderCursor.classList.contains("selected")) {
-        elementUnderCursor.classList.add("selected");
-      }
-    }
-  }
-  if (event.altKey && event.ctrlKey) {
-    // Находим все элементы под курсором
-    var elementsUnderCursor = document.querySelectorAll(":hover");
-    document.querySelectorAll("p:empty").forEach((element) => element.remove());
-    // Ищем первый элемент <p class="selected"> среди элементов под курсором
-    const currentselectedElement = Array.from(elementsUnderCursor).find(
-      (element) =>
-        element.tagName.toLowerCase() === "p" &&
-        element.classList.contains("selected")
-    );
-    if (currentselectedElement) {
-      scrollSave(currentselectedElement);
-      // Находим следующий ближайший <p class="selected">
-      let nextselectedElement = currentselectedElement.nextElementSibling;
-      while (
-        nextselectedElement &&
-        !nextselectedElement.classList.contains("selected")
-      ) {
-        nextselectedElement = nextselectedElement.nextElementSibling;
-      }
-      // Если найден следующий важный элемент
-      if (nextselectedElement) {
-        // Получаем все обычные <p> между текущим и следующим ближайшим <p class="selected">
-        const elementsBetween = [];
-        let currentElement = currentselectedElement.nextElementSibling;
-        while (
-          currentElement &&
-          currentElement !== nextselectedElement &&
-          currentElement.tagName.toLowerCase() === "p"
-        ) {
-          elementsBetween.push(currentElement);
-          currentElement = currentElement.nextElementSibling;
-        }
-        // Присваиваем класс 'selected' элементам, у которых его нет
-        elementsBetween.forEach((element) => {
-          if (!element.classList.contains("selected")) {
-            element.classList.add("selected");
-          }
-        });
-      } else {
-      }
-    } else {
-    }
-    scrollToSaved();
-  }
-});
-
 document.addEventListener("click", function (event) {
   // Проверяем, был ли клик на элементе с классом "date" или на его дочерних элементах
   if (
@@ -1617,14 +1427,8 @@ function addTimeToChapter() {
       const startTime = new Date(firstParagraph.getAttribute("timestamp"));
       const endTime = new Date(lastParagraph.getAttribute("timestamp"));
 
-      const startTimeFormatted = startTime.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-      const endTimeFormatted = endTime.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
+      const startTimeUTC = startTime.toUTCString().slice(-12, -4);
+      const endTimeUTC = endTime.toUTCString().slice(-12, -4);
 
       const durationTime = endTime - startTime;
       const durationHours = Math.floor(durationTime / (1000 * 60 * 60));
@@ -1634,12 +1438,12 @@ function addTimeToChapter() {
 
       const startTimeSpan = document.createElement("span");
       startTimeSpan.classList.add("starttime");
-      startTimeSpan.textContent = startTimeFormatted;
+      startTimeSpan.textContent = startTimeUTC;
       dateHeader.appendChild(startTimeSpan);
 
       const endTimeSpan = document.createElement("span");
       endTimeSpan.classList.add("endtime");
-      endTimeSpan.textContent = endTimeFormatted;
+      endTimeSpan.textContent = endTimeUTC;
       dateHeader.appendChild(endTimeSpan);
 
       const durationTimeSpan = document.createElement("span");
@@ -1675,4 +1479,210 @@ function calculateTotalDuration() {
   totalMinutes %= 60;
 
   console.log(`Суммарно наиграно ${totalHours}ч ${totalMinutes}мин`);
+}
+
+// Транскрипция в МИА
+
+function createTranscriptRecord() {
+  // Получаем элемент с атрибутом timestamp
+  const loglineElement = document.querySelector("p.logline.say");
+
+  if (loglineElement && loglineElement.textContent.includes("Запись")) {
+    // Получаем таймштамп и преобразуем его в нужный формат времени
+    const timestamp = new Date(
+      loglineElement.getAttribute("timestamp")
+    ).toLocaleTimeString("en-US", {
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    // Получаем имя вещателя
+    const playerName = loglineElement
+      .querySelector(".player.yellow")
+      .textContent.trim();
+
+    // Генерируем HTML-код для записи в транскрипт
+    const transcriptRecordHTML = `
+      <div class="record">
+        <p>Запись<span>${timestamp}</span></p>
+        <p>Вещатель<span>${playerName}</span></p>
+      </div>
+      <span class="speech">${loglineElement.textContent.trim()}</span>
+    `;
+
+    // Получаем элемент транскрипта и добавляем созданную запись
+    const transcriptElement = document.querySelector(".transcript");
+    transcriptElement.innerHTML = transcriptRecordHTML;
+  }
+}
+
+// Вызываем функцию при загрузке страницы
+window.onload = createTranscriptRecord;
+
+// Горячие клавиши
+
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Delete") {
+    deleteElementUnderCursor();
+  }
+
+  if (!event.altKey && event.key === "ArrowLeft") {
+    togglePaperClass();
+  }
+
+  if (event.altKey && event.key === "ArrowLeft") {
+    pasteText();
+  }
+
+  if (
+    (event.key === "[" && event.ctrlKey) ||
+    (event.key === "х" && event.ctrlKey)
+  ) {
+    eraseBeforeCursor();
+  }
+
+  if (
+    (event.key === "]" && event.ctrlKey) ||
+    (event.key === "ъ" && event.ctrlKey)
+  ) {
+    eraseAfterCursor();
+  }
+
+  if (event.shiftKey) {
+    toggleSelectedClass();
+  }
+
+  if (event.altKey && event.ctrlKey) {
+    handleAltCtrlKeyCombination();
+  }
+
+  if (event.key === "/") {
+    createTranscriptRecord();
+  }
+});
+
+document
+  .getElementById("keywordsInput")
+  .addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      logFilter();
+    }
+  });
+
+function deleteElementUnderCursor() {
+  const elementsUnderCursor = document.querySelectorAll(":hover");
+  elementsUnderCursor.forEach((element) => {
+    if (element.classList.contains("logline")) {
+      element.remove();
+    } else if (element.classList.contains("date")) {
+      const chapterDiv = element.closest("div.chapter");
+      if (chapterDiv) {
+        chapterDiv.remove();
+      }
+    } else if (
+      element.classList.contains("player") ||
+      element.classList.contains("paper")
+    ) {
+      element.remove();
+    }
+  });
+}
+
+function togglePaperClass() {
+  const elementsUnderCursor = document.querySelectorAll(":hover");
+  elementsUnderCursor.forEach((element) => {
+    if (element.tagName === "P") {
+      element.classList.toggle("paper");
+    }
+  });
+}
+
+function eraseBeforeCursor() {
+  const elementsUnderCursor = document.querySelectorAll(":hover");
+  const elementUnderCursor = Array.from(elementsUnderCursor).find(
+    (element) =>
+      element.tagName.toLowerCase() === "p" ||
+      element.tagName.toLowerCase() === "h2"
+  );
+
+  if (elementUnderCursor) {
+    scrollSave(elementUnderCursor);
+    let previousSiblings = elementUnderCursor.previousElementSibling;
+    while (previousSiblings) {
+      const siblingToRemove = previousSiblings;
+      previousSiblings = previousSiblings.previousElementSibling;
+      siblingToRemove.remove();
+    }
+    scrollToSaved();
+  }
+}
+
+function eraseAfterCursor() {
+  const elementsUnderCursor = document.querySelectorAll(":hover");
+  const elementUnderCursor = Array.from(elementsUnderCursor).find(
+    (element) =>
+      element.tagName.toLowerCase() === "p" ||
+      element.tagName.toLowerCase() === "h2"
+  );
+
+  if (elementUnderCursor) {
+    let nextSiblings = elementUnderCursor.nextElementSibling;
+    while (nextSiblings) {
+      const siblingToRemove = nextSiblings;
+      nextSiblings = nextSiblings.nextElementSibling;
+      siblingToRemove.remove();
+    }
+  }
+}
+
+function toggleSelectedClass() {
+  const elementsUnderCursor = document.querySelectorAll(":hover");
+  const elementUnderCursor = Array.from(elementsUnderCursor).find(
+    (element) => element.tagName.toLowerCase() === "p"
+  );
+
+  if (elementUnderCursor) {
+    if (!elementUnderCursor.classList.contains("selected")) {
+      elementUnderCursor.classList.add("selected");
+    }
+  }
+}
+
+function handleAltCtrlKeyCombination() {
+  const elementsUnderCursor = document.querySelectorAll(":hover");
+  document.querySelectorAll("p:empty").forEach((element) => element.remove());
+  const currentselectedElement = Array.from(elementsUnderCursor).find(
+    (element) =>
+      element.tagName.toLowerCase() === "p" &&
+      element.classList.contains("selected")
+  );
+
+  if (currentselectedElement) {
+    scrollSave(currentselectedElement);
+    let nextselectedElement = currentselectedElement.nextElementSibling;
+    while (
+      nextselectedElement &&
+      !nextselectedElement.classList.contains("selected")
+    ) {
+      nextselectedElement = nextselectedElement.nextElementSibling;
+    }
+    if (nextselectedElement) {
+      const elementsBetween = [];
+      let currentElement = currentselectedElement.nextElementSibling;
+      while (
+        currentElement &&
+        currentElement !== nextselectedElement &&
+        currentElement.tagName.toLowerCase() === "p"
+      ) {
+        elementsBetween.push(currentElement);
+        currentElement = currentElement.nextElementSibling;
+      }
+      elementsBetween.forEach((element) => {
+        if (!element.classList.contains("selected")) {
+          element.classList.add("selected");
+        }
+      });
+    }
+  }
 }

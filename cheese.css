@@ -69,12 +69,12 @@ body {
   /*Главный блок контента*/
   background: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/%D0%BE%D0%B1%D1%80%D0%B5%D0%B7%D0%BA%D0%B8.png?v=1707890032311),
     url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/copy.png?v=1707976771341),
-    url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/f6fde9ac7fccfaae.jpg?v=1707755645582);
-  background-repeat: no-repeat, no-repeat, repeat-y;
-  background-size: contain;
-  background-position-y: top, bottom;
+    url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/f6fde9ac7fccfaae.jpg?v=1707755645582)!important;
+  background-repeat: no-repeat, no-repeat, repeat-y!important;
+  background-size: contain!important;
+  background-position-y: top, bottom!important;
   box-shadow: 0 0 10px 10px #832f0761;
-  border: 8px solid #cf6920;
+  border: 8px solid #cf6920!important;
   width: 1090px !important;
 }
 
