@@ -1,5 +1,5 @@
 let combineDelay = 2 * 1000;
-let timeZoneDifference = 1;
+let timeZoneDifference = 4;
 
 // Главная функция
 
@@ -20,7 +20,7 @@ function formatHTML() {
   addColonToEnd();
   addSpaceToEndOfPlayers();
   addTimeToChapter();
-  createTranscriptRecord();
+  findLoglinesAndConvertToTranscript();
   $(".logline.story span.player").remove();
 
   throw new Error("Скрипт прерван");
@@ -117,7 +117,7 @@ function convertTimestamp(timestamp) {
     new Date().getFullYear(),
     month - 1,
     day,
-    parseInt(hour) + timeZoneDifference, // Добавляем пять часов
+    parseInt(hour) + 1 + timeZoneDifference, // Добавляем пять часов
     minute,
     second,
     millis
@@ -1373,54 +1373,62 @@ function calculateTotalDuration() {
 
 // Транскрипция в МИА
 
-function createTranscriptRecord() {
-  // Получаем элементы span.say
+// Превращает элемент .logline.say в .transcript
+function convertLoglineToTranscript(loglineElement) {
+  // Получаем таймштамп и преобразуем его в нужный формат времени
+  const timestamp = new Date(loglineElement.getAttribute("timestamp"));
+  const hours = ("0" + timestamp.getUTCHours()).slice(-2);
+  const minutes = ("0" + timestamp.getUTCMinutes()).slice(-2);
+  const formattedTimestamp = hours + ":" + minutes;
+
+  // Получаем имя вещателя
+  const playerName = loglineElement.querySelector(".player").textContent.trim();
+
+  // Обработка сообщения регуляркой
+  loglineElement.textContent = loglineElement.textContent.replace(
+    /^.+([Зз]апись|\d\d[:.]\d\d)[,.!: ]/g,
+    ""
+  );
+
+  // Генерируем HTML-код для записи в транскрипт
+  const transcriptRecordHTML = `
+    <div class="record">
+      <p>Время заметки<span>${formattedTimestamp}</span></p>
+      <p>Автор заметки<span>${playerName}</span></p>
+    </div>
+    <span class="speech">${loglineElement.textContent.trim()}</span>
+  `;
+
+  // Создаем новый элемент .transcript
+  const transcriptElement = document.createElement("div");
+  transcriptElement.classList.add("transcript", "selected");
+  transcriptElement.innerHTML = transcriptRecordHTML;
+
+  // Заменяем текущий элемент .logline.say элементом .transcript
+  loglineElement.replaceWith(transcriptElement);
+
+  console.log(`Запись создана для элемента:`, loglineElement);
+  loglineElement.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+// Ищет элементы p.logline по ключевым словам и вызывает функцию convertToTranscript
+function findLoglinesAndConvertToTranscript() {
+  // Получаем элементы p.logline, содержащие класс 'say'
   const loglineElements = document.querySelectorAll("p.logline.say");
 
   // Перебираем каждый элемент
   loglineElements.forEach((loglineElement) => {
     // Проверяем содержит ли текст слово "запись"
     if (/запись/i.test(loglineElement.textContent)) {
-      // Получаем таймштамп и преобразуем его в нужный формат времени
-      const timestamp = new Date(loglineElement.getAttribute("timestamp"));
-      const hours = ("0" + timestamp.getUTCHours()).slice(-2);
-      const minutes = ("0" + timestamp.getUTCMinutes()).slice(-2);
-      const formattedTimestamp = hours + ":" + minutes;
-
-      // Получаем имя вещателя
-      const playerName = loglineElement
-        .querySelector(".player.yellow")
-        .textContent.trim();
-
-      // Обработка сообщения регуляркой
-      loglineElement.textContent = loglineElement.textContent.replace(
-        /^.+([Зз]апись|\d\d[:.]\d\d)[,.!: ]/g,
-        ""
-      );
-
-      // Генерируем HTML-код для записи в транскрипт
-      const transcriptRecordHTML = `
-        <div class="record">
-          <p>Время заметки<span>${formattedTimestamp}</span></p>
-          <p>Автор заметки<span>${playerName}</span></p>
-        </div>
-        <span class="speech">${loglineElement.textContent.trim()}</span>
-      `;
-
-      // Создаем новый элемент .transcript
-      const transcriptElement = document.createElement("div");
-      transcriptElement.classList.add("transcript");
-      transcriptElement.innerHTML = transcriptRecordHTML;
-
-      // Заменяем текущий элемент .logline.say элементом .transcript
-      loglineElement.replaceWith(transcriptElement);
-
-      console.log(`Запись создана для элемента:`, loglineElement);
+      // Превращаем элемент в транскрипт
+      console.log("Найден элемент для конвертации:", loglineElement);
+      convertLoglineToTranscript(loglineElement);
     }
   });
 }
 
 // Горячие клавиши
+
 document.addEventListener("keydown", function (event) {
   if (event.key === "Enter" && event.target.id === "keywordsInput") {
     logFilter();
@@ -1438,8 +1446,17 @@ document.addEventListener("keydown", function (event) {
     pasteImg();
   } else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
     moveElement(event);
-  } else if (event.key === "m") {
-    moveElement(event);
+  } else if (["m", "ь"].includes(event.key)) {
+    const hoveredLogline = document.querySelector(".logline:hover");
+    if (hoveredLogline) {
+      convertLoglineToTranscript(hoveredLogline);
+    }
+  } else if (["[", "х"].includes(event.key) && event.altKey) {
+    startWrap();
+  } else if (["]", "ъ"].includes(event.key) && event.altKey) {
+    finishWrap();
+  } else if (event.key === "/") {
+    WrapToDiv();
   }
 });
 
@@ -1456,29 +1473,22 @@ function toggleSelectedClass() {
     const paperParent = element.closest(".paper");
     const transcriptParent = element.closest(".transcript");
     const playerParent = element.closest(".player");
-    const dateHeadingParent = element.closest("h2.date");
+    const dateParent = element.closest(".chapter");
 
+    // Если кликнули на h2.date или его детей, переключаем класс collapsed у родительского .chapter
     if (
-      loglineParent ||
-      paperParent ||
-      transcriptParent ||
-      playerParent ||
-      dateHeadingParent
+      dateParent &&
+      (element.tagName === "H2" || element.matches("h2.date"))
     ) {
-      console.log("Element under cursor:", element);
-      element.classList.toggle("selected");
-      console.log("Element classList:", element.classList);
+      dateParent.classList.toggle("collapsed");
     }
 
-    if (dateHeadingParent) {
-      const chapterParent = dateHeadingParent.closest(".chapter");
-      if (chapterParent) {
-        chapterParent.classList.toggle("collapsed");
-      }
+    // Если кликнули на другие элементы, переключаем класс selected
+    if (loglineParent || paperParent || transcriptParent || playerParent) {
+      element.classList.toggle("selected");
     }
   });
 }
-
 
 function deleteElementUnderCursor() {
   const elementsUnderCursor = document.querySelectorAll(":hover");
@@ -1577,6 +1587,106 @@ function deleteAfter() {
     }
   });
 }
+
+function startWrap() {
+  const contentChild = document.querySelector(".content > :hover");
+  if (contentChild) {
+    // Удаляем класс start_wrap у всех потомков .content
+    document.querySelectorAll(".content .start_wrap").forEach((element) => {
+      element.classList.remove("start_wrap");
+      console.log("start_wrap removed from element:", element);
+    });
+
+    // Добавляем класс start_wrap для текущего элемента
+    contentChild.classList.add("start_wrap");
+    console.log("start_wrap added to element:", contentChild);
+  }
+}
+
+function finishWrap() {
+  const contentChild = document.querySelector(".content > :hover");
+  if (contentChild) {
+    // Удаляем класс finish_wrap у всех потомков .content
+    document.querySelectorAll(".content .finish_wrap").forEach((element) => {
+      element.classList.remove("finish_wrap");
+      console.log("finish_wrap removed from element:", element);
+    });
+
+    // Добавляем класс finish_wrap для текущего элемента
+    contentChild.classList.add("finish_wrap");
+    console.log("finish_wrap added to element:", contentChild);
+  }
+}
+
+function WrapToDiv() {
+  // Получаем все элементы под курсором, которые являются потомками .content
+  const elementsUnderCursor = document.querySelectorAll(".content > :hover");
+
+  // Перебираем каждый найденный элемент
+  for (const element of elementsUnderCursor) {
+    // Находим ближайшего родителя .content для текущего элемента
+    const contentChild = element.closest("div.content");
+    // Если .content не найден, переходим к следующему элементу
+    if (!contentChild) continue;
+
+    // Находим элементы с классами .start_wrap и .finish_wrap внутри .content
+    const startWrap = contentChild.querySelector(".start_wrap");
+    const finishWrap = contentChild.querySelector(".finish_wrap");
+
+    // Проверяем, что оба элемента .start_wrap и .finish_wrap найдены
+    if (!startWrap || !finishWrap) {
+      // Если хотя бы один из них не найден, выводим сообщение об ошибке и прерываем выполнение функции
+      console.log("Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv.");
+      return;
+    }
+
+    // Получаем всех потомков .content
+    const siblings = Array.from(contentChild.children);
+    // Флаг для отслеживания начала и конца обёртки
+    let isWrapping = false;
+    // Создаем элемент для обёртки всех элементов между start_wrap и finish_wrap
+    const spoilerDiv = document.createElement("div");
+    spoilerDiv.classList.add("spoiler");
+
+    // Перебираем всех потомков .content
+    for (const sibling of siblings) {
+      // Если текущий потомок - это элемент начала обёртки, начинаем обёртку
+      if (sibling === startWrap) {
+        isWrapping = true;
+        // Добавляем элемент start_wrap в обёртку spoilerDiv
+        spoilerDiv.appendChild(startWrap.cloneNode(true)); // Включаем start_wrap в спойлер
+        continue;
+      }
+
+      // Если текущий потомок - это элемент конца обёртки, завершаем обёртку
+      if (sibling === finishWrap) {
+        // Добавляем элемент finish_wrap в обёртку spoilerDiv
+        spoilerDiv.appendChild(finishWrap.cloneNode(true)); // Включаем finish_wrap в спойлер
+        break;
+      }
+
+      // Если обёртка началась и не завершилась, добавляем потомков между start_wrap и finish_wrap в обёртку
+      if (isWrapping) {
+        // Клонируем текущего потомка и добавляем его в обёртку
+        const clonedSibling = sibling.cloneNode(true);
+        spoilerDiv.appendChild(clonedSibling);
+        // Удаляем оригинальный элемент после его клонирования
+        sibling.remove(); // Удаляем оригинальный элемент после клонирования
+      }
+    }
+
+    // Вставляем обёртку spoilerDiv после элемента start_wrap
+    startWrap.parentNode.insertBefore(spoilerDiv, startWrap.nextSibling);
+
+    // Выводим сообщение об успешном обёртывании элементов
+    console.log("Элементы успешно обёрнуты в спойлер:", spoilerDiv);
+    // Прерываем цикл после первого обнаруженного элемента
+    break;
+  }
+}
+
+
+
 
 function pasteImg() {
   console.log("Trying to paste image...");

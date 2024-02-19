@@ -577,31 +577,43 @@ p.mia {
   border-image-width: 20px 20px 20px;
   /* margin: 0 20px 20px; */
   padding: 15px 30px 20px;
+  padding: 2rem;
 }
 
 .record {
-  background: #faecca;
+  background: #faecca6b;
   border-radius: 8px;
-  width: 100%;
-  float: left;
-  padding: 5px 8px;
-  margin-bottom: 5px;
+  display: flex;
+  /* width: 100%; */
+  /* float: left; */
+  /* padding: 5px 8px; */
+  /* margin-bottom: 5px; */
+  flex-direction: row;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  width: fit-content;
 }
 
 .record p {
-  float: left;
+  /* float: left; */
   font-family: mow7;
   color: #9f8473;
-  width: 50%;
-  margin: 0px;
+  display: flex;
+  /* width: 50%; */
+  /* margin: 0px; */
+  align-items: center;
 }
 
 .record p span {
   font-family: "mow3";
-  margin-left: 5px;
-  margin-right: 30px;
-  padding: 0 25px;
+  /* margin-left: 5px; */
+  /* margin-right: 30px; */
+  /* padding: 0 25px; */
   color: #312f2d;
+  margin: 0 1rem;
+  /* vertical-align: middle; */
+  /* height: 100%; */
+  /* display: inline-block; */
 }
 
 .transcript .speech,
@@ -980,4 +992,18 @@ p.logline {
 
 .content > *:not(.selected) {
   filter: saturate(0);
+}
+
+.start_wrap {
+  background: green;
+}
+
+.finish_wrap {
+  background: red;
+}
+
+
+.spoiler {
+  background: #d1d1d1;
+  padding: 1rem;
 }
