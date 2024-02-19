@@ -1,5 +1,26 @@
 let combineDelay = 2 * 1000;
-let timeZoneDifference = 4;
+
+function calculateTimeDifference() {
+  const now = new Date(); // Получаем текущее местное время
+  localOffset = now.getTimezoneOffset(); // Получаем смещение текущего часового пояса относительно UTC
+  localDifference = localOffset / 60; // Переводим смещение в часы
+  moscowDifference = localDifference + 3; // Разница между текущим поясом и московским временем (UTC+3)
+  serverDifference = localDifference + 1; // Разница между текущим поясом и серверным временем (UTC+1)
+  console.log(
+    "Разница между вашим местным временем и UTC (в часах):",
+    localDifference
+  );
+  console.log(
+    "Разница между вашим местным временем и московским временем (в часах):",
+    moscowDifference
+  );
+  console.log(
+    "Разница между вашим местным временем и серверным временем (в часах):",
+    serverDifference
+  );
+}
+
+calculateTimeDifference();
 
 // Главная функция
 
@@ -101,27 +122,20 @@ function handleFileInput(event) {
 }
 
 function convertTimestamp(timestamp) {
-  console.log(timestamp);
-  // Заменяем точку на двоеточие
-  const timestampWithColon = timestamp.replace(".", ":");
+  //console.log("Ввели таймштамп:", timestamp);
 
-  // Разбиваем таймштамп на части
-  const [, month, day, time] = timestampWithColon.match(/^(\d+)\/(\d+)\s(.+)$/);
+  const [date, time] = timestamp.split(" ");
+  const [month, day] = date.split("/");
+  const [hoursMinutesSeconds, milliseconds] = time.split(".");
+  const [hours, minutes, seconds] = hoursMinutesSeconds.split(":");
 
-  const [hour, minute, secondMillis] = time.split(":");
+  // Форматируем дату и время в нужном формате
+  const isoTimestamp = `${new Date().getFullYear()}-${month.padStart(
+    2,
+    "0"
+  )}-${day.padStart(2, "0")}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
 
-  const [second, millis = "000"] = secondMillis.split(".");
-
-  // Формируем стандартный таймштамп
-  const isoTimestamp = new Date(
-    new Date().getFullYear(),
-    month - 1,
-    day,
-    parseInt(hour) + 1 + timeZoneDifference, // Добавляем пять часов
-    minute,
-    second,
-    millis
-  ).toISOString();
+  //console.log("Получили таймштамп:", isoTimestamp);
 
   return isoTimestamp;
 }
@@ -305,10 +319,10 @@ let isCollapsed = true;
 
 function toggleChapters() {
   if (isCollapsed) {
-    console.log("expandChapters();");
+    //console.log("expandChapters();");
     expandChapters();
   } else {
-    console.log("collapseChapters();");
+    //console.log("collapseChapters();");
     collapseChapters();
   }
 
@@ -503,7 +517,7 @@ function combineSay(spanType) {
     }
     // Если содержит, сохраняем нужные значения
     saveCurrentValues(element, spanType);
-    console.log(currentSay);
+    //console.log(currentSay);
     if (!currentSay) {
       continue;
     }
@@ -854,7 +868,7 @@ function toggleCollapse(event) {
     // Выводим в консоль лог текущего состояния "collapsed" до переключения
     // Переключаем класс "collapsed"
     chapter.classList.toggle("collapsed");
-    // console.log("Toggle Collapsed");
+    //// console.log("Toggle Collapsed");
     // Выводим в консоль лог состояния "collapsed" после переключения
   } else {
     console.error(
@@ -936,9 +950,7 @@ function removeShortChapters() {
       const [hours, minutes] = durationAttribute.split(":").map(Number);
       const totalMinutes = hours * 60 + minutes;
       if (totalMinutes < 60) {
-        console.log(
-          `Удаляется chapter с длительностью ${hours} часов ${minutes} минут.`
-        );
+        //// console.log( `Удаляется chapter с длительностью ${hours} часов ${minutes} минут.` );
         chapter.remove();
       }
     }
@@ -1223,7 +1235,7 @@ function filterTrimEverything() {
       trimChapter($(chapter));
     });
   } else {
-    console.log('На странице нет div с классом "chapter".');
+    //// console.log('На странице нет div с классом "chapter".');
   }
 }
 
@@ -1314,32 +1326,39 @@ function addTimeToChapter() {
       dateHeader.querySelector(".starttime")?.remove();
       dateHeader.querySelector(".durationtime")?.remove();
 
+      // Получаем временные метки начала и конца главы
       const startTime = new Date(firstParagraph.getAttribute("timestamp"));
       const endTime = new Date(lastParagraph.getAttribute("timestamp"));
+      //console.log("На входе", firstParagraph.getAttribute("timestamp"));
+      // Функция для форматирования времени в виде "ЧЧ:ММ"
+      const formatTime = (time) => {
+        const hours = String(time.getUTCHours()).padStart(2, "0");
+        const minutes = String(time.getUTCMinutes()).padStart(2, "0");
+        return `${hours}:${minutes}`;
+      };
 
-      const startTimeHours = startTime.getHours();
-      const startTimeMinutes = startTime.getMinutes();
+      // Форматирование времени начала и конца главы
+      const startTimeString = formatTime(startTime);
+      const endTimeString = formatTime(endTime);
 
-      const endTimeHours = endTime.getHours();
-      const endTimeMinutes = endTime.getMinutes();
-
-      const startTimeUTC = `${startTimeHours < 10 ? "0" : ""}${startTimeHours}:${startTimeMinutes < 10 ? "0" : ""}${startTimeMinutes}`;
-      const endTimeUTC = `${endTimeHours < 10 ? "0" : ""}${endTimeHours}:${endTimeMinutes < 10 ? "0" : ""}${endTimeMinutes}`;
-
+      // Вычисляем продолжительность главы в миллисекундах
       const durationTime = endTime - startTime;
+      // Переводим продолжительность в часы и минуты
       const durationHours = Math.floor(durationTime / (1000 * 60 * 60));
       const durationMinutes = Math.floor(
         (durationTime % (1000 * 60 * 60)) / (1000 * 60)
       );
 
+      // Создаем и добавляем элементы для отображения времени начала, конца и продолжительности главы
       const startTimeSpan = document.createElement("span");
       startTimeSpan.classList.add("starttime");
-      startTimeSpan.textContent = startTimeUTC;
+      startTimeSpan.textContent = startTimeString;
       dateHeader.appendChild(startTimeSpan);
+      //console.log('На выходе', startTimeString);
 
       const endTimeSpan = document.createElement("span");
       endTimeSpan.classList.add("endtime");
-      endTimeSpan.textContent = endTimeUTC;
+      endTimeSpan.textContent = endTimeString;
       dateHeader.appendChild(endTimeSpan);
 
       const durationTimeSpan = document.createElement("span");
@@ -1360,6 +1379,29 @@ function addTimeToChapter() {
 }
 
 
+function processTimestamp() {
+  // Получаем элемент с классом .chapter
+  const chapter = document.querySelector(".chapter");
+
+  // Получаем значение атрибута timestamp у элемента .chapter
+  const timestampValue = chapter.getAttribute("timestamp");
+
+  // Выводим значение timestamp в консоль
+  console.log("Введенный таймштамп:", timestampValue);
+
+  // Преобразуем timestamp в формат ЧЧ:ММ без учета часового пояса
+  const dateObject = new Date(timestampValue);
+  const hours = ("0" + dateObject.getUTCHours()).slice(-2); // Получаем часы в формате UTC
+  const minutes = ("0" + dateObject.getUTCMinutes()).slice(-2); // Получаем минуты в формате UTC
+  const formattedTimestamp = hours + ":" + minutes;
+
+  // Выводим отформатированный timestamp в консоль
+  console.log("Отформатированный таймштамп:", formattedTimestamp);
+}
+
+// Применяем функцию к элементу с классом .chapter
+processTimestamp();
+
 function calculateTotalDuration() {
   let totalHours = 0;
   let totalMinutes = 0;
@@ -1375,7 +1417,7 @@ function calculateTotalDuration() {
   totalHours += Math.floor(totalMinutes / 60);
   totalMinutes %= 60;
 
-  console.log(`Суммарно наиграно ${totalHours}ч ${totalMinutes}мин`);
+  //console.log(`Суммарно наиграно ${totalHours}ч ${totalMinutes}мин`);
 }
 
 // Транскрипция в МИА
@@ -1384,9 +1426,11 @@ function calculateTotalDuration() {
 function convertLoglineToTranscript(loglineElement) {
   // Получаем таймштамп и преобразуем его в нужный формат времени
   const timestamp = new Date(loglineElement.getAttribute("timestamp"));
-  const hours = ("0" + timestamp.getUTCHours()).slice(-2);
-  const minutes = ("0" + timestamp.getUTCMinutes()).slice(-2);
+  console.log("На входе",loglineElement.getAttribute("timestamp"));
+  const hours = ("0" + timestamp.getHours()).slice(-2); // Местное время, без префикса UTC
+  const minutes = ("0" + timestamp.getMinutes()).slice(-2); // Местное время, без префикса UTC
   const formattedTimestamp = hours + ":" + minutes;
+  console.log('На выходе',formattedTimestamp);
 
   // Получаем имя вещателя
   const playerName = loglineElement.querySelector(".player").textContent.trim();
@@ -1414,7 +1458,7 @@ function convertLoglineToTranscript(loglineElement) {
   // Заменяем текущий элемент .logline.say элементом .transcript
   loglineElement.replaceWith(transcriptElement);
 
-  console.log(`Запись создана для элемента:`, loglineElement);
+  //// console.log(`Запись создана для элемента:`, loglineElement);
   loglineElement.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
@@ -1428,7 +1472,7 @@ function findLoglinesAndConvertToTranscript() {
     // Проверяем содержит ли текст слово "запись"
     if (/запись/i.test(loglineElement.textContent)) {
       // Превращаем элемент в транскрипт
-      console.log("Найден элемент для конвертации:", loglineElement);
+      ////console.log("Найден элемент для конвертации:", loglineElement);
       convertLoglineToTranscript(loglineElement);
     }
   });
@@ -1591,12 +1635,12 @@ function startWrap() {
     // Удаляем класс start_wrap у всех потомков .content
     document.querySelectorAll(".content .start_wrap").forEach((element) => {
       element.classList.remove("start_wrap");
-      console.log("start_wrap removed from element:", element);
+      //console.log("start_wrap removed from element:", element);
     });
 
     // Добавляем класс start_wrap для текущего элемента
     contentChild.classList.add("start_wrap");
-    console.log("start_wrap added to element:", contentChild);
+    //console.log("start_wrap added to element:", contentChild);
   }
 }
 
@@ -1606,12 +1650,12 @@ function finishWrap() {
     // Удаляем класс finish_wrap у всех потомков .content
     document.querySelectorAll(".content .finish_wrap").forEach((element) => {
       element.classList.remove("finish_wrap");
-      console.log("finish_wrap removed from element:", element);
+      //console.log("finish_wrap removed from element:", element);
     });
 
     // Добавляем класс finish_wrap для текущего элемента
     contentChild.classList.add("finish_wrap");
-    console.log("finish_wrap added to element:", contentChild);
+    //console.log("finish_wrap added to element:", contentChild);
     WrapToDiv();
   }
   function WrapToDiv() {
@@ -1635,9 +1679,7 @@ function finishWrap() {
       // Проверяем, что оба элемента .start_wrap и .finish_wrap найдены
       if (!startWrap || !finishWrap) {
         // Если хотя бы один из них не найден, выводим сообщение об ошибке и прерываем выполнение функции
-        console.log(
-          "Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv."
-        );
+        //console.log( "Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv." );
         return;
       }
 
@@ -1680,7 +1722,7 @@ function finishWrap() {
       startWrap.parentNode.insertBefore(spoilerDiv, startWrap.nextSibling);
 
       // Выводим сообщение об успешном обёртывании элементов
-      console.log("Элементы успешно обёрнуты в спойлер:", spoilerDiv);
+      //console.log("Элементы успешно обёрнуты в спойлер:", spoilerDiv);
       // Прерываем цикл после первого обнаруженного элемента
       startWrap.remove();
       finishWrap.remove();
@@ -1697,7 +1739,7 @@ function finishWrap() {
 }
 
 function pasteImg() {
-  console.log("Trying to paste image...");
+  //console.log("Trying to paste image...");
 
   const elementsUnderCursor = document.querySelectorAll(":hover");
 
@@ -1705,7 +1747,7 @@ function pasteImg() {
     const loglineElement = element.closest("p.logline");
 
     if (loglineElement) {
-      console.log("Found p.logline element, inserting image...");
+      //console.log("Found p.logline element, inserting image...");
 
       const imgDiv = document.createElement("div");
       imgDiv.className = "paper img selected";
@@ -1717,14 +1759,14 @@ function pasteImg() {
       imgDiv.appendChild(imgElement);
       loglineElement.insertAdjacentElement("afterend", imgDiv);
 
-      console.log("Image inserted successfully.");
+      //console.log("Image inserted successfully.");
       break; // Прекращаем перебор после первого соответствующего элемента
     }
   }
 }
 
 function pasteText() {
-  console.log("Trying to paste text...");
+  //console.log("Trying to paste text...");
 
   const elementsUnderCursor = document.querySelectorAll(":hover");
 
@@ -1732,7 +1774,7 @@ function pasteText() {
     const loglineElement = element.closest("p.logline");
 
     if (loglineElement) {
-      console.log("Found p.logline element, inserting text...");
+      //console.log("Found p.logline element, inserting text...");
 
       const paperDiv = document.createElement("div");
       paperDiv.className = "paper selected";
@@ -1743,7 +1785,7 @@ function pasteText() {
       paperDiv.appendChild(textElement);
       loglineElement.insertAdjacentElement("beforebegin", paperDiv);
 
-      console.log("Text inserted successfully.");
+      //console.log("Text inserted successfully.");
       break; // Прекращаем перебор после первого соответствующего элемента
     }
   }
