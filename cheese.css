@@ -1,73 +1,58 @@
-/*----------------Оформление от Malinka----------------*/
-/*----- Курсор -----*/
 .body-bg-8,
 .wp-block.default {
   cursor: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/a205e14d92011e14.png?v=1707976771724"),
     default;
 }
 
-/*----- Шрифты -----*/
 @font-face {
-  /*Шрифт для подписи Сырорерзки*/
-  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/Kill-Switch-Cyr_0.ttf?v=1707755646149");
+    src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/Kill-Switch-Cyr_0.ttf?v=1707755646149");
   font-family: mow1;
 }
 
 @font-face {
-  /*Шрифт для заголовков h2 - дата, доп заголовки, комментировать*/
-  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/rumraisincyrillic.otf?v=1707755646607");
+    src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/rumraisincyrillic.otf?v=1707755646607");
   font-family: mow2;
 }
 
 @font-face {
-  /*Шрифт для рукописного текста врезки МИА*/
-  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/segoescript.ttf?v=1707755647120");
+    src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/segoescript.ttf?v=1707755647120");
   font-family: mow3;
 }
 
 @font-face {
-  /*Шрифт для выделения ников*/
-  src: url("https://cdn.glitch.global/b3e68faa-873e-4c9f-b0e4-8b1a287d6f5a/prestige-normal_%5Ballfont.ru%5D.ttf?v=1660986441745");
+    src: url("https://cdn.glitch.global/b3e68faa-873e-4c9f-b0e4-8b1a287d6f5a/prestige-normal_%5Ballfont.ru%5D.ttf?v=1660986441745");
   font-family: mow4;
 }
 
 @font-face {
-  /*Шрифт для заголовков МИА, транскрипции, карты, подрис.подписей, анонса и концовки */
-  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/zai%20Triumph%20Typewriter%20Regular.ttf?v=1707885275330");
+    src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/zai%20Triumph%20Typewriter%20Regular.ttf?v=1707885275330");
   font-family: mow5;
 }
 
 @font-face {
-  /*Шрифт для основного текста*/
-  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/ofont.ru_Candara.ttf?v=1707886185353");
+    src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/ofont.ru_Candara.ttf?v=1707886185353");
   font-family: mow6;
 }
 
 @font-face {
-  /*Шрифт для Запись-Вещатель и названия сюжета*/
-  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/ofont.ru_Impact.ttf?v=1707761081314");
+    src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/ofont.ru_Impact.ttf?v=1707761081314");
   font-family: mow7;
 }
 
-/*---------------------------------------------------------*/
-/*----- Основное оформление страницы -----*/
 .body-bg-8,
 body {
-  /*Основной фон страницы*/
-  background-image: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/Untit%D0%BC%D0%B8%D0%BC%D0%B2%D1%8Bled-1.png?v=1707976770609) !important;
+    background-image: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/Untit%D0%BC%D0%B8%D0%BC%D0%B2%D1%8Bled-1.png?v=1707976770609) !important;
   background-size: 50% !important;
   background-repeat: repeat !important;
   background-color: #c97744 !important;
 }
 
 .bg-base-img {
-  /*Невидимость*/
-  background: #0000;
+    background: #0000;
 }
 
 .post {
-  /*Главный блок контента*/
-  background: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/%D0%BE%D0%B1%D1%80%D0%B5%D0%B7%D0%BA%D0%B8.png?v=1707890032311),
+    background: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/%D0%BE%D0%B1%D1%80%D0%B5%D0%B7%D0%BA%D0%B8.png?v=1707890032311),
     url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/copy.png?v=1707976771341),
     url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/f6fde9ac7fccfaae.jpg?v=1707755645582) !important;
   background-repeat: no-repeat, no-repeat, repeat-y !important;
@@ -78,13 +63,10 @@ body {
   width: 1090px !important;
 }
 
-.container.auto, /*Убрать все отступы*/
-                                .figure.wp-block-body {
+.container.auto,                                 .figure.wp-block-body {
   padding: 0 !important;
 }
 
-/*---------------------------------------------------------*/
-/*----- Название отчета -----*/
 h2.article-title {
   width: 40%;
   margin: 60px 0 50px 30px !important;
@@ -93,10 +75,8 @@ h2.article-title {
   color: #e1834a !important;
 }
 
-/*----- Сюжеты -----*/
 h2:nth-of-type(2) {
-  /*Убрать заголовок*/
-  display: none;
+    display: none;
 }
 
 .col-md-12 .info-list {
@@ -114,13 +94,11 @@ h2:nth-of-type(2) {
 }
 
 .col-md-12 .info-list .item:hover {
-  color: red;
+  color: var(--hover);
 }
 
-/*----- Участники -----*/
 .binded-chars .wp-block-body {
-  /* background-image: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/1.jpg?v=1707755642931) !important; */
-  position: relative;
+    position: relative;
   left: -390px;
   top: 17px;
 }
@@ -166,12 +144,10 @@ h2:nth-of-type(2) {
   transform: rotate(0deg) !important;
 }
 
-/*----- Информация об авторе -----*/
 .wp-block.article.post .meta-info {
   margin: 15px;
 }
 
-/*----Лайк основной---*/
 .col-sm-2 i.fa.fa-thumbs-o-up.fa-2,
 .col-sm-2 i.fa.fa-3.fa-thumbs-o-up {
   content: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/1123547-2.png?v=1707890375360);
@@ -203,9 +179,9 @@ h2:nth-of-type(2) {
   border-radius: 50%;
   padding-top: 9px;
   font-weight: bold;
+  font-size: 2.4rem;
 }
 
-/*----Лайк в комментариях---*/
 span.comment-meta-left i.fa.fa-thumbs-o-up.fa-2,
 span.comment-meta-left i.fa.fa-3.fa-thumbs-o-up,
 span.comment-meta-left i.fa.fa-2.fa-thumbs-up,
@@ -215,8 +191,6 @@ li.comment span.like-num {
   color: #ff8800 !important;
 }
 
-/*---------------------------------------------------------*/
-/*Заголовки*/
 h2.date,
 h2.title_text,
 .comment-list .comment-count,
@@ -248,8 +222,7 @@ p.mia {
 }
 
 h2.title_text {
-  /*Дополнительный заголовок*/
-  margin: 30px 0 15px 0 !important;
+    margin: 30px 0 15px 0 !important;
 }
 
 .comment-list .comment-count,
@@ -263,7 +236,6 @@ p.titt.t_img {
   text-align: right;
 }
 
-/*Картинки*/
 .map_img img,
 .paper img,
 .dop_img img {
@@ -289,8 +261,6 @@ p.titt.t_img {
   box-shadow: 0 0 3px 2px #0000003b;
 }
 
-/*----------------Внутреннее наполнение--------------------*/
-/*----- Шапка текста -----*/
 .head_paper,
 .footer_paper {
   display: flex;
@@ -300,7 +270,6 @@ p.titt.t_img {
   height: 510px;
 }
 
-/*----- Анонс -----*/
 .anons {
   width: 50%;
   margin-bottom: 30px;
@@ -330,12 +299,8 @@ p.avt {
   text-align: right;
   font-family: mow1;
   color: #e1834a !important;
-  /* position: relative; */
-  /* left: 130px; */
-  /* top: 100px; */
-}
+      }
 
-/*----- Карта -----*/
 .map {
   float: right;
   width: 50%;
@@ -404,14 +369,10 @@ img.imm {
   width: 400px !important;
 }
 
-/*----------------------------------------------------------*/
-/*-------------Основной текст---------------*/
-/*Основной контейнер*/
 .chapter {
   padding: 0 50px;
 }
 
-/*Список игроков*/
 .player {
   background: none;
 }
@@ -455,6 +416,7 @@ ul.players {
   --black: #212121;
   --emote: var(--orange);
   --text-color: #7f5146;
+  --hover:#fc5c45;
 }
 
 .red {
@@ -499,7 +461,6 @@ ul.players {
   color: var(--purple-3);
 }
 
-/*Основной текст*/
 .chapter span.speech,
 .dop_img p,
 .chapter > p:not([class]),
@@ -517,10 +478,8 @@ ul.players {
 .emote {
   color: var(--emote);
   text-transform: none;
-  /* font-weight: 700; */
-  font-family: "mow6";
-  /* font-style: italic; */
-}
+    font-family: "mow6";
+  }
 
 p.story .speech {
   color: var(--emote) !important;
@@ -536,14 +495,10 @@ p.story .speech {
 }
 
 .yell .player {
-  /* color: var(--red); */
-  font-weight: bold;
-  /* font-family: "mow4"; */
+    font-weight: bold;
+  
+  }
 
-  /* text-transform: uppercase; */
-}
-
-/*----------- ВРЕЗКА - МИА -----------*/
 .content > .mia {
   padding-left: 28%;
   height: 170px;
@@ -575,8 +530,7 @@ p.mia {
   border-image-slice: 30 30 30 fill;
   border-image-repeat: stretch repeat;
   border-image-width: 20px 20px 20px;
-  /* margin: 0 20px 20px; */
-  padding: 15px 30px 20px;
+    padding: 15px 30px 20px;
   padding: 2rem;
 }
 
@@ -584,37 +538,24 @@ p.mia {
   background: #faecca6b;
   border-radius: 8px;
   display: flex;
-  /* width: 100%; */
-  /* float: left; */
-  /* padding: 5px 8px; */
-  /* margin-bottom: 5px; */
-  flex-direction: row;
+          flex-direction: row;
   padding: 0.5rem 1rem;
   margin-bottom: 1rem;
   width: fit-content;
 }
 
 .record p {
-  /* float: left; */
-  font-family: mow7;
+    font-family: mow7;
   color: #9f8473;
   display: flex;
-  /* width: 50%; */
-  /* margin: 0px; */
-  align-items: center;
+      align-items: center;
 }
 
 .record p span {
   font-family: "mow3";
-  /* margin-left: 5px; */
-  /* margin-right: 30px; */
-  /* padding: 0 25px; */
-  color: #312f2d;
+        color: #312f2d;
   margin: 0 1rem;
-  /* vertical-align: middle; */
-  /* height: 100%; */
-  /* display: inline-block; */
-}
+      }
 
 .transcript .speech,
 .paper .speech {
@@ -637,7 +578,6 @@ p.mia {
   background-position-x: 19% !important;
 }
 
-/*по старому варианту оформления врезок - без записи*/
 .chapter .paper:not(.img) {
   border: 6px double #860;
   border-image-source: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/%D0%BE%D0%B1%D1%80%D1%8B%D0%B2%D0%BE%D0%BA.png?v=1707759623528);
@@ -656,7 +596,6 @@ p.mia {
   display: inline;
 }
 
-/*ПОДСКАЗКА ПРИ НАВЕДЕНИИ*/
 .hint {
   color: #394179;
   cursor: pointer;
@@ -711,7 +650,6 @@ hint > .text:hover {
   margin: 10px 0 !important;
 }
 
-/*Заключение*/
 .footer_paper .col-md-12 .info-list {
   margin: 15px -70px;
   transform: rotate(1deg);
@@ -733,7 +671,6 @@ hint > .text:hover {
   height: 0px;
 }
 
-/*Дополнительная мини-картинка с описанием и заголовком*/
 .dop_img {
   min-height: 250px;
   width: 250px;
@@ -765,7 +702,6 @@ hint > .text:hover {
   border-bottom: 3px dashed #dd9050;
 }
 
-/*Врезки с лирическим отступлением*/
 .pause {
   width: 100%;
   padding: 0 5%;
@@ -787,7 +723,6 @@ hint > .text:hover {
   transform: rotate(-16deg);
 }
 
-/* Дополнения */
 .col-sm-2 {
   position: absolute;
   top: 644px;
@@ -957,8 +892,7 @@ h2.date span.title {
 }
 
 .footer_paper {
-  /* gap: 1rem; */
-  display: flex;
+    display: flex;
   justify-content: flex-end;
   align-content: flex-start;
   flex-wrap: wrap;
@@ -977,8 +911,7 @@ p.logline {
   margin: 1rem 0;
   color: var(--emote);
   font-family: "mow6";
-  /* font-weight: bold; */
-}
+  }
 
 .paper.say:nth-of-type(2n) {
   transform: rotate(-2deg) !important;
@@ -990,7 +923,7 @@ p.logline {
   color: var(--red);
 }
 
-.content > *:not(.selected) {
+.post .content > *:not(.selected) {
   filter: saturate(0);
 }
 
@@ -1004,6 +937,10 @@ p.logline {
 
 
 .spoiler {
-  background: #d1d1d1;
-  padding: 1rem;
+      height: 6rem;
+  overflow: hidden;
+}
+
+.col-md-3.right-block {
+    display: none;
 }

@@ -1615,78 +1615,83 @@ function finishWrap() {
     // Добавляем класс finish_wrap для текущего элемента
     contentChild.classList.add("finish_wrap");
     console.log("finish_wrap added to element:", contentChild);
+    WrapToDiv();
+  }
+  function WrapToDiv() {
+    // Получаем все элементы под курсором, которые являются потомками .content
+    const elementsUnderCursor = document.querySelectorAll(".content > :hover");
+
+    // Перебираем каждый найденный элемент
+    for (const element of elementsUnderCursor) {
+      // Находим ближайшего родителя .content для текущего элемента
+      const contentChild = element.closest("div.content");
+      // Если .content не найден, переходим к следующему элементу
+      if (!contentChild) continue;
+
+      // Находим элементы с классами .start_wrap и .finish_wrap внутри .content
+      const startWrap = contentChild.querySelector(".start_wrap");
+      const finishWrap = contentChild.querySelector(".finish_wrap");
+      // Удаляем классы .start_wrap и .finish_wrap у найденных элементов
+      startWrap.classList.remove("start_wrap");
+      finishWrap.classList.remove("finish_wrap");
+
+      // Проверяем, что оба элемента .start_wrap и .finish_wrap найдены
+      if (!startWrap || !finishWrap) {
+        // Если хотя бы один из них не найден, выводим сообщение об ошибке и прерываем выполнение функции
+        console.log(
+          "Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv."
+        );
+        return;
+      }
+
+      // Получаем всех потомков .content
+      const siblings = Array.from(contentChild.children);
+      // Флаг для отслеживания начала и конца обёртки
+      let isWrapping = false;
+      // Создаем элемент для обёртки всех элементов между start_wrap и finish_wrap
+      const spoilerDiv = document.createElement("div");
+      spoilerDiv.classList.add("spoiler");
+
+      // Перебираем всех потомков .content
+      for (const sibling of siblings) {
+        // Если текущий потомок - это элемент начала обёртки, начинаем обёртку
+        if (sibling === startWrap) {
+          isWrapping = true;
+          // Добавляем элемент start_wrap в обёртку spoilerDiv
+          spoilerDiv.appendChild(startWrap.cloneNode(true)); // Включаем start_wrap в спойлер
+          continue;
+        }
+
+        // Если текущий потомок - это элемент конца обёртки, завершаем обёртку
+        if (sibling === finishWrap) {
+          // Добавляем элемент finish_wrap в обёртку spoilerDiv
+          spoilerDiv.appendChild(finishWrap.cloneNode(true)); // Включаем finish_wrap в спойлер
+          break;
+        }
+
+        // Если обёртка началась и не завершилась, добавляем потомков между start_wrap и finish_wrap в обёртку
+        if (isWrapping) {
+          // Клонируем текущего потомка и добавляем его в обёртку
+          const clonedSibling = sibling.cloneNode(true);
+          spoilerDiv.appendChild(clonedSibling);
+          // Удаляем оригинальный элемент после его клонирования
+          sibling.remove(); // Удаляем оригинальный элемент после клонирования
+        }
+      }
+
+      // Вставляем обёртку spoilerDiv после элемента start_wrap
+      startWrap.parentNode.insertBefore(spoilerDiv, startWrap.nextSibling);
+
+      // Выводим сообщение об успешном обёртывании элементов
+      console.log("Элементы успешно обёрнуты в спойлер:", spoilerDiv);
+      // Прерываем цикл после первого обнаруженного элемента
+      startWrap.remove();
+      finishWrap.remove();
+      break;
+      // Удаляем startWrap и finishWrap
+    }
   }
 }
-
-function WrapToDiv() {
-  // Получаем все элементы под курсором, которые являются потомками .content
-  const elementsUnderCursor = document.querySelectorAll(".content > :hover");
-
-  // Перебираем каждый найденный элемент
-  for (const element of elementsUnderCursor) {
-    // Находим ближайшего родителя .content для текущего элемента
-    const contentChild = element.closest("div.content");
-    // Если .content не найден, переходим к следующему элементу
-    if (!contentChild) continue;
-
-    // Находим элементы с классами .start_wrap и .finish_wrap внутри .content
-    const startWrap = contentChild.querySelector(".start_wrap");
-    const finishWrap = contentChild.querySelector(".finish_wrap");
-
-    // Проверяем, что оба элемента .start_wrap и .finish_wrap найдены
-    if (!startWrap || !finishWrap) {
-      // Если хотя бы один из них не найден, выводим сообщение об ошибке и прерываем выполнение функции
-      console.log("Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv.");
-      return;
-    }
-
-    // Получаем всех потомков .content
-    const siblings = Array.from(contentChild.children);
-    // Флаг для отслеживания начала и конца обёртки
-    let isWrapping = false;
-    // Создаем элемент для обёртки всех элементов между start_wrap и finish_wrap
-    const spoilerDiv = document.createElement("div");
-    spoilerDiv.classList.add("spoiler");
-
-    // Перебираем всех потомков .content
-    for (const sibling of siblings) {
-      // Если текущий потомок - это элемент начала обёртки, начинаем обёртку
-      if (sibling === startWrap) {
-        isWrapping = true;
-        // Добавляем элемент start_wrap в обёртку spoilerDiv
-        spoilerDiv.appendChild(startWrap.cloneNode(true)); // Включаем start_wrap в спойлер
-        continue;
-      }
-
-      // Если текущий потомок - это элемент конца обёртки, завершаем обёртку
-      if (sibling === finishWrap) {
-        // Добавляем элемент finish_wrap в обёртку spoilerDiv
-        spoilerDiv.appendChild(finishWrap.cloneNode(true)); // Включаем finish_wrap в спойлер
-        break;
-      }
-
-      // Если обёртка началась и не завершилась, добавляем потомков между start_wrap и finish_wrap в обёртку
-      if (isWrapping) {
-        // Клонируем текущего потомка и добавляем его в обёртку
-        const clonedSibling = sibling.cloneNode(true);
-        spoilerDiv.appendChild(clonedSibling);
-        // Удаляем оригинальный элемент после его клонирования
-        sibling.remove(); // Удаляем оригинальный элемент после клонирования
-      }
-    }
-
-    // Вставляем обёртку spoilerDiv после элемента start_wrap
-    startWrap.parentNode.insertBefore(spoilerDiv, startWrap.nextSibling);
-
-    // Выводим сообщение об успешном обёртывании элементов
-    console.log("Элементы успешно обёрнуты в спойлер:", spoilerDiv);
-    // Прерываем цикл после первого обнаруженного элемента
-    break;
-  }
-}
-
-
-
 
 function pasteImg() {
   console.log("Trying to paste image...");
