@@ -1423,13 +1423,33 @@ function convertLoglineToTranscript(loglineElement) {
   // Получаем таймштамп и преобразуем его в нужный формат времени
   const timestamp = new Date(loglineElement.getAttribute("timestamp"));
   console.log("На входе", loglineElement.getAttribute("timestamp"));
-  const hours = ("0" + timestamp.getUTCHours()).slice(-2); // Используем getUTCHours для UTC времени
-  const minutes = ("0" + timestamp.getUTCMinutes()).slice(-2); // Используем getUTCMinutes для UTC времени
-  const formattedTimestamp = hours + ":" + minutes;
+  const day = timestamp.getDate(); // Получаем день месяца
+  const monthNames = [
+    "янв",
+    "фев",
+    "мар",
+    "апр",
+    "май",
+    "июн",
+    "июл",
+    "авг",
+    "сен",
+    "окт",
+    "ноя",
+    "дек",
+  ];
+  const monthIndex = timestamp.getMonth(); // Получаем индекс месяца
+  const formattedDate = day + " " + monthNames[monthIndex]; // Форматируем день и месяц
+  const hours = ("0" + timestamp.getUTCHours()).slice(-2); // Местное время, без префикса UTC
+  const minutes = ("0" + timestamp.getUTCMinutes()).slice(-2); // Местное время, без префикса UTC
+  const formattedTimestamp = formattedDate + " " + hours + ":" + minutes; // Собираем дату и время в одну строку
   console.log("На выходе", formattedTimestamp);
 
   // Получаем имя вещателя
   const playerName = loglineElement.querySelector(".player").textContent.trim();
+
+  // Сохраняем атрибут timestamp
+  loglineElement.setAttribute("timestamp", timestamp.toISOString());
 
   // Обработка сообщения регуляркой
   loglineElement.textContent = loglineElement.textContent.replace(
@@ -1450,6 +1470,9 @@ function convertLoglineToTranscript(loglineElement) {
   const transcriptElement = document.createElement("div");
   transcriptElement.classList.add("transcript", "selected");
   transcriptElement.innerHTML = transcriptRecordHTML;
+
+  // Сохраняем атрибут timestamp в новом элементе .transcript
+  transcriptElement.setAttribute("timestamp", timestamp.toISOString());
 
   // Заменяем текущий элемент .logline.say элементом .transcript
   loglineElement.replaceWith(transcriptElement);
@@ -1501,7 +1524,11 @@ document.addEventListener("keydown", function (event) {
   } else if (["[", "х"].includes(event.key) && event.altKey) {
     startWrap();
   } else if (["]", "ъ"].includes(event.key) && event.altKey) {
-    finishWrap();
+    finishWrap("spoiler");
+  } else if (["[", "х"].includes(event.key)) {
+    startWrap();
+  } else if (["]", "ъ"].includes(event.key)) {
+    finishWrap("paper");
   } else if (event.key === "/") {
     WrapToDiv();
   }
@@ -1640,18 +1667,18 @@ function startWrap() {
   }
 }
 
-function finishWrap() {
+function finishWrap(className) {
   const contentChild = document.querySelector(".content > :hover");
   if (contentChild) {
     // Удаляем класс finish_wrap у всех потомков .content
     document.querySelectorAll(".content .finish_wrap").forEach((element) => {
       element.classList.remove("finish_wrap");
-      //console.log("finish_wrap removed from element:", element);
+      console.log("finish_wrap removed from element:", element);
     });
 
     // Добавляем класс finish_wrap для текущего элемента
     contentChild.classList.add("finish_wrap");
-    //console.log("finish_wrap added to element:", contentChild);
+    console.log("finish_wrap added to element:", contentChild);
     WrapToDiv();
   }
   function WrapToDiv() {
@@ -1675,7 +1702,9 @@ function finishWrap() {
       // Проверяем, что оба элемента .start_wrap и .finish_wrap найдены
       if (!startWrap || !finishWrap) {
         // Если хотя бы один из них не найден, выводим сообщение об ошибке и прерываем выполнение функции
-        //console.log( "Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv." );
+        console.log(
+          "Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv."
+        );
         return;
       }
 
@@ -1685,7 +1714,7 @@ function finishWrap() {
       let isWrapping = false;
       // Создаем элемент для обёртки всех элементов между start_wrap и finish_wrap
       const spoilerDiv = document.createElement("div");
-      spoilerDiv.classList.add("spoiler");
+      spoilerDiv.classList.add(className);
 
       // Перебираем всех потомков .content
       for (const sibling of siblings) {
@@ -1718,16 +1747,20 @@ function finishWrap() {
       startWrap.parentNode.insertBefore(spoilerDiv, startWrap.nextSibling);
 
       // Выводим сообщение об успешном обёртывании элементов
-      //console.log("Элементы успешно обёрнуты в спойлер:", spoilerDiv);
+      console.log("Элементы успешно обёрнуты в спойлер:", spoilerDiv);
       // Прерываем цикл после первого обнаруженного элемента
       startWrap.remove();
       finishWrap.remove();
-      // Добавляем элемент h1 с текстом "Наведитесь, чтобы раскрыть спойлер"
-      const spoilerDesc = document.createElement("h1");
-      spoilerDesc.classList.add("spoiler_desc");
-      spoilerDesc.textContent = "Наведитесь, чтобы раскрыть спойлер";
-      // Вставляем spoilerDesc после элемента .spoiler
-      spoilerDiv.parentNode.insertBefore(spoilerDesc, spoilerDiv.nextSibling);
+
+      if (className === "spoiler") {
+        // Добавляем элемент h1 с текстом "Наведитесь, чтобы раскрыть спойлер"
+        const spoilerDesc = document.createElement("h1");
+        spoilerDesc.classList.add("spoiler_desc");
+        spoilerDesc.textContent = "Наведитесь, чтобы раскрыть спойлер";
+        // Вставляем spoilerDesc после элемента .spoiler
+        spoilerDiv.parentNode.insertBefore(spoilerDesc, spoilerDiv.nextSibling);
+      }
+
       break;
       // Удаляем startWrap и finishWrap
     }
