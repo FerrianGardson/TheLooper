@@ -553,8 +553,8 @@ p.story .speech {
 }
 
 .yell span.player {
-  color: var(--red);
-  font-weight: bold;
+  /* color: var(--red); */
+  /* font-weight: bold; */
 }
 
 .yell span.speech {
@@ -564,11 +564,11 @@ p.story .speech {
 }
 
 .yell .player {
-  color: var(--red);
+  /* color: var(--red); */
   font-weight: bold;
-  font-family: "mow4";
-  font-size: 17px;
-  text-transform: uppercase;
+  /* font-family: "mow4"; */
+  /* font-size: 17px; */
+  /* text-transform: uppercase; */
 }
 
 /*----------- ВРЕЗКА - МИА -----------*/
@@ -1106,3 +1106,9 @@ p.logline {
 .paper.say:nth-of-type(2n) {
   transform: rotate(-2deg) !important;
 }
+
+  .yell .say{
+    text-transform: uppercase;
+    font-weight: bold;
+    color: var(--red);
+  }

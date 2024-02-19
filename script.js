@@ -1,3 +1,5 @@
+let combineDelay = 2 * 1000;
+
 function toggleselectedClass(event) {
   var paragraph = event.target.closest("p");
   if (paragraph) {
@@ -13,7 +15,7 @@ function formatHTML() {
   scrollToStart();
   colorizePlayers(playerColorMap);
   combineFunctions();
-  emoteToSpeech();
+  emoteTosay();
   sayToEmote();
   chapterReverse();
   virt();
@@ -125,7 +127,6 @@ function convertTimestamp(timestamp) {
 
   return isoTimestamp;
 }
-
 
 function importTxt(text) {
   const logLines = text.split("\n");
@@ -409,12 +410,12 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/<p.*?>[А-я]+ шепчет:.*?<\/p>\n/g, ""); // Шепчет:
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?"logline)">(.*)\sговорит:\s(.*?)<\/p>\n/g,
-    '$1 say"><span class="player">$2</span><span class="speech">$3</span></p>\n'
+    '$1 say"><span class="player">$2</span><span class="say">$3</span></p>\n'
   ); // Говорит:
 
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?"logline)">(.*)\sкричит:\s(.*?)<\/p>\n/g,
-    '$1 yell"><span class="player">$2</span><span class="speech">$3</span></p>\n'
+    '$1 yell"><span class="player">$2</span><span class="say">$3</span></p>\n'
   ); // Кричит:
 
   chatlogHTML = chatlogHTML.replace(
@@ -452,10 +453,10 @@ function cleanText() {
     ); //ООС-каналы (рейд)
   }
 
-  //  chatlogHTML = chatlogHTML.replace(/(<p.*?"logline)">([А-я]+):\s(.*?)<\/p>/g,'$1 story"><span class="player">$2</span><span class="speech">$3</p>\n'); // Стори
+  //  chatlogHTML = chatlogHTML.replace(/(<p.*?"logline)">([А-я]+):\s(.*?)<\/p>/g,'$1 story"><span class="player">$2</span><span class="say">$3</p>\n'); // Стори
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?"logline)">(.*?):\s(.*?)<\/p>/g,
-    '$1 story"><span class="player">$2</span><span class="speech">$3</p>\n'
+    '$1 story"><span class="player">$2</span><span class="say">$3</p>\n'
   ); // Стори v2
 
   // Прочее
@@ -463,7 +464,7 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/[—–-]\s/g, "— "); // Тире в процессе
   chatlogHTML = chatlogHTML.replace(/\|\d+\-\d+\((.*?)\)/g, "$1"); // смотрит на |3-3(Халвиэль)
   chatlogHTML = chatlogHTML.replace(/\|[a-z]+/g, ""); // HEX-код
-  chatlogHTML = chatlogHTML.replace(/speech">\s*[—–-]\s*/g, 'speech">'); // Тире в начале
+  chatlogHTML = chatlogHTML.replace(/say">\s*[—–-]\s*/g, 'say">'); // Тире в начале
   // chatlogHTML = chatlogHTML.replace(/\[Объявление рейду\].*?\: /g, ""); // Объявления рейду
   chatlogHTML = chatlogHTML.replace(/&nbsp;/g, " "); // &nbsp;
 
@@ -477,167 +478,16 @@ function cleanText() {
 }
 // Объединение чатбоксов
 
-function combineSpeech() {
-  var currentPlayer = "";
-  var currentSpeech = "";
-  var currentLogline = "";
-  var previousPlayer = "";
-  var previousSpeech = "";
-  var previousLogline = "";
-  var combinedSpeech = "";
-  var currentPlayerElement = "";
-  var currentSpeechElement = "";
-  var elements = document.querySelectorAll("div.chapter p.logline");
-  var length = elements.length;
-  for (var i = 0; i < length; i++) {
-    var element = elements[i];
-    if (!element.classList.contains("say")) {
-      currentPlayer = "";
-      currentSpeech = "";
-      currentLogline = "";
-      previousPlayer = "";
-      previousSpeech = "";
-      previousLogline = "";
-      continue;
-    } else {
-      currentLogline = element;
-      currentPlayerElement = element.querySelector("span.player");
-      currentPlayer = currentPlayerElement
-        ? currentPlayerElement.textContent
-        : "";
-      currentSpeechElement = element.querySelector("span.speech");
-      currentSpeech = currentSpeechElement
-        ? currentSpeechElement.textContent
-        : "";
-    }
-    if (!previousSpeech) {
-      previousSpeech = currentSpeech;
-      previousPlayer = currentPlayer;
-      previousLogline = currentLogline;
-      continue;
-    }
-    if (
-      previousPlayer &&
-      previousSpeech &&
-      currentSpeech &&
-      currentPlayer == previousPlayer
-    ) {
-      combinedSpeech = previousSpeech + " " + currentSpeech;
-      currentSpeechElement.textContent = combinedSpeech;
-      previousLogline.remove();
-      previousLogline = currentLogline;
-      previousSpeech = combinedSpeech;
-      previousPlayer = currentPlayer;
-      currentSpeechElement = "";
-      currentPlayerElement = "";
-      continue;
-    }
-    if (currentPlayer != previousPlayer) {
-      previousPlayer = currentPlayer;
-      previousSpeech = currentSpeech;
-      previousLogline = currentLogline;
-      continue;
-    }
-    continue;
-  }
+function combineFunctions() {
+  combineSay("emote");
+  combineSay("say");
+  combineSay("yell");
+  combineSay("story");
 }
 
-function combineYell() {
-  var currentPlayer = "";
-  var currentYell = "";
-  var currentLogline = "";
-  var previousPlayer = "";
-  var previousYell = "";
-  var previousLogline = "";
-  var combinedYell = "";
-  var currentPlayerElement = "";
-  var currentYellElement = "";
-  var elements = document.querySelectorAll("div.chapter p.logline");
-  var length = elements.length;
-  for (var i = 0; i < length; i++) {
-    var element = elements[i];
-    if (!element.classList.contains("yell")) {
-      currentPlayer = "";
-      currentYell = "";
-      currentLogline = "";
-      previousPlayer = "";
-      previousYell = "";
-      previousLogline = "";
-      continue;
-    } else {
-      currentLogline = element;
-      currentPlayerElement = element.querySelector("span.player");
-      currentPlayer = currentPlayerElement
-        ? currentPlayerElement.textContent
-        : "";
-      currentYellElement = element.querySelector("span.speech");
-      currentYell = currentYellElement ? currentYellElement.textContent : "";
-    }
-    if (!previousYell) {
-      previousYell = currentYell;
-      previousPlayer = currentPlayer;
-      previousLogline = currentLogline;
-      continue;
-    }
-    if (
-      previousPlayer &&
-      previousYell &&
-      currentYell &&
-      currentPlayer == previousPlayer
-    ) {
-      combinedYell = previousYell + " " + currentYell;
-      currentYellElement.textContent = combinedYell;
-      previousLogline.remove();
-      previousLogline = currentLogline;
-      previousYell = combinedYell;
-      previousPlayer = currentPlayer;
-      currentYellElement = "";
-      currentPlayerElement = "";
-      continue;
-    }
-    if (currentPlayer != previousPlayer) {
-      previousPlayer = currentPlayer;
-      previousYell = currentYell;
-      previousLogline = currentLogline;
-      continue;
-    }
-    continue;
-  }
-}
-
-function resetEmotes() {
-  currentPlayer = "";
-  currentEmote = "";
-  currentLogline = "";
-  currentTimeStamp = "";
-  previousPlayer = "";
-  previousEmote = "";
-  previousLogline = "";
-  previousTimeStamp = "";
-  combinedEmote = "";
-  currentPlayerElement = "";
-  currentEmoteElement = "";
-}
-
-function saveCurrentValues(element) {
-  currentLogline = element;
-  currentTimeStamp = element.getAttribute("timestamp");
-  currentPlayerElement = element.querySelector("span.player");
-  currentEmoteElement = element.querySelector("span.emote");
-  currentPlayer = currentPlayerElement ? currentPlayerElement.textContent : "";
-  currentEmote = currentEmoteElement ? currentEmoteElement.textContent : "";
-}
-
-function updatePreviousValues() {
-  previousEmote = currentEmote;
-  previousPlayer = currentPlayer;
-  previousLogline = currentLogline;
-  previousTimeStamp = currentTimeStamp;
-}
-
-function combineEmotes() {
+function combineSay(spanType) {
   // Инициализация переменных
-  resetEmotes();
+  resetSay();
 
   // Получаем все элементы p.logline внутри div.chapter
   var elements = document.querySelectorAll("div.chapter p.logline");
@@ -648,19 +498,19 @@ function combineEmotes() {
     var element = elements[i];
 
     // Проверяем, содержит ли текущий элемент класс "emote"
-    if (!element.classList.contains("emote")) {
+    if (!element.classList.contains(spanType)) {
       // Если нет, сбрасываем значения переменных
-      resetEmotes();
+      resetSay();
       continue;
     }
     // Если содержит, сохраняем нужные значения
-    saveCurrentValues(element);
-    console.log(currentEmote);
-    if (!currentEmote) {
+    saveCurrentValues(element, spanType);
+    console.log(currentSay);
+    if (!currentSay) {
       continue;
     }
     // Проверяем, есть ли предыдущее значение эмоута
-    if (!previousEmote) {
+    if (!previousSay) {
       updatePreviousValues();
       continue;
     }
@@ -677,95 +527,55 @@ function combineEmotes() {
     );
     // Проверяем условие слияния эмоутов
     if (
-      // Между сообщениями должно быть меньше 2 секунды для слияния
-      dt >
-      2 * 1000
+      // Между сообщениями должно быть меньше X секунд для слияния
+      dt > combineDelay
     ) {
       updatePreviousValues();
       continue;
     }
     // Если условие выполнено, объединяем эмоуты и удаляем предыдущий элемент
-    combinedEmote = previousEmote + " " + currentEmote;
-    currentEmoteElement.textContent = combinedEmote;
+    combinedSay = previousSay + " " + currentSay;
+    currentSayElement.textContent = combinedSay;
     previousLogline.remove();
     previousLogline = currentLogline;
-    previousEmote = combinedEmote;
+    previousSay = combinedSay;
     previousPlayer = currentPlayer;
     previousTimeStamp = currentTimeStamp;
-    currentEmoteElement = "";
+    currentSayElement = "";
     currentPlayerElement = "";
     continue;
   }
-}
-
-function combineStory() {
-  var currentPlayer = "";
-  var currentStory = "";
-  var currentLogline = "";
-  var previousPlayer = "";
-  var previousStory = "";
-  var previousLogline = "";
-  var combinedStory = "";
-  var currentPlayerElement = "";
-  var currentStoryElement = "";
-  var elements = document.querySelectorAll("div.chapter p.logline");
-  var length = elements.length;
-  for (var i = 0; i < length; i++) {
-    var element = elements[i];
-    if (!element.classList.contains("story")) {
-      currentPlayer = "";
-      currentStory = "";
-      currentLogline = "";
-      previousPlayer = "";
-      previousStory = "";
-      previousLogline = "";
-      continue;
-    } else {
-      currentLogline = element;
-      currentPlayerElement = element.querySelector("span.player");
-      currentPlayer = currentPlayerElement
-        ? currentPlayerElement.textContent
-        : "";
-      currentStoryElement = element.querySelector("span.speech");
-      currentStory = currentStoryElement ? currentStoryElement.textContent : "";
-    }
-    if (!previousStory) {
-      previousStory = currentStory;
-      previousPlayer = currentPlayer;
-      previousLogline = currentLogline;
-      continue;
-    }
-    if (
-      previousPlayer &&
-      previousStory &&
-      currentStory &&
-      currentPlayer == previousPlayer
-    ) {
-      combinedStory = previousStory + " " + currentStory;
-      currentStoryElement.textContent = combinedStory;
-      previousLogline.remove();
-      currentLogline.querySelector("span.player").remove();
-      // console.log(currentLogline);
-      previousLogline = currentLogline;
-      previousStory = combinedStory;
-      previousPlayer = currentPlayer;
-      currentStoryElement = "";
-      currentPlayerElement = "";
-      continue;
-    }
-    if (currentPlayer != previousPlayer) {
-      previousPlayer = currentPlayer;
-      previousStory = currentStory;
-      previousLogline = currentLogline;
-      continue;
-    }
-    continue;
+  function saveCurrentValues(element, spanType) {
+    currentLogline = element;
+    currentTimeStamp = element.getAttribute("timestamp");
+    currentPlayerElement = element.querySelector("span.player");
+    currentSayElement = element.querySelector(`span.${spanType}`);
+    currentPlayer = currentPlayerElement
+      ? currentPlayerElement.textContent
+      : "";
+    currentSay = currentSayElement ? currentSayElement.textContent : "";
   }
 
-  // Удалить игрока из всех одиночных сторилайнов
-  document
-    .querySelectorAll("p.logline.story span.player")
-    .forEach((element) => element.remove());
+  function updatePreviousValues() {
+    previousSay = currentSay;
+    previousPlayer = currentPlayer;
+    previousLogline = currentLogline;
+    previousTimeStamp = currentTimeStamp;
+  }
+
+  function resetSay() {
+    currentPlayer = "";
+    currentSay = "";
+    currentLogline = "";
+    currentTimeStamp = "";
+    previousPlayer = "";
+    previousSay = "";
+    previousLogline = "";
+    previousTimeStamp = "";
+    combinedSay = "";
+    currentPlayerElement = "";
+    currentSayElement = "";
+  }
 }
 
 // Список игроков
@@ -994,13 +804,13 @@ function replaceSurnames() {
 }
 
 function sayToEmote() {
-  let speech = "";
+  let say = "";
   // Собираем все p.logline.say
-  speech = document.querySelectorAll("p.say, p.yell");
+  say = document.querySelectorAll("p.say, p.yell");
   // Индексируем и обрабатываем каждый p.logline.say
-  for (let i = 0; i < speech.length; i++) {
+  for (let i = 0; i < say.length; i++) {
     // Получаем текст из HTML-элемента
-    let sayText = speech[i].innerHTML;
+    let sayText = say[i].innerHTML;
     // Обрабатываем текст с помощью регулярного выражения
     //sayText = sayText.replace(/([!?:.,])\s((?:—.+?(?:[!?:]|[!?:.,]\s—\s*|<\/span>)))/g,'$1 <span class="emote">$2</span>'); // Старая замена
     // sayText = sayText.replace(/([!?.,:])(\s—\s.*?[!?.,:]\s—\s)/g,'$1<span class="emote">$2</span>'); // Новая замена
@@ -1009,16 +819,16 @@ function sayToEmote() {
       '$1<span class="emote">$2</span>'
     ); // Новая замена
     sayText = sayText.replace(
-      /<\/span><span class="speech">\s*[—–-]\s*/g,
-      '</span><span class="speech">'
+      /<\/span><span class="say">\s*[—–-]\s*/g,
+      '</span><span class="say">'
     ); // Тире в начале
-    speech[i].innerHTML = sayText;
+    say[i].innerHTML = sayText;
     // Выводим обновленную версию текста
-    speech[i].innerHTML = sayText;
+    say[i].innerHTML = sayText;
   }
 }
 
-function emoteToSpeech() {
+function emoteTosay() {
   // Получаем все элементы p.logline.emote
   let emotes = document.querySelectorAll("p.logline.emote");
 
@@ -1028,35 +838,15 @@ function emoteToSpeech() {
     let emoteText = emotes[i].innerHTML;
 
     // Обрабатываем текст с использованием регулярного выражения (пример)
-    // let updatedEmoteText = emoteText.replace(/(—\s(?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)(?:[,.!?] —|<\/span>))/g,'<span class="speech">$1</span>');
+    // let updatedEmoteText = emoteText.replace(/(—\s(?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)(?:[,.!?] —|<\/span>))/g,'<span class="say">$1</span>');
     let updatedEmoteText = emoteText.replace(
       /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[,.!?])(?: —|<\/span>))/g,
-      '<span class="dash">— </span><span class="speech">$2</span><span class="dash"> —</span>'
+      '<span class="dash">— </span><span class="say">$2</span><span class="dash"> —</span>'
     );
 
     // Если нужно обновить HTML-элемент, раскомментируйте следующую строку
     emotes[i].innerHTML = updatedEmoteText;
   }
-
-  /*   // Находим все span.speech > span.emote
-  var speechEmoteElements = document.querySelectorAll(
-    "span.speech > span.emote"
-  );
-
-  // Заменяем символ "–" на "—"
-  speechEmoteElements.forEach(function (element) {
-    element.innerText = element.innerText.replace(/–/g, "—");
-  });
-
-  // Находим все span.emote > span.speech
-  var emoteSpeechElements = document.querySelectorAll(
-    "span.emote > span.speech"
-  );
-
-  // Заменяем символ "–" на "—"
-  emoteSpeechElements.forEach(function (element) {
-    element.innerText = element.innerText.replace(/–/g, "—");
-  }); */
 }
 
 function toggleCollapse(event) {
@@ -1073,13 +863,6 @@ function toggleCollapse(event) {
       "Не найден элемент с классом 'chapter' в родительской цепочке."
     );
   }
-}
-
-function combineFunctions() {
-  combineSpeech();
-  combineEmotes();
-  combineYell();
-  combineStory();
 }
 
 let keywordsInput = null;
