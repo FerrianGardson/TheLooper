@@ -1317,8 +1317,14 @@ function addTimeToChapter() {
       const startTime = new Date(firstParagraph.getAttribute("timestamp"));
       const endTime = new Date(lastParagraph.getAttribute("timestamp"));
 
-      const startTimeUTC = startTime.toUTCString().slice(-12, -4);
-      const endTimeUTC = endTime.toUTCString().slice(-12, -4);
+      const startTimeHours = startTime.getHours();
+      const startTimeMinutes = startTime.getMinutes();
+
+      const endTimeHours = endTime.getHours();
+      const endTimeMinutes = endTime.getMinutes();
+
+      const startTimeUTC = `${startTimeHours < 10 ? "0" : ""}${startTimeHours}:${startTimeMinutes < 10 ? "0" : ""}${startTimeMinutes}`;
+      const endTimeUTC = `${endTimeHours < 10 ? "0" : ""}${endTimeHours}:${endTimeMinutes < 10 ? "0" : ""}${endTimeMinutes}`;
 
       const durationTime = endTime - startTime;
       const durationHours = Math.floor(durationTime / (1000 * 60 * 60));
@@ -1352,6 +1358,7 @@ function addTimeToChapter() {
   //removeShortChapters();
   calculateTotalDuration();
 }
+
 
 function calculateTotalDuration() {
   let totalHours = 0;
@@ -1551,41 +1558,31 @@ function moveElement(event) {
 }
 
 function deleteBefore() {
-  const elementsUnderCursor = document.querySelectorAll(":hover");
-  const contentContainers = document.querySelectorAll(".content");
+  const hoveredElements = document.querySelectorAll(".content > :hover");
 
-  elementsUnderCursor.forEach((element) => {
-    const contentContainer = element.closest(".content");
-    if (!contentContainer) return; // Пропускаем, если элемент не находится в контейнере .content
-
-    const targetElement = element;
-
-    let currentElement = targetElement.previousElementSibling;
+  hoveredElements.forEach((element) => {
+    let currentElement = element.previousElementSibling;
     while (currentElement) {
       const siblingToRemove = currentElement;
       currentElement = currentElement.previousElementSibling;
       siblingToRemove.remove();
     }
   });
+  addTimeToChapter();
 }
 
 function deleteAfter() {
-  const elementsUnderCursor = document.querySelectorAll(":hover");
-  const contentContainers = document.querySelectorAll(".content");
+  const hoveredElements = document.querySelectorAll(".content > :hover");
 
-  elementsUnderCursor.forEach((element) => {
-    const contentContainer = element.closest(".content");
-    if (!contentContainer) return; // Пропускаем, если элемент не находится в контейнере .content
-
-    const targetElement = element;
-
-    let currentElement = targetElement.nextElementSibling;
+  hoveredElements.forEach((element) => {
+    let currentElement = element.nextElementSibling;
     while (currentElement) {
       const siblingToRemove = currentElement;
       currentElement = currentElement.nextElementSibling;
       siblingToRemove.remove();
     }
   });
+  addTimeToChapter();
 }
 
 function startWrap() {
