@@ -1687,6 +1687,12 @@ function finishWrap() {
       // Прерываем цикл после первого обнаруженного элемента
       startWrap.remove();
       finishWrap.remove();
+      // Добавляем элемент h1 с текстом "Наведитесь, чтобы раскрыть спойлер"
+      const spoilerDesc = document.createElement("h1");
+      spoilerDesc.classList.add("spoiler_desc");
+      spoilerDesc.textContent = "Наведитесь, чтобы раскрыть спойлер";
+      // Вставляем spoilerDesc после элемента .spoiler
+      spoilerDiv.parentNode.insertBefore(spoilerDesc, spoilerDiv.nextSibling);
       break;
       // Удаляем startWrap и finishWrap
     }
