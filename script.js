@@ -1378,7 +1378,6 @@ function addTimeToChapter() {
   calculateTotalDuration();
 }
 
-
 function processTimestamp() {
   // Получаем элемент с классом .chapter
   const chapter = document.querySelector(".chapter");
@@ -1398,9 +1397,6 @@ function processTimestamp() {
   // Выводим отформатированный timestamp в консоль
   console.log("Отформатированный таймштамп:", formattedTimestamp);
 }
-
-// Применяем функцию к элементу с классом .chapter
-processTimestamp();
 
 function calculateTotalDuration() {
   let totalHours = 0;
@@ -1426,11 +1422,11 @@ function calculateTotalDuration() {
 function convertLoglineToTranscript(loglineElement) {
   // Получаем таймштамп и преобразуем его в нужный формат времени
   const timestamp = new Date(loglineElement.getAttribute("timestamp"));
-  console.log("На входе",loglineElement.getAttribute("timestamp"));
-  const hours = ("0" + timestamp.getHours()).slice(-2); // Местное время, без префикса UTC
-  const minutes = ("0" + timestamp.getMinutes()).slice(-2); // Местное время, без префикса UTC
+  console.log("На входе", loglineElement.getAttribute("timestamp"));
+  const hours = ("0" + timestamp.getUTCHours()).slice(-2); // Используем getUTCHours для UTC времени
+  const minutes = ("0" + timestamp.getUTCMinutes()).slice(-2); // Используем getUTCMinutes для UTC времени
   const formattedTimestamp = hours + ":" + minutes;
-  console.log('На выходе',formattedTimestamp);
+  console.log("На выходе", formattedTimestamp);
 
   // Получаем имя вещателя
   const playerName = loglineElement.querySelector(".player").textContent.trim();
