@@ -69,24 +69,18 @@ body {
   /*Главный блок контента*/
   background: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/%D0%BE%D0%B1%D1%80%D0%B5%D0%B7%D0%BA%D0%B8.png?v=1707890032311),
     url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/copy.png?v=1707976771341),
-    url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/f6fde9ac7fccfaae.jpg?v=1707755645582)!important;
-  background-repeat: no-repeat, no-repeat, repeat-y!important;
-  background-size: contain!important;
-  background-position-y: top, bottom!important;
+    url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/f6fde9ac7fccfaae.jpg?v=1707755645582) !important;
+  background-repeat: no-repeat, no-repeat, repeat-y !important;
+  background-size: contain !important;
+  background-position-y: top, bottom !important;
   box-shadow: 0 0 10px 10px #832f0761;
-  border: 8px solid #cf6920!important;
+  border: 8px solid #cf6920 !important;
   width: 1090px !important;
 }
 
 .container.auto, /*Убрать все отступы*/
                                 .figure.wp-block-body {
   padding: 0 !important;
-}
-
-.wp-block.default {
-  /*Невидимость внутренностям*/
-  /* border: none; */
-  /* background: #e0e0e000; */
 }
 
 /*---------------------------------------------------------*/
@@ -96,9 +90,6 @@ h2.article-title {
   margin: 60px 0 50px 30px !important;
   text-align: left;
   font-family: "mow5";
-  font-size: 53px !important;
-  font-weight: 300 !important;
-  line-height: 53px !important;
   color: #e1834a !important;
 }
 
@@ -117,7 +108,6 @@ h2:nth-of-type(2) {
 }
 
 .col-md-12 .info-list .item {
-  font-size: 30px;
   font-family: mow7;
   color: #fbf1d9;
   letter-spacing: 2px;
@@ -213,7 +203,6 @@ h2:nth-of-type(2) {
   border-radius: 50%;
   padding-top: 9px;
   font-weight: bold;
-  font-size: 38px;
 }
 
 /*----Лайк в комментариях---*/
@@ -232,7 +221,6 @@ h2.date,
 h2.title_text,
 .comment-list .comment-count,
 a#parent-comment {
-  font-size: 36px !important;
   font-family: mow2;
   font-weight: 300;
   color: #e1834a;
@@ -245,7 +233,6 @@ h2.date {
 p.titt,
 p.mia {
   color: #aa6d47 !important;
-  font-size: 20px;
   font-family: mow5 !important;
   margin-bottom: 5px;
   text-shadow: 0 -3px 0 #fff1ce, 0 -3px 0 #fff1ce, 0 3px 0 #fff1ce,
@@ -333,8 +320,6 @@ p.titt.t_img {
 .pause p {
   margin: 0 0 1rem;
   font-family: "mow5";
-  line-height: 20px !important;
-  font-size: 18px;
   color: #b3683a;
 }
 
@@ -344,9 +329,7 @@ p.avt {
   width: 250px;
   text-align: right;
   font-family: mow1;
-  font-size: 30px !important;
   color: #e1834a !important;
-  line-height: 30px !important;
   /* position: relative; */
   /* left: 130px; */
   /* top: 100px; */
@@ -446,12 +429,10 @@ ul.players {
   display: inline-block;
   margin-right: 0.3em;
   font-weight: bold;
-  font-size: 1.5rem !important;
 }
 
 .chapter li {
   font-family: mow4;
-  font-size: 16px;
 }
 
 :root {
@@ -523,7 +504,6 @@ ul.players {
 .dop_img p,
 .chapter > p:not([class]),
 .paper {
-  /* font-size: 18px; */
   color: var(--text-color);
   font-family: "mow6";
   font-weight: normal;
@@ -532,7 +512,6 @@ ul.players {
 .say > .player {
   font-weight: 700;
   font-family: mow4;
-  /* font-size: 18px; */
 }
 
 .emote {
@@ -541,20 +520,13 @@ ul.players {
   /* font-weight: 700; */
   font-family: "mow6";
   /* font-style: italic; */
-  /* font-size: 16px !important; */
 }
 
 p.story .speech {
   color: var(--emote) !important;
   font-weight: 700;
   font-family: "mow6";
-  font-size: 16px !important;
   font-style: italic;
-}
-
-.yell span.player {
-  /* color: var(--red); */
-  /* font-weight: bold; */
 }
 
 .yell span.speech {
@@ -567,7 +539,7 @@ p.story .speech {
   /* color: var(--red); */
   font-weight: bold;
   /* font-family: "mow4"; */
-  /* font-size: 17px; */
+
   /* text-transform: uppercase; */
 }
 
@@ -589,14 +561,7 @@ p.story .speech {
 
 p.mia {
   margin-left: 30px;
-  font-size: 16px !important;
   margin-bottom: 0px;
-}
-
-.content > .transcript {
-  margin-left: 30%;
-  margin-top: -149px;
-  padding: 15px 30px 20px;
 }
 
 .content > .transcript ~ .transcript {
@@ -610,7 +575,7 @@ p.mia {
   border-image-slice: 30 30 30 fill;
   border-image-repeat: stretch repeat;
   border-image-width: 20px 20px 20px;
-  margin: 0 20px 20px;
+  /* margin: 0 20px 20px; */
   padding: 15px 30px 20px;
 }
 
@@ -629,7 +594,6 @@ p.mia {
   color: #9f8473;
   width: 50%;
   margin: 0px;
-  font-size: 16px !important;
 }
 
 .record p span {
@@ -638,14 +602,12 @@ p.mia {
   margin-right: 30px;
   padding: 0 25px;
   color: #312f2d;
-  font-size: 22px;
 }
 
-.transcript span.speech,
-.paper.logline.say.selected .speech {
+.transcript .speech,
+.paper .speech {
   font-family: "mow5";
-  line-height: 18px !important;
-  font-size: 16px;
+
   color: var(--text-color);
   display: block;
 }
@@ -678,10 +640,6 @@ p.mia {
   gap: 1rem;
 }
 
-.chapter .paper.logline.say.selected span.player {
-  /* color: #cd9002; */
-}
-
 .paper.logline.say.selected .speech {
   display: inline;
 }
@@ -692,7 +650,6 @@ p.mia {
   cursor: pointer;
   font-weight: bold;
   font-family: "mow6";
-  font-size: 18px;
   margin-bottom: 10px;
   display: inline-block;
 }
@@ -707,14 +664,12 @@ hint > .text:hover {
 }
 
 .hint .text p {
-  font-size: 18px;
   color: #41301b;
   font-family: "mow6";
   margin-bottom: 10px;
 }
 
 .hint .text h6 {
-  font-size: 26px !important;
   font-family: mow2;
   font-weight: 300;
   color: #e1834a;
@@ -785,18 +740,12 @@ hint > .text:hover {
 }
 
 .dop_img p {
-  font-size: 16px;
-  line-height: 16px;
   text-align: center;
 }
 
 .dop_img.left {
   float: left;
   margin: 15px 15px 15px -55px;
-}
-
-.left img {
-  /* transform: rotate(3deg); */
 }
 
 .chapter u {
@@ -831,15 +780,9 @@ hint > .text:hover {
   position: absolute;
   top: 644px;
   right: 20px;
-  /* width: 300px!important; */
-  /* position: fixed; */
-  /* top: 7rem; */
-  /* right: 3rem; */
 }
 
 h2.date span.title {
-  font-size: 2.8rem !important;
-  line-height: 100% !important;
   display: block;
   width: 460px;
 }
@@ -883,12 +826,6 @@ h2.date span.title {
   object-fit: cover;
   width: 520px;
   height: 420px;
-}
-
-.paper.img.two > img {
-  /* width: 663px!important; */
-  /* height: 990px; */
-  /* object-position: -260px 0px; */
 }
 
 .wrapper.one {
@@ -957,12 +894,6 @@ h2.date span.title {
   height: 420px;
 }
 
-.paper.img.two img {
-  /* width: 663px!important; */
-  /* height: 990px; */
-  /* object-position: -260px 0px; */
-}
-
 .wrapper.one {
   height: 749px;
   width: 100%;
@@ -996,56 +927,6 @@ h2.date span.title {
   margin-left: 2rem;
 }
 
-.button {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-
-/* Скрываем чекбокс */
-input[type="checkbox"] {
-  display: none;
-}
-
-/* Стилизация фона кнопки в зависимости от состояния чекбокса */
-input[type="checkbox"] + .button {
-  /* background-color: #007bff; */
-}
-
-input[type="checkbox"] + .button {
-  background-color: var(--whisper);
-}
-
-/* Стилизация элементов, зависящих от состояния чекбокса */
-input[type="checkbox"] ~ p {
-  display: none;
-}
-
-input[type="checkbox"]:checked ~ p {
-  display: block;
-}
-
-label.adult.button {
-  width: fit-content;
-  background: none;
-  font-family: var(--header);
-  color: var(--whisper);
-  font-size: 3.1rem !important;
-  font-weight: bold;
-  text-shadow: var(--text-shadow);
-  text-align: left !important;
-  margin: 0 -18px;
-  overflow: visible;
-  margin-bottom: 1rem;
-}
-
-label.adult.button:hover {
-  color: #ff00ba;
-}
-
 .wp-block.default.no-border.binded-chars {
   height: 170px;
 }
@@ -1057,17 +938,6 @@ label.adult.button:hover {
 .emote > span.speech {
   font-style: normal;
   font-weight: 100;
-}
-
-div.virt {
-  background: #ffffff47;
-  padding: 1rem;
-  height: 3rem;
-  overflow: hidden;
-}
-
-div.virt:hover {
-  height: fit-content;
 }
 
 .col-md-12 {
@@ -1086,9 +956,6 @@ div.virt:hover {
 h2.article-title {
   display: none !important;
 }
-div.virt {
-  display: none !important;
-}
 
 p.mia {
   display: none;
@@ -1098,8 +965,6 @@ p.logline {
   margin: 1rem 0;
   color: var(--emote);
   font-family: "mow6";
-  font-size: 1.4rem;
-  line-height: 120%;
   /* font-weight: bold; */
 }
 
@@ -1107,8 +972,12 @@ p.logline {
   transform: rotate(-2deg) !important;
 }
 
-  .yell .say{
-    text-transform: uppercase;
-    font-weight: bold;
-    color: var(--red);
-  }
+.yell .say {
+  text-transform: uppercase;
+  font-weight: bold;
+  color: var(--red);
+}
+
+.content > *:not(.selected) {
+  filter: saturate(0);
+}

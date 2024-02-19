@@ -1,12 +1,6 @@
 let combineDelay = 2 * 1000;
 let timeZoneDifference = 1;
 
-function toggleselectedClass(event) {
-  var paragraph = event.target.closest("p");
-  if (paragraph) {
-    paragraph.classList.toggle("selected");
-  }
-}
 // Главная функция
 
 function formatHTML() {
@@ -26,6 +20,9 @@ function formatHTML() {
   addColonToEnd();
   addSpaceToEndOfPlayers();
   addTimeToChapter();
+  createTranscriptRecord();
+  $(".logline.story span.player").remove();
+
   throw new Error("Скрипт прерван");
 }
 
@@ -865,9 +862,7 @@ function toggleCollapse(event) {
     );
   }
 }
-
 let keywordsInput = null;
-
 function logFilter() {
   // Получаем ключевые слова из поля ввода с учетом слов внутри кавычек
   previousInput = keywordsInput;
@@ -894,27 +889,25 @@ function logFilter() {
     }
   }
   // Выбираем все элементы div.chapter
-  $("div.chapter").each(function () {
-    const timestamp = $(this).attr("timestamp"); // Получаем значение атрибута timestamp
-    // Для каждого параграфа внутри div.chapter
+  $(".chapter").each(function () {
     $(this)
-      .find("p")
+      .find("*")
       .each(function () {
-        const text = $(this).text().toLowerCase().replace(/\s+/g, " ");
-        const hasKeyword = keywords.some((keyword) => text.includes(keyword));
-        const splitKeywords = keywords.map((keyword) => keyword.split("-"));
+        // Перебираем все элементы внутри .chapter
+        const text = $(this).text().toLowerCase().replace(/\s+/g, " "); // Получаем текст элемента и приводим к нижнему регистру
+        const hasKeyword = keywords.some((keyword) => text.includes(keyword)); // Проверяем, содержит ли текст хотя бы одно из ключевых слов
+        const splitKeywords = keywords.map((keyword) => keyword.split("-")); // Разделяем ключевые слова по дефису
         const isRemoveKeyword = splitKeywords.some(
           (pair) => pair.length === 2 && text.includes(pair[1].trim())
-        );
+        ); // Проверяем, содержит ли текст вторую часть ключевого слова (для удаления)
         if (hasKeyword && !isRemoveKeyword) {
-          $(this).addClass("selected");
+          $(this).addClass("selected"); // Добавляем класс 'selected', если содержит ключевое слово и не содержит вторую часть ключевого слова
         } else if (isRemoveKeyword) {
-          $(this).removeClass("selected");
+          $(this).removeClass("selected"); // Удаляем класс 'selected', если содержит вторую часть ключевого слова
         }
       });
-    openselectedChapters();
-    // trimChapter($(this));
   });
+  openselectedChapters();
   removeCollapsed();
   selected = [];
   scrollToSelect();
@@ -960,7 +953,7 @@ function openselectedChapters() {
     var chapter = chapters[i];
     chapter.classList.add("collapsed");
     // Проверить, содержит ли .chapter дочерний элемент с классом .logline.selected
-    if (chapter.querySelector(".logline.selected")) {
+    if (chapter.querySelector(".selected")) {
       // Если содержит, добавить класс .expanded
       chapter.classList.remove("collapsed");
     }
@@ -1234,19 +1227,6 @@ function filterTrimEverything() {
   }
 }
 
-document.addEventListener("click", function (event) {
-  // Проверяем, был ли клик на элементе с классом "date" или на его дочерних элементах
-  if (
-    event.target.classList.contains("date") ||
-    event.target.closest(".date")
-  ) {
-    // console.log("Клик по дате или её дочернему элементу");
-    toggleCollapse(event);
-  }
-});
-
-document.addEventListener("click", toggleselectedClass);
-
 // Конец
 
 function clearChatlog() {
@@ -1292,96 +1272,6 @@ function scrollToSelect() {
     currentPosition = nextIndex;
   }
 }
-
-function pasteImg() {
-  console.log("Trying to paste image...");
-
-  const elementsUnderCursor = document.querySelectorAll(":hover");
-
-  for (const element of elementsUnderCursor) {
-    const loglineElement = element.closest("p.logline");
-
-    if (loglineElement) {
-      console.log("Found p.logline element, inserting image...");
-
-      const imgDiv = document.createElement("div");
-      imgDiv.className = "paper img";
-
-      const imgElement = document.createElement("img");
-      imgElement.src =
-        "https://i.postimg.cc/K8TcrhbQ/Wo-WScrn-Shot-010724-050024.png"; // Замените на ваш способ получения ссылки на изображение
-
-      imgDiv.appendChild(imgElement);
-      loglineElement.insertAdjacentElement("afterend", imgDiv);
-
-      console.log("Image inserted successfully.");
-      break; // Прекращаем перебор после первого соответствующего элемента
-    }
-  }
-}
-
-document.addEventListener("keydown", function (event) {
-  if (event.key === "ArrowRight") {
-    pasteImg();
-  }
-});
-
-function pasteText() {
-  console.log("Trying to paste text...");
-
-  const elementsUnderCursor = document.querySelectorAll(":hover");
-
-  for (const element of elementsUnderCursor) {
-    const loglineElement = element.closest("p.logline");
-
-    if (loglineElement) {
-      console.log("Found p.logline element, inserting text...");
-
-      const paperDiv = document.createElement("div");
-      paperDiv.className = "paper";
-
-      const textElement = document.createElement("p");
-      textElement.textContent = "Текст для вставки";
-
-      paperDiv.appendChild(textElement);
-      loglineElement.insertAdjacentElement("beforebegin", paperDiv);
-
-      console.log("Text inserted successfully.");
-      break; // Прекращаем перебор после первого соответствующего элемента
-    }
-  }
-}
-
-document.addEventListener("keydown", function (event) {
-  if (event.key === "ArrowUp" || event.key === "ArrowDown") {
-    var contentContainers = document.querySelectorAll(".content");
-
-    contentContainers.forEach(function (contentContainer) {
-      var elementUnderCursor = contentContainer.querySelector(":hover");
-
-      if (elementUnderCursor && contentContainer.contains(elementUnderCursor)) {
-        var targetSibling =
-          event.key === "ArrowUp"
-            ? "previousElementSibling"
-            : "nextElementSibling";
-        var siblingElement = elementUnderCursor[targetSibling];
-
-        if (siblingElement) {
-          if (event.key === "ArrowUp") {
-            contentContainer.insertBefore(elementUnderCursor, siblingElement);
-          } else {
-            var nextSibling = siblingElement.nextElementSibling;
-            if (nextSibling) {
-              contentContainer.insertBefore(elementUnderCursor, nextSibling);
-            } else {
-              contentContainer.appendChild(elementUnderCursor);
-            }
-          }
-        }
-      }
-    });
-  }
-});
 
 function addSpaceToEndOfPlayers() {
   // Находим все элементы <p> с классом "logline"
@@ -1484,107 +1374,130 @@ function calculateTotalDuration() {
 // Транскрипция в МИА
 
 function createTranscriptRecord() {
-  // Получаем элемент с атрибутом timestamp
-  const loglineElement = document.querySelector("p.logline.say");
+  // Получаем элементы span.say
+  const loglineElements = document.querySelectorAll("p.logline.say");
 
-  if (loglineElement && loglineElement.textContent.includes("Запись")) {
-    // Получаем таймштамп и преобразуем его в нужный формат времени
-    const timestamp = new Date(
-      loglineElement.getAttribute("timestamp")
-    ).toLocaleTimeString("en-US", {
-      hour12: false,
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+  // Перебираем каждый элемент
+  loglineElements.forEach((loglineElement) => {
+    // Проверяем содержит ли текст слово "запись"
+    if (/запись/i.test(loglineElement.textContent)) {
+      // Получаем таймштамп и преобразуем его в нужный формат времени
+      const timestamp = new Date(loglineElement.getAttribute("timestamp"));
+      const hours = ("0" + timestamp.getUTCHours()).slice(-2);
+      const minutes = ("0" + timestamp.getUTCMinutes()).slice(-2);
+      const formattedTimestamp = hours + ":" + minutes;
 
-    // Получаем имя вещателя
-    const playerName = loglineElement
-      .querySelector(".player.yellow")
-      .textContent.trim();
+      // Получаем имя вещателя
+      const playerName = loglineElement
+        .querySelector(".player.yellow")
+        .textContent.trim();
 
-    // Генерируем HTML-код для записи в транскрипт
-    const transcriptRecordHTML = `
-      <div class="record">
-        <p>Запись<span>${timestamp}</span></p>
-        <p>Вещатель<span>${playerName}</span></p>
-      </div>
-      <span class="speech">${loglineElement.textContent.trim()}</span>
-    `;
+      // Обработка сообщения регуляркой
+      loglineElement.textContent = loglineElement.textContent.replace(
+        /^.+([Зз]апись|\d\d[:.]\d\d)[,.!: ]/g,
+        ""
+      );
 
-    // Получаем элемент транскрипта и добавляем созданную запись
-    const transcriptElement = document.querySelector(".transcript");
-    transcriptElement.innerHTML = transcriptRecordHTML;
-  }
+      // Генерируем HTML-код для записи в транскрипт
+      const transcriptRecordHTML = `
+        <div class="record">
+          <p>Время заметки<span>${formattedTimestamp}</span></p>
+          <p>Автор заметки<span>${playerName}</span></p>
+        </div>
+        <span class="speech">${loglineElement.textContent.trim()}</span>
+      `;
+
+      // Создаем новый элемент .transcript
+      const transcriptElement = document.createElement("div");
+      transcriptElement.classList.add("transcript");
+      transcriptElement.innerHTML = transcriptRecordHTML;
+
+      // Заменяем текущий элемент .logline.say элементом .transcript
+      loglineElement.replaceWith(transcriptElement);
+
+      console.log(`Запись создана для элемента:`, loglineElement);
+    }
+  });
 }
 
-// Вызываем функцию при загрузке страницы
-window.onload = createTranscriptRecord;
-
 // Горячие клавиши
-
 document.addEventListener("keydown", function (event) {
-  if (event.key === "Delete") {
+  if (event.key === "Enter" && event.target.id === "keywordsInput") {
+    logFilter();
+  } else if (event.key === "Delete") {
     deleteElementUnderCursor();
-  }
-
-  if (!event.altKey && event.key === "ArrowLeft") {
+  } else if (!event.altKey && event.key === "ArrowLeft") {
     togglePaperClass();
-  }
-
-  if (event.altKey && event.key === "ArrowLeft") {
+  } else if (event.altKey && event.key === "ArrowLeft") {
     pasteText();
-  }
-
-  if (
-    (event.key === "[" && event.ctrlKey) ||
-    (event.key === "х" && event.ctrlKey)
-  ) {
-    eraseBeforeCursor();
-  }
-
-  if (
-    (event.key === "]" && event.ctrlKey) ||
-    (event.key === "ъ" && event.ctrlKey)
-  ) {
-    eraseAfterCursor();
-  }
-
-  if (event.shiftKey) {
-    toggleSelectedClass();
-  }
-
-  if (event.altKey && event.ctrlKey) {
-    handleAltCtrlKeyCombination();
-  }
-
-  if (event.key === "/") {
-    createTranscriptRecord();
+  } else if (["[", "х"].includes(event.key) && event.ctrlKey) {
+    deleteBefore();
+  } else if (["]", "ъ"].includes(event.key) && event.ctrlKey) {
+    deleteAfter();
+  } else if (event.key === "ArrowRight") {
+    pasteImg();
+  } else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+    moveElement(event);
+  } else if (event.key === "m") {
+    moveElement(event);
   }
 });
 
-document
-  .getElementById("keywordsInput")
-  .addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-      logFilter();
+// Клики
+
+document.addEventListener("click", function () {
+  toggleSelectedClass();
+});
+
+function toggleSelectedClass() {
+  const elementsUnderCursor = document.querySelectorAll(":hover");
+  elementsUnderCursor.forEach((element) => {
+    const loglineParent = element.closest(".logline");
+    const paperParent = element.closest(".paper");
+    const transcriptParent = element.closest(".transcript");
+    const playerParent = element.closest(".player");
+    const dateHeadingParent = element.closest("h2.date");
+
+    if (
+      loglineParent ||
+      paperParent ||
+      transcriptParent ||
+      playerParent ||
+      dateHeadingParent
+    ) {
+      console.log("Element under cursor:", element);
+      element.classList.toggle("selected");
+      console.log("Element classList:", element.classList);
+    }
+
+    if (dateHeadingParent) {
+      const chapterParent = dateHeadingParent.closest(".chapter");
+      if (chapterParent) {
+        chapterParent.classList.toggle("collapsed");
+      }
     }
   });
+}
+
 
 function deleteElementUnderCursor() {
   const elementsUnderCursor = document.querySelectorAll(":hover");
   elementsUnderCursor.forEach((element) => {
-    if (element.classList.contains("logline")) {
-      element.remove();
-    } else if (element.classList.contains("date")) {
-      const chapterDiv = element.closest("div.chapter");
-      if (chapterDiv) {
-        chapterDiv.remove();
+    const loglineParent = element.closest(".logline");
+    const paperParent = element.closest(".paper");
+    const transcriptParent = element.closest(".transcript");
+    const playerParent = element.closest(".player");
+    const dateHeadingParent = element.closest("h2.date");
+
+    if (loglineParent || paperParent || transcriptParent || playerParent) {
+      const parentToRemove =
+        loglineParent || paperParent || transcriptParent || playerParent;
+      parentToRemove.remove();
+    } else if (dateHeadingParent) {
+      const chapterParent = dateHeadingParent.closest(".chapter");
+      if (chapterParent) {
+        chapterParent.remove();
       }
-    } else if (
-      element.classList.contains("player") ||
-      element.classList.contains("paper")
-    ) {
-      element.remove();
     }
   });
 }
@@ -1598,91 +1511,122 @@ function togglePaperClass() {
   });
 }
 
-function eraseBeforeCursor() {
-  const elementsUnderCursor = document.querySelectorAll(":hover");
-  const elementUnderCursor = Array.from(elementsUnderCursor).find(
-    (element) =>
-      element.tagName.toLowerCase() === "p" ||
-      element.tagName.toLowerCase() === "h2"
-  );
+function moveElement(event) {
+  var contentContainers = document.querySelectorAll(".content");
 
-  if (elementUnderCursor) {
-    scrollSave(elementUnderCursor);
-    let previousSiblings = elementUnderCursor.previousElementSibling;
-    while (previousSiblings) {
-      const siblingToRemove = previousSiblings;
-      previousSiblings = previousSiblings.previousElementSibling;
-      siblingToRemove.remove();
-    }
-    scrollToSaved();
-  }
-}
+  contentContainers.forEach(function (contentContainer) {
+    var elementUnderCursor = contentContainer.querySelector(":hover");
 
-function eraseAfterCursor() {
-  const elementsUnderCursor = document.querySelectorAll(":hover");
-  const elementUnderCursor = Array.from(elementsUnderCursor).find(
-    (element) =>
-      element.tagName.toLowerCase() === "p" ||
-      element.tagName.toLowerCase() === "h2"
-  );
+    if (elementUnderCursor && contentContainer.contains(elementUnderCursor)) {
+      var targetSibling =
+        event.key === "ArrowUp"
+          ? "previousElementSibling"
+          : "nextElementSibling";
+      var siblingElement = elementUnderCursor[targetSibling];
 
-  if (elementUnderCursor) {
-    let nextSiblings = elementUnderCursor.nextElementSibling;
-    while (nextSiblings) {
-      const siblingToRemove = nextSiblings;
-      nextSiblings = nextSiblings.nextElementSibling;
-      siblingToRemove.remove();
-    }
-  }
-}
-
-function toggleSelectedClass() {
-  const elementsUnderCursor = document.querySelectorAll(":hover");
-  const elementUnderCursor = Array.from(elementsUnderCursor).find(
-    (element) => element.tagName.toLowerCase() === "p"
-  );
-
-  if (elementUnderCursor) {
-    if (!elementUnderCursor.classList.contains("selected")) {
-      elementUnderCursor.classList.add("selected");
-    }
-  }
-}
-
-function handleAltCtrlKeyCombination() {
-  const elementsUnderCursor = document.querySelectorAll(":hover");
-  document.querySelectorAll("p:empty").forEach((element) => element.remove());
-  const currentselectedElement = Array.from(elementsUnderCursor).find(
-    (element) =>
-      element.tagName.toLowerCase() === "p" &&
-      element.classList.contains("selected")
-  );
-
-  if (currentselectedElement) {
-    scrollSave(currentselectedElement);
-    let nextselectedElement = currentselectedElement.nextElementSibling;
-    while (
-      nextselectedElement &&
-      !nextselectedElement.classList.contains("selected")
-    ) {
-      nextselectedElement = nextselectedElement.nextElementSibling;
-    }
-    if (nextselectedElement) {
-      const elementsBetween = [];
-      let currentElement = currentselectedElement.nextElementSibling;
-      while (
-        currentElement &&
-        currentElement !== nextselectedElement &&
-        currentElement.tagName.toLowerCase() === "p"
-      ) {
-        elementsBetween.push(currentElement);
-        currentElement = currentElement.nextElementSibling;
-      }
-      elementsBetween.forEach((element) => {
-        if (!element.classList.contains("selected")) {
-          element.classList.add("selected");
+      if (siblingElement) {
+        if (event.key === "ArrowUp") {
+          contentContainer.insertBefore(elementUnderCursor, siblingElement);
+        } else {
+          var nextSibling = siblingElement.nextElementSibling;
+          if (nextSibling) {
+            contentContainer.insertBefore(elementUnderCursor, nextSibling);
+          } else {
+            contentContainer.appendChild(elementUnderCursor);
+          }
         }
-      });
+      }
+    }
+  });
+}
+
+function deleteBefore() {
+  const elementsUnderCursor = document.querySelectorAll(":hover");
+  const contentContainers = document.querySelectorAll(".content");
+
+  elementsUnderCursor.forEach((element) => {
+    const contentContainer = element.closest(".content");
+    if (!contentContainer) return; // Пропускаем, если элемент не находится в контейнере .content
+
+    const targetElement = element;
+
+    let currentElement = targetElement.previousElementSibling;
+    while (currentElement) {
+      const siblingToRemove = currentElement;
+      currentElement = currentElement.previousElementSibling;
+      siblingToRemove.remove();
+    }
+  });
+}
+
+function deleteAfter() {
+  const elementsUnderCursor = document.querySelectorAll(":hover");
+  const contentContainers = document.querySelectorAll(".content");
+
+  elementsUnderCursor.forEach((element) => {
+    const contentContainer = element.closest(".content");
+    if (!contentContainer) return; // Пропускаем, если элемент не находится в контейнере .content
+
+    const targetElement = element;
+
+    let currentElement = targetElement.nextElementSibling;
+    while (currentElement) {
+      const siblingToRemove = currentElement;
+      currentElement = currentElement.nextElementSibling;
+      siblingToRemove.remove();
+    }
+  });
+}
+
+function pasteImg() {
+  console.log("Trying to paste image...");
+
+  const elementsUnderCursor = document.querySelectorAll(":hover");
+
+  for (const element of elementsUnderCursor) {
+    const loglineElement = element.closest("p.logline");
+
+    if (loglineElement) {
+      console.log("Found p.logline element, inserting image...");
+
+      const imgDiv = document.createElement("div");
+      imgDiv.className = "paper img selected";
+
+      const imgElement = document.createElement("img");
+      imgElement.src =
+        "https://i.postimg.cc/K8TcrhbQ/Wo-WScrn-Shot-010724-050024.png"; // Замените на ваш способ получения ссылки на изображение
+
+      imgDiv.appendChild(imgElement);
+      loglineElement.insertAdjacentElement("afterend", imgDiv);
+
+      console.log("Image inserted successfully.");
+      break; // Прекращаем перебор после первого соответствующего элемента
+    }
+  }
+}
+
+function pasteText() {
+  console.log("Trying to paste text...");
+
+  const elementsUnderCursor = document.querySelectorAll(":hover");
+
+  for (const element of elementsUnderCursor) {
+    const loglineElement = element.closest("p.logline");
+
+    if (loglineElement) {
+      console.log("Found p.logline element, inserting text...");
+
+      const paperDiv = document.createElement("div");
+      paperDiv.className = "paper selected";
+
+      const textElement = document.createElement("p");
+      textElement.textContent = "Текст для вставки";
+
+      paperDiv.appendChild(textElement);
+      loglineElement.insertAdjacentElement("beforebegin", paperDiv);
+
+      console.log("Text inserted successfully.");
+      break; // Прекращаем перебор после первого соответствующего элемента
     }
   }
 }
