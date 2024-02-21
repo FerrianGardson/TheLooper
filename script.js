@@ -42,7 +42,7 @@ function formatHTML() {
   addSpaceToEndOfPlayers();
   addTimeToChapter();
   findLoglinesAndConvertToTranscript();
-  $(".logline.story span.player").remove();
+  // $(".logline.story span.player").remove();
 
   throw new Error("Скрипт прерван");
 }
@@ -592,13 +592,13 @@ function combineSay(spanType) {
 
 // Список игроков
 
-function colorizePlayers(playerColorMap) {
+function colorizePlayers() {
   const playerColors = {};
   const chapters = document.querySelectorAll(".chapter");
 
   chapters.forEach((chapter) => {
     const playerSpans = chapter.querySelectorAll(
-      ".logline.say .player, .logline.virt .player"
+      ".say .player, .virt .player"
     );
 
     playerSpans.forEach((span, index) => {
@@ -607,10 +607,10 @@ function colorizePlayers(playerColorMap) {
 
       // Добавлен код для обработки имен из нескольких слов
       const playerNameParts = playerName.split(" ");
-      if (playerColorMap[playerName]) {
-        colorClass = playerColorMap[playerName];
-      } else if (playerColorMap[playerNameParts[0]]) {
-        colorClass = playerColorMap[playerNameParts[0]];
+      if (playerColors[playerName]) {
+        colorClass = playerColors[playerName];
+      } else if (playerColors[playerNameParts[0]]) {
+        colorClass = playerColors[playerNameParts[0]];
       } else {
         colorClass =
           playerColors[playerName] ||
@@ -644,34 +644,18 @@ function colorizePlayers(playerColorMap) {
 
     const npcNames = {
       "Гоблин-телохранитель": true,
-      Гнолл: true,
-      Баззерс: true,
-      Охранник: true,
-      Стражник: true,
-      Богачка: true,
-      Богач: true,
-      Рыбак: true,
-      Бедняк: true,
-      Рыболов: true,
-      Повар: true,
-      Бармен: true,
-      Разнорабочий: true,
-      Богач: true,
-      Богач: true,
-      Богач: true,
-      Богач: true,
-      Богач: true,
-      "Гоблин-телохранитель": true,
-      "Гоблин-телохранитель": true,
-      "Гоблин-телохранитель": true,
-      "Гоблин-телохранитель": true,
-      "Гоблин-телохранитель": true,
-      "Гоблин-телохранитель": true,
-      "Гоблин-телохранитель": true,
-      "Гоблин-телохранитель": true,
-      "Гоблин-телохранитель": true,
-      "Гоблин-телохранитель": true,
-      "Гоблин-телохранитель": true,
+      "Гнолл": true,
+      "Баззерс": true,
+      "Охранник": true,
+      "Стражник": true,
+      "Богачка": true,
+      "Богач": true,
+      "Рыбак": true,
+      "Бедняк": true,
+      "Рыболов": true,
+      "Повар": true,
+      "Бармен": true,
+      "Разнорабочий": true
       // Добавьте другие имена NPC сюда
     };
 
@@ -683,9 +667,8 @@ function colorizePlayers(playerColorMap) {
       // Добавлен код для обработки имен из нескольких слов
       const uniquePlayerNameParts = uniquePlayerName.split(" ");
       const colorClass =
-        playerColorMap[uniquePlayerName] ||
-        playerColorMap[uniquePlayerNameParts[0]] ||
         playerColors[uniquePlayerName] ||
+        playerColors[uniquePlayerNameParts[0]] ||
         getColorClass(index);
 
       playerItem.classList.remove(
@@ -729,6 +712,7 @@ function colorizePlayers(playerColorMap) {
   }
 }
 
+
 function removeDMPlayers() {
   const dmsMap = {
     Фг: true,
@@ -748,6 +732,7 @@ function removeDMPlayers() {
 // Карта цветов
 const playerColorMap = {
   Фэрриан: "blue-3",
+  Малет: "blue",
   Роуз: "orange",
   Ананита: "green",
   Жуль: "red",
@@ -759,7 +744,6 @@ const playerColorMap = {
   Санриэль: "yellow",
   Дерек: "red",
   Хильда: "blue",
-  Гардсон: "blue",
   Кэролай: "red",
   Сахаджи: "yellow",
   Винтеза: "green",
@@ -771,6 +755,7 @@ function replaceSurnames() {
   const playerSpans = document.querySelectorAll(".player");
   const surnameMap = {
     Фэрриан: "Фэрриан Гардсон",
+    Малет: "Малет Трант",
     Дезертир: "Герман Шульц",
     Ошберт: "Осберт Осбертсон",
     Роуз: "Арчибальд Роуз",
@@ -1358,7 +1343,7 @@ function addTimeToChapter() {
 
       const endTimeSpan = document.createElement("span");
       endTimeSpan.classList.add("endtime");
-      endTimeSpan.textContent = endTimeString;
+      endTimeSpan.textContent = ` ${endTimeString}`;
       dateHeader.appendChild(endTimeSpan);
 
       const durationTimeSpan = document.createElement("span");
@@ -1371,7 +1356,7 @@ function addTimeToChapter() {
       dateHeader.appendChild(durationTimeSpan);
 
       // Удаляем .endtime
-      endTimeSpan.remove();
+      //endTimeSpan.remove();
     }
   });
   //removeShortChapters();

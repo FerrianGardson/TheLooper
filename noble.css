@@ -609,7 +609,7 @@ ul#redactor-toolbar-0 {
 .paper,
 .transcript {
   background: url(https://i.postimg.cc/dt7gPNPP/image.png) top center,
-    linear-gradient(180deg, rgb(153 133 96) 0%, rgb(101 86 58) 100%) !important;
+    linear-gradient(180deg, rgb(153 133 96) 0%, rgb(133 118 91) 100%) !important;
   border-radius: 8px;
   background-blend-mode: overlay;
   overflow: hidden;
@@ -619,10 +619,11 @@ ul#redactor-toolbar-0 {
   text-shadow: var(--text-shadow);
   margin: 1rem 0;
   color: white;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  /* display: flex; */
+  /* flex-direction: row; */
+  /* flex-wrap: wrap; */
   column-gap: 2rem;
+  /* columns: 2; */
 }
 
 .paper.img {
@@ -708,13 +709,15 @@ ul.npc > li:hover {
 }
 
 p.logline {
-  margin: 1rem 0; /* color: var(--emote); */
+  margin: 1rem 0;
+  color: var(--emote);
 }
 
 .virt > .emote,
 .virt,
 .whisper {
   color: var(--whisper) !important;
+  /* color: white!important; */
 }
 
 :root {
@@ -805,7 +808,7 @@ p.story .speech {
 .paper .player {
   display: block;
   margin-bottom: 0.5rem;
-  color: white;
+  /* color: white; */
 }
 
 .yell span.player {
@@ -1089,7 +1092,7 @@ h2.date span.title {
 .spoiler {
   overflow: hidden;
   transition: max-height 1s cubic-bezier(0.87, 0, 0.13, 1) 0s;
-  max-height: 7rem;
+  max-height: 15rem;
   height: fit-content;
 }
 
@@ -1109,8 +1112,8 @@ h2.date span.title {
   mask-position: top;
 }
 
-.spoiler_desc {
-  color: var(--text-color);
+.post .spoiler_desc {
+  color: var(--text-color)!important;
   text-align: center;
   font-family: mow3;
   position: relative;
@@ -1136,4 +1139,59 @@ h2.date > span {
 
 section.slice.slice-md.bg-base-img:nth-of-type(3) {
   display: none;
+}
+
+p.logline.emote > span {
+    display: inline;
+}
+
+.yell > .say {
+    color: var(--red);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.paper > .logline > .span {
+    display: inline-block;
+}
+
+.paper > .logline > span {
+    display: inline;
+}
+
+.paper > .paper, .paper > .transcript {
+    box-shadow: inset -1px -3px 20px 0px #00000063;
+}
+
+.paper h1 {
+    color: white!important;
+    font-size: 2rem!important;
+}
+
+.content > :hover {
+    filter: unset;
+}
+
+h2.date {
+  color: white!important;
+  font-size: 2.2rem!important;
+}
+
+.post div.chapter > h2.date > span.title {
+  color: white!important;
+  line-height: 120%;
+  font-size: 3rem!important;
+}
+
+.content > *:hover {
+    filter: unset;
+}
+
+.paper.img.right {
+    float: right;
+    margin: 1rem 0rem 0rem 1rem;
+}
+
+span.say {
+    color: white;
 }

@@ -264,7 +264,7 @@ input:focus-visible {
   margin-bottom: 1rem;
 }
 
-p.logline:not(.selected) {
+.content > *:not(.selected, :hover) {
   /* opacity: 0.5; */
   filter: saturate(0.0);
 }
