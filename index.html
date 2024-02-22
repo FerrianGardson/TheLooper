@@ -49,7 +49,6 @@
     />
   </head>
 
-
   <body style="margin: 0; height: 100vh; overflow: hidden">
     <div class="nav">
       <div class="buttons">
@@ -212,60 +211,6 @@
           Экспорт
         </button>
       </div>
-
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-      <script
-        src="https://cbipope3ka.github.io/TheLooper/script.js"
-        async=""
-      ></script>
-      <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
-        integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"
-      ></script>
-
-      <!--       <script>
-        function toggleExternalLinks() {
-          var externalLinks = document.querySelectorAll(".external");
-
-          // Переключаем атрибут disabled у всех внешних ссылок
-          externalLinks.forEach(function (link) {
-            link.toggleAttribute("disabled");
-          });
-
-          function loadExternalContent() {
-            var xhr = new XMLHttpRequest();
-
-            // Путь к внешнему HTML-файлу
-            var url = "https://cbipope3ka.github.io/TheLooper/nav.html";
-
-            xhr.onreadystatechange = function () {
-              if (xhr.readyState === 4 && xhr.status === 200) {
-                // Заменяем содержимое элемента с классом "nav" загруженным HTML
-                document.querySelector(".nav").innerHTML = xhr.responseText;
-              }
-            };
-
-            xhr.open("GET", url, true);
-            xhr.send();
-          }
-
-          // ЗАМЕНЯЕМ ЛОКАЛЬНЫЙ СКРИПТ НА ВНЕШНИЙ
-          // Находим существующий script элемент с src "script.js"
-        var existingScript = document.querySelector(
-            'script[src="script.js"]'
-          );
-
-          existingScript.parentNode.replaceChild(
-            Object.assign(document.createElement("script"), {
-              src: "https://cbipope3ka.github.io/TheLooper/script.js",
-              async: true, // Добавляем атрибут async
-            }),
-            existingScript
-          ); 
-        }
-      </script> -->
       <script src="https://cdn.jsdelivr.net/npm/transliteration@2.0.0/dist/transliteration.min.js"></script>
     </div>
     <button
@@ -3624,8 +3569,8 @@
 
     <div class="footer"></div>
 
-    <!--     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-    <!-- <script src="script.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
       integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="

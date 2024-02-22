@@ -101,7 +101,6 @@ npcNames = {
 
 function formatHTML() {
   cleanText();
-  throw new Error("Скрипт прерван");
   splitSessions();
   wrapChapters();
   scrollToStart();
@@ -1227,9 +1226,9 @@ function convertLoglineToTranscript(loglineElement) {
   // console.log("На выходе", formattedTimestamp);
 
   // Получаем имя вещателя
-  const playerName = loglineElement.querySelector(".player").textContent.trim();
+  let playerName = loglineElement.querySelector(".player").textContent.trim();
   console.log("playerName: ", playerName);
-  playerName = playerName.slice(0, -5); // Обрезаем последний символ, который является двоеточием
+  playerName = playerName.slice(0, -1); // Обрезаем последний символ, который является двоеточием
   console.log("playerName: ", playerName);
   // Сохраняем атрибут timestamp
   loglineElement.setAttribute("timestamp", timestamp.toISOString());
@@ -1798,8 +1797,6 @@ function FullNames() {
     }
   });
 }
-
-console.log("Сообщение блять");
 
 function ShortNames() {
   // console.log("Исходные данные игроков:", playerData);
