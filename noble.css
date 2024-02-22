@@ -1173,6 +1173,7 @@ h2.date span.title {
   font-family: "mow3";
   color: #312f2d;
   margin: 0 1rem;
+  margin-top: 4px;
 }
 
 .spoiler {

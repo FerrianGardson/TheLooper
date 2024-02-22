@@ -1319,8 +1319,8 @@ function convertLoglineToTranscript(loglineElement) {
   // Генерируем HTML-код для записи в транскрипт
   const transcriptRecordHTML = `
     <div class="record">
-      <p>Время заметки<span>${formattedTimestamp}</span></p>
-      <p>Автор заметки<span>${playerName}</span></p>
+      <p>Время<span>25 ОТП, ${formattedDate}, ${hours}:${minutes}</span></p>
+      <p>Автор<span>${playerName}</span></p>
     </div>
     <span class="speech">${loglineElement.textContent.trim()}</span>
   `;
@@ -1679,10 +1679,20 @@ function pasteText() {
   }
 }
 
+// Общие переменные и база
+const uniquePlayers = new Set(); // Для отслеживания уникальных имен игроков
+
+// Функция для создания элемента игрока
+function createPlayerItem(playerName) {
+  const playerItem = document.createElement("li");
+  playerItem.textContent = playerName;
+  playerItem.classList.add("player");
+  return playerItem;
+}
+
+// Функция для формирования списков игроков
 function playerList() {
   const contents = document.querySelectorAll(".content");
-
-  const uniquePlayers = new Set(); // Для отслеживания уникальных имен игроков
 
   contents.forEach((content) => {
     const players = content.querySelectorAll(
@@ -1697,6 +1707,7 @@ function playerList() {
       const playerName = player.textContent.trim();
       const uniquePlayerNameParts = playerName.split(" ");
 
+      // Проверяем, является ли игрок уникальным и не NPC
       if (
         uniquePlayerNameParts.length === 1 &&
         !npcNames[playerName] &&
@@ -1705,6 +1716,7 @@ function playerList() {
         playerList.appendChild(createPlayerItem(playerName));
         uniquePlayers.add(playerName); // Добавляем имя игрока во множество уникальных имен
       } else if (!uniquePlayers.has(playerName)) {
+        // Проверяем, не является ли игрок уникальным
         npcList.appendChild(createPlayerItem(playerName));
         uniquePlayers.add(playerName); // Добавляем имя игрока во множество уникальных имен
       }
@@ -1715,12 +1727,42 @@ function playerList() {
     content.parentNode.insertBefore(actorsDiv, content);
     actorsDiv.appendChild(playerList);
     actorsDiv.appendChild(npcList);
+    colorizePlayers();
   });
 }
 
-function createPlayerItem(playerName) {
-  const playerItem = document.createElement("li");
-  playerItem.textContent = playerName;
-  playerItem.classList.add("player");
-  return playerItem;
+// Функция для раскраски игроков
+function colorizePlayers() {
+  const playerSpans = document.querySelectorAll(".actors .player");
+  playerSpans.forEach((span) => {
+    const playerName = span.textContent.trim();
+    const colorClass =
+      nameColors[playerName] ||
+      randomColors[Math.floor(Math.random() * randomColors.length)];
+    span.classList.add(colorClass);
+  });
+  synchronizePlayerColors();
+}
+
+function synchronizePlayerColors() {
+  const contentPlayers = document.querySelectorAll(".content .player");
+  const actorPlayers = document.querySelectorAll(".actors .player");
+
+  // Проходимся по каждому игроку в .content
+  contentPlayers.forEach((contentPlayer) => {
+    const playerName = contentPlayer.textContent.trim();
+
+    // Ищем цвет игрока в .actors
+    actorPlayers.forEach((actorPlayer) => {
+      if (actorPlayer.textContent.trim() === playerName) {
+        // Применяем цвет игрока из .actors к игроку в .content
+        const actorColorClass = Array.from(actorPlayer.classList).find(
+          (className) =>
+            nameColors.hasOwnProperty(className) ||
+            randomColors.includes(className)
+        );
+        contentPlayer.classList.add(actorColorClass);
+      }
+    });
+  });
 }
