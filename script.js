@@ -1,82 +1,38 @@
 let combineDelay = 2 * 1000;
 
-// Карта цветов
-const nameColors = {
-  Фэрриан: "blue",
-  Малет: "ocean-blue",
-  Роуз: "orange",
-  Аммель: "orange",
-  Маларон: "orange",
-  Ананита: "green",
-  Жуль: "red",
-  Хейвинд: "red",
-  Фуффис: "green",
-  Киббл: "green",
-  Лезинг: "orange",
-  Сырорезка: "yellow",
-  Санриэль: "yellow",
-  Дерек: "red",
-  Хильда: "light-blue",
-  Кэролай: "red",
-  Сахаджи: "yellow",
-  Винтеза: "green",
-  Сэнди: "yellow",
-  Хьюз: "yellow",
-};
+const playerData = [
+  ["Фэрриан", "rogue", "Фэрриан Гардсон"],
+  ["Малет", "shaman", "Малет Трант"],
+  ["Роуз", "hunter", "Арчибальд Роуз"],
+  ["Аммель", "mage", "Рэдрик Аммель"],
+  ["Маларон", "priest", "Мал’арон Берёзовый Лист"],
+  ["Ананита", "rogue", "Ананита Астор"],
+  ["Сырорезка", "yellow", "Джулианна Франческа Третья Златошпун"],
+  ["Санриэль", "mage", "Санриэль Рассветный Луч"],
+  ["Дерек", "hunter", "Дерек Кларк"],
+  ["Кэролай", "priest", "Кэролай Эстер"],
+  ["Сахаджи", "shaman", "Сахаджи"],
+  ["Думитру", "druid", "Думитру Феликс Цимитяну"],
+  ["Каторжник", "warrior", "Рой Редвуд"],
+  ["Кариночка", "demon-hunter", "Карина"],
+  // Добавьте другие позиции согласно вашим данным
+];
 
-// Карта фамилий
-const surNames = {
-  Фэрриан: "Фэрриан Гардсон",
-  Сырорезка: "Джулианна Франческа Третья Златошпун",
-  Аммель: "Рэдрик Аммель",
-  Малет: "Малет Трант",
-  Дезертир: "Герман Шульц",
-  Ошберт: "Осберт Осбертсон",
-  Роуз: "Арчибальд Роуз",
-  Плут: "Винсент Сазерлэнд",
-  Ананита: "Ананита Астор",
-  Хофманн: "Карл Хофманн",
-  Штрих: "Олдиус Лоне",
-  Асмелт: "Асмелт Фьюри",
-  Бель: "Бель Сеймур",
-  Бернд: "Бернд Дженкинс",
-  Мариам: "Мариам Метревели",
-  Кристофер: "Кристофер Стротман",
-  Эндэрд: "Киллиан Эндэрд",
-  Готт: "Готт Айландер",
-  Алрой: "Алрой Джонсон",
-  Брандур: "Брандур Сталехват",
-  Браен: "Браен Бёрк",
-  Маларон: "Мал’арон Берёзовый Лист",
-  Шенн: "Шенн Вельт",
-  Джэф: "Джэфри Майер",
-  Пачек: "Офелия Пачек",
-  Иван: "Иван де Жильбер",
-  Мидас: "Мидас Грейт",
-  Хауэр: "Старшина Хауэр",
-  Кейти: "Кейти Сазерлэнд",
-  Каторжник: "Рой Редвуд",
-  Кариночка: "Слепая",
-  Дезертир: "Герман Шульц",
-  Дезертир: "Герман Шульц",
-  Дезертир: "Герман Шульц",
-  Дезертир: "Герман Шульц",
-  Дезертир: "Герман Шульц",
-  // Добавьте другие сопоставления сюда
-};
 
 // Карта цветов
 const randomColors = [
+  "demon-hunter",
+  "warlock",
+  "monk",
+  "shaman",
+  "death-knight",
+  "druid",
   "priest",
   "mage",
-  "warlock",
-  "rogue",
-  "monk",
-  "hunter",
-  "shaman",
-  "warrior",
   "paladin",
-  "death-knight",
+  "warrior",
+  "hunter",
+  "rogue",
   "random-1",
   "random-2",
   "random-3",
@@ -1730,13 +1686,13 @@ function colorizePlayers() {
     let colorClass;
 
     // Проверяем, есть ли у игрока определенный цвет
-    if (nameColors[playerName]) {
+    const playerInfo = playerData.find((player) => player[0] === playerName);
+    if (playerInfo) {
       // Если у игрока есть определенный цвет, используем его
-      colorClass = nameColors[playerName];
+      colorClass = playerInfo[1];
       console.log(
         `У игрока "${playerName}" есть определенный цвет: ${colorClass}`
       );
-      //delete nameColors[playerName]; // Удаляем выбранный цвет из nameColors
     } else {
       // Если у игрока нет определенного цвета, выбираем цвет из массива randomColors по порядку
       colorClass = randomColors[colorIndex % randomColors.length];
@@ -1752,6 +1708,7 @@ function colorizePlayers() {
   //synchronizePlayerColors();
 }
 
+
 function synchronizePlayerColors() {
   const contentPlayers = document.querySelectorAll(".content .player");
   const actorPlayers = document.querySelectorAll(".actors .player");
@@ -1766,7 +1723,7 @@ function synchronizePlayerColors() {
         // Применяем цвет игрока из .actors к игроку в .content
         const actorColorClass = Array.from(actorPlayer.classList).find(
           (className) =>
-            nameColors.hasOwnProperty(className) ||
+            playerData.hasOwnProperty(className) ||
             randomColors.includes(className)
         );
         contentPlayer.classList.add(actorColorClass);

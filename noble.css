@@ -866,6 +866,12 @@ h2:not(:first-of-type) {
 .death-knight {
   color: #c41f38;
 }
+.druid {
+  color: #fc7c0a;
+}
+.demon-hunter {
+  color: #d200ff;
+}
 
 .red {
   color: var(--red);
