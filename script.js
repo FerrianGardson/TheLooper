@@ -547,11 +547,13 @@ function toggleCollapse(event) {
 
 function logFilter() {
   // Получаем значение из поля ввода и приводим его к нижнему регистру
-  const keywordsInput = document.getElementById("keywordsInput").value.toLowerCase();
-  
+  const keywordsInput = document
+    .getElementById("keywordsInput")
+    .value.toLowerCase();
+
   // Выбираем все элементы, являющиеся дочерними элементами .content
   const elements = document.querySelectorAll(".content > *");
-  
+
   // Перебираем каждый элемент
   elements.forEach((element) => {
     // Получаем текстовое содержимое элемента и приводим его к нижнему регистру
@@ -561,20 +563,22 @@ function logFilter() {
     if (keywordsInput.trim() !== "") {
       // Разделяем введенные ключевые слова по пробелу
       const keywords = keywordsInput.split(" ");
-      
+
       // Перебираем каждое ключевое слово
       keywords.forEach((keyword) => {
         // Инициализируем переменную для хранения ключевого слова без символа "-"
         let removeWord = null;
-        
+
         // Проверяем, начинается ли ключевое слово с символа "-"
         if (keyword.startsWith("-")) {
           // Если да, удаляем символ "-" и сохраняем оставшееся слово в переменную removeWord
           removeWord = keyword.substring(1);
         }
-        
+
         // Проверяем, содержится ли ключевое слово или его "анти-слово" в тексте элемента
-        const containsKeyword = text.includes(keyword) || (removeWord !== null && !text.includes(removeWord));
+        const containsKeyword =
+          text.includes(keyword) ||
+          (removeWord !== null && !text.includes(removeWord));
 
         // Если ключевое слово найдено, добавляем класс "selected" к элементу
         // Если "анти-слово" найдено, удаляем класс "selected" у элемента
@@ -589,8 +593,11 @@ function logFilter() {
       element.classList.remove("selected");
     }
   });
+  openselectedChapters();
+  removeCollapsed();
+  selected = [];
+  scrollToSelect();
 }
-
 
 function trimChapter(chapterElement) {
   const paragraphs = chapterElement.find("p");
@@ -782,10 +789,10 @@ function debug() {
 }
 
 function removeCollapsed() {
-  /*   var collapsedDivs = document.querySelectorAll("div.collapsed");
+  var collapsedDivs = document.querySelectorAll("div.collapsed");
   collapsedDivs.forEach(function (div) {
     div.remove();
-  }); */
+  });
 }
 
 function removePlayers() {

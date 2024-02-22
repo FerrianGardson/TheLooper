@@ -732,6 +732,9 @@ p.logline {
   /* position: relative; */
   text-shadow: none;
   box-shadow: none;
+  transform: rotate(3deg);
+  margin-bottom: 4rem;
+  margin-top: 4rem;
 }
 
 .paper:not(.img) {
@@ -815,9 +818,41 @@ h2.date > span {
 }
 
 #chatlog > .chapter > h2.date > span.title {
-  line-height: 50%;
+  /* line-height: 50%; */
+  width: 100%;
 }
 
 .paper .say {
   text-shadow: none;
+}
+
+.paper + .transcript {
+    margin-top: -5rem;
+}
+
+.rleft {
+    transform: rotate(-3deg);
+}
+
+
+.paper.img + .paper.img {
+    margin-top: -6rem;
+    transform: rotate(-3deg);
+}
+
+div#comment-tree {
+  padding: 0 1rem;
+}
+
+.col-sm-2 {
+  top: 2rem;
+  right: 0rem;
+}
+
+.wp-block-body {}
+
+.binded-chars .wp-block-body {
+  left: 0;
+  top: 0;
+  text-align: left;
 }
