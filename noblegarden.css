@@ -1256,3 +1256,7 @@ span.say {
 .story .say {
     color: var(--emote);
 }
+
+.chapter {
+  padding: 2rem;
+}

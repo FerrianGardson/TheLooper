@@ -101,6 +101,7 @@ npcNames = {
 
 function formatHTML() {
   cleanText();
+  throw new Error("Скрипт прерван");
   splitSessions();
   wrapChapters();
   scrollToStart();
@@ -1227,7 +1228,9 @@ function convertLoglineToTranscript(loglineElement) {
 
   // Получаем имя вещателя
   const playerName = loglineElement.querySelector(".player").textContent.trim();
-
+  console.log("playerName: ", playerName);
+  playerName = playerName.slice(0, -5); // Обрезаем последний символ, который является двоеточием
+  console.log("playerName: ", playerName);
   // Сохраняем атрибут timestamp
   loglineElement.setAttribute("timestamp", timestamp.toISOString());
 
@@ -1776,43 +1779,45 @@ function addCommaAndDot() {
 }
 
 function FullNames() {
-  console.log("Исходные данные игроков:", playerData);
+  // console.log("Исходные данные игроков:", playerData);
 
   const actorPlayers = document.querySelectorAll(".chapter .player");
-  console.log("Найденные элементы .actors .player:", actorPlayers);
+  // console.log("Найденные элементы .actors .player:", actorPlayers);
 
   actorPlayers.forEach((actorPlayer) => {
     const playerName = actorPlayer.textContent.trim();
-    console.log("Найденное короткое имя игрока:", playerName);
+    // console.log("Найденное короткое имя игрока:", playerName);
 
     const playerInfo = playerData.find((info) => info[0] === playerName);
     if (playerInfo) {
-      console.log("Соответствующая информация:", playerInfo);
+      // console.log("Соответствующая информация:", playerInfo);
       actorPlayer.textContent = playerInfo[2];
-      console.log("Короткое имя заменено на полное:", playerInfo[2]);
+      // console.log("Короткое имя заменено на полное:", playerInfo[2]);
     } else {
-      console.log("Короткое имя не найдено в массиве playerData");
+      // console.log("Короткое имя не найдено в массиве playerData");
     }
   });
 }
 
+console.log("Сообщение блять");
+
 function ShortNames() {
-  console.log("Исходные данные игроков:", playerData);
+  // console.log("Исходные данные игроков:", playerData);
 
   const actorPlayers = document.querySelectorAll(".chapter .player");
-  console.log("Найденные элементы .actors .player:", actorPlayers);
+  // console.log("Найденные элементы .actors .player:", actorPlayers);
 
   actorPlayers.forEach((actorPlayer) => {
     const playerName = actorPlayer.textContent.trim();
-    console.log("Найденное полное имя игрока:", playerName);
+    // console.log("Найденное полное имя игрока:", playerName);
 
     const playerInfo = playerData.find((info) => info[2] === playerName);
     if (playerInfo) {
-      console.log("Соответствующая информация:", playerInfo);
+      // console.log("Соответствующая информация:", playerInfo);
       actorPlayer.textContent = playerInfo[0];
-      console.log("Полное имя заменено на короткое:", playerInfo[0]);
+      // console.log("Полное имя заменено на короткое:", playerInfo[0]);
     } else {
-      console.log("Полное имя не найдено в массиве playerData");
+      // console.log("Полное имя не найдено в массиве playerData");
     }
   });
 }

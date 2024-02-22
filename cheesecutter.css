@@ -198,12 +198,18 @@ p.titt.t_img {
 .paper img,
 .dop_img img {
   border: 10px solid #d9c89d;
-.article-image {
-  -webkit-mask-image: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 10%, rgba(255,255,255,1) 95%, rgba(255,255,255,0) 100%);
-  -webkit-mask-size: 100%;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: top;
-};
+  .article-image {
+    -webkit-mask-image: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 10%,
+      rgba(255, 255, 255, 1) 95%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    -webkit-mask-size: 100%;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: top;
+  }
 }
 
 .paper.img {
@@ -325,10 +331,6 @@ img.imm {
 .map_only .map_img img {
   transform: none;
   width: 400px !important;
-}
-
-.chapter {
-  /* padding: 0 50px; */
 }
 
 div.actors {
@@ -519,10 +521,6 @@ hint > .text:hover {
   margin: 20px 0 0 0;
 }
 
-.wp-block.article.post .meta-info {
-  /* margin: 15px; */
-}
-
 .footer_text {
   /* width: 80%; */
   text-align: right;
@@ -640,10 +638,6 @@ h2.date span.title {
   z-index: 0;
 }
 
-.paper .player {
-  /* margin-bottom: -1rem; */
-}
-
 .paper.img.left {
   width: fit-content;
   float: left;
@@ -712,10 +706,6 @@ p.logline {
   color: var(--red);
 }
 
-.post .content > *:not(.selected) {
-  /* filter: saturate(0); */
-}
-
 .start_wrap {
   background: green;
 }
@@ -729,13 +719,14 @@ p.logline {
   margin-top: -140px !important;
 }
 
-.paper, .transcript {
+.paper,
+.transcript {
   border-image-source: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/%D0%BE%D0%B1%D1%80%D1%8B%D0%B2%D0%BE%D0%BA2.png?v=1708321338084);
   border-image-slice: 30 30 30;
   border-image-repeat: stretch repeat;
   border-image-width: 20px 20px 20px;
   padding: 2rem;
-  background: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/404c4184-6fff-4117-92c2-8f62f73b9ce1_scroll_middle_52.jpg?v=1708321337238)!important;
+  background: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/404c4184-6fff-4117-92c2-8f62f73b9ce1_scroll_middle_52.jpg?v=1708321337238) !important;
   border-image-outset: 13px !important;
   /* z-index: 1; */
   /* position: relative; */
@@ -755,10 +746,6 @@ p.logline {
   box-shadow: none;
   text-shadow: none;
   color: var(--text-color);
-}
-
-.post {
-  /* font-size: 1.5rem; */
 }
 
 .post {
@@ -794,39 +781,43 @@ body {
   background-color: #c97744 !important;
 }
 
-
 span.say {
-    color: var(--text-color);
+  color: var(--text-color);
 }
 
 .player {
-    text-shadow: 1px 1px 2px #3d2513;
+  text-shadow: 1px 1px 2px #3d2513;
 }
 
 .emote > .player {
-    text-shadow: 0 0 BLACK;
+  text-shadow: 0 0 BLACK;
 }
 
 span.column {
-    margin-right: 0.2rem;
+  margin-right: 0.2rem;
 }
 
 .paper.img {
-    -webkit-mask-image: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 10%, rgba(255,255,255,1) 95%, rgba(255,255,255,0) 100%);
-    -webkit-mask-size: 100%;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: top;
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 1) 10%,
+    rgba(255, 255, 255, 1) 95%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  -webkit-mask-size: 100%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: top;
 }
 
 h2.date > span {
-    color: wheat;
+  color: wheat;
 }
 
 #chatlog > .chapter > h2.date > span.title {
-    line-height: 50%;
+  line-height: 50%;
 }
 
-
 .paper .say {
-    text-shadow: none;
+  text-shadow: none;
 }

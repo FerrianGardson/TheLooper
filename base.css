@@ -407,3 +407,5 @@ form.tumbler.input.tooltip.show {display: flex;align-content: center;justify-con
 }
 
 input[type="checkbox"] {width: 1rem;}
+
+.content > *:not(.selected, :hover) {filter:saturate(0);opacity:0.5}
