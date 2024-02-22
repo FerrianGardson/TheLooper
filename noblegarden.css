@@ -1272,3 +1272,7 @@ span.say {
 .nav {
   display: block!important;
 }
+
+.actors {
+  margin-bottom: 1rem;
+}
