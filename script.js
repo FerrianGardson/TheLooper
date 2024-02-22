@@ -1005,64 +1005,6 @@ keepRaidWarningCheckbox.addEventListener("change", function () {
   keepRaidWarning = this.checked;
 });
 
-
-// Переключатель стиля для Сырорезки
-const cheeseStyleLink = document.querySelector(".style.cheesecutter");
-
-// Получаем чекбокс по его id
-const checkboxCheese = document.getElementById("cssCheese");
-
-// Добавляем обработчик события change к чекбоксу
-checkboxCheese.addEventListener("change", function() {
-    // Если чекбокс отмечен, включаем стиль, иначе выключаем
-    if (this.checked) {
-        // Включаем стиль, убирая у него атрибут disabled
-        cheeseStyleLink.removeAttribute("disabled");
-    } else {
-        // Выключаем стиль, добавляя ему атрибут disabled
-        cheeseStyleLink.setAttribute("disabled", "");
-    }
-});
-
-// Переключатель стиля для шестого взвода
-const sixthTroopStyleLink = document.querySelector(".style.sixthtroop");
-
-// Получаем чекбокс по его id
-const checkboxTroop = document.getElementById("cssSixthTroop");
-
-// Добавляем обработчик события change к чекбоксу
-checkboxTroop.addEventListener("change", function() {
-    // Если чекбокс отмечен, включаем стиль, иначе выключаем
-    if (this.checked) {
-        // Включаем стиль, убирая у него атрибут disabled
-        sixthTroopStyleLink.removeAttribute("disabled");
-    } else {
-        // Выключаем стиль, добавляя ему атрибут disabled
-        sixthTroopStyleLink.setAttribute("disabled", "");
-    }
-});
-
-// Переключатель стиля для базового стиля
-const baseStyleLink = document.querySelector(".style.base");
-
-// Получаем чекбокс по его id
-const checkbox = document.getElementById("cssBase");
-
-// Добавляем обработчик события change к чекбоксу
-checkbox.addEventListener("change", function() {
-    // Если чекбокс отмечен, включаем стиль, иначе выключаем
-    if (this.checked) {
-        // Включаем стиль, убирая у него атрибут disabled
-        baseStyleLink.removeAttribute("disabled");
-    } else {
-        // Выключаем стиль, добавляя ему атрибут disabled
-        baseStyleLink.setAttribute("disabled", "");
-    }
-});
-
-
-
-
 //
 
 function filterTrimEverything() {

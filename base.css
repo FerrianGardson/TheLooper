@@ -188,25 +188,7 @@ input:focus-visible {
   background: red;
 }
 
-.collapsed {
-  -webkit-mask-image: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 1) 75%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  -webkit-mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: top;
 
-  mask-image: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 1) 75%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  mask-size: 100% 100%;
-  mask-repeat: no-repeat;
-  mask-position: top;
-}
 
 .tumbler > input {
   appearance: none;
@@ -249,16 +231,6 @@ input:focus-visible {
   display: block;
 }
 
-.collapsed > h2::after {
-  content: "Read more...";
-  font-size: 1rem;
-  line-height: 1rem;
-  display: block;
-  font-weight: 100;
-  opacity: 0.5;
-  margin-bottom: 1rem;
-  margin-top: 6px;
-}
 
 .chapter:not(.collapsed) > h2.date {
   margin-bottom: 1rem;
