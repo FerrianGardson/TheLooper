@@ -266,7 +266,7 @@ input:focus-visible {
 
 .content > *:not(.selected, :hover) {
   /* opacity: 0.5; */
-  filter: saturate(0.0);
+  filter: saturate(0.5);
 }
 
 .buttons.cut:hover {
