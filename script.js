@@ -595,14 +595,46 @@ function combineSay(spanType) {
 const colors = [
   "red",
   "green",
+  "blue",
   "blue-1",
   "blue-2",
   "blue-3",
   "yellow",
   "orange",
+  "purple",
   "purple-1",
   "purple-2",
   "purple-3",
+  "white",
+  "whisper",
+  "random-1",
+  "random-2",
+  "random-3",
+  "random-4",
+  "random-5",
+  "random-6",
+  "random-7",
+  "random-8",
+  "random-9",
+  "random-10",
+  "random-11",
+  "random-12",
+  "random-13",
+  "random-14",
+  "random-15",
+  "random-16",
+  "random-17",
+  "random-18",
+  "random-19",
+  "random-20",
+  "random-21",
+  "random-22",
+  "random-23",
+  "random-24",
+  "random-25",
+  "random-26",
+  "random-27",
+  "random-28",
 ];
 
 const npcNames = {
@@ -641,8 +673,8 @@ function colorizePlayers(playerColorMap) {
   const playerColors = {};
   const chapters = document.querySelectorAll(".chapter");
 
+  // Выборка игроков
   chapters.forEach((chapter) => {
-    //Удаление div.actors
     const playerSpans = chapter.querySelectorAll(
       ".logline.say .player, .logline.virt .player"
     );
@@ -651,20 +683,16 @@ function colorizePlayers(playerColorMap) {
       const playerName = span.textContent.trim();
       let colorClass;
 
-      // Добавлен код для обработки имен из нескольких слов
       const playerNameParts = playerName.split(" ");
-      if (playerColorMap[playerName]) {
-        colorClass = playerColorMap[playerName];
-      } else if (playerColorMap[playerNameParts[0]]) {
-        colorClass = playerColorMap[playerNameParts[0]];
-      } else {
-        colorClass =
-          playerColors[playerName] ||
-          (playerColors[playerName] = getColorClass(index));
-      }
+      colorClass =
+        // playerColorMap[playerName] || // Если удалит
+        playerColors[playerName] || // Если удалить, у одного и того же игрока не из списка становится рандомный цвет
+        (playerColors[playerName] = getColorClass(index)); // Если удалить, вообще цвета не применяются
 
       span.classList.remove(...colors);
       span.classList.add(colorClass);
+      //console.log('playerName:', playerName);
+      //console.log('colorClass:', colorClass);
     });
 
     const uniquePlayers = new Set(
@@ -689,19 +717,10 @@ function colorizePlayers(playerColorMap) {
         playerColorMap[uniquePlayerNameParts[0]] ||
         playerColors[uniquePlayerName] ||
         getColorClass(index);
+      console.log("uniquePlayerName:", uniquePlayerName);
+      console.log("colorClass:", colorClass);
 
-      playerItem.classList.remove(
-        "red",
-        "green",
-        "blue-1",
-        "blue-2",
-        "blue-3",
-        "yellow",
-        "orange",
-        "purple-1",
-        "purple-2",
-        "purple-3"
-      );
+      playerItem.classList.remove(...colors);
       playerItem.classList.add(colorClass);
 
       if (
@@ -723,21 +742,7 @@ function colorizePlayers(playerColorMap) {
   });
 }
 
-
-
 function getColorClass(index) {
-  const colors = [
-    "red",
-    "green",
-    "blue-1",
-    "blue-2",
-    "blue-3",
-    "yellow",
-    "orange",
-    "purple-1",
-    "purple-2",
-    "purple-3",
-  ];
   return colors[index % colors.length];
 }
 
@@ -762,6 +767,8 @@ const playerColorMap = {
   Фэрриан: "blue-3",
   Малет: "blue",
   Роуз: "orange",
+  Аммель: "orange",
+  Маларон: "orange",
   Ананита: "green",
   Жуль: "red",
   Хейвинд: "red",
@@ -779,45 +786,47 @@ const playerColorMap = {
   Хьюз: "yellow",
 };
 
+const surnameMap = {
+  Фэрриан: "Фэрриан Гардсон",
+  Аммель: "Рэдрик Аммель",
+  Малет: "Малет Трант",
+  Дезертир: "Герман Шульц",
+  Ошберт: "Осберт Осбертсон",
+  Роуз: "Арчибальд Роуз",
+  Плут: "Винсент Сазерлэнд",
+  Ананита: "Ананита Астор",
+  Хофманн: "Карл Хофманн",
+  Штрих: "Олдиус Лоне",
+  Асмелт: "Асмелт Фьюри",
+  Бель: "Бель Сеймур",
+  Бернд: "Бернд Дженкинс",
+  Мариам: "Мариам Метревели",
+  Кристофер: "Кристофер Стротман",
+  Эндэрд: "Киллиан Эндэрд",
+  Готт: "Готт Айландер",
+  Алрой: "Алрой Джонсон",
+  Брандур: "Брандур Сталехват",
+  Браен: "Браен Бёрк",
+  Маларон: "Мал’арон Берёзовый Лист",
+  Шенн: "Шенн Вельт",
+  Джэф: "Джэфри Майер",
+  Пачек: "Офелия Пачек",
+  Иван: "Иван де Жильбер",
+  Мидас: "Мидас Грейт",
+  Хауэр: "Старшина Хауэр",
+  Кейти: "Кейти Сазерлэнд",
+  Каторжник: "Рой Редвуд",
+  Кариночка: "Слепая",
+  Дезертир: "Герман Шульц",
+  Дезертир: "Герман Шульц",
+  Дезертир: "Герман Шульц",
+  Дезертир: "Герман Шульц",
+  Дезертир: "Герман Шульц",
+  // Добавьте другие сопоставления сюда
+};
+
 function replaceSurnames() {
   const playerSpans = document.querySelectorAll(".player");
-  const surnameMap = {
-    Фэрриан: "Фэрриан Гардсон",
-    Малет: "Малет Трант",
-    Дезертир: "Герман Шульц",
-    Ошберт: "Осберт Осбертсон",
-    Роуз: "Арчибальд Роуз",
-    Плут: "Винсент Сазерлэнд",
-    Ананита: "Ананита Астор",
-    Хофманн: "Карл Хофманн",
-    Штрих: "Олдиус Лоне",
-    Асмелт: "Асмелт Фьюри",
-    Бель: "Бель Сеймур",
-    Бернд: "Бернд Дженкинс",
-    Мариам: "Мариам Метревели",
-    Кристофер: "Кристофер Стротман",
-    Эндэрд: "Киллиан Эндэрд",
-    Готт: "Готт Айландер",
-    Алрой: "Алрой Джонсон",
-    Брандур: "Брандур Сталехват",
-    Браен: "Браен Бёрк",
-    Маларон: "Мал’арон Берёзовый Лист",
-    Шенн: "Шенн Вельт",
-    Джэф: "Джэфри Майер",
-    Пачек: "Офелия Пачек",
-    Иван: "Иван де Жильбер",
-    Мидас: "Мидас Грейт",
-    Хауэр: "Старшина Хауэр",
-    Кейти: "Кейти Сазерлэнд",
-    Дезертир: "Герман Шульц",
-    Дезертир: "Герман Шульц",
-    Дезертир: "Герман Шульц",
-    Дезертир: "Герман Шульц",
-    Дезертир: "Герман Шульц",
-    Дезертир: "Герман Шульц",
-    Дезертир: "Герман Шульц",
-    // Добавьте другие сопоставления сюда
-  };
 
   playerSpans.forEach((span) => {
     const playerName = span.textContent.trim();
@@ -1435,7 +1444,7 @@ function calculateTotalDuration() {
 function convertLoglineToTranscript(loglineElement) {
   // Получаем таймштамп и преобразуем его в нужный формат времени
   const timestamp = new Date(loglineElement.getAttribute("timestamp"));
-  console.log("На входе", loglineElement.getAttribute("timestamp"));
+  // console.log("На входе", loglineElement.getAttribute("timestamp"));
   const day = timestamp.getDate(); // Получаем день месяца
   const monthNames = [
     "янв",
@@ -1456,7 +1465,7 @@ function convertLoglineToTranscript(loglineElement) {
   const hours = ("0" + timestamp.getUTCHours()).slice(-2); // Местное время, без префикса UTC
   const minutes = ("0" + timestamp.getUTCMinutes()).slice(-2); // Местное время, без префикса UTC
   const formattedTimestamp = formattedDate + " " + hours + ":" + minutes; // Собираем дату и время в одну строку
-  console.log("На выходе", formattedTimestamp);
+  // console.log("На выходе", formattedTimestamp);
 
   // Получаем имя вещателя
   const playerName = loglineElement.querySelector(".player").textContent.trim();

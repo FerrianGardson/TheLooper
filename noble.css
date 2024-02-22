@@ -704,7 +704,7 @@ ul.npc > li:hover {
 
 .players,
 .npc {
-  display: inline-block;
+  display: inline;
   flex-wrap: wrap;
 }
 
@@ -733,12 +733,98 @@ p.logline {
   --purple-1: #4f4789ff;
   --purple-2: #6420ff;
   --purple-3: #ae5eff;
+  --white: white;
   --whisper: #d361d3;
   --grey: #808080;
   --light-grey: #c2c2c2;
   --dark-grey: #434343;
   --black: #212121;
   --border-color: rgba(255, 255, 255, 0.26);
+}
+
+.random-1 {
+  color: #ff69b4;
+}
+.random-2 {
+  color: #00ffff;
+}
+.random-3 {
+  color: #00ff00;
+}
+.random-4 {
+  color: #ff00ff;
+}
+.random-5 {
+  color: #ffd700;
+}
+.random-6 {
+  color: #87ceeb;
+}
+.random-7 {
+  color: #ff7f50;
+}
+.random-8 {
+  color: #8a2be2;
+}
+.random-9 {
+  color: #40e0d0;
+}
+.random-10 {
+  color: #7fffd4;
+}
+.random-11 {
+  color: #da70d6;
+}
+.random-12 {
+  color: #ff6347;
+}
+.random-13 {
+  color: #fa8072;
+}
+.random-14 {
+  color: #e6e6fa;
+}
+.random-15 {
+  color: #f0e68c;
+}
+.random-16 {
+  color: #d8bfd8;
+}
+.random-17 {
+  color: #b22222;
+}
+.random-18 {
+  color: #4b0082;
+}
+.random-19 {
+  color: #00ff7f;
+}
+.random-20 {
+  color: #ff1493;
+}
+.random-21 {
+  color: #5f9ea0;
+}
+.random-22 {
+  color: #ff69b4;
+}
+.random-23 {
+  color: #9932cc;
+}
+.random-24 {
+  color: #ffa07a;
+}
+.random-25 {
+  color: #00bfff;
+}
+.random-26 {
+  color: #9370db;
+}
+.random-27 {
+  color: #90ee90;
+}
+.random-28 {
+  color: #00fa9a;
 }
 
 .post h2 {
@@ -1113,7 +1199,7 @@ h2.date span.title {
 }
 
 .post .spoiler_desc {
-  color: var(--text-color)!important;
+  color: var(--text-color) !important;
   text-align: center;
   font-family: mow3;
   position: relative;
@@ -1142,56 +1228,57 @@ section.slice.slice-md.bg-base-img:nth-of-type(3) {
 }
 
 p.logline.emote > span {
-    display: inline;
+  display: inline;
 }
 
 .yell > .say {
-    color: var(--red);
-    font-weight: bold;
-    text-transform: uppercase;
+  color: var(--red);
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 .paper > .logline > .span {
-    display: inline-block;
+  display: inline-block;
 }
 
 .paper > .logline > span {
-    display: inline;
+  display: inline;
 }
 
-.paper > .paper, .paper > .transcript {
-    box-shadow: inset -1px -3px 20px 0px #00000063;
+.paper > .paper,
+.paper > .transcript {
+  box-shadow: inset -1px -3px 20px 0px #00000063;
 }
 
 .paper h1 {
-    color: white!important;
-    font-size: 2rem!important;
+  color: white !important;
+  font-size: 2rem !important;
 }
 
 .content > :hover {
-    filter: unset;
+  filter: unset;
 }
 
 h2.date {
-  color: white!important;
-  font-size: 2.2rem!important;
+  color: white !important;
+  font-size: 2.2rem !important;
 }
 
 .post div.chapter > h2.date > span.title {
-  color: white!important;
+  color: white !important;
   line-height: 120%;
-  font-size: 3rem!important;
+  font-size: 3rem !important;
 }
 
 .content > *:hover {
-    filter: unset;
+  filter: unset;
 }
 
 .paper.img.right {
-    float: right;
-    margin: 1rem 0rem 0rem 1rem;
+  float: right;
+  margin: 1rem 0rem 0rem 1rem;
 }
 
 span.say {
-    color: white;
+  color: white;
 }
