@@ -1480,19 +1480,17 @@ function deleteAfter() {
 }
 
 function updateTimeAndActors() {
-  // Раскраска
-  colorizePlayers()
   // Сброс
-
   const actorsDiv = document.querySelector("div.actors");
   if (actorsDiv) {
     actorsDiv.remove();
   }
-
   // Время
   addTimeToChapter();
   // Список игроков
   playerList();
+  // Раскраска
+  colorizePlayers();
 }
 
 function startWrap() {
@@ -1726,7 +1724,7 @@ function colorizePlayers() {
       console.log(
         `У игрока "${playerName}" есть определенный цвет: ${colorClass}`
       );
-      delete nameColors[playerName]; // Удаляем выбранный цвет из nameColors
+      //delete nameColors[playerName]; // Удаляем выбранный цвет из nameColors
     } else {
       // Если у игрока нет определенного цвета, выбираем случайный из randomColors
       const randomIndex = Math.floor(Math.random() * randomColors.length);
@@ -1734,7 +1732,6 @@ function colorizePlayers() {
       console.log(
         `У игрока "${playerName}" нет определенного цвета. Присваиваем случайный цвет: ${colorClass}`
       );
-      randomColors.splice(randomIndex, 1); // Удаляем выбранный цвет из randomColors
     }
 
     // Применяем выбранный цвет к игроку
