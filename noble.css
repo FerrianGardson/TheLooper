@@ -685,7 +685,7 @@ ul#redactor-toolbar-0 {
 
 .players > li,
 .npc > li {
-  display: inline-block;
+  display: inline;
   margin-right: 0.3em;
   font-weight: bold;
 }
@@ -1263,6 +1263,7 @@ section.slice.slice-md.bg-base-img:nth-of-type(3) {
 
 p.logline.emote > span {
   display: inline;
+  color: unset;
 }
 
 .yell > .say {

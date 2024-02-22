@@ -7,7 +7,7 @@ const playerData = [
   ["Аммель", "mage", "Рэдрик Аммель"],
   ["Маларон", "priest", "Мал’арон Берёзовый Лист"],
   ["Ананита", "rogue", "Ананита Астор"],
-  ["Сырорезка", "yellow", "Джулианна Франческа Третья Златошпун"],
+  ["Сырорезка", "yellow", "Джули"],
   ["Санриэль", "mage", "Санриэль Рассветный Луч"],
   ["Дерек", "hunter", "Дерек Кларк"],
   ["Кэролай", "priest", "Кэролай Эстер"],
@@ -1670,9 +1670,10 @@ function playerList() {
   });
 }
 
+let colorIndex = 0; // Переместить вне функции
+
 // Функция для раскраски игроков
 function colorizePlayers() {
-  let colorIndex = 0;
   const playerSpans = document.querySelectorAll(".actors .player");
   playerSpans.forEach((span) => {
     const playerName = span.textContent.trim();
@@ -1683,17 +1684,17 @@ function colorizePlayers() {
     if (playerInfo) {
       // Если у игрока есть определенный цвет, используем его
       colorClass = playerInfo[1];
-      //console.log( `У игрока "${playerName}" есть определенный цвет: ${colorClass}` );
     } else {
       // Если у игрока нет определенного цвета, выбираем цвет из массива randomColors по порядку
       colorClass = randomColors[colorIndex % randomColors.length];
-      //console.log( `У игрока "${playerName}" нет определенного цвета. Присваиваем цвет из списка случайных цветов: ${colorClass}` ); colorIndex++; // Увеличиваем индекс цвета для следующего игрока
+      colorIndex++; // Увеличиваем индекс цвета для следующего игрока
     }
 
     // Применяем выбранный цвет к игроку
     span.classList.add(colorClass);
   });
-  //synchronizePlayerColors();
+  // colorIndex = 0; // Не нужно обнулять здесь
+  // synchronizePlayerColors();
 }
 
 // Глобальная переменная для выбора всех элементов .player внутри .say, .yell и .virt
@@ -1734,7 +1735,6 @@ function addSpaceToEmotePlayers() {
 function synchronizePlayerColors() {
   // Находим все блоки .chapters
   const chapters = document.querySelectorAll("div.chapter");
-  console.log('chapters: ', chapters);
 
   // Создаем карту для сопоставления текста и второго класса
   const playerColorMap = new Map();
@@ -1743,7 +1743,6 @@ function synchronizePlayerColors() {
   chapters.forEach((chapter) => {
     // Получаем все элементы .actors li.player в текущем .chapter
     const actorsPlayers = chapter.querySelectorAll(".actors li.player");
-    console.log('actorsPlayers: ', actorsPlayers);
 
     // Проходимся по каждому элементу .actors li.player
     actorsPlayers.forEach((actorPlayer) => {
@@ -1756,7 +1755,7 @@ function synchronizePlayerColors() {
     });
 
     // Выводим карту сопоставления в консоль для отладки
-    console.log("Карта сопоставления:", playerColorMap);
+    // console.log("Карта сопоставления:", playerColorMap);
 
     // Применяем цветовые классы ко всем .content > player в этом .chapter
     const contentPlayers = chapter.querySelectorAll(".content .player");
@@ -1799,6 +1798,50 @@ function addCommaAndDot() {
   });
 }
 
+function FullNames() {
+  console.log("Исходные данные игроков:", playerData);
+
+  const actorPlayers = document.querySelectorAll(".chapter .player");
+  console.log("Найденные элементы .actors .player:", actorPlayers);
+
+  actorPlayers.forEach((actorPlayer) => {
+    const playerName = actorPlayer.textContent.trim();
+    console.log("Найденное короткое имя игрока:", playerName);
+
+    const playerInfo = playerData.find((info) => info[0] === playerName);
+    if (playerInfo) {
+      console.log("Соответствующая информация:", playerInfo);
+      actorPlayer.textContent = playerInfo[2];
+      console.log("Короткое имя заменено на полное:", playerInfo[2]);
+    } else {
+      console.log("Короткое имя не найдено в массиве playerData");
+    }
+  });
+}
+
+function ShortNames() {
+  console.log("Исходные данные игроков:", playerData);
+
+  const actorPlayers = document.querySelectorAll(".chapter .player");
+  console.log("Найденные элементы .actors .player:", actorPlayers);
+
+  actorPlayers.forEach((actorPlayer) => {
+    const playerName = actorPlayer.textContent.trim();
+    console.log("Найденное полное имя игрока:", playerName);
+
+    const playerInfo = playerData.find((info) => info[2] === playerName);
+    if (playerInfo) {
+      console.log("Соответствующая информация:", playerInfo);
+      actorPlayer.textContent = playerInfo[0];
+      console.log("Полное имя заменено на короткое:", playerInfo[0]);
+    } else {
+      console.log("Полное имя не найдено в массиве playerData");
+    }
+  });
+}
+
+
+
 function updateTimeAndActors() {
   // Сброс
   const actorsDivs = document.querySelectorAll("div.actors");
@@ -1811,10 +1854,12 @@ function updateTimeAndActors() {
   spans.forEach((span) => {
     span.remove();
   });
-  addTimeToChapter();
-  // Список игроков
+  colorIndex = 0;
+  ShortNames();
   playerList();
   colorizePlayers();
+  FullNames();
+  addTimeToChapter();
   synchronizePlayerColors();
   addColumnToPlayers();
   addSpaceToEmotePlayers();
