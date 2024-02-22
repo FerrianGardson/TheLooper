@@ -67,6 +67,16 @@ const surNames = {
 
 // Карта цветов
 const randomColors = [
+  "priest",
+  "mage",
+  "warlock",
+  "rogue",
+  "monk",
+  "hunter",
+  "shaman",
+  "warrior",
+  "paladin",
+  "death-knight",
   "random-1",
   "random-2",
   "random-3",
@@ -1713,6 +1723,7 @@ function playerList() {
 
 // Функция для раскраски игроков
 function colorizePlayers() {
+  let colorIndex = 0;
   const playerSpans = document.querySelectorAll(".actors .player");
   playerSpans.forEach((span) => {
     const playerName = span.textContent.trim();
@@ -1720,18 +1731,19 @@ function colorizePlayers() {
 
     // Проверяем, есть ли у игрока определенный цвет
     if (nameColors[playerName]) {
+      // Если у игрока есть определенный цвет, используем его
       colorClass = nameColors[playerName];
       console.log(
         `У игрока "${playerName}" есть определенный цвет: ${colorClass}`
       );
       //delete nameColors[playerName]; // Удаляем выбранный цвет из nameColors
     } else {
-      // Если у игрока нет определенного цвета, выбираем случайный из randomColors
-      const randomIndex = Math.floor(Math.random() * randomColors.length);
-      colorClass = randomColors[randomIndex];
+      // Если у игрока нет определенного цвета, выбираем цвет из массива randomColors по порядку
+      colorClass = randomColors[colorIndex % randomColors.length];
       console.log(
-        `У игрока "${playerName}" нет определенного цвета. Присваиваем случайный цвет: ${colorClass}`
+        `У игрока "${playerName}" нет определенного цвета. Присваиваем цвет из списка случайных цветов: ${colorClass}`
       );
+      colorIndex++; // Увеличиваем индекс цвета для следующего игрока
     }
 
     // Применяем выбранный цвет к игроку

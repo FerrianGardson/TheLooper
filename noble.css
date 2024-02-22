@@ -836,6 +836,37 @@ h2:not(:first-of-type) {
   margin-top: 6em;
 }
 
+.priest {
+  color: #ffffff;
+}
+.mage {
+  color: #69ccf0;
+}
+.warlock {
+  color: #9482c9;
+}
+.rogue {
+  color: #fff569;
+}
+.monk {
+  color: #00ff96;
+}
+.hunter {
+  color: #abd473;
+}
+.shaman {
+  color: #00700e;
+}
+.warrior {
+  color: #c79c6e;
+}
+.paladin {
+  color: #f58cba;
+}
+.death-knight {
+  color: #c41f38;
+}
+
 .red {
   color: var(--red);
 }
