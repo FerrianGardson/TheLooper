@@ -116,28 +116,6 @@ function formatHTML() {
   throw new Error("Скрипт прерван");
 }
 
-function correctSpelling() {
-  // Находим все элементы <p> с классом "logline"
-  var loglineElements = document.querySelectorAll("p.logline");
-  // Проходим по каждому элементу
-  loglineElements.forEach(function (loglineElement) {
-    // Находим все элементы <span> внутри текущего элемента
-    var spanElements = loglineElement.querySelectorAll("span");
-    // Проходим по каждому элементу <span>
-    spanElements.forEach(function (spanElement) {
-      // Получаем текстовое содержимое элемента
-      var textContent = spanElement.textContent;
-      // Вот с помощью этой малышки – Похлопал по оптике
-      /* textContent = textContent.replace(
- /([а-я](?:["»]|))\s–\s*([А-Я])/g,
- "$1, — $2"
- ); */
-      //textContent = textContent.replace(/кот/g, "кошка");
-      // Присваиваем обновленное текстовое содержимое обратно элементу
-      spanElement.textContent = textContent;
-    });
-  });
-}
 // Обработка .txt файлов
 async function handleTxtFile(file) {
   // Очищаем содержимое div.chatlog перед загрузкой нового файла
@@ -1027,6 +1005,64 @@ keepRaidWarningCheckbox.addEventListener("change", function () {
   keepRaidWarning = this.checked;
 });
 
+
+// Переключатель стиля для Сырорезки
+const cheeseStyleLink = document.querySelector(".style.cheesecutter");
+
+// Получаем чекбокс по его id
+const checkboxCheese = document.getElementById("cssCheese");
+
+// Добавляем обработчик события change к чекбоксу
+checkboxCheese.addEventListener("change", function() {
+    // Если чекбокс отмечен, включаем стиль, иначе выключаем
+    if (this.checked) {
+        // Включаем стиль, убирая у него атрибут disabled
+        cheeseStyleLink.removeAttribute("disabled");
+    } else {
+        // Выключаем стиль, добавляя ему атрибут disabled
+        cheeseStyleLink.setAttribute("disabled", "");
+    }
+});
+
+// Переключатель стиля для шестого взвода
+const sixthTroopStyleLink = document.querySelector(".style.sixthtroop");
+
+// Получаем чекбокс по его id
+const checkboxTroop = document.getElementById("cssSixthTroop");
+
+// Добавляем обработчик события change к чекбоксу
+checkboxTroop.addEventListener("change", function() {
+    // Если чекбокс отмечен, включаем стиль, иначе выключаем
+    if (this.checked) {
+        // Включаем стиль, убирая у него атрибут disabled
+        sixthTroopStyleLink.removeAttribute("disabled");
+    } else {
+        // Выключаем стиль, добавляя ему атрибут disabled
+        sixthTroopStyleLink.setAttribute("disabled", "");
+    }
+});
+
+// Переключатель стиля для базового стиля
+const baseStyleLink = document.querySelector(".style.base");
+
+// Получаем чекбокс по его id
+const checkbox = document.getElementById("cssBase");
+
+// Добавляем обработчик события change к чекбоксу
+checkbox.addEventListener("change", function() {
+    // Если чекбокс отмечен, включаем стиль, иначе выключаем
+    if (this.checked) {
+        // Включаем стиль, убирая у него атрибут disabled
+        baseStyleLink.removeAttribute("disabled");
+    } else {
+        // Выключаем стиль, добавляя ему атрибут disabled
+        baseStyleLink.setAttribute("disabled", "");
+    }
+});
+
+
+
+
 //
 
 function filterTrimEverything() {
@@ -1584,8 +1620,7 @@ function pasteImg() {
       imgDiv.className = "paper img selected";
 
       const imgElement = document.createElement("img");
-      imgElement.src =
-        "https://i.postimg.cc/K8TcrhbQ/Wo-WScrn-Shot-010724-050024.png"; // Замените на ваш способ получения ссылки на изображение
+      imgElement.src = "POSTIMAGE"; // Замените на ваш способ получения ссылки на изображение
 
       imgDiv.appendChild(imgElement);
       loglineElement.insertAdjacentElement("afterend", imgDiv);
@@ -1839,8 +1874,6 @@ function ShortNames() {
     }
   });
 }
-
-
 
 function updateTimeAndActors() {
   // Сброс

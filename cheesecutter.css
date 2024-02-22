@@ -1,54 +1,9 @@
-.body-bg-8,
-.wp-block.default {
+/* Сырорезка */
+
+body,
+.post {
   cursor: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/a205e14d92011e14.png?v=1707976771724"),
-    default;
-}
-
-@font-face {
-  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/Kill-Switch-Cyr_0.ttf?v=1707755646149");
-  font-family: mow1;
-}
-
-@font-face {
-  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/rumraisincyrillic.otf?v=1707755646607");
-  font-family: mow2;
-}
-
-@font-face {
-  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/segoescript.ttf?v=1707755647120");
-  font-family: mow3;
-}
-
-@font-face {
-  src: url("https://cdn.glitch.global/b3e68faa-873e-4c9f-b0e4-8b1a287d6f5a/prestige-normal_%5Ballfont.ru%5D.ttf?v=1660986441745");
-  font-family: mow4;
-}
-
-@font-face {
-  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/zai%20Triumph%20Typewriter%20Regular.ttf?v=1707885275330");
-  font-family: mow5;
-}
-
-@font-face {
-  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/ofont.ru_Candara.ttf?v=1707886185353");
-  font-family: mow6;
-}
-
-@font-face {
-  src: url("https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/ofont.ru_Impact.ttf?v=1707761081314");
-  font-family: mow7;
-}
-
-.body-bg-8,
-body {
-  background-image: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/Untit%D0%BC%D0%B8%D0%BC%D0%B2%D1%8Bled-1.png?v=1707976770609) !important;
-  background-size: 50% !important;
-  background-repeat: repeat !important;
-  background-color: #c97744 !important;
-}
-
-.bg-base-img {
-  background: #0000;
+    auto !important;
 }
 
 .post {
@@ -76,11 +31,8 @@ h2.article-title {
   color: #e1834a !important;
 }
 
-h2:nth-of-type(2) {
-  display: none;
-}
-
-.col-md-12 .info-list {
+.col-md-12 .info-list,
+.date {
   background-color: #ff9c60 !important;
   border: 5px dashed #a16d568a;
   transform: rotate(359deg);
@@ -147,7 +99,10 @@ h2:nth-of-type(2) {
   transform: rotate(0deg) !important;
 }
 
-.wp-block.article.post .meta-info {margin-bottom: 3rem;margin-left: 3rem;}
+.wp-block.article.post .meta-info {
+  margin-bottom: 3rem;
+  margin-left: 3rem;
+}
 
 .col-sm-2 i.fa.fa-thumbs-o-up.fa-2,
 .col-sm-2 i.fa.fa-3.fa-thumbs-o-up {
@@ -197,12 +152,11 @@ h2.title_text,
 .comment-list .comment-count,
 a#parent-comment {
   font-family: mow2;
-  font-weight: 300;
-  color: #e1834a;
+  /* font-weight: 300; */
+  /* color: #e1834a; */
 }
 
 h2.date {
-  margin-top: 50px !important;
 }
 
 p.titt,
@@ -240,26 +194,17 @@ p.titt.t_img {
 .map_img img,
 .paper img,
 .dop_img img {
-  margin: 0 auto !important;
   border: 10px solid #fff1ce;
-  box-shadow: 0 0 18px 0px #0000003b;
-  filter: grayscale(0.3);
 }
 
 .paper.img {
   text-align: center;
   background: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/pattern2.png?v=1707889369260);
   background-size: 52%;
-  margin: 20px -50px;
   background-repeat: repeat-x;
   background-position-y: center;
   transform: rotate(-1deg);
   margin-bottom: 3rem;
-}
-
-.paper img {
-  width: 84% !important;
-  box-shadow: 0 0 3px 2px #0000003b;
 }
 
 .head_paper,
@@ -297,8 +242,6 @@ p.titt.t_img {
 p.avt {
   transform: rotate(348deg);
   margin: 0 0 0 130px !important;
-  /* width: 250px; */
-  /* text-align: right; */
   font-family: mow1;
   color: #e1834a !important;
   font-size: 4rem;
@@ -379,16 +322,13 @@ img.imm {
   padding: 0 50px;
 }
 
-.player {
-  background: none;
-}
-
-ul.players {
+div.actors {
   text-align: center;
-  margin: 0 -50px 30px -50px;
   border-top: 5px dashed #a16d568a;
   border-bottom: 5px dashed #a16d568a;
   padding: 18px 90px;
+  margin: 1rem 0;
+  transform: rotate(1deg);
 }
 
 .players > li,
@@ -402,71 +342,6 @@ ul.players {
   font-family: mow4;
 }
 
-:root {
-  --red: #dc6864;
-  --green: #4fa974;
-  --blue: var(--blue-3);
-  --blue-1: #38be96;
-  --blue-2: #6aa3c3;
-  --blue-3: #557dac;
-  --yellow: #dcb800;
-  --orange: #d3902e;
-  --purple: var(--purple-1);
-  --purple-1: #5c52a3;
-  --purple-2: #9b76ee;
-  --purple-3: #936bbc;
-  --whisper: #e186e1;
-  --grey: #808080;
-  --light-grey: #c2c2c2;
-  --dark-grey: #434343;
-  --black: #212121;
-  --emote: var(--orange);
-  --text-color: #7f5146;
-  --hover: #fc5c45;
-}
-
-.red {
-  color: var(--red);
-}
-
-.green {
-  color: var(--green);
-}
-
-.blue-1 {
-  color: var(--blue-1);
-}
-
-.blue-2 {
-  color: var(--blue-2);
-}
-
-.blue-3,
-.blue {
-  color: var(--blue-3);
-}
-
-.yellow {
-  color: var(--yellow);
-}
-
-.orange {
-  color: var(--orange);
-}
-
-.purple-1,
-.purple {
-  color: var(--purple-1);
-}
-
-.purple-2 {
-  color: var(--purple-2);
-}
-
-.purple-3 {
-  color: var(--purple-3);
-}
-
 .chapter span.speech,
 .dop_img p,
 .chapter > p:not([class]),
@@ -477,7 +352,6 @@ ul.players {
 }
 
 .say > .player {
-  font-weight: 700;
   font-family: mow4;
 }
 
@@ -732,12 +606,6 @@ h2.date span.title {
   background: none;
 }
 
-.wrapper {
-  /* height: fit-content; */
-  /* width: fit-content; */
-  /* position: relative; */
-}
-
 .paper.img.one {
   transform: rotate(-67deg) scale(1.2);
   width: fit-content;
@@ -764,7 +632,7 @@ h2.date span.title {
 }
 
 .paper .player {
-  margin-bottom: -1rem;
+  /* margin-bottom: -1rem; */
 }
 
 .paper.img.left {
@@ -836,7 +704,7 @@ p.logline {
 }
 
 .post .content > *:not(.selected) {
-  filter: saturate(0);
+  /* filter: saturate(0); */
 }
 
 .start_wrap {
@@ -847,61 +715,23 @@ p.logline {
   background: red;
 }
 
-.spoiler {
-  overflow: hidden;
-  transition: max-height 1s cubic-bezier(0.87, 0, 0.13, 1) 0s;
-  max-height: 7rem;
-  height: fit-content;
-}
-
-.spoiler:hover {
-  filter: unset !important;
-  max-height: 1000rem !important;
-}
-
-.spoiler:not(:hover) {
-  mask-image: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(255, 255, 255, 0) 80%
-  );
-  mask-size: 100% 100%;
-  mask-repeat: no-repeat;
-  mask-position: top;
-}
-
-.spoiler_desc {
-  color: var(--text-color);
-  text-align: center;
-  font-family: mow3;
-  position: relative;
-  top: -1.2em;
-  z-index: 0;
-}
-
-.spoiler:hover ~ .spoiler_desc {
-  display: none;
-}
-
-.col-md-3.right-block {
-  display: none;
-}
-
 .mia_img_tr {
   margin-left: 30% !important;
   margin-top: -140px !important;
 }
 
-.transcript {
+.paper, .transcript {
   border-image-source: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/%D0%BE%D0%B1%D1%80%D1%8B%D0%B2%D0%BE%D0%BA2.png?v=1708321338084);
   border-image-slice: 30 30 30;
   border-image-repeat: stretch repeat;
   border-image-width: 20px 20px 20px;
   padding: 2rem;
-  background: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/404c4184-6fff-4117-92c2-8f62f73b9ce1_scroll_middle_52.jpg?v=1708321337238);
+  background: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/404c4184-6fff-4117-92c2-8f62f73b9ce1_scroll_middle_52.jpg?v=1708321337238)!important;
   border-image-outset: 13px !important;
-  z-index: 1;
-  position: relative;
+  /* z-index: 1; */
+  /* position: relative; */
+  text-shadow: none;
+  box-shadow: none;
 }
 
 .paper:not(.img) {
@@ -910,31 +740,64 @@ p.logline {
   border-image-repeat: stretch repeat;
   border-image-width: 20px 20px 20px;
   padding: 2rem;
-  background: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/404c4184-6fff-4117-92c2-8f62f73b9ce1_scroll_middle_52.jpg?v=1708321337238);
+  background: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/404c4184-6fff-4117-92c2-8f62f73b9ce1_scroll_middle_52.jpg?v=1708321337238) !important;
   border-image-outset: 13px !important;
   margin: 2rem 0 !important;
-}
-
-
-
-
-.post {
-    /* font-size: 1.5rem; */
+  box-shadow: none;
+  text-shadow: none;
+  color: var(--text-color);
 }
 
 .post {
-    font-size: 1.2rem;
+  /* font-size: 1.5rem; */
+}
+
+.post {
+  font-size: 1.2rem;
 }
 
 .map {
-    transform: scale(1) rotate(-53deg);
-    position: relative;
-    top: -25.700000000000003rem;
-    left: 16.700000000000003rem;
+  transform: scale(1) rotate(-53deg);
+  position: relative;
+  top: -25.700000000000003rem;
+  left: 16.700000000000003rem;
 }
 
 div {
-    overflow: visible!important;
+  overflow: visible !important;
 }
 
-.col-md-12 a {}
+body {
+  --text-color: #795548;
+  --text-shadow: 1px 1px black;
+}
+
+.post > div > div {
+  background: none !important;
+  border-image: none !important;
+}
+
+.body-bg-8,
+body {
+  background-image: url(https://cdn.glitch.global/078c0e73-66e5-4061-a137-9051a9c81f26/Untit%D0%BC%D0%B8%D0%BC%D0%B2%D1%8Bled-1.png?v=1707976770609) !important;
+  background-size: 50% !important;
+  background-repeat: repeat !important;
+  background-color: #c97744 !important;
+}
+
+
+span.say {
+    color: var(--text-color);
+}
+
+.player {
+    text-shadow: 1px 1px 2px #3d2513;
+}
+
+.emote > .player {
+    text-shadow: 0 0 BLACK;
+}
+
+span.column {
+    margin-right: 0.2rem;
+}
