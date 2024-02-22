@@ -111,7 +111,6 @@ const randomColors = [
   "random-28",
 ];
 
-
 // Карта НПС
 const npcNames = {
   Гнолл: true,
@@ -141,7 +140,7 @@ const npcNames = {
   Богач: true,
   Богач: true,
   Богач: true,
-  Богач: true
+  Богач: true,
 
   // Добавьте другие имена NPC сюда
 };
@@ -1681,22 +1680,28 @@ function pasteText() {
 }
 
 function playerList() {
-  const contents = document.querySelectorAll('.content');
+  const contents = document.querySelectorAll(".content");
 
   const uniquePlayers = new Set(); // Для отслеживания уникальных имен игроков
 
   contents.forEach((content) => {
-    const players = content.querySelectorAll('.say > .player, .yell > .player, .virt > .player');
-const playerList = document.createElement('ul');
-const npcList = document.createElement('ul');
-    playerList.classList.add('players');
-npcList.classList.add('npc');
+    const players = content.querySelectorAll(
+      ".say > .player, .yell > .player, .virt > .player"
+    );
+    const playerList = document.createElement("ul");
+    const npcList = document.createElement("ul");
+    playerList.classList.add("players");
+    npcList.classList.add("npc");
 
     players.forEach((player) => {
       const playerName = player.textContent.trim();
-      const uniquePlayerNameParts = playerName.split(' ');
+      const uniquePlayerNameParts = playerName.split(" ");
 
-      if (uniquePlayerNameParts.length === 1 && !npcNames[playerName] && !uniquePlayers.has(playerName)) {
+      if (
+        uniquePlayerNameParts.length === 1 &&
+        !npcNames[playerName] &&
+        !uniquePlayers.has(playerName)
+      ) {
         playerList.appendChild(createPlayerItem(playerName));
         uniquePlayers.add(playerName); // Добавляем имя игрока во множество уникальных имен
       } else if (!uniquePlayers.has(playerName)) {
@@ -1705,8 +1710,8 @@ npcList.classList.add('npc');
       }
     });
 
-    const actorsDiv = document.createElement('div');
-    actorsDiv.classList.add('actors');
+    const actorsDiv = document.createElement("div");
+    actorsDiv.classList.add("actors");
     content.parentNode.insertBefore(actorsDiv, content);
     actorsDiv.appendChild(playerList);
     actorsDiv.appendChild(npcList);
@@ -1714,8 +1719,8 @@ npcList.classList.add('npc');
 }
 
 function createPlayerItem(playerName) {
-  const playerItem = document.createElement('li');
+  const playerItem = document.createElement("li");
   playerItem.textContent = playerName;
-  playerItem.classList.add('player');
+  playerItem.classList.add("player");
   return playerItem;
 }
