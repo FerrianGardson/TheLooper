@@ -881,7 +881,7 @@ h2:not(:first-of-type) {
   color: var(--ocean-blue);
 }
 
-.ligjt-blue {
+.light-blue {
   color: var(--light-blue);
 }
 .green {
@@ -931,7 +931,7 @@ p.story .speech {
 }
 
 .yell span.player {
-  color: var(--red);
+  /* color: var(--red); */
   font-weight: bold;
 }
 

@@ -32,6 +32,16 @@ const randomColors = [
   "warrior",
   "hunter",
   "rogue",
+  "yellow",
+  "red",
+  "green",
+  "blue",
+  "ocean-blue",
+  "light-blue",
+  "orange",
+  "purple",
+  "purple-2",
+  "purple-3",
   "random-1",
   "random-2",
   "random-3",
@@ -1673,16 +1683,11 @@ function colorizePlayers() {
     if (playerInfo) {
       // Если у игрока есть определенный цвет, используем его
       colorClass = playerInfo[1];
-      console.log(
-        `У игрока "${playerName}" есть определенный цвет: ${colorClass}`
-      );
+      //console.log( `У игрока "${playerName}" есть определенный цвет: ${colorClass}` );
     } else {
       // Если у игрока нет определенного цвета, выбираем цвет из массива randomColors по порядку
       colorClass = randomColors[colorIndex % randomColors.length];
-      console.log(
-        `У игрока "${playerName}" нет определенного цвета. Присваиваем цвет из списка случайных цветов: ${colorClass}`
-      );
-      colorIndex++; // Увеличиваем индекс цвета для следующего игрока
+      //console.log( `У игрока "${playerName}" нет определенного цвета. Присваиваем цвет из списка случайных цветов: ${colorClass}` ); colorIndex++; // Увеличиваем индекс цвета для следующего игрока
     }
 
     // Применяем выбранный цвет к игроку
@@ -1727,23 +1732,44 @@ function addSpaceToEmotePlayers() {
 }
 
 function synchronizePlayerColors() {
-  const contentPlayers = document.querySelectorAll(".content .player");
-  const actorPlayers = document.querySelectorAll(".actors .player");
+  // Находим все блоки .chapters
+  const chapters = document.querySelectorAll("div.chapter");
+  console.log('chapters: ', chapters);
 
-  // Проходимся по каждому игроку в .content
-  contentPlayers.forEach((contentPlayer) => {
-    const playerName = contentPlayer.textContent.trim();
+  // Создаем карту для сопоставления текста и второго класса
+  const playerColorMap = new Map();
 
-    // Ищем цвет игрока в .actors
-    actorPlayers.forEach((actorPlayer) => {
-      if (actorPlayer.textContent.trim() === playerName) {
-        // Применяем цвет игрока из .actors к игроку в .content
-        const actorColorClass = Array.from(actorPlayer.classList).find(
-          (className) =>
-            playerData.hasOwnProperty(className) ||
-            randomColors.includes(className)
-        );
-        contentPlayer.classList.add(actorColorClass);
+  // Проходимся по каждому блоку .chapters
+  chapters.forEach((chapter) => {
+    // Получаем все элементы .actors li.player в текущем .chapter
+    const actorsPlayers = chapter.querySelectorAll(".actors li.player");
+    console.log('actorsPlayers: ', actorsPlayers);
+
+    // Проходимся по каждому элементу .actors li.player
+    actorsPlayers.forEach((actorPlayer) => {
+      // Получаем текст и второй класс элемента .player
+      const playerName = actorPlayer.textContent.trim();
+      const secondClass = Array.from(actorPlayer.classList)[1];
+
+      // Добавляем сопоставление текста и второго класса в карту
+      playerColorMap.set(playerName, secondClass);
+    });
+
+    // Выводим карту сопоставления в консоль для отладки
+    console.log("Карта сопоставления:", playerColorMap);
+
+    // Применяем цветовые классы ко всем .content > player в этом .chapter
+    const contentPlayers = chapter.querySelectorAll(".content .player");
+    contentPlayers.forEach((contentPlayer) => {
+      // Получаем текст элемента .player
+      const playerName = contentPlayer.textContent.trim();
+
+      // Получаем второй класс из карты сопоставления
+      const secondClass = playerColorMap.get(playerName);
+
+      // Если второй класс найден, применяем его к элементу .player
+      if (secondClass) {
+        contentPlayer.classList.add(secondClass);
       }
     });
   });
@@ -1779,19 +1805,17 @@ function updateTimeAndActors() {
   actorsDivs.forEach((actorsDiv) => {
     actorsDiv.remove();
   });
-
   const spans = document.querySelectorAll(
     "span.comma, span.dot, span.space, span.column"
   );
   spans.forEach((span) => {
     span.remove();
   });
-  // Время
   addTimeToChapter();
   // Список игроков
   playerList();
-  // Раскраска
   colorizePlayers();
+  synchronizePlayerColors();
   addColumnToPlayers();
   addSpaceToEmotePlayers();
   addCommaAndDot();
