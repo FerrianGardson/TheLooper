@@ -1,5 +1,150 @@
 let combineDelay = 2 * 1000;
 
+// Карта цветов
+const playerColorMap = {
+  Фэрриан: "blue-3",
+  Малет: "blue",
+  Роуз: "orange",
+  Аммель: "orange",
+  Маларон: "orange",
+  Ананита: "green",
+  Жуль: "red",
+  Хейвинд: "red",
+  Фуффис: "green",
+  Киббл: "green",
+  Лезинг: "orange",
+  Сырорезка: "yellow",
+  Санриэль: "yellow",
+  Дерек: "red",
+  Хильда: "blue",
+  Кэролай: "red",
+  Сахаджи: "yellow",
+  Винтеза: "green",
+  Сэнди: "yellow",
+  Хьюз: "yellow",
+};
+
+// Карта фамилий
+const surnameMap = {
+  Фэрриан: "Фэрриан Гардсон",
+  Сырорезка: "Джулианна Франческа Третья Златошпун",
+  Аммель: "Рэдрик Аммель",
+  Малет: "Малет Трант",
+  Дезертир: "Герман Шульц",
+  Ошберт: "Осберт Осбертсон",
+  Роуз: "Арчибальд Роуз",
+  Плут: "Винсент Сазерлэнд",
+  Ананита: "Ананита Астор",
+  Хофманн: "Карл Хофманн",
+  Штрих: "Олдиус Лоне",
+  Асмелт: "Асмелт Фьюри",
+  Бель: "Бель Сеймур",
+  Бернд: "Бернд Дженкинс",
+  Мариам: "Мариам Метревели",
+  Кристофер: "Кристофер Стротман",
+  Эндэрд: "Киллиан Эндэрд",
+  Готт: "Готт Айландер",
+  Алрой: "Алрой Джонсон",
+  Брандур: "Брандур Сталехват",
+  Браен: "Браен Бёрк",
+  Маларон: "Мал’арон Берёзовый Лист",
+  Шенн: "Шенн Вельт",
+  Джэф: "Джэфри Майер",
+  Пачек: "Офелия Пачек",
+  Иван: "Иван де Жильбер",
+  Мидас: "Мидас Грейт",
+  Хауэр: "Старшина Хауэр",
+  Кейти: "Кейти Сазерлэнд",
+  Каторжник: "Рой Редвуд",
+  Кариночка: "Слепая",
+  Дезертир: "Герман Шульц",
+  Дезертир: "Герман Шульц",
+  Дезертир: "Герман Шульц",
+  Дезертир: "Герман Шульц",
+  Дезертир: "Герман Шульц",
+  // Добавьте другие сопоставления сюда
+};
+
+// Карта цветов
+const colors = [
+  "red",
+  "green",
+  "blue",
+  "blue-1",
+  "blue-2",
+  "blue-3",
+  "yellow",
+  "orange",
+  "purple",
+  "purple-1",
+  "purple-2",
+  "purple-3",
+  "white",
+  "whisper",
+  "random-1",
+  "random-2",
+  "random-3",
+  "random-4",
+  "random-5",
+  "random-6",
+  "random-7",
+  "random-8",
+  "random-9",
+  "random-10",
+  "random-11",
+  "random-12",
+  "random-13",
+  "random-14",
+  "random-15",
+  "random-16",
+  "random-17",
+  "random-18",
+  "random-19",
+  "random-20",
+  "random-21",
+  "random-22",
+  "random-23",
+  "random-24",
+  "random-25",
+  "random-26",
+  "random-27",
+  "random-28",
+];
+
+
+// Карта НПС
+const npcNames = {
+  Гнолл: true,
+  Баззерс: true,
+  Охранник: true,
+  Стражник: true,
+  Богачка: true,
+  Богач: true,
+  Рыбак: true,
+  Бедняк: true,
+  Рыболов: true,
+  Повар: true,
+  Бармен: true,
+  Разнорабочий: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  "Гоблин-телохранитель": true,
+  "Гоблин-телохранитель": true,
+  "Гоблин-телохранитель": true,
+  "Гоблин-телохранитель": true,
+  "Гоблин-телохранитель": true,
+  "Гоблин-телохранитель": true,
+  "Гоблин-телохранитель": true,
+  "Гоблин-телохранитель": true,
+  "Гоблин-телохранитель": true,
+  "Гоблин-телохранитель": true,
+  "Гоблин-телохранитель": true,
+  // Добавьте другие имена NPC сюда
+};
+
 function calculateTimeDifference() {
   const now = new Date(); // Получаем текущее местное время
   localOffset = now.getTimezoneOffset(); // Получаем смещение текущего часового пояса относительно UTC
@@ -29,19 +174,15 @@ function formatHTML() {
   splitSessions();
   wrapChapters();
   scrollToStart();
-  colorizePlayers(playerColorMap);
   combineFunctions();
   emoteTosay();
   sayToEmote();
   chapterReverse();
   virt();
   removeDMPlayers();
-  replaceSurnames();
-  addCommaOrDot();
-  addColonToEnd();
-  addSpaceToEndOfPlayers();
   addTimeToChapter();
   findLoglinesAndConvertToTranscript();
+  replaceSurnames();
   // $(".logline.story span.player").remove();
 
   throw new Error("Скрипт прерван");
@@ -347,45 +488,6 @@ function renderChatLog(text) {
   formatLog();
 }
 
-// Список игроков
-
-function addCommaOrDot() {
-  // Находим все элементы с классом "players"
-  const playersContainers = document.querySelectorAll(".players, .npc");
-  // Проходимся по каждому элементу с классом "players"
-  playersContainers.forEach((container) => {
-    // Находим элементы с классом "player" внутри текущего контейнера
-    const players = container.querySelectorAll(".player");
-    // Проходимся по каждому элементу
-    players.forEach((player, index) => {
-      // Добавляем запятую, если это не последний элемент
-      if (index < players.length - 1) {
-        player.textContent += ",";
-      } else {
-        // Или добавляем точку, если это последний элемент
-        player.textContent += ".";
-      }
-    });
-  });
-}
-// Двоеточие после ников
-
-function addColonToEnd() {
-  // Находим все элементы с классом "logline", исключая "emote" и "whisper"
-  const loglines = document.querySelectorAll(
-    ".logline.say, .logline.virt, .logline.yell"
-  );
-  // Проходимся по каждому элементу с классом "logline"
-  loglines.forEach((logline) => {
-    // Находим элементы с классом "player" внутри текущего элемента
-    const players = logline.querySelectorAll(".player");
-    // Проходимся по каждому элементу
-    players.forEach((player) => {
-      // Добавляем двоеточие в конце текста элемента
-      player.textContent += ":";
-    });
-  });
-}
 // Чистка от мусора
 
 function cleanText() {
@@ -590,109 +692,55 @@ function combineSay(spanType) {
   }
 }
 
-// Список игроков
 
-const colors = [
-  "red",
-  "green",
-  "blue",
-  "blue-1",
-  "blue-2",
-  "blue-3",
-  "yellow",
-  "orange",
-  "purple",
-  "purple-1",
-  "purple-2",
-  "purple-3",
-  "white",
-  "whisper",
-  "random-1",
-  "random-2",
-  "random-3",
-  "random-4",
-  "random-5",
-  "random-6",
-  "random-7",
-  "random-8",
-  "random-9",
-  "random-10",
-  "random-11",
-  "random-12",
-  "random-13",
-  "random-14",
-  "random-15",
-  "random-16",
-  "random-17",
-  "random-18",
-  "random-19",
-  "random-20",
-  "random-21",
-  "random-22",
-  "random-23",
-  "random-24",
-  "random-25",
-  "random-26",
-  "random-27",
-  "random-28",
-];
 
-const npcNames = {
-  Гнолл: true,
-  Баззерс: true,
-  Охранник: true,
-  Стражник: true,
-  Богачка: true,
-  Богач: true,
-  Рыбак: true,
-  Бедняк: true,
-  Рыболов: true,
-  Повар: true,
-  Бармен: true,
-  Разнорабочий: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  // Добавьте другие имена NPC сюда
-};
+// Создание обратного объекта для замены имен обратно на исходные
+const reverseSurnameMap = {};
+for (const [key, value] of Object.entries(surnameMap)) {
+  reverseSurnameMap[value] = key;
+}
+
+
+function updatePlayers() {
+  // Находим все элементы div с классом "actors" и удаляем их
+  const actorsDivs = document.querySelectorAll("div.actors");
+  actorsDivs.forEach((div) => {
+    div.parentNode.removeChild(div);
+  });
+
+  // Обратная замена имен по surnameMap
+  const playerSpans = document.querySelectorAll(".player");
+  playerSpans.forEach((span) => {
+    const playerName = span.textContent.trim();
+    const originalName = reverseSurnameMap[playerName];
+    if (originalName) {
+      span.textContent = originalName;
+    }
+  });
+
+  colorizePlayers(playerColorMap);
+  replaceSurnames();
+}
+
+
 
 function colorizePlayers(playerColorMap) {
   const playerColors = {};
   const chapters = document.querySelectorAll(".chapter");
 
-  // Выборка игроков
+  // Обработка каждой главы
   chapters.forEach((chapter) => {
     const playerSpans = chapter.querySelectorAll(
       ".logline.say .player, .logline.virt .player"
     );
 
+    // Обработка каждого игрока
     playerSpans.forEach((span, index) => {
       const playerName = span.textContent.trim();
       let colorClass;
 
-      const playerNameParts = playerName.split(" ");
-      colorClass =
-        // playerColorMap[playerName] || // Если удалит
-        playerColors[playerName] || // Если удалить, у одного и того же игрока не из списка становится рандомный цвет
-        (playerColors[playerName] = getColorClass(index)); // Если удалить, вообще цвета не применяются
-
       span.classList.remove(...colors);
       span.classList.add(colorClass);
-      //console.log('playerName:', playerName);
-      //console.log('colorClass:', colorClass);
     });
 
     const uniquePlayers = new Set(
@@ -705,34 +753,34 @@ function colorizePlayers(playerColorMap) {
     const npcList = document.createElement("ul");
     npcList.classList.add("npc");
 
+    // Обработка уникальных игроков
     Array.from(uniquePlayers).forEach((uniquePlayerName, index) => {
       const playerItem = document.createElement("li");
       playerItem.textContent = uniquePlayerName;
       playerItem.className = "player";
 
-      // Добавлен код для обработки имен из нескольких слов
+      // Обработка имен из нескольких слов
       const uniquePlayerNameParts = uniquePlayerName.split(" ");
       const colorClass =
         playerColorMap[uniquePlayerName] ||
         playerColorMap[uniquePlayerNameParts[0]] ||
         playerColors[uniquePlayerName] ||
         getColorClass(index);
-      console.log("uniquePlayerName:", uniquePlayerName);
-      console.log("colorClass:", colorClass);
 
       playerItem.classList.remove(...colors);
       playerItem.classList.add(colorClass);
 
       if (
-        npcNames[uniquePlayerName] ||
-        uniquePlayerNameParts.length > 1 ||
-        uniquePlayerName.includes("-")
-      ) {
-        npcList.appendChild(playerItem);
-      } else {
+        (uniquePlayerNameParts.length === 1 && !npcNames[uniquePlayerName])/*  ||
+        surnameMap[uniquePlayerName] */
+      )
         playerList.appendChild(playerItem);
+      else {
+        npcList.appendChild(playerItem);
       }
     });
+
+    // Создание контейнера для игроков и NPC
     const actorsDiv = document.createElement("div");
     actorsDiv.classList.add("actors");
     chapter.insertBefore(actorsDiv, chapter.firstChild.nextSibling);
@@ -762,77 +810,22 @@ function removeDMPlayers() {
   });
 }
 
-// Карта цветов
-const playerColorMap = {
-  Фэрриан: "blue-3",
-  Малет: "blue",
-  Роуз: "orange",
-  Аммель: "orange",
-  Маларон: "orange",
-  Ананита: "green",
-  Жуль: "red",
-  Хейвинд: "red",
-  Фуффис: "green",
-  Киббл: "green",
-  Лезинг: "orange",
-  Сырорезка: "yellow",
-  Санриэль: "yellow",
-  Дерек: "red",
-  Хильда: "blue",
-  Кэролай: "red",
-  Сахаджи: "yellow",
-  Винтеза: "green",
-  Сэнди: "yellow",
-  Хьюз: "yellow",
-};
-
-const surnameMap = {
-  Фэрриан: "Фэрриан Гардсон",
-  Аммель: "Рэдрик Аммель",
-  Малет: "Малет Трант",
-  Дезертир: "Герман Шульц",
-  Ошберт: "Осберт Осбертсон",
-  Роуз: "Арчибальд Роуз",
-  Плут: "Винсент Сазерлэнд",
-  Ананита: "Ананита Астор",
-  Хофманн: "Карл Хофманн",
-  Штрих: "Олдиус Лоне",
-  Асмелт: "Асмелт Фьюри",
-  Бель: "Бель Сеймур",
-  Бернд: "Бернд Дженкинс",
-  Мариам: "Мариам Метревели",
-  Кристофер: "Кристофер Стротман",
-  Эндэрд: "Киллиан Эндэрд",
-  Готт: "Готт Айландер",
-  Алрой: "Алрой Джонсон",
-  Брандур: "Брандур Сталехват",
-  Браен: "Браен Бёрк",
-  Маларон: "Мал’арон Берёзовый Лист",
-  Шенн: "Шенн Вельт",
-  Джэф: "Джэфри Майер",
-  Пачек: "Офелия Пачек",
-  Иван: "Иван де Жильбер",
-  Мидас: "Мидас Грейт",
-  Хауэр: "Старшина Хауэр",
-  Кейти: "Кейти Сазерлэнд",
-  Каторжник: "Рой Редвуд",
-  Кариночка: "Слепая",
-  Дезертир: "Герман Шульц",
-  Дезертир: "Герман Шульц",
-  Дезертир: "Герман Шульц",
-  Дезертир: "Герман Шульц",
-  Дезертир: "Герман Шульц",
-  // Добавьте другие сопоставления сюда
-};
 
 function replaceSurnames() {
   const playerSpans = document.querySelectorAll(".player");
 
+  // console.log("Найдены элементы .player:", playerSpans);
+
   playerSpans.forEach((span) => {
-    const playerName = span.textContent.trim();
+    let playerName = span.textContent.trim();
+    // console.log("Текущее имя игрока:", playerName);
+
     const fullName = surnameMap[playerName];
+    // console.log("Полное имя для замены:", fullName);
+
     if (fullName) {
       span.textContent = fullName;
+      // console.log("Имя успешно заменено на:", fullName);
     }
   });
 }
@@ -1307,23 +1300,6 @@ function scrollToSelect() {
   }
 }
 
-function addSpaceToEndOfPlayers() {
-  // Находим все элементы <p> с классом "logline"
-  var loglineParagraphs = document.querySelectorAll("p.logline");
-
-  // Проходимся по каждому элементу <p>
-  loglineParagraphs.forEach(function (paragraph) {
-    // Находим все <span> с классом "player" внутри текущего <p>
-    var playerSpans = paragraph.querySelectorAll("span.player");
-
-    // Проходимся по каждому элементу <span> с классом "player"
-    playerSpans.forEach(function (playerSpan) {
-      // Добавляем пробел в конец содержимого элемента <span>
-      playerSpan.textContent += " ";
-    });
-  });
-}
-
 function removeUnselectedLoglines() {
   // Находим все элементы <p> с классом "logline" без класса "selected"
   var unselectedLoglines = document.querySelectorAll(
@@ -1398,6 +1374,7 @@ function addTimeToChapter() {
   });
   //removeShortChapters();
   calculateTotalDuration();
+  updatePlayers();
 }
 
 function processTimestamp() {
