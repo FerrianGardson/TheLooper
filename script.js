@@ -66,7 +66,7 @@ const surNames = {
 };
 
 // Карта цветов
-const colors = [
+const randomColors = [
   "red",
   "green",
   "blue",
@@ -1687,10 +1687,10 @@ function playerList() {
 
   contents.forEach((content) => {
     const players = content.querySelectorAll('.say > .player, .yell > .player, .virt > .player');
-    const playerList = document.createElement('ul');
-    const npcList = document.createElement('ul');
+const playerList = document.createElement('ul');
+const npcList = document.createElement('ul');
     playerList.classList.add('players');
-    npcList.classList.add('npc');
+npcList.classList.add('npc');
 
     players.forEach((player) => {
       const playerName = player.textContent.trim();
