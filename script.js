@@ -2,8 +2,8 @@ let combineDelay = 2 * 1000;
 
 // Карта цветов
 const nameColors = {
-  Фэрриан: "blue-3",
-  Малет: "blue",
+  Фэрриан: "blue",
+  Малет: "ocean-blue",
   Роуз: "orange",
   Аммель: "orange",
   Маларон: "orange",
@@ -16,7 +16,7 @@ const nameColors = {
   Сырорезка: "yellow",
   Санриэль: "yellow",
   Дерек: "red",
-  Хильда: "blue",
+  Хильда: "light-blue",
   Кэролай: "red",
   Сахаджи: "yellow",
   Винтеза: "green",
@@ -67,20 +67,6 @@ const surNames = {
 
 // Карта цветов
 const randomColors = [
-  "red",
-  "green",
-  "blue",
-  "blue-1",
-  "blue-2",
-  "blue-3",
-  "yellow",
-  "orange",
-  "purple",
-  "purple-1",
-  "purple-2",
-  "purple-3",
-  "white",
-  "whisper",
   "random-1",
   "random-2",
   "random-3",
@@ -100,15 +86,6 @@ const randomColors = [
   "random-17",
   "random-18",
   "random-19",
-  "random-20",
-  "random-21",
-  "random-22",
-  "random-23",
-  "random-24",
-  "random-25",
-  "random-26",
-  "random-27",
-  "random-28",
 ];
 
 // Карта НПС
@@ -145,28 +122,6 @@ const npcNames = {
   // Добавьте другие имена NPC сюда
 };
 
-function calculateTimeDifference() {
-  const now = new Date(); // Получаем текущее местное время
-  localOffset = now.getTimezoneOffset(); // Получаем смещение текущего часового пояса относительно UTC
-  localDifference = localOffset / 60; // Переводим смещение в часы
-  moscowDifference = localDifference + 3; // Разница между текущим поясом и московским временем (UTC+3)
-  serverDifference = localDifference + 1; // Разница между текущим поясом и серверным временем (UTC+1)
-  console.log(
-    "Разница между вашим местным временем и UTC (в часах):",
-    localDifference
-  );
-  console.log(
-    "Разница между вашим местным временем и московским временем (в часах):",
-    moscowDifference
-  );
-  console.log(
-    "Разница между вашим местным временем и серверным временем (в часах):",
-    serverDifference
-  );
-}
-
-calculateTimeDifference();
-
 // Главная функция
 
 function formatHTML() {
@@ -179,7 +134,7 @@ function formatHTML() {
   sayToEmote();
   chapterReverse();
   virt();
-  addTimeToChapter();
+  updateTimeAndActors();
   findLoglinesAndConvertToTranscript();
   // $(".logline.story span.player").remove();
 
@@ -1177,7 +1132,7 @@ function addTimeToChapter() {
   chapters.forEach((chapter) => {
     const dateHeader = chapter.querySelector("h2.date");
     const firstParagraph = chapter.querySelector("p[timestamp]:first-of-type");
-    const lastParagraph = chapter.querySelector("p:last-of-type");
+    const lastParagraph = chapter.querySelector("p[timestamp]:last-of-type");
 
     if (dateHeader && firstParagraph && lastParagraph) {
       // Удаляем .starttime и .durationtime, если они уже существуют
@@ -1197,10 +1152,12 @@ function addTimeToChapter() {
 
       // Форматирование времени начала и конца главы
       const startTimeString = formatTime(startTime);
-      const endTimeString = formatTime(endTime);
 
       // Вычисляем продолжительность главы в миллисекундах
       const durationTime = endTime - startTime;
+      //console.log("startTime: ", startTime);
+      //console.log("endTime: ", endTime);
+      //console.log("durationTime: ", durationTime);
       // Переводим продолжительность в часы и минуты
       const durationHours = Math.floor(durationTime / (1000 * 60 * 60));
       const durationMinutes = Math.floor(
@@ -1214,11 +1171,6 @@ function addTimeToChapter() {
       dateHeader.appendChild(startTimeSpan);
       //console.log('На выходе', startTimeString);
 
-      const endTimeSpan = document.createElement("span");
-      endTimeSpan.classList.add("endtime");
-      endTimeSpan.textContent = ` ${endTimeString}`;
-      dateHeader.appendChild(endTimeSpan);
-
       const durationTimeSpan = document.createElement("span");
       durationTimeSpan.classList.add("durationtime");
       durationTimeSpan.textContent = ` (${durationHours}ч ${durationMinutes}мин)`;
@@ -1227,14 +1179,30 @@ function addTimeToChapter() {
         `${durationHours}:${durationMinutes}`
       );
       dateHeader.appendChild(durationTimeSpan);
-
-      // Удаляем .endtime
-      endTimeSpan.remove();
     }
   });
   //removeShortChapters();
   calculateTotalDuration();
-  playerList();
+}
+
+function calculateTimeDifference() {
+  const now = new Date(); // Получаем текущее местное время
+  localOffset = now.getTimezoneOffset(); // Получаем смещение текущего часового пояса относительно UTC
+  localDifference = localOffset / 60; // Переводим смещение в часы
+  moscowDifference = localDifference + 3; // Разница между текущим поясом и московским временем (UTC+3)
+  serverDifference = localDifference + 1; // Разница между текущим поясом и серверным временем (UTC+1)
+  console.log(
+    "Разница между вашим местным временем и UTC (в часах):",
+    localDifference
+  );
+  console.log(
+    "Разница между вашим местным временем и московским временем (в часах):",
+    moscowDifference
+  );
+  console.log(
+    "Разница между вашим местным временем и серверным временем (в часах):",
+    serverDifference
+  );
 }
 
 function processTimestamp() {
@@ -1494,7 +1462,7 @@ function deleteBefore() {
       siblingToRemove.remove();
     }
   });
-  addTimeToChapter();
+  updateTimeAndActors();
 }
 
 function deleteAfter() {
@@ -1508,7 +1476,23 @@ function deleteAfter() {
       siblingToRemove.remove();
     }
   });
+  updateTimeAndActors();
+}
+
+function updateTimeAndActors() {
+  // Раскраска
+  colorizePlayers()
+  // Сброс
+
+  const actorsDiv = document.querySelector("div.actors");
+  if (actorsDiv) {
+    actorsDiv.remove();
+  }
+
+  // Время
   addTimeToChapter();
+  // Список игроков
+  playerList();
 }
 
 function startWrap() {
@@ -1693,15 +1677,17 @@ function createPlayerItem(playerName) {
 // Функция для формирования списков игроков
 function playerList() {
   const contents = document.querySelectorAll(".content");
-
   contents.forEach((content) => {
     const players = content.querySelectorAll(
       ".say > .player, .yell > .player, .virt > .player"
     );
+    const actorsDiv = document.createElement("div");
     const playerList = document.createElement("ul");
     const npcList = document.createElement("ul");
     playerList.classList.add("players");
     npcList.classList.add("npc");
+    actorsDiv.classList.add("actors");
+    content.parentNode.insertBefore(actorsDiv, content);
 
     players.forEach((player) => {
       const playerName = player.textContent.trim();
@@ -1721,13 +1707,9 @@ function playerList() {
         uniquePlayers.add(playerName); // Добавляем имя игрока во множество уникальных имен
       }
     });
-
-    const actorsDiv = document.createElement("div");
-    actorsDiv.classList.add("actors");
-    content.parentNode.insertBefore(actorsDiv, content);
     actorsDiv.appendChild(playerList);
     actorsDiv.appendChild(npcList);
-    colorizePlayers();
+    uniquePlayers.clear();
   });
 }
 
@@ -1736,12 +1718,29 @@ function colorizePlayers() {
   const playerSpans = document.querySelectorAll(".actors .player");
   playerSpans.forEach((span) => {
     const playerName = span.textContent.trim();
-    const colorClass =
-      nameColors[playerName] ||
-      randomColors[Math.floor(Math.random() * randomColors.length)];
+    let colorClass;
+
+    // Проверяем, есть ли у игрока определенный цвет
+    if (nameColors[playerName]) {
+      colorClass = nameColors[playerName];
+      console.log(
+        `У игрока "${playerName}" есть определенный цвет: ${colorClass}`
+      );
+      delete nameColors[playerName]; // Удаляем выбранный цвет из nameColors
+    } else {
+      // Если у игрока нет определенного цвета, выбираем случайный из randomColors
+      const randomIndex = Math.floor(Math.random() * randomColors.length);
+      colorClass = randomColors[randomIndex];
+      console.log(
+        `У игрока "${playerName}" нет определенного цвета. Присваиваем случайный цвет: ${colorClass}`
+      );
+      randomColors.splice(randomIndex, 1); // Удаляем выбранный цвет из randomColors
+    }
+
+    // Применяем выбранный цвет к игроку
     span.classList.add(colorClass);
   });
-  synchronizePlayerColors();
+  //synchronizePlayerColors();
 }
 
 function synchronizePlayerColors() {

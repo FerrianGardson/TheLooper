@@ -723,14 +723,12 @@ p.logline {
 :root {
   --red: #dd403aff;
   --green: #00ac48;
-  --blue: var(--blue-3);
-  --blue-1: #43c59eff;
-  --blue-2: #5398beff;
-  --blue-3: #0a74ec;
+  --blue: #0a74ec;
+  --light-blue: #5398beff;
+  --ocean-blue: #43c59eff;
   --yellow: #ffd914;
   --orange: #f18f01ff;
-  --purple: var(--purple-1);
-  --purple-1: #4f4789ff;
+  --purple: #4f4789ff;
   --purple-2: #6420ff;
   --purple-3: #ae5eff;
   --white: white;
@@ -743,61 +741,61 @@ p.logline {
 }
 
 .random-1 {
-  color: #ff69b4;
+  color: #9b2226;
 }
 .random-2 {
-  color: #00ffff;
+  color: #ae2012;
 }
 .random-3 {
-  color: #00ff00;
+  color: #bb3e03;
 }
 .random-4 {
-  color: #ff00ff;
+  color: #ca6702;
 }
 .random-5 {
-  color: #ffd700;
+  color: #ee9b00;
 }
 .random-6 {
-  color: #87ceeb;
+  color: #e9d8a6;
 }
 .random-7 {
-  color: #ff7f50;
+  color: #94d2bd;
 }
 .random-8 {
-  color: #8a2be2;
+  color: #0a9396;
 }
 .random-9 {
-  color: #40e0d0;
+  color: #005f73;
 }
 .random-10 {
-  color: #7fffd4;
+  color: #f94144;
 }
 .random-11 {
-  color: #da70d6;
+  color: #f3722c;
 }
 .random-12 {
-  color: #ff6347;
+  color: #f8961e;
 }
 .random-13 {
-  color: #fa8072;
+  color: #f9844a;
 }
 .random-14 {
-  color: #e6e6fa;
+  color: #f9c74f;
 }
 .random-15 {
-  color: #f0e68c;
+  color: #90be6d;
 }
 .random-16 {
-  color: #d8bfd8;
+  color: #43aa8b;
 }
 .random-17 {
-  color: #b22222;
+  color: #4d908e;
 }
 .random-18 {
-  color: #4b0082;
+  color: #577590;
 }
 .random-19 {
-  color: #00ff7f;
+  color: #277da1;
 }
 .random-20 {
   color: #ff1493;
@@ -841,26 +839,24 @@ h2:not(:first-of-type) {
 .red {
   color: var(--red);
 }
+
+.ocean-blue {
+  color: var(--ocean-blue);
+}
+
+.ligjt-blue {
+  color: var(--light-blue);
+}
 .green {
   color: var(--green);
 }
-.blue-1 {
-  color: var(--blue-1);
-}
-.blue-2 {
-  color: var(--blue-2);
-}
-.blue-3,
-.blue {
-  color: var(--blue-3);
-}
+
 .yellow {
   color: var(--yellow);
 }
 .orange {
   color: var(--orange);
 }
-.purple-1,
 .purple {
   color: var(--purple-1);
 }
