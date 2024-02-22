@@ -12,22 +12,24 @@
       type="text/css"
     />
     <link
-      class="local style noble"
+      class="local style NobleGarden"
       rel="stylesheet"
-      href="./noble.css"
+      href="./noblegarden.css"
       type="text/css"
+      disabled=""
     />
+
     <link
-      class="local style sixthtroop"
+      class="local style SixthTroop"
       rel="stylesheet"
-      href="./sixthtroop.css"
+      href="./SixthTroop.css"
       type="text/css"
       disabled=""
     />
     <link
-      class="local style cheesecutter"
+      class="local style CheeseCutter"
       rel="stylesheet"
-      href="./cheesecutter.css"
+      href="./CheeseCutter.css"
       type="text/css"
       disabled=""
     />
@@ -44,69 +46,37 @@
       href="https://cbipope3ka.github.io/TheLooper/noble.css"
       type="text/css"
     />
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
-    </style>
   </head>
-
   <script>
-    // Переключатель стиля для базового стиля
-    const baseStyleLink = document.querySelector(".style.base");
-    // Переключатель стиля для шестого взвода
-    const sixthTroopStyleLink = document.querySelector(".style.sixthtroop");
-    // Переключатель стиля для Сырорезки
-    const cheeseStyleLink = document.querySelector(".style.cheesecutter");
-  
-    // Получаем чекбоксы
-    const baseCheckbox = document.getElementById("cssBase");
-    const sixthTroopCheckbox = document.getElementById("cssSixthTroop");
-    const cheeseCheckbox = document.getElementById("cssCheese");
-  
-    // Функция для отключения всех чекбоксов, кроме чекбокса для Нобла
-    function disableAllExceptNob() {
-      baseCheckbox.checked = false;
-      sixthTroopCheckbox.checked = false;
-      cheeseCheckbox.checked = false;
+    function toggleStylesheet(className) {
+      const styleLinks = document.querySelectorAll(`.style.${className}`);
+      styleLinks.forEach((link) => {
+        if (link.disabled) {
+          link.disabled = false;
+        } else {
+          link.disabled = true;
+        }
+      });
     }
-  
-    // Отключаем все чекбоксы, кроме чекбокса для Нобла
-    disableAllExceptNob();
-  
-    // Добавляем обработчик события change к чекбоксам
-    baseCheckbox.addEventListener("change", function () {
-      // Если чекбокс отмечен, включаем стиль, иначе выключаем
-      if (this.checked) {
-        // Включаем стиль
-        baseStyleLink.removeAttribute("disabled");
-      } else {
-        // Выключаем стиль
-        baseStyleLink.setAttribute("disabled", "");
-      }
-    });
-  
-    sixthTroopCheckbox.addEventListener("change", function () {
-      // Если чекбокс отмечен, включаем стиль, иначе выключаем
-      if (this.checked) {
-        // Включаем стиль
-        sixthTroopStyleLink.removeAttribute("disabled");
-      } else {
-        // Выключаем стиль
-        sixthTroopStyleLink.setAttribute("disabled", "");
-      }
-    });
-  
-    cheeseCheckbox.addEventListener("change", function () {
-      // Если чекбокс отмечен, включаем стиль, иначе выключаем
-      if (this.checked) {
-        // Включаем стиль
-        cheeseStyleLink.removeAttribute("disabled");
-      } else {
-        // Выключаем стиль
-        cheeseStyleLink.setAttribute("disabled", "");
-      }
-    });
   </script>
-  
+    <div class="styles-container">
+      <div>
+        <input type="checkbox" id="baseCheckbox" onchange="toggleStylesheet('base')">
+        <label for="baseCheckbox">Base</label>
+      </div>
+      <div>
+        <input type="checkbox" id="nobleGardenCheckbox" onchange="toggleStylesheet('NobleGarden')">
+        <label for="nobleGardenCheckbox">Noble Garden</label>
+      </div>
+      <div>
+        <input type="checkbox" id="sixthTroopCheckbox" onchange="toggleStylesheet('SixthTroop')">
+        <label for="sixthTroopCheckbox">Sixth Troop</label>
+      </div>
+      <div>
+        <input type="checkbox" id="cheeseCutterCheckbox" onchange="toggleStylesheet('CheeseCutter')">
+        <label for="cheeseCutterCheckbox">Cheese Cutter</label>
+      </div>
+    </div>
 
   <body style="margin: 0; height: 100vh; overflow: hidden">
     <div class="nav">
@@ -231,8 +201,7 @@
         <div class="css hide group">
           <button class="show replace no-hover">CSS</button>
           <div class="tumbler input checkbox tooltip hide" tooltip="Подсказка">
-            <input type="checkbox" id="cssBase" checked="" /><label
-              for="cssBase"
+            <input type="checkbox" id="cssBase" /><label for="cssBase"
               >База</label
             >
           </div>
@@ -240,14 +209,14 @@
             class="tumbler input checkbox tooltip hide"
             tooltip="Шестой взвод"
           >
-            <input type="checkbox" id="cssSixthTroop" checked="" /><label
+            <input type="checkbox" id="cssSixthTroop" /><label
               for="cssSixthTroop"
               >Шестой Взвод</label
             >
           </div>
           <div class="tumbler input checkbox tooltip hide" tooltip="Сырорезка">
-            <input type="checkbox" id="cssCheese" checked="" /><label
-              for="cssCheese"
+            <input type="checkbox" id="cssCheeseCutter" /><label
+              for="cssCheeseCutter"
               >Гномий Глас</label
             >
           </div>

@@ -342,3 +342,12 @@ input:focus-visible {
   overflow: hidden;
   padding-bottom: 4rem;
 }
+
+.styles-container {
+  position: fixed;
+  top: 130px;
+  left: 45%;
+  z-index:10;
+  background: #000000e0;
+  padding: 1rem;
+}
