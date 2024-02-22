@@ -18,7 +18,6 @@ const playerData = [
   // Добавьте другие позиции согласно вашим данным
 ];
 
-
 // Карта цветов
 const randomColors = [
   "demon-hunter",
@@ -1445,20 +1444,6 @@ function deleteAfter() {
   updateTimeAndActors();
 }
 
-function updateTimeAndActors() {
-  // Сброс
-  const actorsDiv = document.querySelector("div.actors");
-  if (actorsDiv) {
-    actorsDiv.remove();
-  }
-  // Время
-  addTimeToChapter();
-  // Список игроков
-  playerList();
-  // Раскраска
-  colorizePlayers();
-}
-
 function startWrap() {
   const contentChild = document.querySelector(".content > :hover");
   if (contentChild) {
@@ -1642,9 +1627,7 @@ function createPlayerItem(playerName) {
 function playerList() {
   const contents = document.querySelectorAll(".content");
   contents.forEach((content) => {
-    const players = content.querySelectorAll(
-      ".say > .player, .yell > .player, .virt > .player"
-    );
+    const players = content.querySelectorAll(talkingPlayer);
     const actorsDiv = document.createElement("div");
     const playerList = document.createElement("ul");
     const npcList = document.createElement("ul");
@@ -1708,6 +1691,40 @@ function colorizePlayers() {
   //synchronizePlayerColors();
 }
 
+// Глобальная переменная для выбора всех элементов .player внутри .say, .yell и .virt
+const talkingPlayer = ".say > .player, .yell > .player, .virt > .player";
+
+function addColumnToPlayers() {
+  const contents = document.querySelectorAll(".content");
+
+  contents.forEach((content) => {
+    const players = content.querySelectorAll(talkingPlayer);
+
+    players.forEach((player) => {
+      const columnSpan = document.createElement("span");
+      columnSpan.classList.add("column");
+      columnSpan.textContent = ": ";
+
+      player.appendChild(columnSpan);
+    });
+  });
+}
+
+function addSpaceToEmotePlayers() {
+  const contents = document.querySelectorAll(".content");
+
+  contents.forEach((content) => {
+    const emotePlayers = content.querySelectorAll(".emote > .player");
+
+    emotePlayers.forEach((player) => {
+      const spaceSpan = document.createElement("span");
+      spaceSpan.classList.add("space");
+      spaceSpan.textContent = " ";
+
+      player.appendChild(spaceSpan);
+    });
+  });
+}
 
 function synchronizePlayerColors() {
   const contentPlayers = document.querySelectorAll(".content .player");
@@ -1730,4 +1747,52 @@ function synchronizePlayerColors() {
       }
     });
   });
+}
+
+function addCommaAndDot() {
+  const actorsDivs = document.querySelectorAll("div.actors");
+
+  actorsDivs.forEach((actorsDiv) => {
+    const actors = actorsDiv.querySelectorAll("li.player");
+    const lastActorIndex = actors.length - 1;
+
+    actors.forEach((actor, index) => {
+      const commaSpan = document.createElement("span");
+      commaSpan.classList.add("comma");
+      commaSpan.textContent = ",";
+      actor.appendChild(commaSpan);
+
+      if (index === lastActorIndex) {
+        commaSpan.remove();
+        const dotSpan = document.createElement("span");
+        dotSpan.classList.add("dot");
+        dotSpan.textContent = ".";
+        actor.appendChild(dotSpan);
+      }
+    });
+  });
+}
+
+function updateTimeAndActors() {
+  // Сброс
+  const actorsDivs = document.querySelectorAll("div.actors");
+  actorsDivs.forEach((actorsDiv) => {
+    actorsDiv.remove();
+  });
+
+  const spans = document.querySelectorAll(
+    "span.comma, span.dot, span.space, span.column"
+  );
+  spans.forEach((span) => {
+    span.remove();
+  });
+  // Время
+  addTimeToChapter();
+  // Список игроков
+  playerList();
+  // Раскраска
+  colorizePlayers();
+  addColumnToPlayers();
+  addSpaceToEmotePlayers();
+  addCommaAndDot();
 }
