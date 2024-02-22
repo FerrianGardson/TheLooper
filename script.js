@@ -1,7 +1,7 @@
 let combineDelay = 2 * 1000;
 
 // Карта цветов
-const playerColorMap = {
+const nameColors = {
   Фэрриан: "blue-3",
   Малет: "blue",
   Роуз: "orange",
@@ -25,7 +25,7 @@ const playerColorMap = {
 };
 
 // Карта фамилий
-const surnameMap = {
+const surNames = {
   Фэрриан: "Фэрриан Гардсон",
   Сырорезка: "Джулианна Франческа Третья Златошпун",
   Аммель: "Рэдрик Аммель",
@@ -131,17 +131,18 @@ const npcNames = {
   Богач: true,
   Богач: true,
   Богач: true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
-  "Гоблин-телохранитель": true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true
+
   // Добавьте другие имена NPC сюда
 };
 
@@ -179,10 +180,8 @@ function formatHTML() {
   sayToEmote();
   chapterReverse();
   virt();
-  removeDMPlayers();
   addTimeToChapter();
   findLoglinesAndConvertToTranscript();
-  replaceSurnames();
   // $(".logline.story span.player").remove();
 
   throw new Error("Скрипт прерван");
@@ -690,144 +689,6 @@ function combineSay(spanType) {
     currentPlayerElement = "";
     currentSayElement = "";
   }
-}
-
-
-
-// Создание обратного объекта для замены имен обратно на исходные
-const reverseSurnameMap = {};
-for (const [key, value] of Object.entries(surnameMap)) {
-  reverseSurnameMap[value] = key;
-}
-
-
-function updatePlayers() {
-  // Находим все элементы div с классом "actors" и удаляем их
-  const actorsDivs = document.querySelectorAll("div.actors");
-  actorsDivs.forEach((div) => {
-    div.parentNode.removeChild(div);
-  });
-
-  // Обратная замена имен по surnameMap
-  const playerSpans = document.querySelectorAll(".player");
-  playerSpans.forEach((span) => {
-    const playerName = span.textContent.trim();
-    const originalName = reverseSurnameMap[playerName];
-    if (originalName) {
-      span.textContent = originalName;
-    }
-  });
-
-  colorizePlayers(playerColorMap);
-  replaceSurnames();
-}
-
-
-
-function colorizePlayers(playerColorMap) {
-  const playerColors = {};
-  const chapters = document.querySelectorAll(".chapter");
-
-  // Обработка каждой главы
-  chapters.forEach((chapter) => {
-    const playerSpans = chapter.querySelectorAll(
-      ".logline.say .player, .logline.virt .player"
-    );
-
-    // Обработка каждого игрока
-    playerSpans.forEach((span, index) => {
-      const playerName = span.textContent.trim();
-      let colorClass;
-
-      span.classList.remove(...colors);
-      span.classList.add(colorClass);
-    });
-
-    const uniquePlayers = new Set(
-      Array.from(playerSpans).map((span) => span.textContent.trim())
-    );
-
-    const playerList = document.createElement("ul");
-    playerList.classList.add("players");
-
-    const npcList = document.createElement("ul");
-    npcList.classList.add("npc");
-
-    // Обработка уникальных игроков
-    Array.from(uniquePlayers).forEach((uniquePlayerName, index) => {
-      const playerItem = document.createElement("li");
-      playerItem.textContent = uniquePlayerName;
-      playerItem.className = "player";
-
-      // Обработка имен из нескольких слов
-      const uniquePlayerNameParts = uniquePlayerName.split(" ");
-      const colorClass =
-        playerColorMap[uniquePlayerName] ||
-        playerColorMap[uniquePlayerNameParts[0]] ||
-        playerColors[uniquePlayerName] ||
-        getColorClass(index);
-
-      playerItem.classList.remove(...colors);
-      playerItem.classList.add(colorClass);
-
-      if (
-        (uniquePlayerNameParts.length === 1 && !npcNames[uniquePlayerName])/*  ||
-        surnameMap[uniquePlayerName] */
-      )
-        playerList.appendChild(playerItem);
-      else {
-        npcList.appendChild(playerItem);
-      }
-    });
-
-    // Создание контейнера для игроков и NPC
-    const actorsDiv = document.createElement("div");
-    actorsDiv.classList.add("actors");
-    chapter.insertBefore(actorsDiv, chapter.firstChild.nextSibling);
-
-    actorsDiv.appendChild(playerList);
-    actorsDiv.appendChild(npcList);
-  });
-}
-
-function getColorClass(index) {
-  return colors[index % colors.length];
-}
-
-function removeDMPlayers() {
-  const dmsMap = {
-    Фг: true,
-    Кей: true,
-    // Добавьте другие имена DM сюда
-  };
-
-  const playerItems = document.querySelectorAll(".player");
-  playerItems.forEach((playerItem) => {
-    const playerName = playerItem.textContent.trim();
-    if (dmsMap[playerName]) {
-      playerItem.parentNode.removeChild(playerItem);
-    }
-  });
-}
-
-
-function replaceSurnames() {
-  const playerSpans = document.querySelectorAll(".player");
-
-  // console.log("Найдены элементы .player:", playerSpans);
-
-  playerSpans.forEach((span) => {
-    let playerName = span.textContent.trim();
-    // console.log("Текущее имя игрока:", playerName);
-
-    const fullName = surnameMap[playerName];
-    // console.log("Полное имя для замены:", fullName);
-
-    if (fullName) {
-      span.textContent = fullName;
-      // console.log("Имя успешно заменено на:", fullName);
-    }
-  });
 }
 
 function sayToEmote() {
@@ -1374,7 +1235,7 @@ function addTimeToChapter() {
   });
   //removeShortChapters();
   calculateTotalDuration();
-  updatePlayers();
+  playerList();
 }
 
 function processTimestamp() {
@@ -1817,4 +1678,44 @@ function pasteText() {
       break; // Прекращаем перебор после первого соответствующего элемента
     }
   }
+}
+
+function playerList() {
+  const contents = document.querySelectorAll('.content');
+
+  const uniquePlayers = new Set(); // Для отслеживания уникальных имен игроков
+
+  contents.forEach((content) => {
+    const players = content.querySelectorAll('.say > .player, .yell > .player, .virt > .player');
+    const playerList = document.createElement('ul');
+    const npcList = document.createElement('ul');
+    playerList.classList.add('players');
+    npcList.classList.add('npc');
+
+    players.forEach((player) => {
+      const playerName = player.textContent.trim();
+      const uniquePlayerNameParts = playerName.split(' ');
+
+      if (uniquePlayerNameParts.length === 1 && !npcNames[playerName] && !uniquePlayers.has(playerName)) {
+        playerList.appendChild(createPlayerItem(playerName));
+        uniquePlayers.add(playerName); // Добавляем имя игрока во множество уникальных имен
+      } else if (!uniquePlayers.has(playerName)) {
+        npcList.appendChild(createPlayerItem(playerName));
+        uniquePlayers.add(playerName); // Добавляем имя игрока во множество уникальных имен
+      }
+    });
+
+    const actorsDiv = document.createElement('div');
+    actorsDiv.classList.add('actors');
+    content.parentNode.insertBefore(actorsDiv, content);
+    actorsDiv.appendChild(playerList);
+    actorsDiv.appendChild(npcList);
+  });
+}
+
+function createPlayerItem(playerName) {
+  const playerItem = document.createElement('li');
+  playerItem.textContent = playerName;
+  playerItem.classList.add('player');
+  return playerItem;
 }
