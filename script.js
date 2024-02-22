@@ -546,26 +546,51 @@ function toggleCollapse(event) {
 }
 
 function logFilter() {
-  const keywordsInput = document
-    .getElementById("keywordsInput")
-    .value.toLowerCase();
+  // Получаем значение из поля ввода и приводим его к нижнему регистру
+  const keywordsInput = document.getElementById("keywordsInput").value.toLowerCase();
+  
+  // Выбираем все элементы, являющиеся дочерними элементами .content
   const elements = document.querySelectorAll(".content > *");
+  
+  // Перебираем каждый элемент
   elements.forEach((element) => {
+    // Получаем текстовое содержимое элемента и приводим его к нижнему регистру
     const text = element.textContent.toLowerCase();
+
+    // Проверяем, не пустое ли поле ввода
     if (keywordsInput.trim() !== "") {
+      // Разделяем введенные ключевые слова по пробелу
       const keywords = keywordsInput.split(" ");
+      
+      // Перебираем каждое ключевое слово
       keywords.forEach((keyword) => {
-        console.log("keyword: ", keyword);
-        const containsKeyword = text.includes(keyword);
-        if (containsKeyword) {
+        // Инициализируем переменную для хранения ключевого слова без символа "-"
+        let removeWord = null;
+        
+        // Проверяем, начинается ли ключевое слово с символа "-"
+        if (keyword.startsWith("-")) {
+          // Если да, удаляем символ "-" и сохраняем оставшееся слово в переменную removeWord
+          removeWord = keyword.substring(1);
+        }
+        
+        // Проверяем, содержится ли ключевое слово или его "анти-слово" в тексте элемента
+        const containsKeyword = text.includes(keyword) || (removeWord !== null && !text.includes(removeWord));
+
+        // Если ключевое слово найдено, добавляем класс "selected" к элементу
+        // Если "анти-слово" найдено, удаляем класс "selected" у элемента
+        if (containsKeyword && removeWord === null) {
           element.classList.add("selected");
+        } else if (removeWord !== null && !containsKeyword) {
+          element.classList.remove("selected");
         }
       });
     } else {
+      // Если поле ввода пустое, удаляем класс "selected" у элемента
       element.classList.remove("selected");
     }
   });
 }
+
 
 function trimChapter(chapterElement) {
   const paragraphs = chapterElement.find("p");
