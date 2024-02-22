@@ -34,23 +34,23 @@
     />
     <!-- Внешние ссылки -->
     <link
-      class="external style"
-      rel="stylesheet"
-      href="https://cbipope3ka.github.io/TheLooper/base.css"
-      type="text/css"
-      disabled
+    class="external style"
+    rel="stylesheet"
+    href="https://cbipope3ka.github.io/TheLooper/noblegarden.css"
+    type="text/css"
+    disabled
     />
     <link
       class="external style"
       rel="stylesheet"
-      href="https://cbipope3ka.github.io/TheLooper/noble.css"
+      href="https://cbipope3ka.github.io/TheLooper/CheeseCutter.css"
       type="text/css"
       disabled
     />
   </head>
 
   <body style="margin: 0; height: 100vh; overflow: hidden">
-    <div class="nav" style="display:none">
+    <div class="nav" style="display: none">
       <div class="buttons">
         <div class="hide group important">
           <form
@@ -3571,12 +3571,12 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script.js"></script>
-    <script
+<!--     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
       integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
-    ></script>
+    ></script> -->
     <script src="https://cdn.jsdelivr.net/npm/transliteration@2.0.0/dist/transliteration.min.js"></script>
     <script>
       function toggleStylesheet(className) {
@@ -3587,6 +3587,19 @@
           } else {
             link.disabled = true;
           }
+        });
+      }
+
+      function toggleExternalLinks() {
+        const localStyles = document.querySelectorAll(".local.style");
+        const externalStyles = document.querySelectorAll(".external.style");
+
+        localStyles.forEach((style) => {
+          style.disabled = true;
+        });
+
+        externalStyles.forEach((style) => {
+          style.disabled = false;
         });
       }
     </script>

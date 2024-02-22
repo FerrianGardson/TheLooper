@@ -749,8 +749,9 @@ function exportHTML() {
 
   var pageTitle = document.querySelector("h2.date");
   var fileName = pageTitle
-    ? translit(pageTitle.textContent.trim())
+    ? translit(pageTitle.textContent.trim()).replace(/\s+/g, ' ')
     : "exported";
+  
 
   var element = document.createElement("a");
   element.setAttribute(
