@@ -1,6 +1,6 @@
-let combineDelay = 2 * 1000;
+combineDelay = 2 * 1000;
 
-const playerData = [
+playerData = [
   ["Фэрриан", "rogue", "Фэрриан Гардсон"],
   ["Малет", "shaman", "Малет Трант"],
   ["Роуз", "hunter", "Арчибальд Роуз"],
@@ -19,7 +19,7 @@ const playerData = [
 ];
 
 // Карта цветов
-const randomColors = [
+randomColors = [
   "demon-hunter",
   "warlock",
   "monk",
@@ -64,7 +64,7 @@ const randomColors = [
 ];
 
 // Карта НПС
-const npcNames = {
+npcNames = {
   Гнолл: true,
   Баззерс: true,
   Охранник: true,
@@ -148,7 +148,7 @@ async function handleHtmlFile(file) {
 }
 
 // Загрузка файла
-const fileInputTxt = document.getElementById("file-input-txt");
+fileInputTxt = document.getElementById("file-input-txt");
 fileInputTxt.addEventListener("change", handleFileInput);
 
 function handleFileInput(event) {
@@ -362,7 +362,7 @@ function expandChapters() {
     chapter.classList.remove("collapsed");
   });
 }
-let isCollapsed = true;
+isCollapsed = true;
 
 function toggleChapters() {
   if (isCollapsed) {
@@ -659,7 +659,7 @@ function toggleCollapse(event) {
     );
   }
 }
-let keywordsInput = null;
+keywordsInput = null;
 function logFilter() {
   // Получаем ключевые слова из поля ввода с учетом слов внутри кавычек
   previousInput = keywordsInput;

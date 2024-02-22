@@ -8,6 +8,7 @@ html {
   font-size: 18px;
   line-height: 1.5em;
   --glass: #000000ad;
+  --p:"Montserrat";
 }
 
 .chapter a {
@@ -33,13 +34,14 @@ h2:not(:first-of-type) {
 
 div.buttons {
   display: flex;
-  left: 24px;
-  top: 24px;
+  /* left: 24px; */
+  /* top: 24px; */
   gap: 0.5rem;
-  width: 100%;
-  justify-content: flex-start;
-  flex-direction: row;
-  flex-wrap: wrap;
+  /* width: 100%; */
+  /* justify-content: flex-start; */
+  /* flex-direction: row; */
+  /* flex-wrap: wrap; */
+  align-items: flex-start;
 }
 
 .chapter:not(:first-child) {
@@ -48,7 +50,7 @@ div.buttons {
 
 body {
   color: white;
-  font-family: var(--p), sans-serif;
+  font-family: var(--p);
   background: var(--background-image) no-repeat fixed center,
     var(--background-color);
   background-size: cover;
@@ -75,10 +77,10 @@ button:hover:not(.no-hover),
   color: var(--black);
 }
 
-button,
-label {
-  font-weight: normal;
+button, label, input, form {
+  cursor: pointer;
 }
+
 
 button,
 .tumbler {
@@ -89,10 +91,11 @@ button,
   white-space: nowrap;
   min-width: fit-content;
   background: rgb(0 0 0 / 37%);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-color, #ffffff85);
   border-radius: 8px;
   color: rgba(255, 255, 255, 0.46);
-  font-family: "roboto", sans-serif;
+  font-family: var(--p);
+  background: var(--glass);
 }
 
 .chapter.collapsed > h2.date:hover,
@@ -134,8 +137,7 @@ input:hover {
 
 div#filter {
   display: flex;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-color, #ffffff85);
   height: fit-content;
   flex-direction: row;
   gap: 0;
@@ -217,10 +219,6 @@ input:focus-visible {
   cursor: pointer;
 }
 
-#filter > * {
-  border: none;
-  border-radius: 0;
-}
 
 .tumbler.input {
   padding: 0;
@@ -280,9 +278,6 @@ input:focus-visible {
 .tooltip:hover:before {
   visibility: visible;
 }
-.tooltip:hover:after {
-  /* margin-top: 15px; */
-}
 
 .input.checkbox {
   display: flex;
@@ -290,9 +285,6 @@ input:focus-visible {
   align-items: center;
 }
 
-.checkbox > label {
-  /* padding-left: 0 !important; */
-}
 
 .checkbox > input {
   padding-left: 1rem;
@@ -301,11 +293,12 @@ input:focus-visible {
 
 .hide.group:not(:hover) > .hide {
   display: none;
+  /* visibility: hidden; */
 }
 
 .hide.group {
   display: flex;
-  gap: 0.5rem;
+  /* gap: 0.5rem; */
   flex-direction: column;
 }
 
@@ -351,3 +344,66 @@ input:focus-visible {
   background: #000000e0;
   padding: 1rem;
 }
+
+.group button {
+  background: none;
+  border: 0;
+  border-radius: 0;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.group {
+  background: var(--glass);
+  border-radius: 8px;
+}
+
+div#filter * {
+  border-radius: 0;
+  border: 0;
+}
+
+@font-face {
+  src: url("https://cdn.glitch.global/a5c42250-1d0c-4282-a0b8-b5da29f85db0/MONTSERRAT-REGULAR.TTF?v=1707569313378");
+  font-family: "Montserrat";
+}
+
+@font-face {
+  src: url("https://cdn.glitch.global/a5c42250-1d0c-4282-a0b8-b5da29f85db0/MONTSERRAT-BOLD.TTF?v=1707569314895");
+  font-family: "MontserratBold";
+}
+
+.padding {
+    padding: 1rem;
+}
+
+.group .tumbler {
+    border: 0;
+    background: 0;
+    border-radius: 0;
+    padding-right: 1rem;
+    padding-bottom: 0.5rem;
+}
+
+.tumbler.hide label {
+    padding: 0!important;
+}
+
+form.tumbler.input.tooltip.show {display: flex;align-content: center;justify-content: center;}
+
+
+.group {
+    border: 1px solid var(--border-color, #ffffff85);
+}
+
+.checkbox {
+    padding: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    padding-top: 0;
+}
+
+input[type="checkbox"] {width: 1rem;}

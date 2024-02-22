@@ -429,7 +429,7 @@ a[href="/storyline/17037"] {
   border-image-width: var(--frame-width) !important;
   /* border-radius: 16px; */
   background: var(--info) !important;
-  padding: 3rem !important;
+  /* padding: 3rem !important; */
   /* box-shadow: var(--shadow-inset) !important; */
   margin: 2rem 0;
 }
@@ -855,7 +855,7 @@ h2:not(:first-of-type) {
   color: #abd473;
 }
 .shaman {
-  color: #00700e;
+  color: #0070de;
 }
 .warrior {
   color: #c79c6e;
@@ -922,12 +922,6 @@ p.story .speech {
 
 .chapter:not(:first-of-type) > h2.date {
   margin-top: 6rem !important;
-}
-
-.paper .player {
-  /* display: block; */
-  /* margin-bottom: 0.5rem; */
-  /* color: white; */
 }
 
 .yell span.player {
@@ -1253,4 +1247,12 @@ span.say {
   mask-size: 100% 100%;
   mask-repeat: no-repeat;
   mask-position: top;
+}
+
+.story span.player {
+    display: none;
+}
+
+.story .say {
+    color: var(--emote);
 }
