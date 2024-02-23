@@ -1308,7 +1308,9 @@ function divideChapter() {
   const currentChapter = hoveredElements[0].closest(".chapter");
 
   // Копируем заголовок и актеров текущего .chapter
-  const chapterHeader = currentChapter.querySelector("h2.date").outerHTML;
+  const chapterHeader = currentChapter.querySelector("h2.date").outerHTML.replace(/(<span class="title">.*)(<\/span>)/, '$1 +$2');
+
+
 
   // Получаем timestamp первого logline в текущем .chapter
   const firstLoglineTimestamp = currentChapter
