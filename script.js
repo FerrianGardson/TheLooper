@@ -1567,3 +1567,8 @@ function updateTimeAndActors() {
   addSpaceToEmotePlayers();
   addCommaAndDot();
 }
+
+function toggleHighlight() {
+  var styleLink = document.querySelector('link.selection.style');
+  styleLink.disabled = !styleLink.disabled;
+}

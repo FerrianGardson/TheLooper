@@ -61,6 +61,13 @@
       type="text/css"
       disabled
     />
+    <link
+    class="selection style"
+    rel="stylesheet"
+    href="selection.css"
+    type="text/css"
+    disabled
+  />
     <!-- <script src="https://cbipope3ka.github.io/TheLooper/script.js" class="external style" type="text/javascript" disabled></script> -->
   </head>
 
@@ -68,120 +75,44 @@
     <div class="nav" style="display: none">
       <div class="buttons">
         <div class="hide group important">
-          <form
-            class="tumbler input tooltip show"
-            tooltip="Открыть WoWChatLog.txt из папки Logs. Также позволяет открывать уже экспортированные отсюда HTML-файлы."
-          >
+          <form class="tumbler input tooltip show" tooltip="Открыть WoWChatLog.txt из папки Logs. Также позволяет открывать уже экспортированные отсюда HTML-файлы.">
             <label for="file-input-txt">Импорт</label>
-            <input type="file" id="file-input-txt" />
+            <input type="file" id="file-input-txt">
           </form>
-          <div
-            class="checkbox tooltip hide"
-            tooltip="Если включен, то импортирует в том числе ваши отписи в групповом чате"
-          >
-            <input type="checkbox" id="keepGroupCheckbox" checked="" /><label
-              for="keepGroupCheckbox"
-              >Группа</label
-            >
+          <div class="checkbox tooltip hide" tooltip="Если включен, то импортирует в том числе ваши отписи в групповом чате">
+            <input type="checkbox" id="keepGroupCheckbox" checked=""><label for="keepGroupCheckbox">Группа</label>
           </div>
-          <div
-            class="checkbox tooltip hide"
-            tooltip="Если включен, то импортирует в том числе ваши отписи в рейд-чате"
-          >
-            <input type="checkbox" id="keepRaidCheckbox" /><label
-              for="keepRaidCheckbox"
-              >Рейд</label
-            >
+          <div class="checkbox tooltip hide" tooltip="Если включен, то импортирует в том числе ваши отписи в рейд-чате">
+            <input type="checkbox" id="keepRaidCheckbox"><label for="keepRaidCheckbox">Рейд</label>
           </div>
-          <div
-            class="checkbox tooltip hide"
-            tooltip="Если включен, то импортирует в том числе объявления в рейд"
-          >
-            <input
-              type="checkbox"
-              id="keepRaidWarningCheckbox"
-              checked=""
-            /><label for="keepRaidWarningCheckbox">Объявления</label>
+          <div class="checkbox tooltip hide" tooltip="Если включен, то импортирует в том числе объявления в рейд">
+            <input type="checkbox" id="keepRaidWarningCheckbox" checked=""><label for="keepRaidWarningCheckbox">Объявления</label>
           </div>
         </div>
 
         <div class="hide group important">
-          <button
-            onclick="chapterReverse()"
-            class="tooltip show"
-            tooltip="Влияет на то, в какой хронологии расположены отыгрыши — с самого первого или самого последнего."
-          >
-            Сначала новое</button
-          ><button
-            onclick="toggleChapters()"
-            class="tooltip hide"
-            tooltip="Свернуть или развернуть все главы, чтобы целиком пройтись по тексту или только пробежаться по верхам в поисках нужного отыгрыша."
-          >
-            Развернуть</button
-          ><button
-            onclick="selectAll()"
-            class="tooltip hide"
-            tooltip="Выделяет или снимает выделение со всех строк. Можно отдельно кликать на строки и выделять или снимать выделение. Кнопка «Очистка» оставит только выделенные части."
-          >
-            Убрать всё
-          </button>
+          <button onclick="chapterReverse()" class="tooltip show" tooltip="Влияет на то, в какой хронологии расположены отыгрыши — с самого первого или самого последнего.">
+            Сначала новое</button><button onclick="toggleChapters()" class="tooltip hide" tooltip="Свернуть или развернуть все главы, чтобы целиком пройтись по тексту или только пробежаться по верхам в поисках нужного отыгрыша.">
+            Развернуть</button><button onclick="toggleHighlight()" class="tooltip hide" tooltip="Позволяет наглядно видеть, какие элементы выделены, а какие нет, чтобы провести редактирование и чистку логов.">Подсветка</button><button onclick="selectAll()" class="tooltip hide" tooltip="Выделяет или снимает выделение со всех строк. Можно отдельно кликать на строки и выделять или снимать выделение. Кнопка «Очистка» оставит только выделенные части.">Выделить всё</button>
         </div>
 
         <div id="filter" class="hide group">
-          <input
-            type="text"
-            id="keywordsInput"
-            placeholder="Введите ключевые слова через запятую"
-            value="Роуз"
-            class="show"
-          />
-          <button
-            onclick="logFilter()"
-            class="tooltip show"
-            tooltip="Выделить только строки, содержащие ключевые слова через запятую. Например: «Фэрриан, Ананита»."
-          >
+          <input type="text" id="keywordsInput" placeholder="Введите ключевые слова через запятую" value="Роуз" class="show">
+          <button onclick="logFilter()" class="tooltip show" tooltip="Выделить только строки, содержащие ключевые слова через запятую. Например: «Фэрриан, Ананита».">
             Фильтр
           </button>
-          <button
-            onclick="filterTrimEverything()"
-            class="tooltip hide"
-            tooltip="Обрезает края каждой главы так, чтобы она начиналась и заканчивалась выделенными строками."
-          >
+          <button onclick="filterTrimEverything()" class="tooltip hide" tooltip="Обрезает края каждой главы так, чтобы она начиналась и заканчивалась выделенными строками.">
             Обрезка
           </button>
         </div>
         <div class="remove hide group">
           <button class="show replace no-hover">Удалить</button>
           <div class="hide wrap col">
-            <button
-              onclick="removeUnselectedLoglines()"
-              class="tooltip hide"
-              tooltip="Удаляет все строки, с которых было снято выделение. Чтобы выделить или снять выделение, щёлкните по строке левой кнопкой мыши."
-            >
-              Строки</button
-            ><button
-              onclick="removeCollapsed()"
-              class="tooltip hide"
-              tooltip="Удаляет все главы кроме развёрнутых."
-            >
-              Главы</button
-            ><button
-              onclick="removePlayers()"
-              class="tooltip hide"
-              tooltip="Удаляет списки игроков под каждой главой. Если вы хотите удалить кого-то конкретного — просто наведитесь на него мышью и нажмите Del на клавиатуре."
-            >
-              Игроков</button
-            ><button
-              onclick="clearChatlog()"
-              class="tooltip hide"
-              tooltip="Удаляет буквально всё перед импортом нового лога."
-            >
-              Всё</button
-            ><button
-              onclick="debug()"
-              class="tooltip hide"
-              tooltip="Не нажимай, убьёт!"
-            >
+            <button onclick="removeUnselectedLoglines()" class="tooltip hide" tooltip="Удаляет все строки, с которых было снято выделение. Чтобы выделить или снять выделение, щёлкните по строке левой кнопкой мыши.">
+              Строки</button><button onclick="removeCollapsed()" class="tooltip hide" tooltip="Удаляет все главы кроме развёрнутых.">
+              Главы</button><button onclick="removePlayers()" class="tooltip hide" tooltip="Удаляет списки игроков под каждой главой. Если вы хотите удалить кого-то конкретного — просто наведитесь на него мышью и нажмите Del на клавиатуре.">
+              Игроков</button><button onclick="clearChatlog()" class="tooltip hide" tooltip="Удаляет буквально всё перед импортом нового лога.">
+              Всё</button><button onclick="debug()" class="tooltip hide" tooltip="Не нажимай, убьёт!">
               Дебаг
             </button>
           </div>
@@ -200,33 +131,21 @@
               <label for="nobleGardenCheckbox">NobleGarden</label>
             </div> -->
             <div class="checkbox">
-              <input
-                type="checkbox"
-                id="sixthTroopCheckbox"
-                onchange="toggleStylesheet('SixthTroop')"
-              />
+              <input type="checkbox" id="sixthTroopCheckbox" onchange="toggleStylesheet('SixthTroop')">
               <label for="sixthTroopCheckbox">Sixth Troop</label>
             </div>
             <div class="checkbox">
-              <input
-                type="checkbox"
-                id="cheeseCutterCheckbox"
-                onchange="toggleStylesheet('CheeseCutter')"
-              />
+              <input type="checkbox" id="cheeseCutterCheckbox" onchange="toggleStylesheet('CheeseCutter')">
               <label for="cheeseCutterCheckbox">Cheese Cutter</label>
             </div>
           </div>
         </div>
 
-        <button
-          onclick="exportHTML()"
-          class="tooltip"
-          tooltip="Сохраняет страницу в виде HTML-файла, который вы можете скинуть друзьям. Его можно открыть как напрямую из папки «Загрузки», так и повторно импортировать на сайте через кнопку «Импорт»."
-        >
+        <button onclick="exportHTML()" class="tooltip" tooltip="Сохраняет страницу в виде HTML-файла, который вы можете скинуть друзьям. Его можно открыть как напрямую из папки «Загрузки», так и повторно импортировать на сайте через кнопку «Импорт».">
           Экспорт
         </button>
       </div>
-      <script src="https://cdn.jsdelivr.net/npm/transliteration@2.0.0/dist/transliteration.min.js"></script>
+      <!-- <script src="https://cdn.jsdelivr.net/npm/transliteration@2.0.0/dist/transliteration.min.js"></script> -->
     </div>
     <button
       class="isolated"
@@ -3585,13 +3504,13 @@
     <div class="footer"></div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script
+<!--     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
       integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
-    ></script>
-    <script src="https://cdn.jsdelivr.net/npm/transliteration@2.0.0/dist/transliteration.min.js"></script>
+    ></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/transliteration@2.0.0/dist/transliteration.min.js"></script> -->
     <script>
       function toggleStylesheet(className) {
         const styleLinks = document.querySelectorAll(`.style.${className}`);

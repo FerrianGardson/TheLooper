@@ -1276,3 +1276,7 @@ span.say {
 .actors {
   margin-bottom: 1rem;
 }
+
+.content > *:not(.selected, :hover) {
+  filter: none;
+}
