@@ -1,3 +1,5 @@
+console.log('Hello world!')
+
 combineDelay = 2 * 1000;
 
 playerData = [
