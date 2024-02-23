@@ -17,6 +17,8 @@ playerData = [
   ["Думитру", "druid", "Думитру Феликс Цимитяну"],
   ["Каторжник", "warrior", "Рой Редвуд"],
   ["Кариночка", "demon-hunter", "Карина"],
+  ["Пачек", "warrior", "Офелия Пачек"],
+  ["Шенн", "shaman", "Шенн Вельт"],
 ];
 
 randomColors = [
@@ -1245,18 +1247,49 @@ function moveElement(event) {
 }
 
 function deleteBefore() {
-  const hoveredElements = document.querySelectorAll(".content > :hover");
+  const hoveredElements = document.querySelectorAll(
+    "#chatlog > .chapter > :hover, #chatlog > h2.date"
+  );
 
   hoveredElements.forEach((element) => {
-    let currentElement = element.previousElementSibling;
-    while (currentElement) {
-      const siblingToRemove = currentElement;
-      currentElement = currentElement.previousElementSibling;
-      siblingToRemove.remove();
+    if (element.tagName === "H2") {
+      console.log(
+        "// Если наведено на h2.date, добавить класс remove всем соседям .chapter выше"
+      );
+      const closestChapter = element.closest(".chapter");
+      if (closestChapter) {
+        let sibling = closestChapter.previousElementSibling;
+        while (sibling && sibling.id !== "chatlog") {
+          sibling.classList.add("remove");
+          sibling = sibling.previousElementSibling;
+        }
+      }
+    } else {
+      console.log(
+        "// Если наведено на элемент внутри .content, удалить его соседей"
+      );
+      console.log("Deleting siblings before", element);
+      let currentElement = element.previousElementSibling;
+      while (currentElement && !currentElement.classList.contains("chapter")) {
+        const siblingToRemove = currentElement;
+        currentElement = currentElement.previousElementSibling;
+        siblingToRemove.remove();
+      }
     }
   });
+
+  // Удаление всех элементов с классом .chapter.remove из #chatlog
+  document.querySelectorAll('#chatlog > .chapter.remove').forEach(element => element.remove());
+
+  // Обновление времени и актеров
   updateTimeAndActors();
 }
+
+
+
+
+
+
 
 function divideChapter() {
   const hoveredElements = document.querySelectorAll(".content > :hover");
@@ -1273,7 +1306,7 @@ function divideChapter() {
   });
 
   // Озвучиваем в консоль содержимое массива
-  console.log("Migrating Loglines:", migratingLoglines);
+  //console.log("Migrating Loglines:", migratingLoglines);
 
   // Находим ближайший родительский .chapter
   const currentChapter = hoveredElements[0].closest(".chapter");
@@ -1281,9 +1314,12 @@ function divideChapter() {
   // Копируем заголовок и актеров текущего .chapter
   const chapterHeader = currentChapter.querySelector("h2.date").outerHTML;
 
-  // Создаем новый .chapter
+  // Получаем timestamp первого logline в текущем .chapter
+  const firstLoglineTimestamp = currentChapter.querySelector(".logline").getAttribute("timestamp");
+
+  // Создаем новый .chapter с атрибутом timestamp от первого logline
   const newChapterHTML = `
-    <div class="chapter">
+    <div class="chapter" timestamp="${firstLoglineTimestamp}">
       ${chapterHeader}
       <div class="content">
         ${migratingLoglines.join("")}
@@ -1300,22 +1336,48 @@ function divideChapter() {
   // Обновляем время и актеров только для текущего .chapter и нового .chapter
   updateTimeAndActors(currentChapter);
   updateTimeAndActors(currentChapter.previousElementSibling);
-  hoveredElement.scrollIntoView();
 }
+
 
 function deleteAfter() {
-  const hoveredElements = document.querySelectorAll(".content > :hover");
+  const hoveredElements = document.querySelectorAll(
+    "#chatlog > .chapter > :hover, #chatlog > h2.date"
+  );
 
   hoveredElements.forEach((element) => {
-    let currentElement = element.nextElementSibling;
-    while (currentElement) {
-      const siblingToRemove = currentElement;
-      currentElement = currentElement.nextElementSibling;
-      siblingToRemove.remove();
+    if (element.tagName === "H2") {
+      console.log(
+        "// Если наведено на h2.date, добавить класс remove всем соседям .chapter ниже"
+      );
+      const closestChapter = element.closest(".chapter");
+      if (closestChapter) {
+        let sibling = closestChapter.nextElementSibling;
+        while (sibling && sibling.id !== "chatlog") {
+          sibling.classList.add("remove");
+          sibling = sibling.nextElementSibling;
+        }
+      }
+    } else {
+      console.log(
+        "// Если наведено на элемент внутри .content, удалить его соседей"
+      );
+      console.log("Deleting siblings after", element);
+      let currentElement = element.nextElementSibling;
+      while (currentElement && !currentElement.classList.contains("chapter")) {
+        const siblingToRemove = currentElement;
+        currentElement = currentElement.nextElementSibling;
+        siblingToRemove.remove();
+      }
     }
   });
+
+  // Удаление всех элементов с классом .chapter.remove из #chatlog
+  document.querySelectorAll('#chatlog > .chapter.remove').forEach(element => element.remove());
+
+  // Обновление времени и актеров
   updateTimeAndActors();
 }
+
 
 function startWrap() {
   const contentChild = document.querySelector(".content > :hover");
