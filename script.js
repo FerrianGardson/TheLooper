@@ -106,6 +106,7 @@ function formatHTML() {
   virt();
   updateTimeAndActors();
   findLoglinesAndConvertToTranscript();
+  // $(".logline.story span.player").remove();
 
   throw new Error("Скрипт прерван");
 }
@@ -340,81 +341,104 @@ function renderChatLog(text) {
 }
 
 function cleanText() {
-  chatlogHTML = document.getElementById("chatlog").innerHTML;
-  chatlogHTML = chatlogHTML.replace(/кошка/g, "кот");
-  chatlogHTML = chatlogHTML.replace(/<\/p>/g, "</p>\n");
+  chatlogHTML = document.getElementById("chatlog").innerHTML; // Определение
+  chatlogHTML = chatlogHTML.replace(/кошка/g, "кот"); // Пример
+  chatlogHTML = chatlogHTML.replace(/<\/p>/g, "</p>\n"); // Перенос
+
+  // Системные сообщения
 
   chatlogHTML = chatlogHTML.replace(
     /<p.*?>\s*((Аукцион|%s|ОШИБКА:|Было|Сегодня|Значок|Вы|Магическая|Удалено|Удалена|Номер|Игрок|Ставка|За|Существо|Кожаная|Персонаж|Сохранённый|Для|Всем|Текст|Эффект|щит|Телепорт|С\s|Получен|Характеристики|Маг.уст\:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила\:|Ловк\:|Инта\:|Физ.уст\:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|У|Ваше|Начислено|Камень|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем)\s.*?|(Результат\:|Персонаж))<\/p>\n/g,
     ""
-  );
-  chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:");
+  ); // Системные сообщения, начинаются с указанных слов
+
+  chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:"); // |Hchannel:PARTY|h[Лидер группы]|h Роуз: => [Лидер группы] Роуз:
+
   chatlogHTML = chatlogHTML.replace(
     /<p.*?>([A-Za-z]|\>|\&|\(|\d).*?<\/p>\n/g,
     ""
-  );
+  ); // Системные сообщения, начинаются со служебных символов
+
   chatlogHTML = chatlogHTML.replace(
     /<p.*[А-Я][а-я-]+?\s(is|действие|получил|атакует,|кажется,|приглашается|\(|атакует|уже состоит|вступает|исключается|смотрит|преклоняет|рассказывает|is Away|получает|не имеет ауры|does not wish|к вам|смотрит на вас|кивает вам|смотрит на вас|ставит|добавлено|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*?<\/p>\n/g,
     ""
-  );
-  /*   document.getElementById("chatlog").innerHTML = chatlogHTML;   throw new Error("Скрипт прерван"); */
+  ); // Игрок %ООС-действие%
 
-  chatlogHTML = chatlogHTML.replace(/<p.*?(GUID|Fly|\-го уровня).*?<\/p>/g, "");
+  /*   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+  throw new Error("Скрипт прерван"); */
 
-  chatlogHTML = chatlogHTML.replace(/<p.*?>[А-я]+ шепчет:.*?<\/p>\n/g, "");
+  chatlogHTML = chatlogHTML.replace(/<p.*?(GUID|Fly|\-го уровня).*?<\/p>/g, ""); // Системные сообщения, содержат указанные слова в середине
+
+  // Оформление
+
+  chatlogHTML = chatlogHTML.replace(/<p.*?>[А-я]+ шепчет:.*?<\/p>\n/g, ""); // Шепчет:
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?"logline)">(.*)\sговорит:\s(.*?)<\/p>\n/g,
     '$1 say"><span class="player">$2</span><span class="say">$3</span></p>\n'
-  );
+  ); // Говорит:
+
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?"logline)">(.*)\sкричит:\s(.*?)<\/p>\n/g,
     '$1 yell"><span class="player">$2</span><span class="say">$3</span></p>\n'
-  );
+  ); // Кричит:
+
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?"logline)">([А-я]+)\s(.*?)<\/p>\n/g,
     '$1 emote"><span class="player">$2</span><span class="emote">$3</span></p>\n'
-  );
+  ); // Эмоут
+
+  // Вирт
 
   if (!keepGroup) {
     chatlogHTML = chatlogHTML.replace(
       /<p.*?>\[(Лидер группы|Группа)\].*?<\/p>\n/g,
       ""
-    );
+    ); //ООС-каналы (группа)
   }
 
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?logline)">\[(?:Группа|Лидер группы)\]\s*([А-я]+):\s*(.*?)<\/p>/g,
     '$1 emote virt"><span class="player">$2</span><span class="emote">$3</span></p>'
-  );
-  chatlogHTML = chatlogHTML.replace(/<p.*?>\[(Гильдия)\].*?<\/p>\n/g, "");
+  ); // ООС в Эмоут
+
+  chatlogHTML = chatlogHTML.replace(/<p.*?>\[(Гильдия)\].*?<\/p>\n/g, ""); //ООС-каналы (гильдия)
+
   if (!keepRaid) {
     chatlogHTML = chatlogHTML.replace(
       /<p.*?>\[(Рейд|Лидер рейда)\].*?<\/p>\n/g,
       ""
-    );
+    ); //ООС-каналы (рейд)
   }
 
   if (!keepRaidWarning) {
     chatlogHTML = chatlogHTML.replace(
       /<p.*?>\[(Объявление рейду)\].*?<\/p>\n/g,
       ""
-    );
+    ); //ООС-каналы (рейд)
   }
 
+  //  chatlogHTML = chatlogHTML.replace(/(<p.*?"logline)">([А-я]+):\s(.*?)<\/p>/g,'$1 story"><span class="player">$2</span><span class="say">$3</p>\n'); // Стори
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?"logline)">(.*?):\s(.*?)<\/p>/g,
     '$1 story"><span class="player">$2</span><span class="say">$3</p>\n'
-  );
+  ); // Стори v2
 
-  chatlogHTML = chatlogHTML.replace(/[—–-]\s/g, "— ");
-  chatlogHTML = chatlogHTML.replace(/\|\d+\-\d+\((.*?)\)/g, "$1");
-  chatlogHTML = chatlogHTML.replace(/\|[a-z]+/g, "");
-  chatlogHTML = chatlogHTML.replace(/say">\s*[—–-]\s*/g, 'say">');
-  chatlogHTML = chatlogHTML.replace(/&nbsp;/g, " ");
-  document.getElementById("chatlog").innerHTML = chatlogHTML;
+  // Прочее
+
+  chatlogHTML = chatlogHTML.replace(/[—–-]\s/g, "— "); // Тире в процессе
+  chatlogHTML = chatlogHTML.replace(/\|\d+\-\d+\((.*?)\)/g, "$1"); // смотрит на |3-3(Халвиэль)
+  chatlogHTML = chatlogHTML.replace(/\|[a-z]+/g, ""); // HEX-код
+  chatlogHTML = chatlogHTML.replace(/say">\s*[—–-]\s*/g, 'say">'); // Тире в начале
+  // chatlogHTML = chatlogHTML.replace(/\[Объявление рейду\].*?\: /g, ""); // Объявления рейду
+  chatlogHTML = chatlogHTML.replace(/&nbsp;/g, " "); // &nbsp;
+
+  // Вывод для дебага
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+  // debugger;
+
   document
     .querySelectorAll("#chatlog p:empty")
-    .forEach((emptyParagraph) => emptyParagraph.remove());
+    .forEach((emptyParagraph) => emptyParagraph.remove()); // Удаление пустых абзацев
 }
 
 function combineFunctions() {
@@ -546,7 +570,7 @@ function toggleCollapse(event) {
     );
   }
 }
-
+keywordsInput = null;
 function logFilter() {
   // Получаем значение из поля ввода и приводим его к нижнему регистру
   const keywordsInput = document
