@@ -1,4 +1,4 @@
-console.log('Hello world!')
+console.log("Hello world!");
 
 combineDelay = 2 * 1000;
 
@@ -620,7 +620,7 @@ function logFilter() {
     }
   });
   openselectedChapters();
-  removeCollapsed();
+  //  removeCollapsed();
   selected = [];
   scrollToSelect();
 }
@@ -775,9 +775,8 @@ function exportHTML() {
 
   var pageTitle = document.querySelector("h2.date");
   var fileName = pageTitle
-    ? translit(pageTitle.textContent.trim()).replace(/\s+/g, ' ')
+    ? translit(pageTitle.textContent.trim()).replace(/\s+/g, " ")
     : "exported";
-  
 
   var element = document.createElement("a");
   element.setAttribute(
@@ -930,11 +929,35 @@ function scrollToSelect() {
   }
 }
 
-function removeUnselectedLoglines() {
-  var unselectedLoglines = document.querySelectorAll(
-    "p.logline:not(.selected)"
-  );
+function rearrangeChapters() {
+  // Находим все элементы .chapter
+  var chapters = document.querySelectorAll(".chapter");
 
+  chapters.forEach(function (chapter) {
+    var hoveredElement = chapter.querySelector(".content > *:hover");
+
+    if (hoveredElement) {
+      // Находим ближайший родительский .chapter
+      var closestChapter = hoveredElement.closest(".chapter");
+
+      // Вставляем HTML-код после указанного элемента
+      var newChapterHTML = `
+        </div>
+      </div>
+      <div class="chapter">
+        <div class="content">
+      `;
+      hoveredElement.insertAdjacentHTML("afterend", newChapterHTML);
+
+      // Выводим сообщение о выполнении
+      console.log("HTML-код успешно вставлен после hoveredElement.");
+    }
+  });
+}
+
+function removeUnselectedLoglines() {
+  var content = document.querySelector(".content"); // Находим ближайший элемент .content
+  var unselectedLoglines = content.querySelectorAll("p.logline:not(.selected)"); // Находим все невыбранные лог-линии внутри .content
   unselectedLoglines.forEach(function (logline) {
     logline.remove();
   });
@@ -1127,6 +1150,10 @@ document.addEventListener("keydown", function (event) {
   } else if (["]", "ъ"].includes(event.key)) {
     finishWrap("paper");
   } else if (event.key === "/") {
+    divideChapter();
+  } else if (event.key === "*") {
+    WrapToDiv();
+  } else if (event.key === "-") {
     WrapToDiv();
   }
 });
@@ -1229,6 +1256,51 @@ function deleteBefore() {
     }
   });
   updateTimeAndActors();
+}
+
+function divideChapter() {
+  const hoveredElements = document.querySelectorAll(".content > :hover");
+  let migratingLoglines = [];
+
+  hoveredElements.forEach((element) => {
+    let currentElement = element.previousElementSibling;
+    while (currentElement) {
+      migratingLoglines.unshift(currentElement.outerHTML);
+      const siblingToRemove = currentElement;
+      currentElement = currentElement.previousElementSibling;
+      siblingToRemove.remove();
+    }
+  });
+
+  // Озвучиваем в консоль содержимое массива
+  console.log("Migrating Loglines:", migratingLoglines);
+
+  // Находим ближайший родительский .chapter
+  const currentChapter = hoveredElements[0].closest(".chapter");
+
+  // Копируем заголовок и актеров текущего .chapter
+  const chapterHeader = currentChapter.querySelector("h2.date").outerHTML;
+  const chapterActors = currentChapter.querySelector(".players").outerHTML;
+
+  // Создаем новый .chapter
+  const newChapterHTML = `
+    <div class="chapter">
+      ${chapterHeader}
+      <div class="content">
+        ${migratingLoglines.join("")}
+      </div>
+    </div>
+  `;
+
+  // Вставляем новый .chapter перед текущим
+  currentChapter.insertAdjacentHTML("beforebegin", newChapterHTML);
+
+  // Очищаем массив
+  migratingLoglines = [];
+
+  // Обновляем время и актеров только для текущего .chapter и нового .chapter
+  updateTimeAndActors(currentChapter);
+  updateTimeAndActors(currentChapter.previousElementSibling);
 }
 
 function deleteAfter() {
@@ -1569,6 +1641,6 @@ function updateTimeAndActors() {
 }
 
 function toggleHighlight() {
-  var styleLink = document.querySelector('link.selection.style');
+  var styleLink = document.querySelector("link.selection.style");
   styleLink.disabled = !styleLink.disabled;
 }
