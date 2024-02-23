@@ -1279,17 +1279,13 @@ function deleteBefore() {
   });
 
   // Удаление всех элементов с классом .chapter.remove из #chatlog
-  document.querySelectorAll('#chatlog > .chapter.remove').forEach(element => element.remove());
+  document
+    .querySelectorAll("#chatlog > .chapter.remove")
+    .forEach((element) => element.remove());
 
   // Обновление времени и актеров
   updateTimeAndActors();
 }
-
-
-
-
-
-
 
 function divideChapter() {
   const hoveredElements = document.querySelectorAll(".content > :hover");
@@ -1315,7 +1311,9 @@ function divideChapter() {
   const chapterHeader = currentChapter.querySelector("h2.date").outerHTML;
 
   // Получаем timestamp первого logline в текущем .chapter
-  const firstLoglineTimestamp = currentChapter.querySelector(".logline").getAttribute("timestamp");
+  const firstLoglineTimestamp = currentChapter
+    .querySelector(".logline")
+    .getAttribute("timestamp");
 
   // Создаем новый .chapter с атрибутом timestamp от первого logline
   const newChapterHTML = `
@@ -1337,7 +1335,6 @@ function divideChapter() {
   updateTimeAndActors(currentChapter);
   updateTimeAndActors(currentChapter.previousElementSibling);
 }
-
 
 function deleteAfter() {
   const hoveredElements = document.querySelectorAll(
@@ -1372,12 +1369,13 @@ function deleteAfter() {
   });
 
   // Удаление всех элементов с классом .chapter.remove из #chatlog
-  document.querySelectorAll('#chatlog > .chapter.remove').forEach(element => element.remove());
+  document
+    .querySelectorAll("#chatlog > .chapter.remove")
+    .forEach((element) => element.remove());
 
   // Обновление времени и актеров
   updateTimeAndActors();
 }
-
 
 function startWrap() {
   const contentChild = document.querySelector(".content > :hover");
@@ -1621,7 +1619,8 @@ function synchronizePlayerColors() {
       const secondClass = playerColorMap.get(playerName);
 
       if (secondClass) {
-        contentPlayer.classList.add(secondClass);
+        // Удаление всех имеющихся классов у игрока
+        contentPlayer.className = "player " + secondClass;
       }
     });
   });
