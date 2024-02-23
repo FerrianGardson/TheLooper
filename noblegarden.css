@@ -714,7 +714,6 @@ p.logline {
 }
 
 .virt > .emote,
-.virt,
 .whisper {
   color: var(--whisper) !important;
   /* color: white!important; */
@@ -1159,7 +1158,7 @@ section.slice.slice-md.bg-base-img:nth-of-type(3) {
 
 p.logline.emote > span {
   display: inline;
-  color: unset;
+  /* color: unset; */
 }
 
 .yell > .say {
