@@ -1280,7 +1280,6 @@ function divideChapter() {
 
   // Копируем заголовок и актеров текущего .chapter
   const chapterHeader = currentChapter.querySelector("h2.date").outerHTML;
-  const chapterActors = currentChapter.querySelector(".players").outerHTML;
 
   // Создаем новый .chapter
   const newChapterHTML = `
@@ -1301,6 +1300,7 @@ function divideChapter() {
   // Обновляем время и актеров только для текущего .chapter и нового .chapter
   updateTimeAndActors(currentChapter);
   updateTimeAndActors(currentChapter.previousElementSibling);
+  hoveredElement.scrollIntoView();
 }
 
 function deleteAfter() {
