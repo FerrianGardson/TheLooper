@@ -1765,12 +1765,14 @@ function gatherPlayersAndInsert() {
   const totalPlayersDiv = document.createElement("div");
   totalPlayersDiv.classList.add("totalplayers");
 
-  // Перебираем найденные игроков и добавляем их в div.totalplayers
-  totalUniquePlayers.forEach((player) => {
-    let playerClone = player.cloneNode(true);
-    playerClone.textContent = playerClone.textContent.trim().slice(0, -1); // Обрезаем последний символ
+  // Перебираем найденные игроки и добавляем их в div.totalplayers
+  totalUniquePlayers.forEach((playerName) => {
+    // Создаем новый элемент для каждого уникального игрока
+    const playerElement = document.createElement("li");
+    playerElement.textContent = playerName; // Присваиваем текст из уникального имени игрока
 
-    totalPlayersDiv.appendChild(playerClone);
+    // Добавляем элемент игрока в div.totalplayers
+    totalPlayersDiv.appendChild(playerElement);
   });
 
   // Находим элемент div.totalduration
@@ -1779,10 +1781,13 @@ function gatherPlayersAndInsert() {
   );
 
   if (totalDurationChapter) {
-    // Вставляем div.totalplayers в конец div.totalduration
-    totalDurationChapter.appendChild(totalPlayersDiv);
+    // Вставляем div.totalplayers в начало div.totalduration
+    totalDurationChapter.insertBefore(
+      totalPlayersDiv,
+      totalDurationChapter.firstChild
+    );
     console.log(
-      "Все игроки успешно собраны и вставлены в конец общей продолжительности."
+      "Все игроки успешно собраны и вставлены в начало общей продолжительности."
     );
   } else {
     console.log(
@@ -1792,7 +1797,16 @@ function gatherPlayersAndInsert() {
 }
 
 function removeDuplicates(array) {
-  return Array.from(new Set(array));
+  // Создаем набор имен игроков для определения уникальных элементов
+  const playerNames = new Set();
+
+  // Добавляем имена игроков в набор
+  array.forEach((player) => {
+    playerNames.add(player.textContent.trim());
+  });
+
+  // Возвращаем массив уникальных имен игроков
+  return Array.from(playerNames);
 }
 
 function toggleHighlight() {
