@@ -1593,25 +1593,6 @@ function playerList() {
   });
 }
 
-let colorIndex = 0;
-function colorizePlayers() {
-  const playerSpans = document.querySelectorAll(".actors .player");
-  playerSpans.forEach((span) => {
-    const playerName = span.textContent.trim();
-    let colorClass;
-
-    const playerInfo = playerData.find((player) => player[0] === playerName);
-    if (playerInfo) {
-      colorClass = playerInfo[1];
-    } else {
-      colorClass = randomColors[colorIndex % randomColors.length];
-      colorIndex++;
-    }
-
-    span.classList.add(colorClass);
-  });
-}
-
 const talkingPlayer = ".say > .player, .yell > .player, .virt > .player";
 
 function addColumnToPlayers() {
@@ -1768,18 +1749,19 @@ function gatherPlayersAndInsert() {
     player.innerHTML = player.innerHTML.replace(/<span[^>]*>.*?<\/span>/g, "");
   });
   const totalUniquePlayers = removeDuplicates(allPlayers);
-
+  console.log('allPlayers: ', allPlayers);
+  console.log('totalUniquePlayers: ', totalUniquePlayers);
   // Создаем элемент div.totalplayers
   const totalPlayersDiv = document.createElement("div");
   totalPlayersDiv.classList.add("totalplayers");
 
   // Перебираем найденные игроки и добавляем их в div.totalplayers
-  totalUniquePlayers.forEach((playerName) => {
-    // Создаем новый элемент для каждого уникального игрока
-    const playerElement = document.createElement("li");
-    playerElement.textContent = playerName; // Присваиваем текст из уникального имени игрока
 
-    // Добавляем элемент игрока в div.totalplayers
+  totalUniquePlayers.forEach((playerName) => {
+    // Создаем новый элемент <li> с классом "player"
+    const playerElement = document.createElement("li");
+    playerElement.classList.add("player");
+    playerElement.textContent = playerName; // Присваиваем текст из уникального имени игрока
     totalPlayersDiv.appendChild(playerElement);
   });
 
@@ -1805,14 +1787,42 @@ function gatherPlayersAndInsert() {
 }
 
 function removeDuplicates(array) {
-  // Создаем набор имен игроков для определения уникальных элементов
-  const playerNames = new Set();
+  // Создаем набор уникальных элементов для определения уникальности
+  const uniquePlayers = new Set();
 
-  // Добавляем имена игроков в набор
+  // Добавляем элементы в набор
   array.forEach((player) => {
-    playerNames.add(player.textContent.trim());
+    const playerName = player.textContent.trim();
+    const existingPlayer = Array.from(uniquePlayers).find(
+      (item) => item.textContent.trim() === playerName
+    );
+
+    if (!existingPlayer) {
+      uniquePlayers.add(player.cloneNode(true)); // Клонируем элемент и добавляем его в набор
+    }
   });
 
-  // Возвращаем массив уникальных имен игроков
-  return Array.from(playerNames);
+  // Преобразуем набор обратно в массив элементов
+  return Array.from(uniquePlayers);
+}
+
+
+
+let colorIndex = 0;
+function colorizePlayers() {
+  const playerSpans = document.querySelectorAll(".actors .player");
+  playerSpans.forEach((span) => {
+    const playerName = span.textContent.trim();
+    let colorClass;
+
+    const playerInfo = playerData.find((player) => player[0] === playerName);
+    if (playerInfo) {
+      colorClass = playerInfo[1];
+    } else {
+      colorClass = randomColors[colorIndex % randomColors.length];
+      colorIndex++;
+    }
+
+    span.classList.add(colorClass);
+  });
 }
