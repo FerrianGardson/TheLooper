@@ -1757,13 +1757,10 @@ function gatherPlayersAndInsert() {
 
   // Перебираем найденные игроки и добавляем их в div.totalplayers
 
-  totalUniquePlayers.forEach((playerName) => {
-    // Создаем новый элемент <li> с классом "player"
-    const playerElement = document.createElement("li");
-    playerElement.classList.add("player");
-    playerElement.textContent = playerName; // Присваиваем текст из уникального имени игрока
-    totalPlayersDiv.appendChild(playerElement);
-  });
+  totalUniquePlayers.forEach((player) => {
+    totalPlayersDiv.appendChild(player);
+});
+
 
   // Находим элемент div.totalduration
   const totalDurationChapter = document.querySelector(
