@@ -2,3 +2,14 @@
   opacity: 0.5;
   filter: saturate(0.5);
 }
+.remove {
+  background: #ff000047;
+}
+
+.start_wrap {
+  background: green;
+}
+
+.finish_wrap {
+  background: red;
+}

@@ -444,6 +444,7 @@ function cleanText() {
 }
 
 function combineFunctions() {
+  console.log("combineFunctions");
   combineSay("emote");
   combineSay("say");
   combineSay("yell");
@@ -813,8 +814,43 @@ function selectAll() {
 }
 
 function debug() {
-  scrollToSelect();
+  console.log("Дебаг");
+  calculateTotalDuration();
 }
+
+function calculateTotalDuration() {
+  console.log("Начинаем подсчет общей продолжительности...");
+
+  const durationElements = document.querySelectorAll('#chatlog span.durationtime');
+
+  let totalMinutes = 0;
+
+  durationElements.forEach((element) => {
+    const durationText = element.getAttribute('duration');
+    console.log(`Найдена продолжительность: ${durationText}`);
+    const [hours, minutes] = durationText.split(':').map(Number);
+    console.log(`Часы: ${hours}, Минуты: ${minutes}`);
+    totalMinutes += hours * 60 + minutes;
+  });
+
+  console.log(`Общая продолжительность в минутах: ${totalMinutes}`);
+
+  const totalHours = Math.floor(totalMinutes / 60);
+  const remainingMinutes = totalMinutes % 60;
+
+  console.log(`Общее количество часов: ${totalHours}, Оставшиеся минуты: ${remainingMinutes}`);
+
+  const totalDurationHeading = document.createElement('h2');
+  totalDurationHeading.textContent = `Всего наиграно ${totalHours}ч ${remainingMinutes}мин`;
+
+  const chatlog = document.querySelector('#chatlog');
+  console.log("Вставляем общую продолжительность в начало #chatlog...");
+  chatlog.insertBefore(totalDurationHeading, chatlog.firstChild);
+
+  console.log("Общая продолжительность успешно вычислена и добавлена на страницу.");
+}
+
+
 
 function removeCollapsed() {
   var collapsedDivs = document.querySelectorAll("div.collapsed");
@@ -958,10 +994,21 @@ function rearrangeChapters() {
 }
 
 function removeUnselectedLoglines() {
-  var content = document.querySelector(".content"); // Находим ближайший элемент .content
-  var unselectedLoglines = content.querySelectorAll("p.logline:not(.selected)"); // Находим все невыбранные лог-линии внутри .content
-  unselectedLoglines.forEach(function (logline) {
-    logline.remove();
+  console.log("Удаляю ненужные строки");
+
+  // Находим все .chapter, которые не .collapsed
+  const chapters = document.querySelectorAll(".chapter:not(.collapsed)");
+
+  chapters.forEach((chapter) => {
+    // Внутри каждого .chapter находим все p.logline, которые не .selected
+    const unselectedLoglines = chapter.querySelectorAll(
+      "p.logline:not(.selected)"
+    );
+
+    // Удаляем найденные ненужные строки
+    unselectedLoglines.forEach((logline) => {
+      logline.remove();
+    });
   });
 }
 
@@ -1157,6 +1204,11 @@ document.addEventListener("keydown", function (event) {
     WrapToDiv();
   } else if (event.key === "-") {
     WrapToDiv();
+  } else if (event.key === "d") {
+    debug();
+  } else if (event.key === "+") {
+    combineDelay = 999999999;
+    combineFunctions();
   }
 });
 
@@ -1247,37 +1299,34 @@ function moveElement(event) {
 }
 
 function deleteBefore() {
-  const hoveredElements = document.querySelectorAll(
-    "#chatlog > .chapter > :hover, #chatlog > h2.date"
-  );
+  const hover = document.querySelectorAll(".content > :hover, h2.date:hover");
 
-  hoveredElements.forEach((element) => {
-    if (element.tagName === "H2") {
-      console.log(
-        "// Если наведено на h2.date, добавить класс remove всем соседям .chapter выше"
-      );
+  hover.forEach((element) => {
+    if (element.tagName.toLowerCase() === "h2") {
+      console.log("Под курсором h2.date");
       const closestChapter = element.closest(".chapter");
       if (closestChapter) {
         let sibling = closestChapter.previousElementSibling;
-        while (sibling && sibling.id !== "chatlog") {
+        while (sibling && sibling.tagName !== "H2") {
           sibling.classList.add("remove");
           sibling = sibling.previousElementSibling;
         }
       }
     } else {
-      console.log(
-        "// Если наведено на элемент внутри .content, удалить его соседей"
-      );
-      console.log("Deleting siblings before", element);
-      let currentElement = element.previousElementSibling;
-      while (currentElement && !currentElement.classList.contains("chapter")) {
+      console.log("Под курсором .content > :hover");
+      const contentContainer = element.closest(".content");
+      if (!contentContainer) return; // Пропускаем, если элемент не находится в контейнере .content
+
+      const targetElement = element;
+
+      let currentElement = targetElement.previousElementSibling;
+      while (currentElement) {
         const siblingToRemove = currentElement;
         currentElement = currentElement.previousElementSibling;
         siblingToRemove.remove();
       }
     }
   });
-
   // Удаление всех элементов с классом .chapter.remove из #chatlog
   document
     .querySelectorAll("#chatlog > .chapter.remove")
@@ -1286,6 +1335,7 @@ function deleteBefore() {
   // Обновление времени и актеров
   updateTimeAndActors();
 }
+
 
 function divideChapter() {
   const hoveredElements = document.querySelectorAll(".content > :hover");
@@ -1308,9 +1358,9 @@ function divideChapter() {
   const currentChapter = hoveredElements[0].closest(".chapter");
 
   // Копируем заголовок и актеров текущего .chapter
-  const chapterHeader = currentChapter.querySelector("h2.date").outerHTML.replace(/(<span class="title">.*)(<\/span>)/, '$1 +$2');
-
-
+  const chapterHeader = currentChapter
+    .querySelector("h2.date")
+    .outerHTML.replace(/(<span class="title">.*)(<\/span>)/, "$1 +$2");
 
   // Получаем timestamp первого logline в текущем .chapter
   const firstLoglineTimestamp = currentChapter
@@ -1339,15 +1389,11 @@ function divideChapter() {
 }
 
 function deleteAfter() {
-  const hoveredElements = document.querySelectorAll(
-    "#chatlog > .chapter > :hover, #chatlog > h2.date"
-  );
+  const hover = document.querySelectorAll(".content > :hover, h2.date:hover");
 
-  hoveredElements.forEach((element) => {
-    if (element.tagName === "H2") {
-      console.log(
-        "// Если наведено на h2.date, добавить класс remove всем соседям .chapter ниже"
-      );
+  hover.forEach((element) => {
+    if (element.tagName.toLowerCase() === "h2") {
+      console.log("Под курсором h2.date");
       const closestChapter = element.closest(".chapter");
       if (closestChapter) {
         let sibling = closestChapter.nextElementSibling;
@@ -1357,19 +1403,20 @@ function deleteAfter() {
         }
       }
     } else {
-      console.log(
-        "// Если наведено на элемент внутри .content, удалить его соседей"
-      );
-      console.log("Deleting siblings after", element);
-      let currentElement = element.nextElementSibling;
-      while (currentElement && !currentElement.classList.contains("chapter")) {
+      console.log("Под курсором .content > :hover");
+      const contentContainer = element.closest(".content");
+      if (!contentContainer) return; // Пропускаем, если элемент не находится в контейнере .content
+
+      const targetElement = element;
+
+      let currentElement = targetElement.nextElementSibling;
+      while (currentElement) {
         const siblingToRemove = currentElement;
         currentElement = currentElement.nextElementSibling;
         siblingToRemove.remove();
       }
     }
   });
-
   // Удаление всех элементов с классом .chapter.remove из #chatlog
   document
     .querySelectorAll("#chatlog > .chapter.remove")
@@ -1378,6 +1425,7 @@ function deleteAfter() {
   // Обновление времени и актеров
   updateTimeAndActors();
 }
+
 
 function startWrap() {
   const contentChild = document.querySelector(".content > :hover");

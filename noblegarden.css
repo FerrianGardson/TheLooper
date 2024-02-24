@@ -1205,8 +1205,8 @@ h2.date {
 }
 
 .paper.img.right {
-  float: right;
-  margin: 1rem 0rem 0rem 1rem;
+  /* float: right; */
+  /* margin: 1rem 0rem 0rem 1rem; */
 }
 
 span.say {
@@ -1276,9 +1276,6 @@ span.say {
   margin-bottom: 1rem;
 }
 
-.content > *:not(.selected, :hover) {
-  filter: none;
-}
 
 .virt > .emote, .virt, .whisper {
     color: unset!important;

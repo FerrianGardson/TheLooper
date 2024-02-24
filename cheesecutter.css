@@ -656,10 +656,11 @@ h2.date span.title {
   float: right;
   transform: rotate(5deg);
   background: none;
-  margin: 0;
+  margin-left: 1rem;
   margin-top: 1rem;
   text-align: right;
   position: relative;
+  max-width: 50%;
 }
 
 .wp-block.default.no-border.binded-chars {
@@ -705,14 +706,6 @@ p.logline {
   text-transform: uppercase;
   font-weight: bold;
   color: var(--red);
-}
-
-.start_wrap {
-  background: green;
-}
-
-.finish_wrap {
-  background: red;
 }
 
 .mia_img_tr {
