@@ -457,6 +457,9 @@ function cleanText() {
   // chatlogHTML = chatlogHTML.replace(/\[Объявление рейду\].*?\: /g, ""); // Объявления рейду
   chatlogHTML = chatlogHTML.replace(/&nbsp;/g, " "); // &nbsp;
 
+  // Вывод для дебага
+  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+  
   document
     .querySelectorAll("#chatlog p:empty")
     .forEach((emptyParagraph) => emptyParagraph.remove()); // Удаление пустых абзацев
@@ -646,14 +649,14 @@ function trimChapter(chapterElement) {
   const paragraphs = chapterElement.find("p");
   const selectedParagraphs = paragraphs.filter(".selected");
   if (selectedParagraphs.length > 0) {
-    const firstSelectedselectedIndex = paragraphs.selectedIndex(
+    const firstindex = paragraphs.index(
       selectedParagraphs.first()
     );
-    const lastSelectedselectedIndex = paragraphs.selectedIndex(
+    const lastindex = paragraphs.index(
       selectedParagraphs.last()
     );
-    paragraphs.slice(0, firstSelectedselectedIndex).remove();
-    paragraphs.slice(lastSelectedselectedIndex + 1).remove();
+    paragraphs.slice(0, firstindex).remove();
+    paragraphs.slice(lastindex + 1).remove();
   }
   addTimeToChapter();
 }
@@ -1104,8 +1107,8 @@ function convertLoglineToTranscript(loglineElement) {
     "ноя",
     "дек",
   ];
-  const monthselectedIndex = timestamp.getMonth();
-  const formattedDate = day + " " + monthNames[monthselectedIndex];
+  const monthindex = timestamp.getMonth();
+  const formattedDate = day + " " + monthNames[monthindex];
   const hours = ("0" + timestamp.getUTCHours()).slice(-2);
   const minutes = ("0" + timestamp.getUTCMinutes()).slice(-2);
   const formattedTimestamp = formattedDate + " " + hours + ":" + minutes;
@@ -1567,8 +1570,8 @@ function playerList() {
       if (!uniquePlayers.has(playerName) && !npcNames[playerName]) {
         // Если у игрока одна часть имени, добавляем его в список игроков
         if (
-          playerName.selectedIndexOf(" ") === -1 &&
-          playerName.selectedIndexOf("-") === -1
+          playerName.indexOf(" ") === -1 &&
+          playerName.indexOf("-") === -1
         ) {
           playerList.appendChild(createPlayerItem(playerName));
         } else {
@@ -1657,15 +1660,15 @@ function addCommaAndDotToPlayerList() {
 
   actorsDivs.forEach((actorsDiv) => {
     const actors = actorsDiv.querySelectorAll("li.player");
-    const lastActorselectedIndex = actors.length - 1;
+    const lastActorindex = actors.length - 1;
 
-    actors.forEach((actor, selectedIndex) => {
+    actors.forEach((actor, index) => {
       const commaSpan = document.createElement("span");
       commaSpan.classList.add("comma");
       commaSpan.textContent = ",";
       actor.appendChild(commaSpan);
 
-      if (selectedIndex === lastActorselectedIndex) {
+      if (index === lastActorindex) {
         commaSpan.remove();
         const dotSpan = document.createElement("span");
         dotSpan.classList.add("dot");
@@ -1715,7 +1718,7 @@ function updateTimeAndActors() {
   spans.forEach((span) => {
     span.remove();
   });
-  colorselectedIndex = 0;
+  colorindex = 0;
   removePlayersWithDungeonMasterNames();
   ShortNames();
   playerList();
@@ -1800,7 +1803,7 @@ function removeDuplicates(array) {
   return Array.from(uniquePlayers);
 }
 
-let colorselectedIndex = 0;
+let colorindex = 0;
 function colorizePlayers() {
   const playerSpans = document.querySelectorAll(".actors .player");
   playerSpans.forEach((span) => {
@@ -1811,8 +1814,8 @@ function colorizePlayers() {
     if (playerInfo) {
       colorClass = playerInfo[1];
     } else {
-      colorClass = randomColors[colorselectedIndex % randomColors.length];
-      colorselectedIndex++;
+      colorClass = randomColors[colorindex % randomColors.length];
+      colorindex++;
     }
 
     span.classList.add(colorClass);
@@ -1964,7 +1967,7 @@ function logFilter() {
   oldKeywordsInput = keywordsInput;
 }
 
-let selectedIndex = 0; // Начальный индекс
+let index = 0; // Начальный индекс
 
 function scrollToNextSelected() {
   // Находим все элементы с классом "selected"
@@ -1976,20 +1979,20 @@ function scrollToNextSelected() {
   }
 
   // Увеличиваем индекс на 1
-  selectedIndex++;
+  index++;
 
   // Если индекс достиг конца массива, обнуляем его
-  if (selectedIndex >= selectedElements.length) {
-    selectedIndex = 0;
+  if (index >= selectedElements.length) {
+    index = 0;
   }
 
   // Прокручиваем к следующему элементу
   const totalSelected = selectedElements.length - 1;
   console.log(
-    `Общий индекс: ${totalSelected}, Текущая позиция: ${selectedIndex}`
+    `Общий индекс: ${totalSelected}, Текущая позиция: ${index}`
   );
   console.log('selectedElements: ', selectedElements);
-  selectedElements[selectedIndex].scrollIntoView({
+  selectedElements[index].scrollIntoView({
     behavior: "smooth",
     block: "start",
   });
