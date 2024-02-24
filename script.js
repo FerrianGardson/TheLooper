@@ -594,7 +594,7 @@ function toggleCollapse(event) {
     // console.error( "Не найден элемент с классом 'chapter' в родительской цепочке." );
   }
 }
-keywordsInput = null;
+/* keywordsInput = null;
 function logFilter() {
   // Получаем значение из поля ввода и приводим его к нижнему регистру
   const keywordsInput = document
@@ -644,10 +644,7 @@ function logFilter() {
     }
   });
   openselectedChapters();
-  //  removeCollapsed();
-  selected = [];
-  scrollToSelect();
-}
+} */
 
 function trimChapter(chapterElement) {
   const paragraphs = chapterElement.find("p");
@@ -973,32 +970,6 @@ function clearChatlog() {
   var chatlog = document.getElementById("chatlog");
 
   chatlog.innerHTML = "";
-}
-
-let selected = [];
-let currentPosition = null;
-
-function scrollToSelect() {
-  if (!selected.length || currentPosition === null) {
-    selected = Array.from(document.querySelectorAll("p.selected"));
-
-    if (selected.length > 0) {
-      selected[0].scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-
-      currentPosition = 0;
-    }
-  } else {
-    const nextIndex = (currentPosition + 1) % selected.length;
-    selected[nextIndex].scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-    });
-
-    currentPosition = nextIndex;
-  }
 }
 
 function rearrangeChapters() {
@@ -1869,4 +1840,113 @@ function removePlayersWithDungeonMasterNames() {
       player.remove();
     }
   });
+}
+
+// Попытка восстановить старый фильтр по ключевым словам
+
+function logFilter() {
+  // Получаем значение из поля ввода
+  const keywordsInput = document.getElementById("keywordsInput").value;
+  console.log("keywordsInput: ", keywordsInput);
+
+  // Если пусто, то развыделяем всё
+  if (keywordsInput.trim() === "") {
+    const selectedElements = document.querySelectorAll("p.logline.selected");
+    selectedElements.forEach((element) => {
+      element.classList.remove("selected");
+    });
+    return;
+  }
+
+  // Разделяем введенные значения по запятым
+  const keywordsArray = keywordsInput
+    .split(",")
+    .map((keyword) => keyword.trim());
+
+  // Массив для хранения "анти-слов"
+  const removeWords = [];
+
+  // Фильтруем массив ключевых слов, извлекая "анти-слова"
+  const addKeywords = keywordsArray.filter((keyword) => {
+    if (keyword.startsWith("-")) {
+      removeWords.push(keyword.substring(1)); // Добавляем "анти-слово" в массив removeWords
+      return false; // Возвращаем false, чтобы слово не попало в основной массив ключевых слов
+    } else {
+      return true; // Возвращаем true для обычных ключевых слов
+    }
+  });
+
+  // Выводим основной массив ключевых слов в консоль
+  console.log("Keywords:", addKeywords);
+
+  if (addKeywords.length > 0) {
+    // Перебираем каждое ключевое слово из массива addKeywords
+    addKeywords.forEach((keyword) => {
+      // Приводим ключевое слово к нижнему регистру
+      const lowerKeyword = keyword.toLowerCase();
+      console.log("Keyword:", lowerKeyword);
+
+      // Выбираем все главы, которые не свернуты
+      const chapters = document.querySelectorAll(".chapter:not(.collapsed)");
+      console.log("Chapters:", chapters);
+
+      // Перебираем каждую главу
+      chapters.forEach((chapter) => {
+        // Выбираем все спаны с классом "logline" внутри контента главы
+        const contentSpans = chapter.querySelectorAll(".content > .logline");
+        console.log("Content Spans:", contentSpans);
+
+        // Перебираем каждый спан внутри контента
+        contentSpans.forEach((span) => {
+          // Получаем текст из спана и приводим его к нижнему регистру
+          const textContent = span.textContent.toLowerCase();
+          // console.log("Span Text Content:", textContent);
+
+          // Проверяем, содержит ли текст ключевое слово
+          if (textContent.includes(lowerKeyword)) {
+            console.log("Keyword found in:", span);
+            // Если содержит, добавляем класс "selected" к спану
+            span.classList.add("selected");
+          }
+        });
+      });
+    });
+  }
+
+  // Выводим массив "анти-слов" в консоль
+  console.log("Remove words:", removeWords);
+
+  if (removeWords.length > 0) {
+    // Перебираем каждое "анти-слово" из массива removeWords
+    removeWords.forEach((removeWord) => {
+      // Приводим "анти-слово" к нижнему регистру
+      const lowerRemoveWord = removeWord.toLowerCase();
+      console.log("Remove word:", lowerRemoveWord);
+      
+      // Выбираем все главы, которые не свернуты
+      const chapters = document.querySelectorAll(".chapter:not(.collapsed)");
+      console.log("Chapters:", chapters);
+      
+      // Перебираем каждую главу
+      chapters.forEach((chapter) => {
+        // Выбираем все спаны с классом "logline" внутри контента главы
+        const contentSpans = chapter.querySelectorAll(".content > .logline");
+        console.log("Content Spans:", contentSpans);
+        
+        // Перебираем каждый спан внутри контента
+        contentSpans.forEach((span) => {
+          // Получаем текст из спана и приводим его к нижнему регистру
+          const textContent = span.textContent.toLowerCase();
+          // console.log("Span Text Content:", textContent);
+          
+          // Проверяем, содержит ли текст "анти-слово"
+          if (textContent.includes(lowerRemoveWord)) {
+            console.log("Remove word found in:", span);
+            // Если содержит, удаляем класс "selected" у спана
+            span.classList.remove("selected");
+          }
+        });
+      });
+    });
+  }
 }
