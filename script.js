@@ -1,4 +1,4 @@
-console.log("Hello world!");
+// console.log("Hello world!");
 
 combineDelay = 2 * 1000;
 
@@ -78,11 +78,34 @@ npcNames = {
   Повар: true,
   Бармен: true,
   Разнорабочий: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
+  "Дерек Кларк": true,
+  Мурлок: true,
+  Жрица: true,
+  Извозчик: true,
+  Ветроплет: true,
+  Пирожок: true,
+  Надсмотрщик: true,
+  Вызыватель: true,
+  Горнорабочий: true,
+  Надзиратель: true,
+  Шахтер: true,
+  Сторож: true,
+  Головорез: true,
+  Стрелок: true,
+  Почтальон: true,
+  Дундосик: true,
+  Инженер: true,
+  Заступник: true,
+  Дозорный: true,
+  Хильда: true,
+  Охранитель: true,
+  Охотник: true,
+  Хобгоблин: true,
+  Посетительница: true,
+  Посетитель: true,
+  Кожевник: true,
+  Нешрешшс: true,
+  Охотница: true,
   Богач: true,
   Богач: true,
   Богач: true,
@@ -131,7 +154,7 @@ async function handleHtmlFile(file) {
   if (newChatlog) {
     chatlog.innerHTML = newChatlog.innerHTML;
   } else {
-    console.error("Элемент #chatlog не найден в HTML файле");
+    // console.error("Элемент #chatlog не найден в HTML файле");
   }
 }
 
@@ -147,10 +170,10 @@ function handleFileInput(event) {
     } else if (file.name.endsWith(".html")) {
       handleHtmlFile(file);
     } else {
-      console.error("Неподдерживаемый тип файла");
+      // console.error("Неподдерживаемый тип файла");
     }
   } else {
-    console.error("Файл не найден");
+    // console.error("Файл не найден");
   }
 }
 
@@ -258,12 +281,12 @@ function insertContentDiv(contentDiv, nextElement) {
 function wrapChapters() {
   const chatlog = document.querySelector("#chatlog");
   if (!chatlog) {
-    console.error("Элемент #chatlog не найден.");
+    // console.error("Элемент #chatlog не найден.");
     return;
   }
   const dates = chatlog.querySelectorAll("h2.date");
   if (!dates.length) {
-    console.error("Не найдены элементы h2.date.");
+    // console.error("Не найдены элементы h2.date.");
     return;
   }
   let chapters = [];
@@ -444,7 +467,7 @@ function cleanText() {
 }
 
 function combineFunctions() {
-  console.log("combineFunctions");
+  // console.log("combineFunctions");
   combineSay("emote");
   combineSay("say");
   combineSay("yell");
@@ -568,9 +591,7 @@ function toggleCollapse(event) {
   if (chapter) {
     chapter.classList.toggle("collapsed");
   } else {
-    console.error(
-      "Не найден элемент с классом 'chapter' в родительской цепочке."
-    );
+    // console.error( "Не найден элемент с классом 'chapter' в родительской цепочке." );
   }
 }
 keywordsInput = null;
@@ -814,19 +835,19 @@ function selectAll() {
 }
 
 function debug() {
-  console.log("Дебаг");
+  // console.log("Дебаг");
   gatherPlayersAndInsert();
 }
 
 function calculateTotalDuration() {
-  console.log("Начинаем подсчет общей продолжительности...");
+  // console.log("Начинаем подсчет общей продолжительности...");
 
   // Удаляем существующий элемент .totalduration, если он есть
   const existingTotalDuration = document.querySelector(
     "#chatlog .totalduration"
   );
   if (existingTotalDuration) {
-    console.log("Удаляем существующую общую продолжительность...");
+    // console.log("Удаляем существующую общую продолжительность...");
     existingTotalDuration.remove();
   }
 
@@ -838,20 +859,18 @@ function calculateTotalDuration() {
 
   durationElements.forEach((element) => {
     const durationText = element.getAttribute("duration");
-    console.log(`Найдена продолжительность: ${durationText}`);
+    // console.log(`Найдена продолжительность: ${durationText}`);
     const [hours, minutes] = durationText.split(":").map(Number);
-    console.log(`Часы: ${hours}, Минуты: ${minutes}`);
+    // console.log(`Часы: ${hours}, Минуты: ${minutes}`);
     totalMinutes += hours * 60 + minutes;
   });
 
-  console.log(`Общая продолжительность в минутах: ${totalMinutes}`);
+  // console.log(`Общая продолжительность в минутах: ${totalMinutes}`);
 
   const totalHours = Math.floor(totalMinutes / 60);
   const remainingMinutes = totalMinutes % 60;
 
-  console.log(
-    `Общее количество часов: ${totalHours}, Оставшиеся минуты: ${remainingMinutes}`
-  );
+  // console.log( `Общее количество часов: ${totalHours}, Оставшиеся минуты: ${remainingMinutes}` );
 
   const totalDurationHeading = document.createElement("h2");
   totalDurationHeading.textContent = `Всего наиграно ${totalHours}ч ${remainingMinutes}мин`;
@@ -861,12 +880,10 @@ function calculateTotalDuration() {
   totalDurationChapter.appendChild(totalDurationHeading);
 
   const chatlog = document.querySelector("#chatlog");
-  console.log("Вставляем общую продолжительность в начало #chatlog...");
+  // console.log("Вставляем общую продолжительность в начало #chatlog...");
   chatlog.insertBefore(totalDurationChapter, chatlog.firstChild);
 
-  console.log(
-    "Общая продолжительность успешно вычислена и добавлена на страницу."
-  );
+  // console.log( "Общая продолжительность успешно вычислена и добавлена на страницу." );
 }
 
 function removeCollapsed() {
@@ -1005,13 +1022,13 @@ function rearrangeChapters() {
       hoveredElement.insertAdjacentHTML("afterend", newChapterHTML);
 
       // Выводим сообщение о выполнении
-      console.log("HTML-код успешно вставлен после hoveredElement.");
+      // console.log("HTML-код успешно вставлен после hoveredElement.");
     }
   });
 }
 
 function removeUnselectedLoglines() {
-  console.log("Удаляю ненужные строки");
+  // console.log("Удаляю ненужные строки");
 
   // Находим все .chapter, которые не .collapsed
   const chapters = document.querySelectorAll(".chapter:not(.collapsed)");
@@ -1080,18 +1097,9 @@ function calculateTimeDifference() {
   localDifference = localOffset / 60;
   moscowDifference = localDifference + 3;
   serverDifference = localDifference + 1;
-  console.log(
-    "Разница между вашим местным временем и UTC (в часах):",
-    localDifference
-  );
-  console.log(
-    "Разница между вашим местным временем и московским временем (в часах):",
-    moscowDifference
-  );
-  console.log(
-    "Разница между вашим местным временем и серверным временем (в часах):",
-    serverDifference
-  );
+  // console.log( "Разница между вашим местным временем и UTC (в часах):", localDifference );
+  // console.log( "Разница между вашим местным временем и московским временем (в часах):", moscowDifference );
+  // console.log( "Разница между вашим местным временем и серверным временем (в часах):", serverDifference );
 }
 
 function processTimestamp() {
@@ -1099,14 +1107,14 @@ function processTimestamp() {
 
   const timestampValue = chapter.getAttribute("timestamp");
 
-  console.log("Введенный таймштамп:", timestampValue);
+  // console.log("Введенный таймштамп:", timestampValue);
 
   const dateObject = new Date(timestampValue);
   const hours = ("0" + dateObject.getUTCHours()).slice(-2);
   const minutes = ("0" + dateObject.getUTCMinutes()).slice(-2);
   const formattedTimestamp = hours + ":" + minutes;
 
-  console.log("Отформатированный таймштамп:", formattedTimestamp);
+  // console.log("Отформатированный таймштамп:", formattedTimestamp);
 }
 
 function convertLoglineToTranscript(loglineElement) {
@@ -1304,7 +1312,7 @@ function deleteBefore() {
 
   hover.forEach((element) => {
     if (element.tagName.toLowerCase() === "h2") {
-      console.log("Под курсором h2.date");
+      // console.log("Под курсором h2.date");
       const closestChapter = element.closest(".chapter");
       if (closestChapter) {
         let sibling = closestChapter.previousElementSibling;
@@ -1314,7 +1322,7 @@ function deleteBefore() {
         }
       }
     } else {
-      console.log("Под курсором .content > :hover");
+      // console.log("Под курсором .content > :hover");
       const contentContainer = element.closest(".content");
       if (!contentContainer) return; // Пропускаем, если элемент не находится в контейнере .content
 
@@ -1352,7 +1360,7 @@ function divideChapter() {
   });
 
   // Озвучиваем в консоль содержимое массива
-  //console.log("Migrating Loglines:", migratingLoglines);
+  //// console.log("Migrating Loglines:", migratingLoglines);
 
   // Находим ближайший родительский .chapter
   const currentChapter = hoveredElements[0].closest(".chapter");
@@ -1393,7 +1401,7 @@ function deleteAfter() {
 
   hover.forEach((element) => {
     if (element.tagName.toLowerCase() === "h2") {
-      console.log("Под курсором h2.date");
+      // console.log("Под курсором h2.date");
       const closestChapter = element.closest(".chapter");
       if (closestChapter) {
         let sibling = closestChapter.nextElementSibling;
@@ -1403,7 +1411,7 @@ function deleteAfter() {
         }
       }
     } else {
-      console.log("Под курсором .content > :hover");
+      // console.log("Под курсором .content > :hover");
       const contentContainer = element.closest(".content");
       if (!contentContainer) return; // Пропускаем, если элемент не находится в контейнере .content
 
@@ -1442,11 +1450,11 @@ function finishWrap(className) {
   if (contentChild) {
     document.querySelectorAll(".content .finish_wrap").forEach((element) => {
       element.classList.remove("finish_wrap");
-      console.log("finish_wrap removed from element:", element);
+      // console.log("finish_wrap removed from element:", element);
     });
 
     contentChild.classList.add("finish_wrap");
-    console.log("finish_wrap added to element:", contentChild);
+    // console.log("finish_wrap added to element:", contentChild);
     WrapToDiv();
   }
   function WrapToDiv() {
@@ -1462,9 +1470,7 @@ function finishWrap(className) {
       finishWrap.classList.remove("finish_wrap");
 
       if (!startWrap || !finishWrap) {
-        console.log(
-          "Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv."
-        );
+        // console.log( "Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv." );
         return;
       }
 
@@ -1494,7 +1500,7 @@ function finishWrap(className) {
 
       startWrap.parentNode.insertBefore(spoilerDiv, startWrap.nextSibling);
 
-      console.log("Элементы успешно обёрнуты в спойлер:", spoilerDiv);
+      // console.log("Элементы успешно обёрнуты в спойлер:", spoilerDiv);
       startWrap.remove();
       finishWrap.remove();
 
@@ -1560,35 +1566,52 @@ function createPlayerItem(playerName) {
 }
 
 function playerList() {
+  // Получаем все элементы с классом "content"
   const contents = document.querySelectorAll(".content");
+
+  // Перебираем каждый элемент "content"
   contents.forEach((content) => {
+    // Получаем всех игроков внутри текущего "content"
     const players = content.querySelectorAll(talkingPlayer);
-    const actorsDiv = document.createElement("div");
-    const playerList = document.createElement("ul");
-    const npcList = document.createElement("ul");
+
+    // Создаем элементы для игроков и NPC
+    const actorsDiv = document.createElement("div"); // Общий контейнер для всех актеров
+    const playerList = document.createElement("ul"); // Список игроков
+    const npcList = document.createElement("ul"); // Список NPC
+
+    // Добавляем классы к спискам игроков и NPC
     playerList.classList.add("players");
     npcList.classList.add("npc");
+
+    // Добавляем класс к общему контейнеру
     actorsDiv.classList.add("actors");
+
+    // Вставляем общий контейнер перед текущим "content"
     content.parentNode.insertBefore(actorsDiv, content);
 
+    // Перебираем всех игроков в текущем "content"
     players.forEach((player) => {
-      const playerName = player.textContent.trim();
-      const uniquePlayerNameParts = playerName.split(" ");
+      const playerName = player.textContent.trim(); // Получаем имя игрока
 
-      if (
-        uniquePlayerNameParts.length === 1 &&
-        !npcNames[playerName] &&
-        !uniquePlayers.has(playerName)
-      ) {
-        playerList.appendChild(createPlayerItem(playerName));
-        uniquePlayers.add(playerName);
-      } else if (!uniquePlayers.has(playerName)) {
-        npcList.appendChild(createPlayerItem(playerName));
+      // Если имя игрока уникально и он не является NPC
+      if (!uniquePlayers.has(playerName) && !npcNames[playerName]) {
+        // Если у игрока одна часть имени, добавляем его в список игроков
+        if (playerName.indexOf(" ") === -1 && playerName.indexOf("-") === -1) {
+          playerList.appendChild(createPlayerItem(playerName));
+        } else {
+          // Если у игрока более одной части имени, он считается NPC и добавляется в соответствующий список
+          npcList.appendChild(createPlayerItem(playerName));
+        }
+        // Добавляем имя игрока в список уникальных имен
         uniquePlayers.add(playerName);
       }
     });
+
+    // Добавляем списки игроков и NPC в общий контейнер
     actorsDiv.appendChild(playerList);
     actorsDiv.appendChild(npcList);
+
+    // Очищаем список уникальных имен перед переходом к следующему "content"
     uniquePlayers.clear();
   });
 }
@@ -1656,7 +1679,7 @@ function synchronizePlayerColors() {
   });
 }
 
-function addCommaAndDot() {
+function addCommaAndDotToPlayerList() {
   const actorsDivs = document.querySelectorAll("div.actors");
 
   actorsDivs.forEach((actorsDiv) => {
@@ -1720,16 +1743,18 @@ function updateTimeAndActors() {
     span.remove();
   });
   colorIndex = 0;
+  removePlayersWithDungeonMasterNames();
   ShortNames();
   playerList();
   colorizePlayers();
   FullNames();
   addTimeToChapter();
   synchronizePlayerColors();
+  calculateTotalDuration();
+  gatherPlayersAndInsert();
+  addCommaAndDotToPlayerList();
   addColumnToPlayers();
   addSpaceToEmotePlayers();
-  addCommaAndDot();
-  calculateTotalDuration();
 }
 
 function toggleHighlight() {
@@ -1738,29 +1763,31 @@ function toggleHighlight() {
 }
 
 function gatherPlayersAndInsert() {
-  console.log("Начинаем сбор всех игроков и их вставку...");
+  const totalPlayers = document.querySelector(".totalduration > .players");
+  if (totalPlayers) {
+    totalPlayers.remove();
+  }
+
+  // // console.log("Начинаем сбор всех игроков и их вставку...");
 
   // Собираем все элементы .players > li со всей страницы
   const allPlayers = document.querySelectorAll(".players > li");
-  console.log(`Найдено ${allPlayers.length} игроков.`);
+  // // console.log(`Найдено ${allPlayers.length} игроков.`);
 
   // Проходимся по каждому элементу и удаляем все <span> из его содержимого
   allPlayers.forEach((player) => {
     player.innerHTML = player.innerHTML.replace(/<span[^>]*>.*?<\/span>/g, "");
   });
   const totalUniquePlayers = removeDuplicates(allPlayers);
-  console.log('allPlayers: ', allPlayers);
-  console.log('totalUniquePlayers: ', totalUniquePlayers);
-  // Создаем элемент div.totalplayers
-  const totalPlayersDiv = document.createElement("div");
-  totalPlayersDiv.classList.add("totalplayers");
+  // Создаем элемент div.players
+  const playersUl = document.createElement("ul");
+  playersUl.classList.add("players");
 
-  // Перебираем найденные игроки и добавляем их в div.totalplayers
+  // Перебираем найденные игроки и добавляем их в ul.players
 
   totalUniquePlayers.forEach((player) => {
-    totalPlayersDiv.appendChild(player);
-});
-
+    playersUl.appendChild(player);
+  });
 
   // Находим элемент div.totalduration
   const totalDurationChapter = document.querySelector(
@@ -1768,18 +1795,14 @@ function gatherPlayersAndInsert() {
   );
 
   if (totalDurationChapter) {
-    // Вставляем div.totalplayers в начало div.totalduration
+    // Вставляем ul.players в начало div.totalduration
     totalDurationChapter.insertBefore(
-      totalPlayersDiv,
-      totalDurationChapter.firstChild
+      playersUl,
+      totalDurationChapter.lastChild
     );
-    console.log(
-      "Все игроки успешно собраны и вставлены в начало общей продолжительности."
-    );
+    // // console.log( "Все игроки успешно собраны и вставлены в начало общей продолжительности." );
   } else {
-    console.log(
-      "Элемент div.totalduration не найден. Не удалось вставить игроков."
-    );
+    // // console.log( "Элемент div.totalduration не найден. Не удалось вставить игроков." );
   }
 }
 
@@ -1803,8 +1826,6 @@ function removeDuplicates(array) {
   return Array.from(uniquePlayers);
 }
 
-
-
 let colorIndex = 0;
 function colorizePlayers() {
   const playerSpans = document.querySelectorAll(".actors .player");
@@ -1821,5 +1842,31 @@ function colorizePlayers() {
     }
 
     span.classList.add(colorClass);
+  });
+}
+
+const dungeonMasterMap = new Map([
+  ["Фг", true],
+  ["Кей", true],
+  ["Минор", true],
+  ["Кей", true],
+  ["Кей", true],
+  ["Кей", true],
+  ["Кей", true],
+  ["Кей", true],
+  ["Кей", true],
+  ["Кей", true],
+  ["Кей", true],
+  ["Кей", true],
+]);
+
+// Функция для удаления всех игроков с именами ДМов
+function removePlayersWithDungeonMasterNames() {
+  const players = document.querySelectorAll(".player");
+  players.forEach((player) => {
+    const playerName = player.textContent.trim();
+    if (dungeonMasterMap.has(playerName)) {
+      player.remove();
+    }
   });
 }

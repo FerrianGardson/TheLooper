@@ -684,7 +684,7 @@ ul#redactor-toolbar-0 {
 }
 
 .players > li, .npc > li, .totalplayers > li {
-  display: inline;
+  display: inline-block;
   margin-right: 0.3em;
   font-weight: bold;
 }
