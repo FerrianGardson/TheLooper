@@ -1,4 +1,4 @@
-.content > *:not(.selected, :hover) {
+.content > p:not(.selected, :hover) {
   opacity: 0.5;
   filter: saturate(0.5);
 }

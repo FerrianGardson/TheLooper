@@ -1238,6 +1238,7 @@ span.say {
 
 .totalduration {
     padding: 2rem;
+    margin-bottom: -6rem;
 }
 
 .emote > .speech {

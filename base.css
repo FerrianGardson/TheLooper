@@ -234,9 +234,9 @@ input:focus-visible {
   margin-bottom: 1rem;
 }
 
-.content > *:not(.selected, :hover) {
-  /* opacity: 0.5; */
-  filter: saturate(0.5);
+.content > .logline:not(.selected, :hover) {
+  opacity: 0.5;
+  filter: saturate(0);
 }
 
 .buttons.cut:hover {
@@ -439,3 +439,6 @@ input[type="checkbox"] {width: 1rem;}
   mask-position: top;
 }
 
+.paper.controls {
+  margin-bottom: -10rem;
+}

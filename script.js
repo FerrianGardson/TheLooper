@@ -457,10 +457,6 @@ function cleanText() {
   // chatlogHTML = chatlogHTML.replace(/\[Объявление рейду\].*?\: /g, ""); // Объявления рейду
   chatlogHTML = chatlogHTML.replace(/&nbsp;/g, " "); // &nbsp;
 
-  // Вывод для дебага
-  document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
-  // debugger;
-
   document
     .querySelectorAll("#chatlog p:empty")
     .forEach((emptyParagraph) => emptyParagraph.remove()); // Удаление пустых абзацев
@@ -650,10 +646,14 @@ function trimChapter(chapterElement) {
   const paragraphs = chapterElement.find("p");
   const selectedParagraphs = paragraphs.filter(".selected");
   if (selectedParagraphs.length > 0) {
-    const firstSelectedIndex = paragraphs.index(selectedParagraphs.first());
-    const lastSelectedIndex = paragraphs.index(selectedParagraphs.last());
-    paragraphs.slice(0, firstSelectedIndex).remove();
-    paragraphs.slice(lastSelectedIndex + 1).remove();
+    const firstSelectedselectedIndex = paragraphs.selectedIndex(
+      selectedParagraphs.first()
+    );
+    const lastSelectedselectedIndex = paragraphs.selectedIndex(
+      selectedParagraphs.last()
+    );
+    paragraphs.slice(0, firstSelectedselectedIndex).remove();
+    paragraphs.slice(lastSelectedselectedIndex + 1).remove();
   }
   addTimeToChapter();
 }
@@ -833,7 +833,6 @@ function selectAll() {
 
 function debug() {
   // console.log("Дебаг");
-  gatherPlayersAndInsert();
 }
 
 function calculateTotalDuration() {
@@ -1105,8 +1104,8 @@ function convertLoglineToTranscript(loglineElement) {
     "ноя",
     "дек",
   ];
-  const monthIndex = timestamp.getMonth();
-  const formattedDate = day + " " + monthNames[monthIndex];
+  const monthselectedIndex = timestamp.getMonth();
+  const formattedDate = day + " " + monthNames[monthselectedIndex];
   const hours = ("0" + timestamp.getUTCHours()).slice(-2);
   const minutes = ("0" + timestamp.getUTCMinutes()).slice(-2);
   const formattedTimestamp = formattedDate + " " + hours + ":" + minutes;
@@ -1567,7 +1566,10 @@ function playerList() {
       // Если имя игрока уникально и он не является NPC
       if (!uniquePlayers.has(playerName) && !npcNames[playerName]) {
         // Если у игрока одна часть имени, добавляем его в список игроков
-        if (playerName.indexOf(" ") === -1 && playerName.indexOf("-") === -1) {
+        if (
+          playerName.selectedIndexOf(" ") === -1 &&
+          playerName.selectedIndexOf("-") === -1
+        ) {
           playerList.appendChild(createPlayerItem(playerName));
         } else {
           // Если у игрока более одной части имени, он считается NPC и добавляется в соответствующий список
@@ -1655,15 +1657,15 @@ function addCommaAndDotToPlayerList() {
 
   actorsDivs.forEach((actorsDiv) => {
     const actors = actorsDiv.querySelectorAll("li.player");
-    const lastActorIndex = actors.length - 1;
+    const lastActorselectedIndex = actors.length - 1;
 
-    actors.forEach((actor, index) => {
+    actors.forEach((actor, selectedIndex) => {
       const commaSpan = document.createElement("span");
       commaSpan.classList.add("comma");
       commaSpan.textContent = ",";
       actor.appendChild(commaSpan);
 
-      if (index === lastActorIndex) {
+      if (selectedIndex === lastActorselectedIndex) {
         commaSpan.remove();
         const dotSpan = document.createElement("span");
         dotSpan.classList.add("dot");
@@ -1713,7 +1715,7 @@ function updateTimeAndActors() {
   spans.forEach((span) => {
     span.remove();
   });
-  colorIndex = 0;
+  colorselectedIndex = 0;
   removePlayersWithDungeonMasterNames();
   ShortNames();
   playerList();
@@ -1726,6 +1728,7 @@ function updateTimeAndActors() {
   addCommaAndDotToPlayerList();
   addColumnToPlayers();
   addSpaceToEmotePlayers();
+  gatherPlayersAndInsert();
 }
 
 function toggleHighlight() {
@@ -1797,7 +1800,7 @@ function removeDuplicates(array) {
   return Array.from(uniquePlayers);
 }
 
-let colorIndex = 0;
+let colorselectedIndex = 0;
 function colorizePlayers() {
   const playerSpans = document.querySelectorAll(".actors .player");
   playerSpans.forEach((span) => {
@@ -1808,8 +1811,8 @@ function colorizePlayers() {
     if (playerInfo) {
       colorClass = playerInfo[1];
     } else {
-      colorClass = randomColors[colorIndex % randomColors.length];
-      colorIndex++;
+      colorClass = randomColors[colorselectedIndex % randomColors.length];
+      colorselectedIndex++;
     }
 
     span.classList.add(colorClass);
@@ -1844,17 +1847,26 @@ function removePlayersWithDungeonMasterNames() {
 
 // Попытка восстановить старый фильтр по ключевым словам
 
+let keywordsInput = document.getElementById("keywordsInput").value;
+let oldKeywordsInput = "";
+
 function logFilter() {
   // Получаем значение из поля ввода
-  const keywordsInput = document.getElementById("keywordsInput").value;
+  keywordsInput = document.getElementById("keywordsInput").value;
   console.log("keywordsInput: ", keywordsInput);
 
   // Если пусто, то развыделяем всё
   if (keywordsInput.trim() === "") {
-    const selectedElements = document.querySelectorAll("p.logline.selected");
+    const selectedElements = document.querySelectorAll(".selected");
     selectedElements.forEach((element) => {
       element.classList.remove("selected");
     });
+    return;
+  }
+
+  // Если инпут прежний, делаем скролл
+  if (keywordsInput === oldKeywordsInput) {
+    scrollToNextSelected();
     return;
   }
 
@@ -1877,34 +1889,34 @@ function logFilter() {
   });
 
   // Выводим основной массив ключевых слов в консоль
-  console.log("Keywords:", addKeywords);
+  // console.log("Keywords:", addKeywords);
 
   if (addKeywords.length > 0) {
     // Перебираем каждое ключевое слово из массива addKeywords
     addKeywords.forEach((keyword) => {
       // Приводим ключевое слово к нижнему регистру
       const lowerKeyword = keyword.toLowerCase();
-      console.log("Keyword:", lowerKeyword);
+      // console.log("Keyword:", lowerKeyword);
 
       // Выбираем все главы, которые не свернуты
       const chapters = document.querySelectorAll(".chapter:not(.collapsed)");
-      console.log("Chapters:", chapters);
+      // console.log("Chapters:", chapters);
 
       // Перебираем каждую главу
       chapters.forEach((chapter) => {
         // Выбираем все спаны с классом "logline" внутри контента главы
         const contentSpans = chapter.querySelectorAll(".content > .logline");
-        console.log("Content Spans:", contentSpans);
+        // console.log("Content Spans:", contentSpans);
 
         // Перебираем каждый спан внутри контента
         contentSpans.forEach((span) => {
           // Получаем текст из спана и приводим его к нижнему регистру
           const textContent = span.textContent.toLowerCase();
-          // console.log("Span Text Content:", textContent);
+          // // console.log("Span Text Content:", textContent);
 
           // Проверяем, содержит ли текст ключевое слово
           if (textContent.includes(lowerKeyword)) {
-            console.log("Keyword found in:", span);
+            // console.log("Keyword found in:", span);
             // Если содержит, добавляем класс "selected" к спану
             span.classList.add("selected");
           }
@@ -1914,7 +1926,7 @@ function logFilter() {
   }
 
   // Выводим массив "анти-слов" в консоль
-  console.log("Remove words:", removeWords);
+  // console.log("Remove words:", removeWords);
 
   if (removeWords.length > 0) {
     // Перебираем каждое "анти-слово" из массива removeWords
@@ -1922,23 +1934,23 @@ function logFilter() {
       // Приводим "анти-слово" к нижнему регистру
       const lowerRemoveWord = removeWord.toLowerCase();
       console.log("Remove word:", lowerRemoveWord);
-      
+
       // Выбираем все главы, которые не свернуты
       const chapters = document.querySelectorAll(".chapter:not(.collapsed)");
       console.log("Chapters:", chapters);
-      
+
       // Перебираем каждую главу
       chapters.forEach((chapter) => {
         // Выбираем все спаны с классом "logline" внутри контента главы
         const contentSpans = chapter.querySelectorAll(".content > .logline");
         console.log("Content Spans:", contentSpans);
-        
+
         // Перебираем каждый спан внутри контента
         contentSpans.forEach((span) => {
           // Получаем текст из спана и приводим его к нижнему регистру
           const textContent = span.textContent.toLowerCase();
           // console.log("Span Text Content:", textContent);
-          
+
           // Проверяем, содержит ли текст "анти-слово"
           if (textContent.includes(lowerRemoveWord)) {
             console.log("Remove word found in:", span);
@@ -1949,4 +1961,36 @@ function logFilter() {
       });
     });
   }
+  oldKeywordsInput = keywordsInput;
+}
+
+let selectedIndex = 0; // Начальный индекс
+
+function scrollToNextSelected() {
+  // Находим все элементы с классом "selected"
+  const selectedElements = document.querySelectorAll(".selected");
+
+  // Если нет выбранных элементов или их количество меньше двух, прерываем выполнение функции
+  if (!selectedElements || selectedElements.length < 2) {
+    return;
+  }
+
+  // Увеличиваем индекс на 1
+  selectedIndex++;
+
+  // Если индекс достиг конца массива, обнуляем его
+  if (selectedIndex >= selectedElements.length) {
+    selectedIndex = 0;
+  }
+
+  // Прокручиваем к следующему элементу
+  const totalSelected = selectedElements.length - 1;
+  console.log(
+    `Общий индекс: ${totalSelected}, Текущая позиция: ${selectedIndex}`
+  );
+  console.log('selectedElements: ', selectedElements);
+  selectedElements[selectedIndex].scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
 }
