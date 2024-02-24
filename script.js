@@ -1751,6 +1751,11 @@ function updateTimeAndActors() {
   calculateTotalDuration();
 }
 
+function toggleHighlight() {
+  var styleLink = document.querySelector("link.selection.style");
+  styleLink.disabled = !styleLink.disabled;
+}
+
 function gatherPlayersAndInsert() {
   console.log("Начинаем сбор всех игроков и их вставку...");
 
@@ -1758,7 +1763,10 @@ function gatherPlayersAndInsert() {
   const allPlayers = document.querySelectorAll(".players > li");
   console.log(`Найдено ${allPlayers.length} игроков.`);
 
-  // Удаляем дубликаты из массива игроков
+  // Проходимся по каждому элементу и удаляем все <span> из его содержимого
+  allPlayers.forEach((player) => {
+    player.innerHTML = player.innerHTML.replace(/<span[^>]*>.*?<\/span>/g, "");
+  });
   const totalUniquePlayers = removeDuplicates(allPlayers);
 
   // Создаем элемент div.totalplayers
@@ -1807,9 +1815,4 @@ function removeDuplicates(array) {
 
   // Возвращаем массив уникальных имен игроков
   return Array.from(playerNames);
-}
-
-function toggleHighlight() {
-  var styleLink = document.querySelector("link.selection.style");
-  styleLink.disabled = !styleLink.disabled;
 }

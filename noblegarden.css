@@ -918,12 +918,9 @@ p.story .speech {
   color: var(--emote) !important;
 }
 
-.chapter:not(:first-of-type) > h2.date {
-  /* margin-top: 6rem !important; */
-}
+
 
 .yell span.player {
-  /* color: var(--red); */
   font-weight: bold;
 }
 
@@ -935,16 +932,6 @@ p.story .speech {
   color: var(--text-color) !important;
 }
 
-/* Брейкпойнт */
-
-@media (min-width: 1440px) {
-  /* Ваши стили здесь */
-  .col-sm-2 {
-    /* position: absolute; */
-    /* top: 606px; */
-    /* right: 30px; */
-  }
-}
 
 @media (max-width: 768px) {
   .wp-block.default.no-border.shadow-5.portrait {
@@ -1202,11 +1189,6 @@ h2.date {
 
 .content > *:hover {
   filter: unset;
-}
-
-.paper.img.right {
-  /* float: right; */
-  /* margin: 1rem 0rem 0rem 1rem; */
 }
 
 span.say {
