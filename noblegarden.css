@@ -683,8 +683,7 @@ ul#redactor-toolbar-0 {
   text-transform: uppercase;
 }
 
-.players > li,
-.npc > li {
+.players > li, .npc > li, .totalplayers > li {
   display: inline;
   margin-right: 0.3em;
   font-weight: bold;
@@ -920,7 +919,7 @@ p.story .speech {
 }
 
 .chapter:not(:first-of-type) > h2.date {
-  margin-top: 6rem !important;
+  /* margin-top: 6rem !important; */
 }
 
 .yell span.player {
@@ -941,9 +940,9 @@ p.story .speech {
 @media (min-width: 1440px) {
   /* Ваши стили здесь */
   .col-sm-2 {
-    position: absolute;
-    top: 606px;
-    right: 30px;
+    /* position: absolute; */
+    /* top: 606px; */
+    /* right: 30px; */
   }
 }
 
@@ -1148,8 +1147,9 @@ h2.date span.title {
   padding: 0;
 }
 
-h2.date > span {
-  color: #ffffff9c;
+h2.date > span, .totalduration > h2 {
+  color: #ffffff9c!important;
+  font-size: 2.2rem!important;
 }
 
 section.slice.slice-md.bg-base-img:nth-of-type(3) {
@@ -1217,37 +1217,6 @@ span.say {
   text-shadow: 1px 1px black;
 }
 
-.collapsed > h2::after {
-  content: "Читать далее...";
-  font-size: 1rem;
-  line-height: 1rem;
-  display: block;
-  font-weight: 100;
-  opacity: 0.5;
-  margin-bottom: 1rem;
-  margin-top: 6px;
-}
-
-.collapsed {
-  -webkit-mask-image: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 1) 75%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  -webkit-mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: top;
-
-  mask-image: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 1) 75%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  mask-size: 100% 100%;
-  mask-repeat: no-repeat;
-  mask-position: top;
-}
-
 .story span.player {
     display: none;
 }
@@ -1279,4 +1248,24 @@ span.say {
 
 .virt > .emote, .virt, .whisper {
     color: unset!important;
+}
+
+.totalduration.chapter {
+    margin-bottom: -4rem;
+}
+
+.totalduration {
+    padding: 2rem;
+}
+
+.emote > .speech {
+  color: var(--text-color) !important;
+}
+
+div#chatlog {
+  margin-top: 11rem;
+}
+
+h2.date > span {
+    font-size: 0.7em!important;
 }

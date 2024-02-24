@@ -92,6 +92,6 @@ span.badge.like-num {
   box-shadow: none !important;
 }
 
-.emote > .speech {
-  color: var(--text-color) !important;
+.wp-block.default.no-border.binded-chars {
+  margin-bottom: -11rem;
 }

@@ -815,20 +815,31 @@ function selectAll() {
 
 function debug() {
   console.log("Дебаг");
-  calculateTotalDuration();
+  gatherPlayersAndInsert();
 }
 
 function calculateTotalDuration() {
   console.log("Начинаем подсчет общей продолжительности...");
 
-  const durationElements = document.querySelectorAll('#chatlog span.durationtime');
+  // Удаляем существующий элемент .totalduration, если он есть
+  const existingTotalDuration = document.querySelector(
+    "#chatlog .totalduration"
+  );
+  if (existingTotalDuration) {
+    console.log("Удаляем существующую общую продолжительность...");
+    existingTotalDuration.remove();
+  }
+
+  const durationElements = document.querySelectorAll(
+    "#chatlog span.durationtime"
+  );
 
   let totalMinutes = 0;
 
   durationElements.forEach((element) => {
-    const durationText = element.getAttribute('duration');
+    const durationText = element.getAttribute("duration");
     console.log(`Найдена продолжительность: ${durationText}`);
-    const [hours, minutes] = durationText.split(':').map(Number);
+    const [hours, minutes] = durationText.split(":").map(Number);
     console.log(`Часы: ${hours}, Минуты: ${minutes}`);
     totalMinutes += hours * 60 + minutes;
   });
@@ -838,19 +849,25 @@ function calculateTotalDuration() {
   const totalHours = Math.floor(totalMinutes / 60);
   const remainingMinutes = totalMinutes % 60;
 
-  console.log(`Общее количество часов: ${totalHours}, Оставшиеся минуты: ${remainingMinutes}`);
+  console.log(
+    `Общее количество часов: ${totalHours}, Оставшиеся минуты: ${remainingMinutes}`
+  );
 
-  const totalDurationHeading = document.createElement('h2');
+  const totalDurationHeading = document.createElement("h2");
   totalDurationHeading.textContent = `Всего наиграно ${totalHours}ч ${remainingMinutes}мин`;
 
-  const chatlog = document.querySelector('#chatlog');
+  const totalDurationChapter = document.createElement("div");
+  totalDurationChapter.classList.add("totalduration", "chapter");
+  totalDurationChapter.appendChild(totalDurationHeading);
+
+  const chatlog = document.querySelector("#chatlog");
   console.log("Вставляем общую продолжительность в начало #chatlog...");
-  chatlog.insertBefore(totalDurationHeading, chatlog.firstChild);
+  chatlog.insertBefore(totalDurationChapter, chatlog.firstChild);
 
-  console.log("Общая продолжительность успешно вычислена и добавлена на страницу.");
+  console.log(
+    "Общая продолжительность успешно вычислена и добавлена на страницу."
+  );
 }
-
-
 
 function removeCollapsed() {
   var collapsedDivs = document.querySelectorAll("div.collapsed");
@@ -1092,22 +1109,6 @@ function processTimestamp() {
   console.log("Отформатированный таймштамп:", formattedTimestamp);
 }
 
-function calculateTotalDuration() {
-  let totalHours = 0;
-  let totalMinutes = 0;
-
-  const durationTimeSpans = document.querySelectorAll(".durationtime");
-  durationTimeSpans.forEach((span) => {
-    const durationAttribute = span.getAttribute("duration");
-    const [hours, minutes] = durationAttribute.split(":").map(Number);
-    totalHours += hours;
-    totalMinutes += minutes;
-  });
-
-  totalHours += Math.floor(totalMinutes / 60);
-  totalMinutes %= 60;
-}
-
 function convertLoglineToTranscript(loglineElement) {
   const timestamp = new Date(loglineElement.getAttribute("timestamp"));
   const day = timestamp.getDate();
@@ -1336,7 +1337,6 @@ function deleteBefore() {
   updateTimeAndActors();
 }
 
-
 function divideChapter() {
   const hoveredElements = document.querySelectorAll(".content > :hover");
   let migratingLoglines = [];
@@ -1425,7 +1425,6 @@ function deleteAfter() {
   // Обновление времени и актеров
   updateTimeAndActors();
 }
-
 
 function startWrap() {
   const contentChild = document.querySelector(".content > :hover");
@@ -1749,6 +1748,51 @@ function updateTimeAndActors() {
   addColumnToPlayers();
   addSpaceToEmotePlayers();
   addCommaAndDot();
+  calculateTotalDuration();
+}
+
+function gatherPlayersAndInsert() {
+  console.log("Начинаем сбор всех игроков и их вставку...");
+
+  // Собираем все элементы .players > li со всей страницы
+  const allPlayers = document.querySelectorAll(".players > li");
+  console.log(`Найдено ${allPlayers.length} игроков.`);
+
+  // Удаляем дубликаты из массива игроков
+  const totalUniquePlayers = removeDuplicates(allPlayers);
+
+  // Создаем элемент div.totalplayers
+  const totalPlayersDiv = document.createElement("div");
+  totalPlayersDiv.classList.add("totalplayers");
+
+  // Перебираем найденные игроков и добавляем их в div.totalplayers
+  totalUniquePlayers.forEach((player) => {
+    let playerClone = player.cloneNode(true);
+    playerClone.textContent = playerClone.textContent.trim().slice(0, -1); // Обрезаем последний символ
+
+    totalPlayersDiv.appendChild(playerClone);
+  });
+
+  // Находим элемент div.totalduration
+  const totalDurationChapter = document.querySelector(
+    "#chatlog .totalduration"
+  );
+
+  if (totalDurationChapter) {
+    // Вставляем div.totalplayers в конец div.totalduration
+    totalDurationChapter.appendChild(totalPlayersDiv);
+    console.log(
+      "Все игроки успешно собраны и вставлены в конец общей продолжительности."
+    );
+  } else {
+    console.log(
+      "Элемент div.totalduration не найден. Не удалось вставить игроков."
+    );
+  }
+}
+
+function removeDuplicates(array) {
+  return Array.from(new Set(array));
 }
 
 function toggleHighlight() {
