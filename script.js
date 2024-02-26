@@ -626,7 +626,7 @@ function recombineFunction(spanClass) {
 
       // В любом условии меняем игрока от строчки к строчке
 
-      currentElement.classList.add("remove")
+      currentElement.classList.add("remove");
     } else {
       console.log("Другой игрок!");
     }
