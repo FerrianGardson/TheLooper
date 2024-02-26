@@ -600,12 +600,7 @@ function recombineFunction(spanType) {
   let currentEmote = null;
 
   function reset() {
-    loglines = [];
     emotes = [];
-    combinePlayer = null;
-    currentPlayer = null;
-    previousPlayer = document.querySelector(".logline > .player");
-    currentEmote = null;
   }
 
   // Получаем все элементы с классом "logline" и указанным типом span внутри элементов div с классом "chapter"
@@ -621,7 +616,11 @@ function recombineFunction(spanType) {
     currentEmote = element.querySelector(".emote");
 
     if (currentPlayer.textContent !== previousPlayer.textContent) {
-      console.log("Игрок изменился!", previousPlayer.textContent, currentPlayer.textContent);
+      console.log(
+        "Игрок изменился!",
+        previousPlayer.textContent,
+        currentPlayer.textContent
+      );
 
       if (emotes.length > 0) {
         console.log("emotes.textContent: ", emotes.textContent);
@@ -646,20 +645,18 @@ function recombineFunction(spanType) {
           emote.appendChild(spaceSpan);
         });
 
+        // Вставляем массив в изначального игрока и сбрасываем всё
         emotes.forEach((emote) => {
           combinePlayer.insertAdjacentHTML("afterend", emote.outerHTML);
         });
-        reset();
       }
     } else {
       console.log(
         "Совпадение на " + currentPlayer.textContent,
         currentEmote.textContent
       );
-      combinePlayer = previousPlayer;
       emotes.push(currentEmote);
-      currentEmote.remove();
-      previousPlayer = currentPlayer;
+      element.classList.add('remove');
     }
   }
 
