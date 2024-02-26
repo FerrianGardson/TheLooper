@@ -589,171 +589,84 @@ function thirdPerson(className, secondClass) {
     });
 }
 
-function recombineFunction(spanType) {
-  // Инициализация переменных для хранения предыдущего игрока, сообщения и элемента
-
-  let loglines = [];
-  let emotes = [];
-  let combinePlayer = null;
+function recombineFunction() {
   let currentPlayer = null;
-  let previousPlayer = document.querySelector(".logline > .player");
-  let currentEmote = null;
+  let previousPlayer = null;
+  let combinePlayer = null;
+  let emotes = [];
+  let currentElement = null;
+  let previousElement = null;
+  let loglines = document.querySelectorAll(`p.logline.emote`);
 
-  function reset() {
-    emotes = [];
-  }
-
-  // Получаем все элементы с классом "logline" и указанным типом span внутри элементов div с классом "chapter"
-  loglines = document.querySelectorAll(`p.logline.emote`);
-  const length = loglines.length; // Получаем количество найденных элементов
-
+  // Получаем кол-во элементов
+  const length = loglines.length;
   console.log(`Найдено ${length} элементов с классом emote`);
 
+  // Перебор
   for (let i = 0; i < length; i++) {
     console.log("i: ", i);
-    const element = loglines[i];
-    currentPlayer = element.querySelector(".player");
-    currentEmote = element.querySelector(".emote");
 
-    if (currentPlayer.textContent !== previousPlayer.textContent) {
-      console.log(
-        "Игрок изменился!",
-        previousPlayer.textContent,
-        currentPlayer.textContent
-      );
+    currentElement = loglines[i];
+    currentPlayer = currentElement.querySelector(".player");
+    currentEmote = currentElement.querySelector(".emote");
 
-      if (emotes.length > 0) {
-        console.log("emotes.textContent: ", emotes.textContent);
+    // Если предыдущий игрок пуст, ставим текущего
+    if (previousPlayer === null) {
+      previousPlayer = currentPlayer;
+      continue;
+    }
 
-        // Находим первый элемент в массиве loglines
-        const firstLogline = loglines[0];
-        console.log("firstLogline: ", firstLogline);
+    if (currentPlayer.textContent === previousPlayer.textContent) {
+      // Совпадение
+      console.log("Совпадение!");
+      combinePlayer = previousPlayer;
+      emotes.push(currentEmote);
+      currentElement.classList.add("remove");
+    } else {
+      // Игрок изменился
+      console.log("Игрок изменился c", previousPlayer, currentPlayer);
+      emotes.forEach((emote, index) => {
 
-        // Находим элемент span.player внутри первого элемента logline
-        combinePlayer = firstLogline.querySelector(".player");
-        console.log("combinePlayer: ", combinePlayer);
-
-        // Вставляем содержимое коллекции emotes после span.player
-
-        emotes.forEach((emote, index) => {
-          // Создаем новый элемент span для пробела
-          const spaceSpan = document.createElement("span");
-          spaceSpan.className = "space";
-          spaceSpan.textContent = " ";
-
-          // Вставляем пробел в конец текущего элемента emote
-          emote.appendChild(spaceSpan);
-        });
+        // Создаем новый элемент span для пробела
+        const spaceSpan = document.createElement("span");
+        spaceSpan.className = "space";
+        spaceSpan.textContent = " ";
+        combinePlayer.emote.appendChild(spaceSpan);
 
         // Вставляем массив в изначального игрока и сбрасываем всё
         emotes.forEach((emote) => {
-          combinePlayer.insertAdjacentHTML("afterend", emote.outerHTML);
-        });
-      }
-    } else {
-      console.log(
-        "Совпадение на " + currentPlayer.textContent,
-        currentEmote.textContent
-      );
-      emotes.push(currentEmote);
-      element.classList.add('remove');
+        combinePlayerParent.appendChild(emote);}
+
+
+
+
+
+
+
+
+
+        emotes = [];
+        combinePlayer = null;
+      });
+
+      // Вставляем массив в изначального игрока и сбрасываем всё
+      emotes.forEach((emote) => {
+        combinePlayerParent.appendChild(emote);
+      });
     }
+
+    // В любом условии меняем игрока от строчки к строчке
+    previousElement = currentElement;
+    previousPlayer = currentPlayer;
   }
-
-  // // Перебираем все найденные элементы
-  // for (let i = 0; i < length; i++) {
-  //   const element = elements[i]; // Текущий обрабатываемый элемент
-  //   const currentPlayerElement = element.querySelector("span.player"); // Элемент span с классом "player"
-  //   const currentSayElement = element.querySelector(`span.${spanType}`); // Элемент span с указанным типом
-  //   const currentPlayer = currentPlayerElement
-  //     ? currentPlayerElement.textContent
-  //     : ""; // Текущее имя игрока
-  //   const currentSay = currentSayElement ? currentSayElement.textContent : ""; // Текущее сообщение игрока
-
-  //   console.log(`Обрабатывается элемент ${i + 1}:`);
-  //   console.log(`Текущий игрок: ${currentPlayer}`);
-  //   console.log(`Текущее сообщение: ${currentSay}`);
-
-  //   // Если текущий игрок не равен предыдущему
-  //   if (currentPlayer !== previousPlayer) {
-  //     // Обновляем значения предыдущего игрока, сообщения и элемента
-  //     previousPlayer = currentPlayer;
-  //     previousSay = currentSay;
-  //     previousLogline = element;
-  //   } else {
-  //     // Если у предыдущего элемента есть сообщение, объединяем его с текущим сообщением
-  //     if (previousLogline) {
-  //       const combinedSay = previousSay + " " + currentSay; // Объединенное сообщение
-  //       const combinedElement = document.createElement("span"); // Создаем новый элемент span
-  //       combinedElement.textContent = combinedSay; // Устанавливаем текст объединенного сообщения
-  //       previousLogline.appendChild(combinedElement); // Добавляем элемент в предыдущий элемент
-  //       currentSayElement.remove(); // Удаляем текущий элемент сообщения
-
-  //       console.log(`Объединено сообщение: ${combinedSay}`);
-  //     }
-  //   }
-  // }
 }
 
 function toggleCollapse(event) {
   const chapter = event.target.closest(".chapter");
   if (chapter) {
     chapter.classList.toggle("collapsed");
-  } else {
-    // console.error( "Не найден элемент с классом 'chapter' в родительской цепочке." );
   }
 }
-/* keywordsInput = null;
-function logFilter() {
-  // Получаем значение из поля ввода и приводим его к нижнему регистру
-  const keywordsInput = document
-    .getElementById("keywordsInput")
-    .value.toLowerCase();
-
-  // Выбираем все элементы, являющиеся дочерними элементами .content
-  const elements = document.querySelectorAll(".content > *");
-
-  // Перебираем каждый элемент
-  elements.forEach((element) => {
-    // Получаем текстовое содержимое элемента и приводим его к нижнему регистру
-    const text = element.textContent.toLowerCase();
-
-    // Проверяем, не пустое ли поле ввода
-    if (keywordsInput.trim() !== "") {
-      // Разделяем введенные ключевые слова по пробелу
-      const keywords = keywordsInput.split(" ");
-
-      // Перебираем каждое ключевое слово
-      keywords.forEach((keyword) => {
-        // Инициализируем переменную для хранения ключевого слова без символа "-"
-        let removeWord = null;
-
-        // Проверяем, начинается ли ключевое слово с символа "-"
-        if (keyword.startsWith("-")) {
-          // Если да, удаляем символ "-" и сохраняем оставшееся слово в переменную removeWord
-          removeWord = keyword.substring(1);
-        }
-
-        // Проверяем, содержится ли ключевое слово или его "анти-слово" в тексте элемента
-        const containsKeyword =
-          text.includes(keyword) ||
-          (removeWord !== null && !text.includes(removeWord));
-
-        // Если ключевое слово найдено, добавляем класс "selected" к элементу
-        // Если "анти-слово" найдено, удаляем класс "selected" у элемента
-        if (containsKeyword && removeWord === null) {
-          element.classList.add("selected");
-        } else if (removeWord !== null && !containsKeyword) {
-          element.classList.remove("selected");
-        }
-      });
-    } else {
-      // Если поле ввода пустое, удаляем класс "selected" у элемента
-      element.classList.remove("selected");
-    }
-  });
-  openselectedChapters();
-} */
 
 function trimChapter(chapterElement) {
   const paragraphs = chapterElement.find("p");
