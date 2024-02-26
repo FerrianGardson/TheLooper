@@ -1,4 +1,4 @@
-console.log('Ветка Мейн с рабочим виртом');
+console.log("Ветка Мейн с рабочим виртом");
 
 combineDelay = 2 * 1000;
 
@@ -140,9 +140,9 @@ function formatHTML() {
   scrollToStart();
   combineFunctions();
   emoteTosay();
+  virtToSay();
   sayToEmote();
   chapterReverse();
-  virt();
   updateTimeAndActors();
   findLoglinesAndConvertToTranscript();
   //postClear();
@@ -438,7 +438,7 @@ function cleanText() {
 
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?logline)">\[(?:Группа|Лидер группы)\]\s*([А-я]+):\s*(.*?)<\/p>/g,
-    '$1 emote virt"><span class="player">$2</span><span class="emote">$3</span></p>'
+    '$1 virt"><span class="player">$2</span><span class="virt">$3</span></p>'
   ); // ООС в Эмоут
 
   chatlogHTML = chatlogHTML.replace(/<p.*?>\[(Гильдия)\].*?<\/p>\n/g, ""); //ООС-каналы (гильдия)
@@ -475,7 +475,7 @@ function cleanText() {
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
   //throw new Error("Скрипт прерван");
-  
+
   document
     .querySelectorAll("#chatlog p:empty")
     .forEach((emptyParagraph) => emptyParagraph.remove()); // Удаление пустых абзацев
@@ -487,6 +487,7 @@ function combineFunctions() {
   combineSay("say");
   combineSay("yell");
   combineSay("story");
+  combineSay("virt");
 }
 
 function combineSay(spanType) {
@@ -593,7 +594,22 @@ function emoteTosay() {
     let emoteText = emotes[i].innerHTML;
 
     let updatedEmoteText = emoteText.replace(
-      /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[,.!?])(?: —|<\/span>))/g,
+      /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[…,.!?])(?: —|<\/span>))/g,
+      '<span class="dash">— </span><span class="say">$2</span><span class="dash"> —</span>'
+    );
+
+    emotes[i].innerHTML = updatedEmoteText;
+  }
+}
+
+function virtToSay() {
+  let emotes = document.querySelectorAll("p.logline.virt");
+
+  for (let i = 0; i < emotes.length; i++) {
+    let emoteText = emotes[i].innerHTML;
+
+    let updatedEmoteText = emoteText.replace(
+      /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[…,.!?])(?: —|<\/span>))/g,
       '<span class="dash">— </span><span class="say">$2</span><span class="dash"> —</span>'
     );
 
@@ -665,12 +681,8 @@ function trimChapter(chapterElement) {
   const paragraphs = chapterElement.find("p");
   const selectedParagraphs = paragraphs.filter(".selected");
   if (selectedParagraphs.length > 0) {
-    const firstindex = paragraphs.index(
-      selectedParagraphs.first()
-    );
-    const lastindex = paragraphs.index(
-      selectedParagraphs.last()
-    );
+    const firstindex = paragraphs.index(selectedParagraphs.first());
+    const lastindex = paragraphs.index(selectedParagraphs.last());
     paragraphs.slice(0, firstindex).remove();
     paragraphs.slice(lastindex + 1).remove();
   }
@@ -851,7 +863,12 @@ function selectAll() {
 }
 
 function debug() {
-  // console.log("Дебаг");
+  // Удаляем класс .collapsed у всех элементов с этим классом
+  const collapsedElements = document.querySelectorAll(".collapsed");
+  collapsedElements.forEach((element) => {
+    element.classList.remove("collapsed");
+  });
+  document.querySelector('link[href="selection.css"]').disabled = true;
 }
 
 function calculateTotalDuration() {
@@ -937,10 +954,10 @@ function removeEmptyLines() {
   document.body.innerHTML = cleanedHtml;
 }
 
-function virt() {
+/* function virtDashes() {
   document.querySelectorAll("p.virt").forEach((element) => {
     element.innerHTML = element.innerHTML.replace(
-      /(<span class="emote">)<span class="dash">— <\/span>/g,
+      /(<span class="say">)<span class="dash">— <\/span>/g,
       "$1"
     );
     element.innerHTML = element.innerHTML.replace(
@@ -948,7 +965,28 @@ function virt() {
       "</span>"
     );
   });
+} */
+
+function virtDashes() {
+  const virtList = document.querySelectorAll("p.logline.virt");
+  virtList.forEach((element, index) => {
+    console.log("Элемент", index, ":", element);
+    if (index === 10) {
+      throw new Error("Ошибка на пятом шаге");
+    }
+    element.innerHTML = element.innerHTML.replace(
+      /<span class="virt"><span class="dash">— <\/span>/g,
+      "<span class='virt'>"
+    );
+    element.innerHTML = element.innerHTML.replace(
+      /<span class="dash"> —<\/span><\/span>/g,
+      "</span>"
+    );
+  });
 }
+
+
+
 
 const keepGroupCheckbox = document.getElementById("keepGroupCheckbox");
 let keepGroup = true;
@@ -1268,9 +1306,11 @@ function togglePaperClass() {
 }
 
 function moveElement(event) {
-  var contentContainers = document.querySelectorAll(".content:hover, .paper:hover");
+  var contentContainers = document.querySelectorAll(
+    ".content:hover, .paper:hover"
+  );
 
-  contentContainers.forEach(function(contentContainer) {
+  contentContainers.forEach(function (contentContainer) {
     var elementUnderCursor = contentContainer.querySelector(":hover");
 
     if (elementUnderCursor) {
@@ -1295,7 +1335,6 @@ function moveElement(event) {
     }
   });
 }
-
 
 function deleteBefore() {
   const hover = document.querySelectorAll(".content > :hover, h2.date:hover");
@@ -1586,10 +1625,7 @@ function playerList() {
       // Если имя игрока уникально и он не является NPC
       if (!uniquePlayers.has(playerName) && !npcNames[playerName]) {
         // Если у игрока одна часть имени, добавляем его в список игроков
-        if (
-          playerName.indexOf(" ") === -1 &&
-          playerName.indexOf("-") === -1
-        ) {
+        if (playerName.indexOf(" ") === -1 && playerName.indexOf("-") === -1) {
           playerList.appendChild(createPlayerItem(playerName));
         } else {
           // Если у игрока более одной части имени, он считается NPC и добавляется в соответствующий список
@@ -1725,6 +1761,7 @@ function ShortNames() {
 }
 
 function updateTimeAndActors() {
+  console.log('Апдейт');
   const actorsDivs = document.querySelectorAll("div.actors");
   actorsDivs.forEach((actorsDiv) => {
     actorsDiv.remove();
@@ -1749,6 +1786,7 @@ function updateTimeAndActors() {
   addColumnToPlayers();
   addSpaceToEmotePlayers();
   gatherPlayersAndInsert();
+  virtDashes();
 }
 
 function toggleHighlight() {
@@ -2005,10 +2043,8 @@ function scrollToNextSelected() {
 
   // Прокручиваем к следующему элементу
   const totalSelected = selectedElements.length - 1;
-  console.log(
-    `Общий индекс: ${totalSelected}, Текущая позиция: ${index}`
-  );
-  console.log('selectedElements: ', selectedElements);
+  console.log(`Общий индекс: ${totalSelected}, Текущая позиция: ${index}`);
+  console.log("selectedElements: ", selectedElements);
   selectedElements[index].scrollIntoView({
     behavior: "smooth",
     block: "start",
@@ -2020,7 +2056,7 @@ function postClear() {
   const valuesToRemove = ["Существу", "Настой удачи", "Другое значение"];
 
   // Находим все элементы <p> с классом logline
-  const loglines = document.querySelectorAll('p.logline');
+  const loglines = document.querySelectorAll("p.logline");
 
   // Перебираем найденные элементы
   loglines.forEach((element) => {
@@ -2031,3 +2067,4 @@ function postClear() {
     }
   });
 }
+
