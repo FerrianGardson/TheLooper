@@ -493,9 +493,9 @@ function combineFunctions() {
   combineLoglines("say");
   combineLoglines("yell");
   combineLoglines("story");
-  thirdPerson("emote","say");
-  thirdPerson("say","emote");
-  thirdPerson("yell","emote");
+  thirdPerson("emote", "say");
+  thirdPerson("say", "emote");
+  thirdPerson("yell", "emote");
 }
 
 function combineLoglines(spanType) {
@@ -577,122 +577,97 @@ function combineLoglines(spanType) {
   }
 }
 
-// function thirdPerson() {
-//   let say = "";
-//   say = document.querySelectorAll("p.say, p.yell");
-//   for (let i = 0; i < say.length; i++) {
-//     let sayText = say[i].innerHTML;
-//     sayText = sayText.replace(
-//       /([!?.,:])(\s—\s.*?[!?.,:](\s—\s|<\/span>))/g,
-//       '$1<span class="emote">$2</span>'
-//     );
-//     sayText = sayText.replace(
-//       /<\/span><span class="say">\s*[—–-]\s*/g,
-//       '</span><span class="say">'
-//     );
-//     say[i].innerHTML = sayText;
-//     say[i].innerHTML = sayText;
-//   }
-// }
-
 function thirdPerson(className, secondClass) {
-  document.querySelectorAll(`p.logline.${className} > .${className}`).forEach((element) => {
-    element.outerHTML = element.outerHTML.replace(
-      /([!?,.:;])( — )([А-я].*?)(— |<\/span>)/g,
-      `$1<span class='${secondClass}'>$2$3$4</span>`
-    );
-    // console.log("element.outerHTML: ", element.outerHTML);
-  });
-}
-
-// function emoteTosay() {
-//   let emotes = document.querySelectorAll("p.logline.emote");
-
-//   for (let i = 0; i < emotes.length; i++) {
-//     let emoteText = emotes[i].innerHTML;
-//     console.log('emotes: ', emotes);
-//     let updatedEmoteText = emoteText.replace(
-//       /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[,.!?])(?: —|<\/span>))/g,
-//       '<span class="dash">— </span><span class="say">$2</span><span class="dash"> —</span>'
-//     );
-
-//     console.log('updatedEmoteText1: ', updatedEmoteText);
-//     updatedEmoteText = updatedEmoteText.replace(
-//       /<\/span><span class="dash"> —<\/span>/g,
-//       "</span>"
-//     );
-//     console.log('updatedEmoteText2: ', updatedEmoteText);
-
-//     emotes[i].innerHTML = updatedEmoteText;
-//   }
-// }
-
-// // Ломается <p timestamp="2024-02-25T01:12:15.521Z" class="logline emote"><span class="player">Зайка<span class="space"> </span></span><span class="emote">усердно вылизывала пальцы Роя. Впрочем, магическим эффектом этот процесс не обладал. И никакого целебного — также. Язык Лайлы просто исердно ходил по пальцам, постепенно затягивая их всё глубже и глубже. Губы девушки то вытягивались вперёд, то просто сжимались на фалангах. Влажные звуки становились всё приглушеннее. И затем — Лайла потащила руку изо рта, усердно втягивая всю влагу, до какой дотягивалась, всасывала, и... В общем-то, оставляла за собой сухие и чистые пальцы Роя. Впрочем, он может нарушить эту идиллию...</span></p>
-// function emoteTosay() {
-//   const punct = "[,.!:]";
-//   document.querySelectorAll("p.logline.emote > .emote").forEach((element) => {
-//     element.outerHTML = element.outerHTML.replace(/( — )([А-Я].*?)( — |<\/span>)/g, "<span class='say'>$1$2$3</span>");
-//     console.log('element.outerHTML: ', element.outerHTML);
-//   });
-// }
-
-function emoteTosay() {
-  document.querySelectorAll("p.logline.emote > .emote").forEach((element) => {
-    element.outerHTML = element.outerHTML.replace(
-      /([!?,.:;])( — )([А-Я].*?)( — |<\/span>)/g,
-      "$1<span class='say'>$2$3$4</span>"
-    );
-    console.log("element.outerHTML: ", element.outerHTML);
-  });
+  document
+    .querySelectorAll(`p.logline.${className} > .${className}`)
+    .forEach((element) => {
+      element.outerHTML = element.outerHTML.replace(
+        /([!?,.:;])( — )([А-я].*?)(— |<\/span>)/g,
+        `$1<span class='${secondClass}'>$2$3$4</span>`
+      );
+      // console.log("element.outerHTML: ", element.outerHTML);
+    });
 }
 
 function recombineFunction(spanType) {
   // Инициализация переменных для хранения предыдущего игрока, сообщения и элемента
-  let previousPlayer = "";
-  let previousSay = "";
-  let previousLogline = null;
+  let loglines = [];
+  let emotes = [];
 
   // Получаем все элементы с классом "logline" и указанным типом span внутри элементов div с классом "chapter"
-  const elements = document.querySelectorAll(
-    `div.chapter p.logline.${spanType}`
-  );
-  const length = elements.length; // Получаем количество найденных элементов
+  loglines = document.querySelectorAll(`p.logline.emote`);
+  const length = loglines.length; // Получаем количество найденных элементов
 
-  console.log(`Найдено ${length} элементов с классом ${spanType}`);
+  console.log(`Найдено ${length} элементов с классом emote`);
 
-  // Перебираем все найденные элементы
   for (let i = 0; i < length; i++) {
-    const element = elements[i]; // Текущий обрабатываемый элемент
-    const currentPlayerElement = element.querySelector("span.player"); // Элемент span с классом "player"
-    const currentSayElement = element.querySelector(`span.${spanType}`); // Элемент span с указанным типом
-    const currentPlayer = currentPlayerElement
-      ? currentPlayerElement.textContent
-      : ""; // Текущее имя игрока
-    const currentSay = currentSayElement ? currentSayElement.textContent : ""; // Текущее сообщение игрока
-
-    console.log(`Обрабатывается элемент ${i + 1}:`);
-    console.log(`Текущий игрок: ${currentPlayer}`);
-    console.log(`Текущее сообщение: ${currentSay}`);
-
-    // Если текущий игрок не равен предыдущему
-    if (currentPlayer !== previousPlayer) {
-      // Обновляем значения предыдущего игрока, сообщения и элемента
-      previousPlayer = currentPlayer;
-      previousSay = currentSay;
-      previousLogline = element;
-    } else {
-      // Если у предыдущего элемента есть сообщение, объединяем его с текущим сообщением
-      if (previousLogline) {
-        const combinedSay = previousSay + " " + currentSay; // Объединенное сообщение
-        const combinedElement = document.createElement("span"); // Создаем новый элемент span
-        combinedElement.textContent = combinedSay; // Устанавливаем текст объединенного сообщения
-        previousLogline.appendChild(combinedElement); // Добавляем элемент в предыдущий элемент
-        currentSayElement.remove(); // Удаляем текущий элемент сообщения
-
-        console.log(`Объединено сообщение: ${combinedSay}`);
-      }
-    }
+    const element = loglines[i];
+    const currentPlayerElement = element.querySelector(".player");
+    const currentEmote = element.querySelector(".emote");
+    console.log("currentPlayerElement: ", currentPlayerElement.textContent);
+    emotes.push(currentEmote);
+    currentEmote.remove();
   }
+
+  console.log("emotes: ", emotes);
+
+  // Находим первый элемент в массиве loglines
+  const firstLogline = loglines[0];
+  console.log("firstLogline: ", firstLogline);
+
+  // Находим элемент span.player внутри первого элемента logline
+  const combinePlayer = firstLogline.querySelector(".player");
+  console.log("combinePlayer: ", combinePlayer);
+
+  // Вставляем содержимое коллекции emotes после span.player
+
+  emotes.forEach((emote, index) => {
+    // Создаем новый элемент span для пробела
+    const spaceSpan = document.createElement("span");
+    spaceSpan.className = "space";
+    spaceSpan.textContent = " ";
+
+    // Вставляем пробел в конец текущего элемента emote
+    emote.appendChild(spaceSpan);
+  });
+
+  emotes.forEach((emote) => {
+    combinePlayer.insertAdjacentHTML("afterend", emote.outerHTML);
+  });
+
+  // // Перебираем все найденные элементы
+  // for (let i = 0; i < length; i++) {
+  //   const element = elements[i]; // Текущий обрабатываемый элемент
+  //   const currentPlayerElement = element.querySelector("span.player"); // Элемент span с классом "player"
+  //   const currentSayElement = element.querySelector(`span.${spanType}`); // Элемент span с указанным типом
+  //   const currentPlayer = currentPlayerElement
+  //     ? currentPlayerElement.textContent
+  //     : ""; // Текущее имя игрока
+  //   const currentSay = currentSayElement ? currentSayElement.textContent : ""; // Текущее сообщение игрока
+
+  //   console.log(`Обрабатывается элемент ${i + 1}:`);
+  //   console.log(`Текущий игрок: ${currentPlayer}`);
+  //   console.log(`Текущее сообщение: ${currentSay}`);
+
+  //   // Если текущий игрок не равен предыдущему
+  //   if (currentPlayer !== previousPlayer) {
+  //     // Обновляем значения предыдущего игрока, сообщения и элемента
+  //     previousPlayer = currentPlayer;
+  //     previousSay = currentSay;
+  //     previousLogline = element;
+  //   } else {
+  //     // Если у предыдущего элемента есть сообщение, объединяем его с текущим сообщением
+  //     if (previousLogline) {
+  //       const combinedSay = previousSay + " " + currentSay; // Объединенное сообщение
+  //       const combinedElement = document.createElement("span"); // Создаем новый элемент span
+  //       combinedElement.textContent = combinedSay; // Устанавливаем текст объединенного сообщения
+  //       previousLogline.appendChild(combinedElement); // Добавляем элемент в предыдущий элемент
+  //       currentSayElement.remove(); // Удаляем текущий элемент сообщения
+
+  //       console.log(`Объединено сообщение: ${combinedSay}`);
+  //     }
+  //   }
+  // }
 }
 
 function toggleCollapse(event) {
