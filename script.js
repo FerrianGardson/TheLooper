@@ -10,6 +10,7 @@ playerData = [
   ["Маларон", "priest", "Мал’арон Берёзовый Лист"],
   ["Ананита", "rogue", "Ананита Астор"],
   ["Сырорезка", "yellow", "Джули"],
+  ["Фотоклякс", "hunter", "Фотоклякс"],
   ["Санриэль", "mage", "Санриэль Рассветный Луч"],
   ["Дерек", "hunter", "Дерек Кларк"],
   ["Кэролай", "priest", "Кэролай Эстер"],
@@ -139,8 +140,6 @@ function formatHTML() {
   wrapChapters();
   scrollToStart();
   combineFunctions();
-  emoteTosay();
-  sayToEmote();
   chapterReverse();
   virt();
   updateTimeAndActors();
@@ -392,6 +391,13 @@ function cleanText() {
     ""
   ); // Системные сообщения, начинаются с указанных слов и пробела
 
+  chatlogHTML = chatlogHTML.replace(/<p.*?>(Существу)<\/p>/g, ""); // Системные сообщения из одного слова
+
+  // Вывод
+  // document.getElementById("chatlog").innerHTML = chatlogHTML;
+  // throw new Error("Скрипт прерван");
+  // Для дебага
+
   chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:"); // |Hchannel:PARTY|h[Лидер группы]|h Роуз: => [Лидер группы] Роуз:
 
   chatlogHTML = chatlogHTML.replace(
@@ -419,7 +425,7 @@ function cleanText() {
 
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?"logline)">(.*)\sкричит:\s(.*?)<\/p>\n/g,
-    '$1 yell"><span class="player">$2</span><span class="say">$3</span></p>\n'
+    '$1 yell"><span class="player">$2</span><span class="yell">$3</span></p>\n'
   ); // Кричит:
 
   chatlogHTML = chatlogHTML.replace(
@@ -438,7 +444,7 @@ function cleanText() {
 
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?logline)">\[(?:Группа|Лидер группы)\]\s*([А-я]+):\s*(.*?)<\/p>/g,
-    '$1 emote virt"><span class="player">$2</span><span class="emote">$3</span></p>'
+    '$1 virt"><span class="player">$2</span><span class="virt">$3</span></p>'
   ); // ООС в Эмоут
 
   chatlogHTML = chatlogHTML.replace(/<p.*?>\[(Гильдия)\].*?<\/p>\n/g, ""); //ООС-каналы (гильдия)
@@ -460,7 +466,7 @@ function cleanText() {
   //  chatlogHTML = chatlogHTML.replace(/(<p.*?"logline)">([А-я]+):\s(.*?)<\/p>/g,'$1 story"><span class="player">$2</span><span class="say">$3</p>\n'); // Стори
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?"logline)">(.*?):\s(.*?)<\/p>/g,
-    '$1 story"><span class="player">$2</span><span class="say">$3</p>\n'
+    '$1 story"><span class="player">$2</span><span class="story">$3</p>\n'
   ); // Стори v2
 
   // Прочее
@@ -475,7 +481,7 @@ function cleanText() {
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
   //throw new Error("Скрипт прерван");
-  
+
   document
     .querySelectorAll("#chatlog p:empty")
     .forEach((emptyParagraph) => emptyParagraph.remove()); // Удаление пустых абзацев
@@ -483,13 +489,16 @@ function cleanText() {
 
 function combineFunctions() {
   // console.log("combineFunctions");
-  combineSay("emote");
-  combineSay("say");
-  combineSay("yell");
-  combineSay("story");
+  combineLoglines("emote");
+  combineLoglines("say");
+  combineLoglines("yell");
+  combineLoglines("story");
+  thirdPerson("emote","say");
+  thirdPerson("say","emote");
+  thirdPerson("yell","emote");
 }
 
-function combineSay(spanType) {
+function combineLoglines(spanType) {
   resetSay();
 
   var elements = document.querySelectorAll("div.chapter p.logline");
@@ -568,36 +577,121 @@ function combineSay(spanType) {
   }
 }
 
-function sayToEmote() {
-  let say = "";
-  say = document.querySelectorAll("p.say, p.yell");
-  for (let i = 0; i < say.length; i++) {
-    let sayText = say[i].innerHTML;
-    sayText = sayText.replace(
-      /([!?.,:])(\s—\s.*?[!?.,:](\s—\s|<\/span>))/g,
-      '$1<span class="emote">$2</span>'
+// function thirdPerson() {
+//   let say = "";
+//   say = document.querySelectorAll("p.say, p.yell");
+//   for (let i = 0; i < say.length; i++) {
+//     let sayText = say[i].innerHTML;
+//     sayText = sayText.replace(
+//       /([!?.,:])(\s—\s.*?[!?.,:](\s—\s|<\/span>))/g,
+//       '$1<span class="emote">$2</span>'
+//     );
+//     sayText = sayText.replace(
+//       /<\/span><span class="say">\s*[—–-]\s*/g,
+//       '</span><span class="say">'
+//     );
+//     say[i].innerHTML = sayText;
+//     say[i].innerHTML = sayText;
+//   }
+// }
+
+function thirdPerson(className, secondClass) {
+  document.querySelectorAll(`p.logline.${className} > .${className}`).forEach((element) => {
+    element.outerHTML = element.outerHTML.replace(
+      /([!?,.:;])( — )([А-я].*?)(— |<\/span>)/g,
+      `$1<span class='${secondClass}'>$2$3$4</span>`
     );
-    sayText = sayText.replace(
-      /<\/span><span class="say">\s*[—–-]\s*/g,
-      '</span><span class="say">'
-    );
-    say[i].innerHTML = sayText;
-    say[i].innerHTML = sayText;
-  }
+    // console.log("element.outerHTML: ", element.outerHTML);
+  });
 }
 
+// function emoteTosay() {
+//   let emotes = document.querySelectorAll("p.logline.emote");
+
+//   for (let i = 0; i < emotes.length; i++) {
+//     let emoteText = emotes[i].innerHTML;
+//     console.log('emotes: ', emotes);
+//     let updatedEmoteText = emoteText.replace(
+//       /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[,.!?])(?: —|<\/span>))/g,
+//       '<span class="dash">— </span><span class="say">$2</span><span class="dash"> —</span>'
+//     );
+
+//     console.log('updatedEmoteText1: ', updatedEmoteText);
+//     updatedEmoteText = updatedEmoteText.replace(
+//       /<\/span><span class="dash"> —<\/span>/g,
+//       "</span>"
+//     );
+//     console.log('updatedEmoteText2: ', updatedEmoteText);
+
+//     emotes[i].innerHTML = updatedEmoteText;
+//   }
+// }
+
+// // Ломается <p timestamp="2024-02-25T01:12:15.521Z" class="logline emote"><span class="player">Зайка<span class="space"> </span></span><span class="emote">усердно вылизывала пальцы Роя. Впрочем, магическим эффектом этот процесс не обладал. И никакого целебного — также. Язык Лайлы просто исердно ходил по пальцам, постепенно затягивая их всё глубже и глубже. Губы девушки то вытягивались вперёд, то просто сжимались на фалангах. Влажные звуки становились всё приглушеннее. И затем — Лайла потащила руку изо рта, усердно втягивая всю влагу, до какой дотягивалась, всасывала, и... В общем-то, оставляла за собой сухие и чистые пальцы Роя. Впрочем, он может нарушить эту идиллию...</span></p>
+// function emoteTosay() {
+//   const punct = "[,.!:]";
+//   document.querySelectorAll("p.logline.emote > .emote").forEach((element) => {
+//     element.outerHTML = element.outerHTML.replace(/( — )([А-Я].*?)( — |<\/span>)/g, "<span class='say'>$1$2$3</span>");
+//     console.log('element.outerHTML: ', element.outerHTML);
+//   });
+// }
+
 function emoteTosay() {
-  let emotes = document.querySelectorAll("p.logline.emote");
-
-  for (let i = 0; i < emotes.length; i++) {
-    let emoteText = emotes[i].innerHTML;
-
-    let updatedEmoteText = emoteText.replace(
-      /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[,.!?])(?: —|<\/span>))/g,
-      '<span class="dash">— </span><span class="say">$2</span><span class="dash"> —</span>'
+  document.querySelectorAll("p.logline.emote > .emote").forEach((element) => {
+    element.outerHTML = element.outerHTML.replace(
+      /([!?,.:;])( — )([А-Я].*?)( — |<\/span>)/g,
+      "$1<span class='say'>$2$3$4</span>"
     );
+    console.log("element.outerHTML: ", element.outerHTML);
+  });
+}
 
-    emotes[i].innerHTML = updatedEmoteText;
+function recombineFunction(spanType) {
+  // Инициализация переменных для хранения предыдущего игрока, сообщения и элемента
+  let previousPlayer = "";
+  let previousSay = "";
+  let previousLogline = null;
+
+  // Получаем все элементы с классом "logline" и указанным типом span внутри элементов div с классом "chapter"
+  const elements = document.querySelectorAll(
+    `div.chapter p.logline.${spanType}`
+  );
+  const length = elements.length; // Получаем количество найденных элементов
+
+  console.log(`Найдено ${length} элементов с классом ${spanType}`);
+
+  // Перебираем все найденные элементы
+  for (let i = 0; i < length; i++) {
+    const element = elements[i]; // Текущий обрабатываемый элемент
+    const currentPlayerElement = element.querySelector("span.player"); // Элемент span с классом "player"
+    const currentSayElement = element.querySelector(`span.${spanType}`); // Элемент span с указанным типом
+    const currentPlayer = currentPlayerElement
+      ? currentPlayerElement.textContent
+      : ""; // Текущее имя игрока
+    const currentSay = currentSayElement ? currentSayElement.textContent : ""; // Текущее сообщение игрока
+
+    console.log(`Обрабатывается элемент ${i + 1}:`);
+    console.log(`Текущий игрок: ${currentPlayer}`);
+    console.log(`Текущее сообщение: ${currentSay}`);
+
+    // Если текущий игрок не равен предыдущему
+    if (currentPlayer !== previousPlayer) {
+      // Обновляем значения предыдущего игрока, сообщения и элемента
+      previousPlayer = currentPlayer;
+      previousSay = currentSay;
+      previousLogline = element;
+    } else {
+      // Если у предыдущего элемента есть сообщение, объединяем его с текущим сообщением
+      if (previousLogline) {
+        const combinedSay = previousSay + " " + currentSay; // Объединенное сообщение
+        const combinedElement = document.createElement("span"); // Создаем новый элемент span
+        combinedElement.textContent = combinedSay; // Устанавливаем текст объединенного сообщения
+        previousLogline.appendChild(combinedElement); // Добавляем элемент в предыдущий элемент
+        currentSayElement.remove(); // Удаляем текущий элемент сообщения
+
+        console.log(`Объединено сообщение: ${combinedSay}`);
+      }
+    }
   }
 }
 
@@ -665,12 +759,8 @@ function trimChapter(chapterElement) {
   const paragraphs = chapterElement.find("p");
   const selectedParagraphs = paragraphs.filter(".selected");
   if (selectedParagraphs.length > 0) {
-    const firstindex = paragraphs.index(
-      selectedParagraphs.first()
-    );
-    const lastindex = paragraphs.index(
-      selectedParagraphs.last()
-    );
+    const firstindex = paragraphs.index(selectedParagraphs.first());
+    const lastindex = paragraphs.index(selectedParagraphs.last());
     paragraphs.slice(0, firstindex).remove();
     paragraphs.slice(lastindex + 1).remove();
   }
@@ -851,7 +941,10 @@ function selectAll() {
 }
 
 function debug() {
-  // console.log("Дебаг");
+  console.log("Дебаг");
+  document.querySelectorAll(".logline.say").forEach((element) => {
+    element.remove();
+  });
 }
 
 function calculateTotalDuration() {
@@ -1205,8 +1298,7 @@ document.addEventListener("keydown", function (event) {
   } else if (event.key === "d") {
     debug();
   } else if (event.key === "+") {
-    combineDelay = 999999999;
-    combineFunctions();
+    recombineFunction("emote");
   }
 });
 
@@ -1268,9 +1360,11 @@ function togglePaperClass() {
 }
 
 function moveElement(event) {
-  var contentContainers = document.querySelectorAll(".content:hover, .paper:hover");
+  var contentContainers = document.querySelectorAll(
+    ".content:hover, .paper:hover"
+  );
 
-  contentContainers.forEach(function(contentContainer) {
+  contentContainers.forEach(function (contentContainer) {
     var elementUnderCursor = contentContainer.querySelector(":hover");
 
     if (elementUnderCursor) {
@@ -1295,7 +1389,6 @@ function moveElement(event) {
     }
   });
 }
-
 
 function deleteBefore() {
   const hover = document.querySelectorAll(".content > :hover, h2.date:hover");
@@ -1586,10 +1679,7 @@ function playerList() {
       // Если имя игрока уникально и он не является NPC
       if (!uniquePlayers.has(playerName) && !npcNames[playerName]) {
         // Если у игрока одна часть имени, добавляем его в список игроков
-        if (
-          playerName.indexOf(" ") === -1 &&
-          playerName.indexOf("-") === -1
-        ) {
+        if (playerName.indexOf(" ") === -1 && playerName.indexOf("-") === -1) {
           playerList.appendChild(createPlayerItem(playerName));
         } else {
           // Если у игрока более одной части имени, он считается NPC и добавляется в соответствующий список
@@ -2005,10 +2095,8 @@ function scrollToNextSelected() {
 
   // Прокручиваем к следующему элементу
   const totalSelected = selectedElements.length - 1;
-  console.log(
-    `Общий индекс: ${totalSelected}, Текущая позиция: ${index}`
-  );
-  console.log('selectedElements: ', selectedElements);
+  console.log(`Общий индекс: ${totalSelected}, Текущая позиция: ${index}`);
+  console.log("selectedElements: ", selectedElements);
   selectedElements[index].scrollIntoView({
     behavior: "smooth",
     block: "start",
@@ -2020,7 +2108,7 @@ function postClear() {
   const valuesToRemove = ["Существу", "Настой удачи", "Другое значение"];
 
   // Находим все элементы <p> с классом logline
-  const loglines = document.querySelectorAll('p.logline');
+  const loglines = document.querySelectorAll("p.logline");
 
   // Перебираем найденные элементы
   loglines.forEach((element) => {

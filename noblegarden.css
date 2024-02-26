@@ -672,18 +672,9 @@ ul#redactor-toolbar-0 {
   font-weight: initial;
 }
 
-.say > .player,
-.virt > .player {
-  font-weight: bold;
-}
-
-.yell span.speech {
-  color: var(--red);
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.players > li, .npc > li, .totalplayers > li {
+.players > li,
+.npc > li,
+.totalplayers > li {
   display: inline-block;
   margin-right: 0.3em;
   font-weight: bold;
@@ -710,11 +701,6 @@ ul.npc > li:hover {
 p.logline {
   margin: 1rem 0;
   color: var(--emote);
-}
-
-.virt > .emote,
-.whisper {
-  /* color: var(--whisper) !important; */
 }
 
 :root {
@@ -917,12 +903,6 @@ p.story .speech {
   color: var(--emote) !important;
 }
 
-
-
-.yell span.player {
-  font-weight: bold;
-}
-
 .wp-block.default.no-border.binded-chars {
   margin-left: 1rem !important;
 }
@@ -930,7 +910,6 @@ p.story .speech {
 .emote > .speech {
   color: var(--text-color) !important;
 }
-
 
 @media (max-width: 768px) {
   .wp-block.default.no-border.shadow-5.portrait {
@@ -1133,9 +1112,10 @@ h2.date span.title {
   padding: 0;
 }
 
-h2.date > span, .totalduration > h2 {
-  color: #ffffff9c!important;
-  font-size: 2.2rem!important;
+h2.date > span,
+.totalduration > h2 {
+  color: #ffffff9c !important;
+  font-size: 2.2rem !important;
 }
 
 section.slice.slice-md.bg-base-img:nth-of-type(3) {
@@ -1145,12 +1125,6 @@ section.slice.slice-md.bg-base-img:nth-of-type(3) {
 p.logline.emote > span {
   display: inline;
   /* color: unset; */
-}
-
-.yell > .say {
-  color: var(--red);
-  font-weight: bold;
-  text-transform: uppercase;
 }
 
 .paper > .logline > .span {
@@ -1199,11 +1173,11 @@ span.say {
 }
 
 .story span.player {
-    display: none;
+  display: none;
 }
 
 .story .say {
-    color: var(--emote);
+  color: var(--emote);
 }
 
 .chapter {
@@ -1219,21 +1193,20 @@ span.say {
 }
 
 .nav {
-  display: block!important;
+  display: block !important;
 }
 
 .actors {
   margin-bottom: 1rem;
 }
 
-
 .totalduration.chapter {
-    margin-bottom: -4rem;
+  margin-bottom: -4rem;
 }
 
 .totalduration {
-    padding: 2rem;
-    margin-bottom: -6rem;
+  padding: 2rem;
+  margin-bottom: -6rem;
 }
 
 .emote > .speech {
@@ -1245,13 +1218,19 @@ div#chatlog {
 }
 
 h2.date > span {
-    font-size: 0.7em!important;
+  font-size: 0.7em !important;
 }
 
 p.logline.emote > .emote {
-    color: var(--emote);
+  color: var(--emote);
 }
 
 .story + .story {
   margin-top: -1rem;
+}
+
+span.yell {
+  color: var(--red);
+  font-weight: bold;
+  text-transform: uppercase;
 }
