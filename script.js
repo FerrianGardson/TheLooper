@@ -591,13 +591,22 @@ function thirdPerson(className, secondClass) {
 
 function recombineFunction(spanType) {
   // Инициализация переменных для хранения предыдущего игрока, сообщения и элемента
+
   let loglines = [];
   let emotes = [];
-  let combinePlayer;
-  let currentPlayer;
-  let previousPlayer;
-  let currentEmote;
-  let combining;
+  let combinePlayer = null;
+  let currentPlayer = null;
+  let previousPlayer = document.querySelector(".logline > .player");
+  let currentEmote = null;
+
+  function reset() {
+    loglines = [];
+    emotes = [];
+    combinePlayer = null;
+    currentPlayer = null;
+    previousPlayer = document.querySelector(".logline > .player");
+    currentEmote = null;
+  }
 
   // Получаем все элементы с классом "logline" и указанным типом span внутри элементов div с классом "chapter"
   loglines = document.querySelectorAll(`p.logline.emote`);
@@ -606,52 +615,52 @@ function recombineFunction(spanType) {
   console.log(`Найдено ${length} элементов с классом emote`);
 
   for (let i = 0; i < length; i++) {
-    console.log('previousPlayer: ', previousPlayer);
+    console.log("i: ", i);
     const element = loglines[i];
     currentPlayer = element.querySelector(".player");
     currentEmote = element.querySelector(".emote");
-    console.log(currentPlayer.textContent, currentEmote.textContent);
-    if (currentPlayer == previousPlayer) {
+
+    if (currentPlayer.textContent !== previousPlayer.textContent) {
+      console.log("Игрок изменился!", previousPlayer.textContent, currentPlayer.textContent);
+
+      if (emotes.length > 0) {
+        console.log("emotes.textContent: ", emotes.textContent);
+
+        // Находим первый элемент в массиве loglines
+        const firstLogline = loglines[0];
+        console.log("firstLogline: ", firstLogline);
+
+        // Находим элемент span.player внутри первого элемента logline
+        combinePlayer = firstLogline.querySelector(".player");
+        console.log("combinePlayer: ", combinePlayer);
+
+        // Вставляем содержимое коллекции emotes после span.player
+
+        emotes.forEach((emote, index) => {
+          // Создаем новый элемент span для пробела
+          const spaceSpan = document.createElement("span");
+          spaceSpan.className = "space";
+          spaceSpan.textContent = " ";
+
+          // Вставляем пробел в конец текущего элемента emote
+          emote.appendChild(spaceSpan);
+        });
+
+        emotes.forEach((emote) => {
+          combinePlayer.insertAdjacentHTML("afterend", emote.outerHTML);
+        });
+        reset();
+      }
+    } else {
       console.log(
-        "Совпадение на" + currentPlayer.textContent,
+        "Совпадение на " + currentPlayer.textContent,
         currentEmote.textContent
       );
       combinePlayer = previousPlayer;
-      combining = true;
       emotes.push(currentEmote);
       currentEmote.remove();
-    } else {
-      console.log("i: ", i);
-     previousPlayer = currentPlayer
-     console.log('currentPlayer: ', currentPlayer);
+      previousPlayer = currentPlayer;
     }
-  }
-
-  if (emotes.length > 0) {
-    console.log("emotes.textContent: ", emotes.textContent);
-    // Находим первый элемент в массиве loglines
-    const firstLogline = loglines[0];
-    console.log("firstLogline: ", firstLogline);
-
-    // Находим элемент span.player внутри первого элемента logline
-    combinePlayer = firstLogline.querySelector(".player");
-    console.log("combinePlayer: ", combinePlayer);
-
-    // Вставляем содержимое коллекции emotes после span.player
-
-    emotes.forEach((emote, index) => {
-      // Создаем новый элемент span для пробела
-      const spaceSpan = document.createElement("span");
-      spaceSpan.className = "space";
-      spaceSpan.textContent = " ";
-
-      // Вставляем пробел в конец текущего элемента emote
-      emote.appendChild(spaceSpan);
-    });
-
-    emotes.forEach((emote) => {
-      combinePlayer.insertAdjacentHTML("afterend", emote.outerHTML);
-    });
   }
 
   // // Перебираем все найденные элементы
