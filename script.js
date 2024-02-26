@@ -487,22 +487,14 @@ function cleanText() {
 }
 
 function combineFunctions() {
-  // console.log("combineFunctions");
-  combineLoglines("emote");
-  combineLoglines("virt");
-  combineLoglines("say");
-  combineLoglines("yell");
-  combineLoglines("story");
-  thirdPerson("emote", "say");
-  thirdPerson("say", "emote");
-  thirdPerson("yell", "emote");
-  // thirdPerson("virt", "say");
-  emoteTosay()
+  combineSay("emote");
+  combineSay("say");
+  combineSay("yell");
+  combineSay("story");
+  combineSay("virt");
 }
 
-
-
-function combineLoglines(spanType) {
+function combineSay(spanType) {
   resetSay();
 
   var elements = document.querySelectorAll("div.chapter p.logline");
