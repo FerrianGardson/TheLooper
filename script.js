@@ -493,11 +493,14 @@ function combineFunctions() {
   combineLoglines("say");
   combineLoglines("yell");
   combineLoglines("story");
-  thirdPerson("emote", "say");
-  thirdPerson("say", "emote");
-  thirdPerson("yell", "emote");
-  thirdPerson("virt", "say");
+  // thirdPerson("emote", "say");
+  // thirdPerson("say", "emote");
+  // thirdPerson("yell", "emote");
+  // thirdPerson("virt", "say");
+  emoteTosay()
 }
+
+
 
 function combineLoglines(spanType) {
   resetSay();
@@ -591,6 +594,34 @@ function thirdPerson(firstClass, secondClass) {
 
     emotes[i].innerHTML = updatedEmoteText;
   }
+}
+
+function emoteTosay() {
+  let emotes = document.querySelectorAll("p.logline.emote");
+
+  for (let i = 0; i < emotes.length; i++) {
+    let emoteText = emotes[i].innerHTML;
+
+    let updatedEmoteText = emoteText.replace(
+      /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[,.!?])(?: —|<\/span>))/g,
+      '<span class="dash">— </span><span class="say">$2</span><span class="dash"> —</span>'
+    );
+
+    emotes[i].innerHTML = updatedEmoteText;
+  }
+}
+
+function virt() {
+  document.querySelectorAll("p.virt").forEach((element) => {
+    element.innerHTML = element.innerHTML.replace(
+      /(<span class="emote">)<span class="dash">— <\/span>/g,
+      "$1"
+    );
+    element.innerHTML = element.innerHTML.replace(
+      /<span class="dash">( —|— )<\/span><\/span>/g,
+      "</span>"
+    );
+  });
 }
 
 function recombineFunction(spanClass) {
