@@ -139,9 +139,7 @@ function formatHTML() {
   wrapChapters();
   scrollToStart();
   combineFunctions();
-  emoteTosay();
-  virtToSay();
-  sayToEmote();
+
   chapterReverse();
   updateTimeAndActors();
   findLoglinesAndConvertToTranscript();
@@ -488,6 +486,12 @@ function combineFunctions() {
   combineSay("yell");
   combineSay("story");
   combineSay("virt");
+  virtToSay();
+  emoteToSay();
+  sayToEmote();
+  thirdPerson("say", "emote");
+  thirdPerson("emote", "say");
+  thirdPerson("yell", "emote");
 }
 
 function combineSay(spanType) {
@@ -587,21 +591,6 @@ function sayToEmote() {
   }
 }
 
-function emoteTosay() {
-  let emotes = document.querySelectorAll("p.logline.emote");
-
-  for (let i = 0; i < emotes.length; i++) {
-    let emoteText = emotes[i].innerHTML;
-
-    let updatedEmoteText = emoteText.replace(
-      /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[…,.!?])(?: —|<\/span>))/g,
-      '<span class="dash">— </span><span class="say">$2</span><span class="dash"> —</span>'
-    );
-
-    emotes[i].innerHTML = updatedEmoteText;
-  }
-}
-
 function virtToSay() {
   let emotes = document.querySelectorAll("p.logline.virt");
 
@@ -616,6 +605,38 @@ function virtToSay() {
     emotes[i].innerHTML = updatedEmoteText;
   }
 }
+
+function emoteToSay() {
+  let emotes = document.querySelectorAll("p.logline.emote");
+
+  for (let i = 0; i < emotes.length; i++) {
+    let emoteText = emotes[i].innerHTML;
+
+    let updatedEmoteText = emoteText.replace(
+      /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[…,.!?])(?: —|<\/span>))/g,
+      '<span class="dash">— </span><span class="say">$2</span><span class="dash"> —</span>'
+    );
+
+    emotes[i].innerHTML = updatedEmoteText;
+  }
+}
+
+function thirdPerson(firstClass, secondClass) {
+  let emotes = document.querySelectorAll(`p.logline.${firstClass}`);
+
+  for (let i = 0; i < emotes.length; i++) {
+    let emoteText = emotes[i].innerHTML;
+
+    let updatedEmoteText = emoteText.replace(
+      /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[,.!?])(?: —|<\/span>))/g,
+      `<span class="${secondClass}"><span class="dash">— </span>$2<span class="dash"> —</span></span>`
+    );
+
+    emotes[i].innerHTML = updatedEmoteText;
+  }
+}
+
+
 
 function toggleCollapse(event) {
   const chapter = event.target.closest(".chapter");
@@ -953,40 +974,19 @@ function removeEmptyLines() {
   var cleanedHtml = bodyHtml.replace(/^\s*[\r\n]/gm, "");
   document.body.innerHTML = cleanedHtml;
 }
-
-/* function virtDashes() {
-  document.querySelectorAll("p.virt").forEach((element) => {
-    element.innerHTML = element.innerHTML.replace(
-      /(<span class="say">)<span class="dash">— <\/span>/g,
-      "$1"
-    );
-    element.innerHTML = element.innerHTML.replace(
-      /<span class="dash">( —|— )<\/span><\/span>/g,
-      "</span>"
-    );
-  });
-} */
-
-function virtDashes() {
-  const virtList = document.querySelectorAll("p.logline.virt");
-  virtList.forEach((element, index) => {
-    console.log("Элемент", index, ":", element);
-    if (index === 10) {
-      throw new Error("Ошибка на пятом шаге");
-    }
-    element.innerHTML = element.innerHTML.replace(
-      /<span class="virt"><span class="dash">— <\/span>/g,
-      "<span class='virt'>"
-    );
-    element.innerHTML = element.innerHTML.replace(
-      /<span class="dash"> —<\/span><\/span>/g,
-      "</span>"
-    );
-  });
+function removeDashes() {
+  // const loglines = document.querySelectorAll("p.logline");
+  // loglines.forEach((element, index) => {
+  //   element.innerHTML = element.innerHTML.replace(
+  //     /"><span class="dash">— <\/span>/g,
+  //     '">'
+  //   );
+  //   element.innerHTML = element.innerHTML.replace(
+  //     /<span class="dash"> —<\/span><\/span>/g,
+  //     "</span>"
+  //   );
+  // });
 }
-
-
-
 
 const keepGroupCheckbox = document.getElementById("keepGroupCheckbox");
 let keepGroup = true;
@@ -1761,7 +1761,7 @@ function ShortNames() {
 }
 
 function updateTimeAndActors() {
-  console.log('Апдейт');
+  console.log("Апдейт");
   const actorsDivs = document.querySelectorAll("div.actors");
   actorsDivs.forEach((actorsDiv) => {
     actorsDiv.remove();
@@ -1786,7 +1786,7 @@ function updateTimeAndActors() {
   addColumnToPlayers();
   addSpaceToEmotePlayers();
   gatherPlayersAndInsert();
-  virtDashes();
+  removeDashes();
 }
 
 function toggleHighlight() {
@@ -2067,4 +2067,3 @@ function postClear() {
     }
   });
 }
-
