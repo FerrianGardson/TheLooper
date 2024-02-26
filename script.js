@@ -1,4 +1,4 @@
-// console.log("Hello world!");
+console.log('Ветка Мейн с рабочим виртом');
 
 combineDelay = 2 * 1000;
 
