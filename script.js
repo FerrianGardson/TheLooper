@@ -589,87 +589,17 @@ function thirdPerson(className, secondClass) {
     });
 }
 
-// function recombineFunction() {
-//   let currentPlayer = null;
-//   let previousPlayer = null;
-//   let combinePlayer = null;
-//   let emotes = [];
-//   let currentElement = null;
-//   let previousElement = null;
-//   let loglines = document.querySelectorAll(`p.logline.emote`);
-
-//   // Получаем кол-во элементов
-//   const length = loglines.length;
-//   console.log(`Найдено ${length} элементов с классом emote`);
-
-//   // Перебор
-//   for (let i = 0; i < length; i++) {
-//     console.log("i: ", i);
-
-//     currentElement = loglines[i];
-//     currentPlayer = currentElement.querySelector(".player");
-//     currentEmote = currentElement.querySelector(".emote");
-
-//     // Если предыдущий игрок пуст, ставим текущего
-//     if (previousPlayer === null) {
-//       previousPlayer = currentPlayer;
-//       combinePlayer = currentPlayer;
-//       continue;
-//     }
-
-//     if (currentPlayer.textContent === previousPlayer.textContent) {
-//       // Совпадение
-//       console.log("Совпадение!");
-//       if (combinePlayer.textContent != previousPlayer.textContent) {
-//         combinePlayer = previousPlayer;
-//       }
-//       emotes.push(currentEmote);
-//       currentElement.classList.add("remove");
-//     } else {
-//       // Игрок изменился
-//       console.log("Игрок изменился c", previousPlayer, currentPlayer);
-
-//       // Получаем родительский элемент combinePlayer
-//       const combinePlayerParent = combinePlayer.parentElement;
-
-//       /// Добавляем каждый элемент из массива emotes в конец родителя combinePlayer
-//       emotes.forEach((emote) => {
-//         // Проверяем, существует ли emote
-//         if (emote) {
-//           // Создаем новый элемент span для пробела
-//           const spaceSpan = document.createElement("span");
-//           spaceSpan.className = "space";
-//           spaceSpan.textContent = " ";
-
-//           // Вставляем пробел в конец текущего элемента emote
-//           emote.appendChild(spaceSpan);
-
-//           // Вставляем текущий элемент emote в конец родителя combinePlayer
-//           combinePlayerParent.appendChild(emote);
-//         }
-//       });
-
-//       // Очищаем массив emotes и сбрасываем переменную combinePlayer
-//       emotes = [];
-//       combinePlayer = currentPlayer;
-//     }
-
-//     // В любом условии меняем игрока от строчки к строчке
-//     previousElement = currentElement;
-//     previousPlayer = currentPlayer;
-//   }
-// }
-
-function recombineFunction() {
+function recombineFunction(spanClass) {
   let currentPlayer = null;
   let previousPlayer = null;
   let currentElement = null;
   let previousElement = null;
-  let loglines = document.querySelectorAll(`p.logline.emote`);
+  let previousPlayerParent = null;
+  let loglines = document.querySelectorAll(`p.logline.${spanClass}`);
 
   // Получаем кол-во элементов
   const length = loglines.length;
-  console.log(`Найдено ${length} элементов с классом emote`);
+  console.log(`Найдено ${length} элементов с классом ${spanClass}`);
 
   // Перебор
   for (let i = 0; i < length; i++) {
@@ -677,7 +607,7 @@ function recombineFunction() {
 
     currentElement = loglines[i];
     currentPlayer = currentElement.querySelector(".player");
-    currentEmote = currentElement.querySelector(".emote");
+    currentEmote = currentElement.querySelector(`.${spanClass}`);
 
     // Если предыдущий игрок пуст, ставим текущего
     if (previousPlayer === null) {
@@ -689,7 +619,16 @@ function recombineFunction() {
       // Совпадение
       console.log("Совпадение!");
       previousPlayerParent = previousPlayer.parentElement;
-      previousPlayerParent.appendChild(currentEmote);
+      if (previousPlayerParent && currentEmote) {
+        previousPlayerParent.appendChild(currentEmote);
+        previousPlayerParent = null;
+      }
+
+      // В любом условии меняем игрока от строчки к строчке
+
+      currentElement.classList.add("remove")
+    } else {
+      console.log("Другой игрок!");
     }
 
     // В любом условии меняем игрока от строчки к строчке
@@ -1249,6 +1188,7 @@ document.addEventListener("keydown", function (event) {
     debug();
   } else if (event.key === "+") {
     recombineFunction("emote");
+    recombineFunction("say");
   }
 });
 
