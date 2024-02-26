@@ -442,7 +442,7 @@ function cleanText() {
 
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?logline)">\[(?:Группа|Лидер группы)\]\s*([А-я]+):\s*(.*?)<\/p>/g,
-    '$1 virt"><span class="player">$2</span><span class="virt">$3</span></p>'
+    '$1 virt emote"><span class="player">$2</span><span class="virt">$3</span></p>'
   ); // Вирт
 
   chatlogHTML = chatlogHTML.replace(/<p.*?>\[(Гильдия)\].*?<\/p>\n/g, ""); //ООС-каналы (гильдия)
@@ -578,20 +578,18 @@ function combineLoglines(spanType) {
   }
 }
 
-function thirdPerson(className, secondClass) {
-  let tumbler = false
-  if (tumbler) {
-    document
-      .querySelectorAll(`p.logline.${className} > .${className}`)
-      .forEach((element) => {
-        // Проверяем наличие класса className в элементе
-        if (element.classList.contains(className)) {
-          element.outerHTML = element.outerHTML.replace(
-            /(— )([А-Я].*?)( —|<\/span>)/g,
-            `<span class="${secondClass}">$1$2$3</span>`
-          );
-        }
-      });
+function thirdPerson(firstClass, secondClass) {
+  let emotes = document.querySelectorAll(`p.logline.${firstClass}`);
+
+  for (let i = 0; i < emotes.length; i++) {
+    let emoteText = emotes[i].innerHTML;
+
+    let updatedEmoteText = emoteText.replace(
+      /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[,.!?])(?: —|<\/span>))/g,
+      `<span class="dash">— </span><span class="${secondClass}">$2</span><span class="dash"> —</span>`
+    );
+
+    emotes[i].innerHTML = updatedEmoteText;
   }
 }
 
