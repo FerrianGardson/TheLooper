@@ -143,7 +143,6 @@ function formatHTML() {
   virtToSay();
   sayToEmote();
   chapterReverse();
-  virt();
   updateTimeAndActors();
   findLoglinesAndConvertToTranscript();
   //postClear();
@@ -595,7 +594,7 @@ function emoteTosay() {
     let emoteText = emotes[i].innerHTML;
 
     let updatedEmoteText = emoteText.replace(
-      /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[,.!?])(?: —|<\/span>))/g,
+      /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[…,.!?])(?: —|<\/span>))/g,
       '<span class="dash">— </span><span class="say">$2</span><span class="dash"> —</span>'
     );
 
@@ -610,7 +609,7 @@ function virtToSay() {
     let emoteText = emotes[i].innerHTML;
 
     let updatedEmoteText = emoteText.replace(
-      /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[,.!?])(?: —|<\/span>))/g,
+      /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[…,.!?])(?: —|<\/span>))/g,
       '<span class="dash">— </span><span class="say">$2</span><span class="dash"> —</span>'
     );
 
@@ -955,10 +954,10 @@ function removeEmptyLines() {
   document.body.innerHTML = cleanedHtml;
 }
 
-function virt() {
+/* function virtDashes() {
   document.querySelectorAll("p.virt").forEach((element) => {
     element.innerHTML = element.innerHTML.replace(
-      /(<span class="emote">)<span class="dash">— <\/span>/g,
+      /(<span class="say">)<span class="dash">— <\/span>/g,
       "$1"
     );
     element.innerHTML = element.innerHTML.replace(
@@ -966,7 +965,28 @@ function virt() {
       "</span>"
     );
   });
+} */
+
+function virtDashes() {
+  const virtList = document.querySelectorAll("p.logline.virt");
+  virtList.forEach((element, index) => {
+    console.log("Элемент", index, ":", element);
+    if (index === 10) {
+      throw new Error("Ошибка на пятом шаге");
+    }
+    element.innerHTML = element.innerHTML.replace(
+      /<span class="virt"><span class="dash">— <\/span>/g,
+      "<span class='virt'>"
+    );
+    element.innerHTML = element.innerHTML.replace(
+      /<span class="dash"> —<\/span><\/span>/g,
+      "</span>"
+    );
+  });
 }
+
+
+
 
 const keepGroupCheckbox = document.getElementById("keepGroupCheckbox");
 let keepGroup = true;
@@ -1741,6 +1761,7 @@ function ShortNames() {
 }
 
 function updateTimeAndActors() {
+  console.log('Апдейт');
   const actorsDivs = document.querySelectorAll("div.actors");
   actorsDivs.forEach((actorsDiv) => {
     actorsDiv.remove();
@@ -1765,6 +1786,7 @@ function updateTimeAndActors() {
   addColumnToPlayers();
   addSpaceToEmotePlayers();
   gatherPlayersAndInsert();
+  virtDashes();
 }
 
 function toggleHighlight() {
@@ -2045,3 +2067,4 @@ function postClear() {
     }
   });
 }
+
