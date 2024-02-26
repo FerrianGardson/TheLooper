@@ -1,4 +1,4 @@
-/* Кастомные шрифты: */
+/* ÐšÐ°ÑÑ‚Ð¾Ð¼Ð½Ñ‹Ðµ ÑˆÑ€Ð¸Ñ„Ñ‚Ñ‹: */
 
 @font-face {
   src: url("https://cdn.glitch.global/a5c42250-1d0c-4282-a0b8-b5da29f85db0/MONTSERRAT-REGULAR.TTF?v=1707569313378");
@@ -40,7 +40,7 @@
   font-family: "RDR";
 }
 
-/* Шаблон (минималистичный) */
+/* Ð¨Ð°Ð±Ð»Ð¾Ð½ (Ð¼Ð¸Ð½Ð¸Ð¼Ð°Ð»Ð¸ÑÑ‚Ð¸Ñ‡Ð½Ñ‹Ð¹) */
 
 body {
   --background-color: #0000008c;
@@ -234,7 +234,7 @@ body .post > .figure.wp-block-body {
   margin-left: 1rem;
 }
 
-/* Лайки */
+/* Ð›Ð°Ð¹ÐºÐ¸ */
 
 .post .likes .fa {
   font-size: 3rem !important;
@@ -263,7 +263,7 @@ body .post > .figure.wp-block-body {
   text-shadow: var(--text-shadow);
 }
 
-/* Прочее */
+/* ÐŸÑ€Ð¾Ñ‡ÐµÐµ */
 
 .post h1,
 .post h2,
@@ -417,7 +417,7 @@ a[href="/storyline/17037"] {
   border: 0;
 }
 
-/* Рамка */
+/* Ð Ð°Ð¼ÐºÐ° */
 
 .post > div > div,
 .binded-chars > div,
@@ -458,7 +458,7 @@ a[href="/storyline/17037"] {
   justify-content: flex-start;
 }
 
-/* Ютьюб */
+/* Ð®Ñ‚ÑŒÑŽÐ± */
 
 .youtube {
   width: 66px;
@@ -472,7 +472,7 @@ a[href="/storyline/17037"] {
   filter: saturate(2.5);
 }
 
-/* Подсказки, работающие путём вложения span.text вовнутрь span.hint */
+/* ÐŸÐ¾Ð´ÑÐºÐ°Ð·ÐºÐ¸, Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÑŽÑ‰Ð¸Ðµ Ð¿ÑƒÑ‚Ñ‘Ð¼ Ð²Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ span.text Ð²Ð¾Ð²Ð½ÑƒÑ‚Ñ€ÑŒ span.hint */
 
 .hint {
   display: inline;
@@ -526,7 +526,7 @@ ul#redactor-toolbar-0 {
   z-index: 0;
 }
 
-/* Страница шрифтов */
+/* Ð¡Ñ‚Ñ€Ð°Ð½Ð¸Ñ†Ð° ÑˆÑ€Ð¸Ñ„Ñ‚Ð¾Ð² */
 
 .fonts h2 {
   font-family: inherit;
@@ -558,7 +558,7 @@ ul#redactor-toolbar-0 {
   font-size: 2em !important;
 }
 
-/* Информация */
+/* Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ */
 .row.information-block {
   flex-direction: row;
   flex-wrap: wrap;
@@ -600,7 +600,7 @@ ul#redactor-toolbar-0 {
   display: none;
 }
 
-/* Отчёты */
+/* ÐžÑ‚Ñ‡Ñ‘Ñ‚Ñ‹ */
 
 .paper.img {
   padding: 0;
@@ -714,8 +714,7 @@ p.logline {
 
 .virt > .emote,
 .whisper {
-  color: var(--whisper) !important;
-  /* color: white!important; */
+  /* color: var(--whisper) !important; */
 }
 
 :root {
@@ -961,7 +960,7 @@ p.story .speech {
   }
 }
 
-/* Комменты */
+/* ÐšÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ñ‹ */
 
 div.wrapper-main > section:nth-child(4) {
   padding-top: 0;
@@ -1212,7 +1211,7 @@ span.say {
 }
 
 .paper.img.left {
-  float: left;
+  /* float: left; */
 }
 
 .paper.img.right {
@@ -1227,10 +1226,6 @@ span.say {
   margin-bottom: 1rem;
 }
 
-
-.virt > .emote, .virt, .whisper {
-    color: unset!important;
-}
 
 .totalduration.chapter {
     margin-bottom: -4rem;
@@ -1251,4 +1246,12 @@ div#chatlog {
 
 h2.date > span {
     font-size: 0.7em!important;
+}
+
+p.logline.emote > .emote {
+    color: var(--emote);
+}
+
+.story + .story {
+  margin-top: -1rem;
 }

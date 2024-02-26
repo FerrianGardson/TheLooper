@@ -1,7 +1,3 @@
-.content > p:not(.selected, :hover) {
-  opacity: 0.5;
-  filter: saturate(0.5);
-}
 .remove {
   background: #ff000047;
 }
@@ -12,4 +8,14 @@
 
 .finish_wrap {
   background: red;
+}
+
+.virt > .emote,
+.whisper {
+  color: var(--whisper) !important;
+}
+
+.content > .logline:not(.selected, .paper, :hover) {
+  opacity: 0.5;
+  filter: saturate(0);
 }

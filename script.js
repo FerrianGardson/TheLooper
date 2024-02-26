@@ -106,6 +106,20 @@ npcNames = {
   Кожевник: true,
   Нешрешшс: true,
   Охотница: true,
+  Лекарь: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
+  Богач: true,
   Богач: true,
   Богач: true,
   Богач: true,
@@ -131,9 +145,10 @@ function formatHTML() {
   virt();
   updateTimeAndActors();
   findLoglinesAndConvertToTranscript();
+  //postClear();
   // $(".logline.story span.player").remove();
 
-  throw new Error("Скрипт прерван");
+  //throw new Error("Скрипт прерван");
 }
 
 async function handleTxtFile(file) {
@@ -373,9 +388,9 @@ function cleanText() {
   // Системные сообщения
 
   chatlogHTML = chatlogHTML.replace(
-    /<p.*?>\s*((Аукцион|%s|ОШИБКА:|Было|Сегодня|Значок|Вы|Магическая|Удалено|Удалена|Номер|Игрок|Ставка|За|Существо|Кожаная|Персонаж|Сохранённый|Для|Всем|Текст|Эффект|щит|Телепорт|С\s|Получен|Характеристики|Маг.уст\:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила\:|Ловк\:|Инта\:|Физ.уст\:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|У|Ваше|Начислено|Камень|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем)\s.*?|(Результат\:|Персонаж))<\/p>\n/g,
+    /<p.*?>\s*((Аукцион|%s|ОШИБКА:|Результат:|Результат\:|Было|Сегодня|Значок|Вы|Магическая|Удалено|Удалена|Номер|Игрок|Ставка|За|Существо|Кожаная|Персонаж|Сохранённый|Для|Всем|Текст|Эффект|щит|Телепорт|С\s|Получен|Характеристики|Маг.уст\:|вами.|Spawn|Если|Начислен|Установлен|Удален|Сохранён|Облик|Статы|Существу|Сила\:|Ловк\:|Инта\:|Физ.уст\:|На|Рейд|\*|Перезагрузка|Удаляются|Физическая|Похоже,|Подключиться|Повторите|Используйте|Персонаж|Статус|Стандартная|Добро|&\?|Так|Вы|Вам|Вас|Ваша|Ваш|Теперь|Участники|Порог|Бой|Поверженные|Сбежали|Победители|Приглашение|Настройки|Ошибка|Местоположение|Разделение|У|Ваше|Начислено|Камень|Получено|\[СЕРВЕР\]|Разыгрываются|Продление|Сломанные|Способности|Кастомный|Тканевые|Отношение|Смена|Не|Рядом|Объект|ОШИБКА|Задание|Всего|Поздравляем)\s.*?|(Результат\:|Персонаж))<\/p>\n/g,
     ""
-  ); // Системные сообщения, начинаются с указанных слов
+  ); // Системные сообщения, начинаются с указанных слов и пробела
 
   chatlogHTML = chatlogHTML.replace(/\|H.*?(\[.*?\])\|h\s(.+?):/g, "$1 $2:"); // |Hchannel:PARTY|h[Лидер группы]|h Роуз: => [Лидер группы] Роуз:
 
@@ -459,6 +474,7 @@ function cleanText() {
 
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
+  //throw new Error("Скрипт прерван");
   
   document
     .querySelectorAll("#chatlog p:empty")
@@ -1009,7 +1025,7 @@ function removeUnselectedLoglines() {
   chapters.forEach((chapter) => {
     // Внутри каждого .chapter находим все p.logline, которые не .selected
     const unselectedLoglines = chapter.querySelectorAll(
-      "p.logline:not(.selected)"
+      "p.logline:not(.selected):not(.paper):not(.transcript)"
     );
 
     // Удаляем найденные ненужные строки
@@ -1130,7 +1146,7 @@ function convertLoglineToTranscript(loglineElement) {
   `;
 
   const transcriptElement = document.createElement("div");
-  transcriptElement.classList.add("transcript", "selected");
+  transcriptElement.classList.add("transcript");
   transcriptElement.innerHTML = transcriptRecordHTML;
 
   transcriptElement.setAttribute("timestamp", timestamp.toISOString());
@@ -1252,12 +1268,12 @@ function togglePaperClass() {
 }
 
 function moveElement(event) {
-  var contentContainers = document.querySelectorAll(".content");
+  var contentContainers = document.querySelectorAll(".content:hover, .paper:hover");
 
-  contentContainers.forEach(function (contentContainer) {
+  contentContainers.forEach(function(contentContainer) {
     var elementUnderCursor = contentContainer.querySelector(":hover");
 
-    if (elementUnderCursor && contentContainer.contains(elementUnderCursor)) {
+    if (elementUnderCursor) {
       var targetSibling =
         event.key === "ArrowUp"
           ? "previousElementSibling"
@@ -1279,6 +1295,7 @@ function moveElement(event) {
     }
   });
 }
+
 
 function deleteBefore() {
   const hover = document.querySelectorAll(".content > :hover, h2.date:hover");
@@ -1497,7 +1514,7 @@ function pasteImg() {
 
     if (loglineElement) {
       const imgDiv = document.createElement("div");
-      imgDiv.className = "paper img selected";
+      imgDiv.className = "paper img";
 
       const imgElement = document.createElement("img");
       imgElement.src = "POSTIMAGE";
@@ -1826,7 +1843,7 @@ const dungeonMasterMap = new Map([
   ["Фг", true],
   ["Кей", true],
   ["Минор", true],
-  ["Кей", true],
+  ["Эдита", true],
   ["Кей", true],
   ["Кей", true],
   ["Кей", true],
@@ -1995,5 +2012,22 @@ function scrollToNextSelected() {
   selectedElements[index].scrollIntoView({
     behavior: "smooth",
     block: "start",
+  });
+}
+
+function postClear() {
+  // Создаем массив со значениями, которые мы хотим удалить
+  const valuesToRemove = ["Существу", "Настой удачи", "Другое значение"];
+
+  // Находим все элементы <p> с классом logline
+  const loglines = document.querySelectorAll('p.logline');
+
+  // Перебираем найденные элементы
+  loglines.forEach((element) => {
+    // Проверяем, содержит ли значение элемента одно из значений для удаления
+    if (valuesToRemove.includes(element.textContent.trim())) {
+      // Если содержит одно из указанных значений, удаляем элемент
+      element.remove();
+    }
   });
 }

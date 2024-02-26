@@ -655,8 +655,9 @@ h2.date span.title {
   /* transform: rotate(-5deg); */
   text-align: right;
   position: relative;
-  left: -3rem;
+  left: -5rem;
   background: 0;
+  z-index: 2;
 }
 
 .paper.img.right {
@@ -668,6 +669,7 @@ h2.date span.title {
   text-align: right;
   position: relative;
   max-width: 50%;
+  z-index: 2;
 }
 
 .wp-block.default.no-border.binded-chars {
@@ -803,7 +805,7 @@ span.column {
 }
 
 h2.date > span {
-  color: wheat;
+  color: wheat!important;
 }
 
 #chatlog > .chapter > h2.date > span.title {
@@ -820,7 +822,7 @@ h2.date > span {
 }
 
 .rleft {
-  transform: rotate(-3deg);
+  /* transform: rotate(-3deg); */
 }
 
 .paper.img + .paper.img {
@@ -869,4 +871,21 @@ div#comment-tree {
 
 .paper.img {
   clear: both;
+}
+
+.rleft {
+  transform: rotate(-3deg)!important;
+}
+
+.totalduration > h2 {
+  font-family: 'mow2';
+  color: white!important;
+}
+
+.paper.rleft {
+  margin: 4rem 0!important;
+}
+
+.rright {
+  transform: rotate(5deg)!important;
 }

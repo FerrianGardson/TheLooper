@@ -234,10 +234,7 @@ input:focus-visible {
   margin-bottom: 1rem;
 }
 
-.content > .logline:not(.selected, :hover) {
-  opacity: 0.5;
-  filter: saturate(0);
-}
+
 
 .buttons.cut:hover {
   height: auto;
@@ -409,7 +406,7 @@ form.tumbler.input.tooltip.show {display: flex;align-content: center;justify-con
 input[type="checkbox"] {width: 1rem;}
 
 .collapsed > h2::after {
-  content: "Читать далее...";
+  content: "Ð§Ð¸Ñ‚Ð°Ñ‚ÑŒ Ð´Ð°Ð»ÐµÐµ...";
   font-size: 1rem;
   line-height: 1rem;
   display: block;
