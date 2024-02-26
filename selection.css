@@ -15,7 +15,7 @@
   color: var(--whisper) !important;
 }
 
-.content > .logline:not(.selected, .paper, :hover) {
+.content > .logline:not(.selected, .paper, :hover, .remove) {
   opacity: 0.5;
   filter: saturate(0);
 }

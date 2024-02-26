@@ -638,15 +638,6 @@ function thirdPerson(firstClass, secondClass) {
   }
 }
 
-function toggleCollapse(event) {
-  const chapter = event.target.closest(".chapter");
-  if (chapter) {
-    chapter.classList.toggle("collapsed");
-  } else {
-    // console.error( "Не найден элемент с классом 'chapter' в родительской цепочке." );
-  }
-}
-
 function trimChapter(chapterElement) {
   const paragraphs = chapterElement.find("p");
   const selectedParagraphs = paragraphs.filter(".selected");
@@ -1192,8 +1183,9 @@ document.addEventListener("keydown", function (event) {
   } else if (event.key === "d") {
     debug();
   } else if (event.key === "+") {
-    combineDelay = 999999999;
-    combineFunctions();
+    // combineDelay = 999999999;
+    // combineFunctions();
+    recombineFunction("say");
   }
 });
 
@@ -2014,4 +2006,59 @@ function postClear() {
       element.remove();
     }
   });
+}
+
+function recombineFunction(spanClass) {
+  let currentPlayer = null;
+  let previousPlayer = null;
+  let currentElement = null;
+  let previousElement = null;
+  let previousPlayerParent = null;
+  let loglines = document.querySelectorAll(`p.logline.${spanClass}`);
+
+  // Получаем кол-во элементов
+  const length = loglines.length;
+  console.log(`Найдено ${length} элементов с классом ${spanClass}`);
+
+  // Перебор
+  for (let i = 0; i < length; i++) {
+    console.log("i: ", i);
+
+    currentElement = loglines[i];
+    currentPlayer = currentElement.querySelector(".player");
+    currentEmote = currentElement.querySelector(`.${spanClass}`);
+
+    // Если предыдущий игрок пуст, ставим текущего
+    if (previousPlayer === null) {
+      previousPlayer = currentPlayer;
+      continue;
+    }
+
+    if (currentPlayer.textContent === previousPlayer.textContent) {
+      // Совпадение
+      console.log("Совпадение!");
+      previousPlayerParent = previousPlayer.parentElement;
+      if (previousPlayerParent && currentEmote) {
+        previousPlayerParent.appendChild(currentEmote);
+        previousPlayerParent = null;
+      }
+
+      // В любом условии меняем игрока от строчки к строчке
+
+      currentElement.classList.add("remove");
+    } else {
+      console.log("Другой игрок!");
+    }
+
+    // В любом условии меняем игрока от строчки к строчке
+    previousElement = currentElement;
+    previousPlayer = currentPlayer;
+  }
+}
+
+function toggleCollapse(event) {
+  const chapter = event.target.closest(".chapter");
+  if (chapter) {
+    chapter.classList.toggle("collapsed");
+  }
 }
