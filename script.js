@@ -1,4 +1,4 @@
-console.log('Ветка Мейн с рабочим виртом');
+console.log("Ветка Мейн с рабочим виртом");
 
 combineDelay = 2 * 1000;
 
@@ -476,7 +476,7 @@ function cleanText() {
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
   //throw new Error("Скрипт прерван");
-  
+
   document
     .querySelectorAll("#chatlog p:empty")
     .forEach((emptyParagraph) => emptyParagraph.remove()); // Удаление пустых абзацев
@@ -681,12 +681,8 @@ function trimChapter(chapterElement) {
   const paragraphs = chapterElement.find("p");
   const selectedParagraphs = paragraphs.filter(".selected");
   if (selectedParagraphs.length > 0) {
-    const firstindex = paragraphs.index(
-      selectedParagraphs.first()
-    );
-    const lastindex = paragraphs.index(
-      selectedParagraphs.last()
-    );
+    const firstindex = paragraphs.index(selectedParagraphs.first());
+    const lastindex = paragraphs.index(selectedParagraphs.last());
     paragraphs.slice(0, firstindex).remove();
     paragraphs.slice(lastindex + 1).remove();
   }
@@ -867,7 +863,11 @@ function selectAll() {
 }
 
 function debug() {
-  // console.log("Дебаг");
+  // Удаляем класс .collapsed у всех элементов с этим классом
+  const collapsedElements = document.querySelectorAll(".collapsed");
+  collapsedElements.forEach((element) => {
+    element.classList.remove("collapsed");
+  });
 }
 
 function calculateTotalDuration() {
@@ -1284,9 +1284,11 @@ function togglePaperClass() {
 }
 
 function moveElement(event) {
-  var contentContainers = document.querySelectorAll(".content:hover, .paper:hover");
+  var contentContainers = document.querySelectorAll(
+    ".content:hover, .paper:hover"
+  );
 
-  contentContainers.forEach(function(contentContainer) {
+  contentContainers.forEach(function (contentContainer) {
     var elementUnderCursor = contentContainer.querySelector(":hover");
 
     if (elementUnderCursor) {
@@ -1311,7 +1313,6 @@ function moveElement(event) {
     }
   });
 }
-
 
 function deleteBefore() {
   const hover = document.querySelectorAll(".content > :hover, h2.date:hover");
@@ -1602,10 +1603,7 @@ function playerList() {
       // Если имя игрока уникально и он не является NPC
       if (!uniquePlayers.has(playerName) && !npcNames[playerName]) {
         // Если у игрока одна часть имени, добавляем его в список игроков
-        if (
-          playerName.indexOf(" ") === -1 &&
-          playerName.indexOf("-") === -1
-        ) {
+        if (playerName.indexOf(" ") === -1 && playerName.indexOf("-") === -1) {
           playerList.appendChild(createPlayerItem(playerName));
         } else {
           // Если у игрока более одной части имени, он считается NPC и добавляется в соответствующий список
@@ -2021,10 +2019,8 @@ function scrollToNextSelected() {
 
   // Прокручиваем к следующему элементу
   const totalSelected = selectedElements.length - 1;
-  console.log(
-    `Общий индекс: ${totalSelected}, Текущая позиция: ${index}`
-  );
-  console.log('selectedElements: ', selectedElements);
+  console.log(`Общий индекс: ${totalSelected}, Текущая позиция: ${index}`);
+  console.log("selectedElements: ", selectedElements);
   selectedElements[index].scrollIntoView({
     behavior: "smooth",
     block: "start",
@@ -2036,7 +2032,7 @@ function postClear() {
   const valuesToRemove = ["Существу", "Настой удачи", "Другое значение"];
 
   // Находим все элементы <p> с классом logline
-  const loglines = document.querySelectorAll('p.logline');
+  const loglines = document.querySelectorAll("p.logline");
 
   // Перебираем найденные элементы
   loglines.forEach((element) => {
