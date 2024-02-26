@@ -488,6 +488,7 @@ function combineFunctions() {
   combineSay("yell");
   combineSay("story");
   combineSay("virt");
+  removeDashes();
 }
 
 function combineSay(spanType) {
@@ -967,18 +968,14 @@ function removeEmptyLines() {
   });
 } */
 
-function virtDashes() {
-  const virtList = document.querySelectorAll("p.logline.virt");
-  virtList.forEach((element, index) => {
-    console.log("Элемент", index, ":", element);
-    if (index === 10) {
-      throw new Error("Ошибка на пятом шаге");
-    }
-    element.innerHTML = element.innerHTML.replace(
-      /<span class="virt"><span class="dash">— <\/span>/g,
-      "<span class='virt'>"
+function removeDashes() {
+  const loglines = document.querySelectorAll("p.logline");
+  loglines.forEach((logline) => {
+    logline.innerHTML = logline.innerHTML.replace(
+      /"><span class="dash">— <\/span>/g,
+      '">'
     );
-    element.innerHTML = element.innerHTML.replace(
+    logline.innerHTML = logline.innerHTML.replace(
       /<span class="dash"> —<\/span><\/span>/g,
       "</span>"
     );
