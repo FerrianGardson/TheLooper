@@ -1184,10 +1184,6 @@ span.say {
   padding: 2rem;
 }
 
-.paper.img.left {
-  /* float: left; */
-}
-
 .paper.img.right {
   float: right;
 }
