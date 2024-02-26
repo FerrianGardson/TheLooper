@@ -486,12 +486,13 @@ function combineFunctions() {
   combineSay("yell");
   combineSay("story");
   combineSay("virt");
-  virtToSay();
-  emoteToSay();
   sayToEmote();
+  thirdPerson("emote", "say");
+  thirdPerson("virt", "say");
   removeDashes();
+  // virtToSay();
+  // emoteToSay();
   // thirdPerson("say", "emote");
-  // thirdPerson("emote", "say");
   // thirdPerson("yell", "emote");
 }
 
@@ -629,15 +630,13 @@ function thirdPerson(firstClass, secondClass) {
     let emoteText = emotes[i].innerHTML;
 
     let updatedEmoteText = emoteText.replace(
-      /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[,.!?])(?: —|<\/span>))/g,
-      `<span class="${secondClass}"><span class="dash">— </span>$2<span class="dash"> —</span></span>`
+      /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[…,.!?])(?: —|<\/span>))/g,
+      `<span class="dash">— </span><span class="${secondClass}">$2</span><span class="dash"> —</span>`
     );
 
     emotes[i].innerHTML = updatedEmoteText;
   }
 }
-
-
 
 function toggleCollapse(event) {
   const chapter = event.target.closest(".chapter");
@@ -647,57 +646,6 @@ function toggleCollapse(event) {
     // console.error( "Не найден элемент с классом 'chapter' в родительской цепочке." );
   }
 }
-/* keywordsInput = null;
-function logFilter() {
-  // Получаем значение из поля ввода и приводим его к нижнему регистру
-  const keywordsInput = document
-    .getElementById("keywordsInput")
-    .value.toLowerCase();
-
-  // Выбираем все элементы, являющиеся дочерними элементами .content
-  const elements = document.querySelectorAll(".content > *");
-
-  // Перебираем каждый элемент
-  elements.forEach((element) => {
-    // Получаем текстовое содержимое элемента и приводим его к нижнему регистру
-    const text = element.textContent.toLowerCase();
-
-    // Проверяем, не пустое ли поле ввода
-    if (keywordsInput.trim() !== "") {
-      // Разделяем введенные ключевые слова по пробелу
-      const keywords = keywordsInput.split(" ");
-
-      // Перебираем каждое ключевое слово
-      keywords.forEach((keyword) => {
-        // Инициализируем переменную для хранения ключевого слова без символа "-"
-        let removeWord = null;
-
-        // Проверяем, начинается ли ключевое слово с символа "-"
-        if (keyword.startsWith("-")) {
-          // Если да, удаляем символ "-" и сохраняем оставшееся слово в переменную removeWord
-          removeWord = keyword.substring(1);
-        }
-
-        // Проверяем, содержится ли ключевое слово или его "анти-слово" в тексте элемента
-        const containsKeyword =
-          text.includes(keyword) ||
-          (removeWord !== null && !text.includes(removeWord));
-
-        // Если ключевое слово найдено, добавляем класс "selected" к элементу
-        // Если "анти-слово" найдено, удаляем класс "selected" у элемента
-        if (containsKeyword && removeWord === null) {
-          element.classList.add("selected");
-        } else if (removeWord !== null && !containsKeyword) {
-          element.classList.remove("selected");
-        }
-      });
-    } else {
-      // Если поле ввода пустое, удаляем класс "selected" у элемента
-      element.classList.remove("selected");
-    }
-  });
-  openselectedChapters();
-} */
 
 function trimChapter(chapterElement) {
   const paragraphs = chapterElement.find("p");
