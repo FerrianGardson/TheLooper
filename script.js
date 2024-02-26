@@ -489,9 +489,10 @@ function combineFunctions() {
   virtToSay();
   emoteToSay();
   sayToEmote();
-  thirdPerson("say", "emote");
-  thirdPerson("emote", "say");
-  thirdPerson("yell", "emote");
+  removeDashes();
+  // thirdPerson("say", "emote");
+  // thirdPerson("emote", "say");
+  // thirdPerson("yell", "emote");
 }
 
 function combineSay(spanType) {
@@ -975,17 +976,17 @@ function removeEmptyLines() {
   document.body.innerHTML = cleanedHtml;
 }
 function removeDashes() {
-  // const loglines = document.querySelectorAll("p.logline");
-  // loglines.forEach((element, index) => {
-  //   element.innerHTML = element.innerHTML.replace(
-  //     /"><span class="dash">— <\/span>/g,
-  //     '">'
-  //   );
-  //   element.innerHTML = element.innerHTML.replace(
-  //     /<span class="dash"> —<\/span><\/span>/g,
-  //     "</span>"
-  //   );
-  // });
+  const loglines = document.querySelectorAll("p.logline");
+  loglines.forEach((element, index) => {
+    element.innerHTML = element.innerHTML.replace(
+      /"><span class="dash">— <\/span>/g,
+      '">'
+    );
+    element.innerHTML = element.innerHTML.replace(
+      /<span class="dash"> —<\/span><\/span>/g,
+      "</span>"
+    );
+  });
 }
 
 const keepGroupCheckbox = document.getElementById("keepGroupCheckbox");
@@ -1786,7 +1787,6 @@ function updateTimeAndActors() {
   addColumnToPlayers();
   addSpaceToEmotePlayers();
   gatherPlayersAndInsert();
-  removeDashes();
 }
 
 function toggleHighlight() {
