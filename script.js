@@ -488,6 +488,7 @@ function combineFunctions() {
   combineSay("say");
   combineSay("yell");
   combineSay("story");
+  combineSay("virt");
 }
 
 function combineSay(spanType) {
@@ -868,6 +869,7 @@ function debug() {
   collapsedElements.forEach((element) => {
     element.classList.remove("collapsed");
   });
+  document.querySelector('link[href="selection.css"]').disabled = true;
 }
 
 function calculateTotalDuration() {
