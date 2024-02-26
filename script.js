@@ -1,4 +1,4 @@
-// console.log("Hello world!");
+console.log("26-02-2024");
 
 combineDelay = 2 * 1000;
 
@@ -433,8 +433,6 @@ function cleanText() {
     '$1 emote"><span class="player">$2</span><span class="emote">$3</span></p>\n'
   ); // Эмоут
 
-  // Вирт
-
   if (!keepGroup) {
     chatlogHTML = chatlogHTML.replace(
       /<p.*?>\[(Лидер группы|Группа)\].*?<\/p>\n/g,
@@ -445,7 +443,7 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?logline)">\[(?:Группа|Лидер группы)\]\s*([А-я]+):\s*(.*?)<\/p>/g,
     '$1 virt"><span class="player">$2</span><span class="virt">$3</span></p>'
-  ); // ООС в Эмоут
+  ); // Вирт
 
   chatlogHTML = chatlogHTML.replace(/<p.*?>\[(Гильдия)\].*?<\/p>\n/g, ""); //ООС-каналы (гильдия)
 
@@ -477,6 +475,7 @@ function cleanText() {
   chatlogHTML = chatlogHTML.replace(/say">\s*[—–-]\s*/g, 'say">'); // Тире в начале
   // chatlogHTML = chatlogHTML.replace(/\[Объявление рейду\].*?\: /g, ""); // Объявления рейду
   chatlogHTML = chatlogHTML.replace(/&nbsp;/g, " "); // &nbsp;
+  chatlogHTML = chatlogHTML.replace(/\.\.+/g, "…"); // Многоточие
 
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
@@ -490,12 +489,14 @@ function cleanText() {
 function combineFunctions() {
   // console.log("combineFunctions");
   combineLoglines("emote");
+  combineLoglines("virt");
   combineLoglines("say");
   combineLoglines("yell");
   combineLoglines("story");
   thirdPerson("emote", "say");
   thirdPerson("say", "emote");
   thirdPerson("yell", "emote");
+  thirdPerson("virt", "say");
 }
 
 function combineLoglines(spanType) {
@@ -578,15 +579,20 @@ function combineLoglines(spanType) {
 }
 
 function thirdPerson(className, secondClass) {
-  document
-    .querySelectorAll(`p.logline.${className} > .${className}`)
-    .forEach((element) => {
-      element.outerHTML = element.outerHTML.replace(
-        /([!?,.:;])( — )([А-я].*?)(— |<\/span>)/g,
-        `$1<span class='${secondClass}'>$2$3$4</span>`
-      );
-      // console.log("element.outerHTML: ", element.outerHTML);
-    });
+  let tumbler = false
+  if (tumbler) {
+    document
+      .querySelectorAll(`p.logline.${className} > .${className}`)
+      .forEach((element) => {
+        // Проверяем наличие класса className в элементе
+        if (element.classList.contains(className)) {
+          element.outerHTML = element.outerHTML.replace(
+            /(— )([А-Я].*?)( —|<\/span>)/g,
+            `<span class="${secondClass}">$1$2$3</span>`
+          );
+        }
+      });
+  }
 }
 
 function recombineFunction(spanClass) {
@@ -829,11 +835,26 @@ function selectAll() {
   isAllSellected = !isAllSellected;
 }
 
+// function debug() {
+//   console.log("Дебаг");
+//   document.querySelectorAll(".logline.say").forEach((element) => {
+//     element.remove();
+//   });
+
+// }
+
 function debug() {
-  console.log("Дебаг");
-  document.querySelectorAll(".logline.say").forEach((element) => {
-    element.remove();
+  // Удаляем класс .collapsed у всех элементов с этим классом
+  const collapsedElements = document.querySelectorAll(".collapsed");
+  collapsedElements.forEach((element) => {
+    element.classList.remove("collapsed");
   });
+
+  // Отключаем стиль selection.css
+  const selectionStyle = document.querySelector('link[href="selection.css"]');
+  if (selectionStyle) {
+    selectionStyle.disabled = true;
+  }
 }
 
 function calculateTotalDuration() {
@@ -920,17 +941,15 @@ function removeEmptyLines() {
 }
 
 function virt() {
-  document.querySelectorAll("p.virt").forEach((element) => {
-    element.innerHTML = element.innerHTML.replace(
-      /(<span class="emote">)<span class="dash">— <\/span>/g,
-      "$1"
-    );
-    element.innerHTML = element.innerHTML.replace(
-      /<span class="dash">( —|— )<\/span><\/span>/g,
-      "</span>"
-    );
+  const virtList = document.querySelectorAll(".virt");
+
+  virtList.forEach((virt) => {
+    console.log("virt: ", virt);
   });
 }
+
+// Вызываем функцию
+virt();
 
 const keepGroupCheckbox = document.getElementById("keepGroupCheckbox");
 let keepGroup = true;
@@ -1183,7 +1202,7 @@ document.addEventListener("keydown", function (event) {
   } else if (event.key === "*") {
     WrapToDiv();
   } else if (event.key === "-") {
-    WrapToDiv();
+    thirdPerson("virt", "say");
   } else if (event.key === "d") {
     debug();
   } else if (event.key === "+") {
