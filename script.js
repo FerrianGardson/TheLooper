@@ -493,9 +493,9 @@ function combineFunctions() {
   combineLoglines("say");
   combineLoglines("yell");
   combineLoglines("story");
-  // thirdPerson("emote", "say");
-  // thirdPerson("say", "emote");
-  // thirdPerson("yell", "emote");
+  thirdPerson("emote", "say");
+  thirdPerson("say", "emote");
+  thirdPerson("yell", "emote");
   // thirdPerson("virt", "say");
   emoteTosay()
 }
