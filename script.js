@@ -140,6 +140,7 @@ function formatHTML() {
   scrollToStart();
   combineFunctions();
   emoteTosay();
+  virtToSay();
   sayToEmote();
   chapterReverse();
   virt();
@@ -438,7 +439,7 @@ function cleanText() {
 
   chatlogHTML = chatlogHTML.replace(
     /(<p.*?logline)">\[(?:Группа|Лидер группы)\]\s*([А-я]+):\s*(.*?)<\/p>/g,
-    '$1 emote virt"><span class="player">$2</span><span class="emote">$3</span></p>'
+    '$1 virt"><span class="player">$2</span><span class="virt">$3</span></p>'
   ); // ООС в Эмоут
 
   chatlogHTML = chatlogHTML.replace(/<p.*?>\[(Гильдия)\].*?<\/p>\n/g, ""); //ООС-каналы (гильдия)
@@ -588,6 +589,21 @@ function sayToEmote() {
 
 function emoteTosay() {
   let emotes = document.querySelectorAll("p.logline.emote");
+
+  for (let i = 0; i < emotes.length; i++) {
+    let emoteText = emotes[i].innerHTML;
+
+    let updatedEmoteText = emoteText.replace(
+      /(—\s((?:["«]|)\s*(?:\(.+\)\s|)[А-Я](?:.+?)[,.!?])(?: —|<\/span>))/g,
+      '<span class="dash">— </span><span class="say">$2</span><span class="dash"> —</span>'
+    );
+
+    emotes[i].innerHTML = updatedEmoteText;
+  }
+}
+
+function virtToSay() {
+  let emotes = document.querySelectorAll("p.logline.virt");
 
   for (let i = 0; i < emotes.length; i++) {
     let emoteText = emotes[i].innerHTML;
