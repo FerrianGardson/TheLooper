@@ -2,6 +2,8 @@ console.log("Ветка Мейн с рабочим виртом");
 
 combineDelay = 5 * 1000;
 hoursBetweenSessions = 1;
+//chapterCollapseStatus = ".chapter:not(.collapsed)"
+chapterCollapseStatus = ".chapter"
 
 playerData = [
   ["Фэрриан", "rogue", "Фэрриан Гардсон"],
@@ -818,7 +820,7 @@ function translit(word) {
 }
 
 function exportHTML() {
-  /*   removeCollapsed(); */
+  /*   removeCollapsedChapters(); */
   removeEmptyLines();
 
   var pageTitle = document.querySelector("h2.date");
@@ -914,8 +916,8 @@ function calculateTotalDuration() {
   // console.log( "Общая продолжительность успешно вычислена и добавлена на страницу." );
 }
 
-function removeCollapsed() {
-  var collapsedDivs = document.querySelectorAll("div.collapsed");
+function removeCollapsedChapters() {
+  var collapsedDivs = document.querySelectorAll(".chapter.collapsed");
   collapsedDivs.forEach(function (div) {
     div.remove();
   });
@@ -1033,7 +1035,7 @@ function removeUnselectedLoglines() {
   // console.log("Удаляю ненужные строки");
 
   // Находим все .chapter, которые не .collapsed
-  const chapters = document.querySelectorAll(".chapter:not(.collapsed)");
+  const chapters = document.querySelectorAll(chapterCollapseStatus);
 
   chapters.forEach((chapter) => {
     // Внутри каждого .chapter находим все p.logline, которые не .selected
@@ -1895,6 +1897,9 @@ function removePlayersWithDungeonMasterNames() {
 
 let keywordsInput = document.getElementById("keywordsInput").value;
 let oldKeywordsInput = "";
+let keywordsArray = [];
+let removeWords = [];
+let addWords = [];
 
 function logFilter() {
   // Получаем значение из поля ввода
@@ -1903,31 +1908,31 @@ function logFilter() {
 
   // Если пусто, то развыделяем всё
   if (keywordsInput.trim() === "") {
+    console.log("Если пусто, то развыделяем всё");
     const selectedElements = document.querySelectorAll(".selected");
     selectedElements.forEach((element) => {
       element.classList.remove("selected");
+      oldKeywordsInput = "";
     });
     return;
   }
 
   // Если инпут прежний, делаем скролл
   if (keywordsInput === oldKeywordsInput) {
+    console.log("Если инпут прежний, делаем скролл");
     scrollToNextSelected();
     return;
   }
 
   // Разделяем введенные значения по запятым
-  const keywordsArray = keywordsInput
-    .split(",")
-    .map((keyword) => keyword.trim());
-
-  // Массив для хранения "анти-слов"
-  const removeWords = [];
+  keywordsArray = keywordsInput.split(",").map((keyword) => keyword.trim());
 
   // Фильтруем массив ключевых слов, извлекая "анти-слова"
-  const addKeywords = keywordsArray.filter((keyword) => {
+  addWords = keywordsArray.filter((keyword) => {
     if (keyword.startsWith("-")) {
+      console.log('if (keyword.startsWith("-")) {');
       removeWords.push(keyword.substring(1)); // Добавляем "анти-слово" в массив removeWords
+      console.log('removeWords: ', removeWords);
       return false; // Возвращаем false, чтобы слово не попало в основной массив ключевых слов
     } else {
       return true; // Возвращаем true для обычных ключевых слов
@@ -1935,17 +1940,17 @@ function logFilter() {
   });
 
   // Выводим основной массив ключевых слов в консоль
-  // console.log("Keywords:", addKeywords);
+  // console.log("Keywords:", addWords);
 
-  if (addKeywords.length > 0) {
-    // Перебираем каждое ключевое слово из массива addKeywords
-    addKeywords.forEach((keyword) => {
+  if (addWords.length > 0) {
+    // Перебираем каждое ключевое слово из массива addWords
+    addWords.forEach((keyword) => {
       // Приводим ключевое слово к нижнему регистру
       const lowerKeyword = keyword.toLowerCase();
       // console.log("Keyword:", lowerKeyword);
 
       // Выбираем все главы, которые не свернуты
-      const chapters = document.querySelectorAll(".chapter:not(.collapsed)");
+      const chapters = document.querySelectorAll(chapterCollapseStatus);
       // console.log("Chapters:", chapters);
 
       // Перебираем каждую главу
@@ -1969,7 +1974,11 @@ function logFilter() {
         });
       });
     });
+    addWords = [];
   }
+
+  // Сворачиваем все главы на случай, если там не окажется находок
+  collapseChapters();
 
   // Выводим массив "анти-слов" в консоль
   // console.log("Remove words:", removeWords);
@@ -1982,7 +1991,7 @@ function logFilter() {
       console.log("Remove word:", lowerRemoveWord);
 
       // Выбираем все главы, которые не свернуты
-      const chapters = document.querySelectorAll(".chapter:not(.collapsed)");
+      const chapters = document.querySelectorAll(chapterCollapseStatus);
       console.log("Chapters:", chapters);
 
       // Перебираем каждую главу
@@ -2006,17 +2015,21 @@ function logFilter() {
         });
       });
     });
+    removeWords=[];
   }
   oldKeywordsInput = keywordsInput;
+  keywordsInput = "";
+  // Разворачиваем все главы с найденными словами
+  openselectedChapters();
+  removeCollapsedChapters();
 }
 
-
-
 let index = 0; // Начальный индекс
+let selectedElements = document.querySelectorAll(".selected");
 
 function scrollToNextSelected() {
   // Находим все элементы с классом "selected"
-  const selectedElements = document.querySelectorAll(".selected");
+  selectedElements = document.querySelectorAll(".selected");
 
   // Если нет выбранных элементов или их количество меньше двух, прерываем выполнение функции
   if (!selectedElements || selectedElements.length < 2) {
@@ -2039,6 +2052,8 @@ function scrollToNextSelected() {
     behavior: "smooth",
     block: "start",
   });
+  selectedElements = null;
+  console.log("selectedElements: ", selectedElements);
 }
 
 function postClear() {
