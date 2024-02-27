@@ -208,22 +208,22 @@ function importTxt(text) {
   const logLines = text.split("\n");
   const chatlog = document.querySelector("#chatlog");
   for (const line of logLines) {
-    if (/\d/.test(line)) {
-      const timestampMatch = line.match(/^(\S+\s\S+)/);
-      const timestamp = timestampMatch ? timestampMatch[1] : "";
-      const loglineBody = line.replace(timestamp, "").trim();
-      if (timestamp) {
-        const p = document.createElement("p");
-        p.setAttribute("timestamp", convertTimestamp(timestamp));
-        p.className = "logline";
-        p.textContent = loglineBody;
-        chatlog.appendChild(p);
-        console.log('timestamp: ', timestamp);
-      }
+    if (!/^\d+\/\d+\s+\d{2}:\d{2}:\d{2}\.\d{3}\s+/.test(line)) continue; // Пропускаем строки, не соответствующие формату временной метки
+    const timestampMatch = line.match(/^(\S+\s\S+)/);
+    const timestamp = timestampMatch ? timestampMatch[1] : "";
+    const loglineBody = line.replace(timestamp, "").trim();
+    if (timestamp) {
+      const p = document.createElement("p");
+      p.setAttribute("timestamp", convertTimestamp(timestamp));
+      p.className = "logline";
+      p.textContent = loglineBody;
+      chatlog.appendChild(p);
+      console.log('timestamp: ', timestamp);
     }
   }
   formatHTML();
 }
+
 
 function splitSessions() {
   const paragraphs = document.querySelectorAll("p.logline");
