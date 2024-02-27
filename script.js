@@ -218,6 +218,7 @@ function importTxt(text) {
         p.className = "logline";
         p.textContent = loglineBody;
         chatlog.appendChild(p);
+        console.log('timestamp: ', timestamp);
       }
     }
   }
