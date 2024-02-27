@@ -1,6 +1,7 @@
 console.log("Ветка Мейн с рабочим виртом");
 
-combineDelay = 2 * 1000;
+combineDelay = 5 * 1000;
+hoursBetweenSessions = 1;
 
 playerData = [
   ["Фэрриан", "rogue", "Фэрриан Гардсон"],
@@ -134,18 +135,24 @@ npcNames = {
 };
 
 function formatHTML() {
+  console.log("cleanText();");
   cleanText();
+  console.log("splitSessions();");
   splitSessions();
+  console.log("wrapChapters();");
   wrapChapters();
+  console.log("scrollToStart();");
   scrollToStart();
+  console.log("combineFunctions();");
   combineFunctions();
-
+  console.log("chapterReverse();");
   chapterReverse();
+  console.log("updateTimeAndActors();");
   updateTimeAndActors();
+  console.log("findLoglinesAndConvertToTranscript();");
   findLoglinesAndConvertToTranscript();
   //postClear();
   // $(".logline.story span.player").remove();
-
   //throw new Error("Скрипт прерван");
 }
 
@@ -218,14 +225,14 @@ function importTxt(text) {
       p.className = "logline";
       p.textContent = loglineBody;
       chatlog.appendChild(p);
-      console.log('timestamp: ', timestamp);
+      console.log("timestamp: ", timestamp);
     }
   }
   formatHTML();
 }
 
-
 function splitSessions() {
+  console.log("splitSessions");
   const paragraphs = document.querySelectorAll("p.logline");
   let prevTimestamp = null;
   paragraphs.forEach((paragraph) => {
@@ -234,7 +241,13 @@ function splitSessions() {
       const currentTimestamp = new Date(timestamp);
       if (prevTimestamp) {
         const timeDifference = currentTimestamp - prevTimestamp;
-        if (timeDifference > 1 * 60 * 60 * 1000 || timeDifference < 0) {
+        if (
+          timeDifference > hoursBetweenSessions * 60 * 60 * 1000 ||
+          timeDifference < 0
+        ) {
+          console.log(
+            "if (timeDifference > 1 * 60 * 60 * 1000 || timeDifference < 0) {"
+          );
           const dateHeader = document.createElement("h2");
           dateHeader.className = "date";
           const formattedDate = getFormattedDate(timestamp);
@@ -242,6 +255,7 @@ function splitSessions() {
           paragraph.parentNode.insertBefore(dateHeader, paragraph);
         }
       } else {
+        console.log('  const dateHeader = document.createElement("h2");');
         const dateHeader = document.createElement("h2");
         dateHeader.className = "date";
         const formattedDate = getFormattedDate(timestamp);
@@ -249,6 +263,7 @@ function splitSessions() {
         paragraph.parentNode.insertBefore(dateHeader, paragraph);
       }
       if (!paragraph.textContent.trim()) {
+        console.log("if (!paragraph.textContent.trim()) {");
         paragraph.remove();
         return;
       }
@@ -258,6 +273,7 @@ function splitSessions() {
 }
 
 function getFormattedDate(timestamp) {
+  console.log("getFormattedDate" + timestamp);
   const date = new Date(timestamp);
   const monthNames = [
     "января",
@@ -278,6 +294,7 @@ function getFormattedDate(timestamp) {
 }
 
 function padZero(number) {
+  console.log("padZero" + number);
   return number.toString().padStart(2, "0");
 }
 
@@ -293,28 +310,40 @@ function insertContentDiv(contentDiv, nextElement) {
 }
 
 function wrapChapters() {
+  console.log("Начало выполнения функции wrapChapters()");
+
   const chatlog = document.querySelector("#chatlog");
   if (!chatlog) {
-    // console.error("Элемент #chatlog не найден.");
+    console.error("Элемент #chatlog не найден.");
     return;
   }
+
   const dates = chatlog.querySelectorAll("h2.date");
   if (!dates.length) {
-    // console.error("Не найдены элементы h2.date.");
+    console.error("Не найдены элементы h2.date.");
     return;
   }
+
+  console.log(`Найдено ${dates.length} элементов h2.date.`);
+
   let chapters = [];
+
   for (const date of dates) {
+    console.log("for (const date of dates) {");
     let nextElement = date.nextElementSibling;
     const chapterElements = [date];
     let firstPTimestamp = null;
+
     while (nextElement && nextElement.tagName === "P") {
+      console.log('while (nextElement && nextElement.tagName === "P") {');
       if (!firstPTimestamp) {
+        console.log("if (!firstPTimestamp) {");
         firstPTimestamp = nextElement.getAttribute("timestamp");
       }
       chapterElements.push(nextElement);
       nextElement = nextElement.nextElementSibling;
     }
+
     const chapterDiv = document.createElement("div");
     chapterDiv.classList.add("chapter");
     chapterDiv.setAttribute("timestamp", firstPTimestamp);
@@ -322,6 +351,9 @@ function wrapChapters() {
     chapterDiv.append(...chapterElements);
     chapters.push(chapterDiv);
   }
+
+  console.log(`Создано ${chapters.length} глав.`);
+
   chatlog.innerHTML = "";
   chatlog.append(...chapters);
 
@@ -339,6 +371,8 @@ function wrapChapters() {
 
     chapter.appendChild(contentContainer);
   });
+
+  console.log("Функция wrapChapters() завершена успешно.");
 }
 
 function collapseChapters() {
@@ -1715,18 +1749,31 @@ function updateTimeAndActors() {
     span.remove();
   });
   colorindex = 0;
+  console.log("removePlayersWithDungeonMasterNames();");
   removePlayersWithDungeonMasterNames();
+  console.log("ShortNames();");
   ShortNames();
+  console.log("playerList();");
   playerList();
+  console.log("colorizePlayers();");
   colorizePlayers();
+  console.log("FullNames();");
   FullNames();
+  console.log("addTimeToChapter();");
   addTimeToChapter();
+  console.log("synchronizePlayerColors();");
   synchronizePlayerColors();
+  console.log("calculateTotalDuration();");
   calculateTotalDuration();
+  console.log("gatherPlayersAndInsert();");
   gatherPlayersAndInsert();
+  console.log("addCommaAndDotToPlayerList();");
   addCommaAndDotToPlayerList();
+  console.log("addColumnToPlayers();");
   addColumnToPlayers();
+  console.log("addSpaceToEmotePlayers();");
   addSpaceToEmotePlayers();
+  console.log("gatherPlayersAndInsert();");
   gatherPlayersAndInsert();
 }
 
@@ -1962,6 +2009,8 @@ function logFilter() {
   }
   oldKeywordsInput = keywordsInput;
 }
+
+
 
 let index = 0; // Начальный индекс
 
