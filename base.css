@@ -406,7 +406,7 @@ form.tumbler.input.tooltip.show {display: flex;align-content: center;justify-con
 input[type="checkbox"] {width: 1rem;}
 
 .collapsed > h2::after {
-  content: "Ð§Ð¸Ñ‚Ð°Ñ‚ÑŒ Ð´Ð°Ð»ÐµÐµ...";
+  content: "Читать...";
   font-size: 1rem;
   line-height: 1rem;
   display: block;

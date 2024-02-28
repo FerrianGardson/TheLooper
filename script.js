@@ -909,7 +909,7 @@ function calculateTotalDuration() {
   totalDurationHeading.textContent = `Всего наиграно ${totalHours}ч ${remainingMinutes}мин`;
 
   const totalDurationChapter = document.createElement("div");
-  totalDurationChapter.classList.add("totalduration", "chapter");
+  totalDurationChapter.classList.add("totalduration");
   totalDurationChapter.appendChild(totalDurationHeading);
 
   const chatlog = document.querySelector("#chatlog");
@@ -1189,7 +1189,7 @@ document.addEventListener("keydown", function (event) {
     logFilter();
   } else if (event.key === "Delete") {
     deleteElementUnderCursor();
-  } else if (!event.altKey && event.key === "ArrowLeft") {
+  } else if (event.key === "p" || event.key === "з") {
     togglePaperClass();
   } else if (event.altKey && event.key === "ArrowLeft") {
     pasteText();
@@ -1210,8 +1210,8 @@ document.addEventListener("keydown", function (event) {
     startWrap();
   } else if (["s", "ы"].includes(event.key)) {
     finishWrap("spoiler");
-  // } else if (["p", "з"].includes(event.key)) {
-  //   finishWrap("paper");
+  } else if (["]", "ъ"].includes(event.key)) {
+    finishWrap("paper");
   } else if (["]", "ъ"].includes(event.key) && event.ctrlKey) {
     finishWrap("remove");
   } else if (event.key === "/") {
@@ -1259,15 +1259,10 @@ function deleteElementUnderCursor() {
   const elementsUnderCursor = document.querySelectorAll(":hover");
   elementsUnderCursor.forEach((element) => {
     const loglineParent = element.closest(".logline");
-    const paperParent = element.closest(".paper");
-    const transcriptParent = element.closest(".transcript");
-    const playerParent = element.closest(".player");
     const dateHeadingParent = element.closest("h2.date");
 
-    if (loglineParent || paperParent || transcriptParent || playerParent) {
-      const parentToRemove =
-        loglineParent || paperParent || transcriptParent || playerParent;
-      parentToRemove.remove();
+    if (loglineParent) {
+      loglineParent.remove();
     } else if (dateHeadingParent) {
       const chapterParent = dateHeadingParent.closest(".chapter");
       if (chapterParent) {
@@ -1276,6 +1271,7 @@ function deleteElementUnderCursor() {
     }
   });
 }
+
 
 function togglePaperClass() {
   const elementsUnderCursor = document.querySelectorAll(":hover");
@@ -1468,9 +1464,15 @@ function removeRed() {
 }
 
 function finishWrap(className) {
+  console.log("finishWrap called with className:", className);
+
   if (wrapping == true) {
+    console.log("Wrapping is set to true.");
+
     const contentChild = document.querySelector(".content .logline:hover");
     if (contentChild) {
+      console.log("contentChild found:", contentChild);
+
       document.querySelectorAll(".content .finish_wrap").forEach((element) => {
         element.classList.remove("finish_wrap");
         console.log("finish_wrap removed from element:", element);
@@ -1478,15 +1480,25 @@ function finishWrap(className) {
 
       contentChild.classList.add("finish_wrap");
       console.log("finish_wrap added to element:", contentChild);
+
       WrapToDiv();
     }
+
     function WrapToDiv() {
-      const elementsUnderCursor =
-        document.querySelectorAll(".content .logline:hover");
+      console.log("WrapToDiv function called.");
+
+      const elementsUnderCursor = document.querySelectorAll(
+        ".content .logline:hover"
+      );
 
       for (const element of elementsUnderCursor) {
+        console.log("Processing element:", element);
+
         const contentChild = element.closest("div.content");
-        if (!contentChild) continue;
+        if (!contentChild) {
+          console.log("No contentChild found. Skipping.");
+          continue;
+        }
 
         const startWrap = contentChild.querySelector(".start_wrap");
         const finishWrap = contentChild.querySelector(".finish_wrap");
@@ -1500,6 +1512,9 @@ function finishWrap(className) {
           return;
         }
 
+        console.log("startWrap:", startWrap);
+        console.log("finishWrap:", finishWrap);
+
         const siblings = Array.from(contentChild.children);
         let isWrapping = false;
         const spoilerDiv = document.createElement("div");
@@ -1509,26 +1524,37 @@ function finishWrap(className) {
           if (sibling === startWrap) {
             isWrapping = true;
             spoilerDiv.appendChild(startWrap.cloneNode(true));
+
+            // После строки 1541
+            console.log("startWrap content:", startWrap.innerHTML);
+            console.log("finishWrap content:", finishWrap.innerHTML);
+
+            console.log(
+              "SpoilerDiv content before removing startWrap and finishWrap:",
+              spoilerDiv.innerHTML
+            );
+
             continue;
           }
 
           if (sibling === finishWrap) {
             spoilerDiv.appendChild(finishWrap.cloneNode(true));
+            console.log("finishWrap cloned and appended to spoilerDiv.");
             break;
           }
 
           if (isWrapping) {
             const clonedSibling = sibling.cloneNode(true);
             spoilerDiv.appendChild(clonedSibling);
+            console.log("Sibling cloned and appended to spoilerDiv.");
             sibling.remove();
           }
         }
 
         startWrap.parentNode.insertBefore(spoilerDiv, startWrap.nextSibling);
 
-        console.log("Элементы успешно обёрнуты в спойлер:", spoilerDiv);
-        startWrap.remove();
-        finishWrap.remove();
+        console.log("SpoilerDiv inserted after startWrap:", spoilerDiv);
+        console.log("Removing startWrap and finishWrap.");
 
         if (className === "spoiler") {
           const spoilerDesc = document.createElement("h1");
@@ -1538,12 +1564,15 @@ function finishWrap(className) {
             spoilerDesc,
             spoilerDiv.nextSibling
           );
+          console.log("SpoilerDesc added after spoilerDiv.");
         }
-        if ((className = "remove")) {
+        if (className === "remove") {
+          console.log("Removing red elements.");
           removeRed();
         }
+        startWrap.remove();
+        finishWrap.remove();
         wrapping = false;
-        break;
       }
     }
   }
