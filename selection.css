@@ -1,13 +1,13 @@
 .remove {
-  background: #ff000047;
+  background: #ff000047!important;
 }
 
 .start_wrap {
-  background: green;
+  background: green!important;
 }
 
 .finish_wrap {
-  background: red;
+  background: red!important;
 }
 
 .virt > .emote,
