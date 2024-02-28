@@ -3,7 +3,7 @@ console.log("Ветка Мейн с рабочим виртом");
 combineDelay = 5 * 1000;
 hoursBetweenSessions = 1;
 //chapterCollapseStatus = ".chapter:not(.collapsed)"
-chapterCollapseStatus = ".chapter"
+chapterCollapseStatus = ".chapter";
 
 playerData = [
   ["Фэрриан", "rogue", "Фэрриан Гардсон"],
@@ -1190,9 +1190,9 @@ document.addEventListener("keydown", function (event) {
     togglePaperClass();
   } else if (event.altKey && event.key === "ArrowLeft") {
     pasteText();
-  } else if (["[", "х"].includes(event.key) && event.ctrlKey) {
+  } else if (["[", "х"].includes(event.key) && event.ctrlKey && event.altKey) {
     deleteBefore();
-  } else if (["]", "ъ"].includes(event.key) && event.ctrlKey) {
+  } else if (["]", "ъ"].includes(event.key) && event.ctrlKey && event.altKey) {
     deleteAfter();
   } else if (event.key === "ArrowRight") {
     pasteImg();
@@ -1203,20 +1203,20 @@ document.addEventListener("keydown", function (event) {
     if (hoveredLogline) {
       convertLoglineToTranscript(hoveredLogline);
     }
-  } else if (["[", "х"].includes(event.key) && event.altKey) {
-    startWrap();
-  } else if (["]", "ъ"].includes(event.key) && event.altKey) {
-    finishWrap("spoiler");
   } else if (["[", "х"].includes(event.key)) {
     startWrap();
-  } else if (["]", "ъ"].includes(event.key)) {
+  } else if (["s", "ы"].includes(event.key)) {
+    finishWrap("spoiler");
+  } else if (["p", "з"].includes(event.key)) {
     finishWrap("paper");
+  } else if (["]", "ъ"].includes(event.key) && event.ctrlKey) {
+    finishWrap("remove");
   } else if (event.key === "/") {
     divideChapter();
   } else if (event.key === "*") {
     WrapToDiv();
   } else if (event.key === "-") {
-    WrapToDiv();
+    finishWrap("remove");
   } else if (event.key === "d") {
     debug();
   } else if (event.key === "+") {
@@ -1442,6 +1442,7 @@ function deleteAfter() {
 }
 
 function startWrap() {
+  console.log("startWrap");
   const contentChild = document.querySelector(".content > :hover");
   if (contentChild) {
     document.querySelectorAll(".content .start_wrap").forEach((element) => {
@@ -1452,16 +1453,24 @@ function startWrap() {
   }
 }
 
+function removeRed() {
+  console.log("removeRed()");
+  let toRemove = document.querySelectorAll(".remove");
+  toRemove.forEach((element) => {
+    element.remove();
+  });
+}
+
 function finishWrap(className) {
   const contentChild = document.querySelector(".content > :hover");
   if (contentChild) {
     document.querySelectorAll(".content .finish_wrap").forEach((element) => {
       element.classList.remove("finish_wrap");
-      // console.log("finish_wrap removed from element:", element);
+      console.log("finish_wrap removed from element:", element);
     });
 
     contentChild.classList.add("finish_wrap");
-    // console.log("finish_wrap added to element:", contentChild);
+    console.log("finish_wrap added to element:", contentChild);
     WrapToDiv();
   }
   function WrapToDiv() {
@@ -1477,7 +1486,9 @@ function finishWrap(className) {
       finishWrap.classList.remove("finish_wrap");
 
       if (!startWrap || !finishWrap) {
-        // console.log( "Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv." );
+        console.log(
+          "Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv."
+        );
         return;
       }
 
@@ -1507,7 +1518,7 @@ function finishWrap(className) {
 
       startWrap.parentNode.insertBefore(spoilerDiv, startWrap.nextSibling);
 
-      // console.log("Элементы успешно обёрнуты в спойлер:", spoilerDiv);
+      console.log("Элементы успешно обёрнуты в спойлер:", spoilerDiv);
       startWrap.remove();
       finishWrap.remove();
 
@@ -1516,6 +1527,9 @@ function finishWrap(className) {
         spoilerDesc.classList.add("spoiler_desc");
         spoilerDesc.textContent = "Наведитесь, чтобы раскрыть спойлер";
         spoilerDiv.parentNode.insertBefore(spoilerDesc, spoilerDiv.nextSibling);
+      }
+      if (className = "remove") {
+        removeRed();
       }
 
       break;
@@ -1932,7 +1946,7 @@ function logFilter() {
     if (keyword.startsWith("-")) {
       console.log('if (keyword.startsWith("-")) {');
       removeWords.push(keyword.substring(1)); // Добавляем "анти-слово" в массив removeWords
-      console.log('removeWords: ', removeWords);
+      console.log("removeWords: ", removeWords);
       return false; // Возвращаем false, чтобы слово не попало в основной массив ключевых слов
     } else {
       return true; // Возвращаем true для обычных ключевых слов
@@ -2015,7 +2029,7 @@ function logFilter() {
         });
       });
     });
-    removeWords=[];
+    removeWords = [];
   }
   oldKeywordsInput = keywordsInput;
   keywordsInput = "";
