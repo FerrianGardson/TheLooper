@@ -2,8 +2,11 @@ console.log("Ветка Мейн с рабочим виртом");
 
 combineDelay = 5 * 1000;
 hoursBetweenSessions = 1;
-//chapterCollapseStatus = ".chapter:not(.collapsed)"
-chapterCollapseStatus = ".chapter";
+
+let searchWithinCollapsed = true;
+let chapterCollapseStatus = searchWithinCollapsed
+  ? ".chapter"
+  : ".chapter:not(.collapsed)";
 
 playerData = [
   ["Фэрриан", "rogue", "Фэрриан Гардсон"],
@@ -1035,7 +1038,7 @@ function removeUnselectedLoglines() {
   // console.log("Удаляю ненужные строки");
 
   // Находим все .chapter, которые не .collapsed
-  const chapters = document.querySelectorAll(chapterCollapseStatus);
+  const chapters = document.querySelectorAll(".chapter:not(.collapsed)");
 
   chapters.forEach((chapter) => {
     // Внутри каждого .chapter находим все p.logline, которые не .selected
@@ -1207,8 +1210,8 @@ document.addEventListener("keydown", function (event) {
     startWrap();
   } else if (["s", "ы"].includes(event.key)) {
     finishWrap("spoiler");
-  } else if (["p", "з"].includes(event.key)) {
-    finishWrap("paper");
+  // } else if (["p", "з"].includes(event.key)) {
+  //   finishWrap("paper");
   } else if (["]", "ъ"].includes(event.key) && event.ctrlKey) {
     finishWrap("remove");
   } else if (event.key === "/") {
@@ -1441,9 +1444,12 @@ function deleteAfter() {
   updateTimeAndActors();
 }
 
+let wrapping = false;
+
 function startWrap() {
   console.log("startWrap");
-  const contentChild = document.querySelector(".content > :hover");
+  wrapping = true;
+  const contentChild = document.querySelector(".content .logline:hover");
   if (contentChild) {
     document.querySelectorAll(".content .start_wrap").forEach((element) => {
       element.classList.remove("start_wrap");
@@ -1462,77 +1468,83 @@ function removeRed() {
 }
 
 function finishWrap(className) {
-  const contentChild = document.querySelector(".content > :hover");
-  if (contentChild) {
-    document.querySelectorAll(".content .finish_wrap").forEach((element) => {
-      element.classList.remove("finish_wrap");
-      console.log("finish_wrap removed from element:", element);
-    });
+  if (wrapping == true) {
+    const contentChild = document.querySelector(".content .logline:hover");
+    if (contentChild) {
+      document.querySelectorAll(".content .finish_wrap").forEach((element) => {
+        element.classList.remove("finish_wrap");
+        console.log("finish_wrap removed from element:", element);
+      });
 
-    contentChild.classList.add("finish_wrap");
-    console.log("finish_wrap added to element:", contentChild);
-    WrapToDiv();
-  }
-  function WrapToDiv() {
-    const elementsUnderCursor = document.querySelectorAll(".content > :hover");
+      contentChild.classList.add("finish_wrap");
+      console.log("finish_wrap added to element:", contentChild);
+      WrapToDiv();
+    }
+    function WrapToDiv() {
+      const elementsUnderCursor =
+        document.querySelectorAll(".content .logline:hover");
 
-    for (const element of elementsUnderCursor) {
-      const contentChild = element.closest("div.content");
-      if (!contentChild) continue;
+      for (const element of elementsUnderCursor) {
+        const contentChild = element.closest("div.content");
+        if (!contentChild) continue;
 
-      const startWrap = contentChild.querySelector(".start_wrap");
-      const finishWrap = contentChild.querySelector(".finish_wrap");
-      startWrap.classList.remove("start_wrap");
-      finishWrap.classList.remove("finish_wrap");
+        const startWrap = contentChild.querySelector(".start_wrap");
+        const finishWrap = contentChild.querySelector(".finish_wrap");
+        startWrap.classList.remove("start_wrap");
+        finishWrap.classList.remove("finish_wrap");
 
-      if (!startWrap || !finishWrap) {
-        console.log(
-          "Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv."
-        );
-        return;
-      }
-
-      const siblings = Array.from(contentChild.children);
-      let isWrapping = false;
-      const spoilerDiv = document.createElement("div");
-      spoilerDiv.classList.add(className);
-
-      for (const sibling of siblings) {
-        if (sibling === startWrap) {
-          isWrapping = true;
-          spoilerDiv.appendChild(startWrap.cloneNode(true));
-          continue;
+        if (!startWrap || !finishWrap) {
+          console.log(
+            "Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv."
+          );
+          return;
         }
 
-        if (sibling === finishWrap) {
-          spoilerDiv.appendChild(finishWrap.cloneNode(true));
-          break;
+        const siblings = Array.from(contentChild.children);
+        let isWrapping = false;
+        const spoilerDiv = document.createElement("div");
+        spoilerDiv.classList.add(className);
+
+        for (const sibling of siblings) {
+          if (sibling === startWrap) {
+            isWrapping = true;
+            spoilerDiv.appendChild(startWrap.cloneNode(true));
+            continue;
+          }
+
+          if (sibling === finishWrap) {
+            spoilerDiv.appendChild(finishWrap.cloneNode(true));
+            break;
+          }
+
+          if (isWrapping) {
+            const clonedSibling = sibling.cloneNode(true);
+            spoilerDiv.appendChild(clonedSibling);
+            sibling.remove();
+          }
         }
 
-        if (isWrapping) {
-          const clonedSibling = sibling.cloneNode(true);
-          spoilerDiv.appendChild(clonedSibling);
-          sibling.remove();
+        startWrap.parentNode.insertBefore(spoilerDiv, startWrap.nextSibling);
+
+        console.log("Элементы успешно обёрнуты в спойлер:", spoilerDiv);
+        startWrap.remove();
+        finishWrap.remove();
+
+        if (className === "spoiler") {
+          const spoilerDesc = document.createElement("h1");
+          spoilerDesc.classList.add("spoiler_desc");
+          spoilerDesc.textContent = "Наведитесь, чтобы раскрыть спойлер";
+          spoilerDiv.parentNode.insertBefore(
+            spoilerDesc,
+            spoilerDiv.nextSibling
+          );
         }
+        if ((className = "remove")) {
+          removeRed();
+        }
+        wrapping = false;
+        break;
       }
-
-      startWrap.parentNode.insertBefore(spoilerDiv, startWrap.nextSibling);
-
-      console.log("Элементы успешно обёрнуты в спойлер:", spoilerDiv);
-      startWrap.remove();
-      finishWrap.remove();
-
-      if (className === "spoiler") {
-        const spoilerDesc = document.createElement("h1");
-        spoilerDesc.classList.add("spoiler_desc");
-        spoilerDesc.textContent = "Наведитесь, чтобы раскрыть спойлер";
-        spoilerDiv.parentNode.insertBefore(spoilerDesc, spoilerDiv.nextSibling);
-      }
-      if (className = "remove") {
-        removeRed();
-      }
-
-      break;
     }
   }
 }
@@ -2066,8 +2078,8 @@ function scrollToNextSelected() {
     behavior: "smooth",
     block: "start",
   });
-  selectedElements = null;
-  console.log("selectedElements: ", selectedElements);
+  // selectedElements = null;
+  // console.log("selectedElements: ", selectedElements);
 }
 
 function postClear() {
