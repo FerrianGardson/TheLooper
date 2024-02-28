@@ -1961,6 +1961,12 @@ function logFilter() {
   keywordsInput = document.getElementById("keywordsInput").value;
   console.log("keywordsInput: ", keywordsInput);
 
+  // Если три содержит .virt, то запускается функция searchVirt
+  if (keywordsInput.includes(".virt")) {
+    console.log("Если содержит .virt, то запускается функция searchVirt");
+    searchVirt();
+  }
+
   // Если пусто, то развыделяем всё
   if (keywordsInput.trim() === "") {
     console.log("Если пусто, то развыделяем всё");
@@ -2077,6 +2083,44 @@ function logFilter() {
   // Разворачиваем все главы с найденными словами
   openselectedChapters();
   removeCollapsedChapters();
+}
+
+function searchVirt() {
+  console.log("Searching for .virt elements...");
+
+  // Снимаем selected со всех классов
+  const selectedElements = document.querySelectorAll(".selected");
+  selectedElements.forEach((element) => {
+    element.classList.remove("selected");
+  });
+  console.log("Removed .selected class from all elements.");
+
+  // Находим все элементы p.virt и добавляем им класс .selected
+  const virtElements = document.querySelectorAll("p.virt");
+  virtElements.forEach((element) => {
+    element.classList.add("selected");
+  });
+  console.log("Added .selected class to all .virt elements.");
+
+  // Составляем список индексов всех элементов p.virt
+  const indexes = Array.from(virtElements).map((element) => {
+    return Array.from(element.parentNode.children).indexOf(element);
+  });
+  console.log("Indexes of .virt elements:", indexes);
+
+  // Скроллим к первому элементу p.virt
+  if (indexes.length > 0) {
+    window.scrollTo({
+      top: virtElements[0].offsetTop - window.innerHeight / 2,
+      behavior: "smooth",
+    });
+    console.log("Scrolled to the first .virt element.");
+  } else {
+    console.log("No .virt elements found.");
+  }
+  openselectedChapters();
+  removeCollapsedChapters();
+  removeUnselectedLoglines();
 }
 
 let index = 0; // Начальный индекс
