@@ -150,12 +150,12 @@ function formatHTML() {
   scrollToStart();
   console.log("combineFunctions();");
   combineFunctions();
-  console.log("chapterReverse();");
-  chapterReverse();
   console.log("updateTimeAndActors();");
   updateTimeAndActors();
   console.log("findLoglinesAndConvertToTranscript();");
   findLoglinesAndConvertToTranscript();
+  console.log("chapterReverse();");
+  chapterReverse();
   //postClear();
   // $(".logline.story span.player").remove();
   //throw new Error("Скрипт прерван");
@@ -933,21 +933,39 @@ function removePlayers() {
   });
 }
 
-var isReversed = false;
+var isReversed = true;
+
 function chapterReverse() {
-  var chatlog = document.getElementById("chatlog");
-  var messages = Array.from(chatlog.children);
-  messages.reverse();
-  while (chatlog.firstChild) {
-    chatlog.removeChild(chatlog.firstChild);
-  }
-  messages.forEach(function (message) {
-    chatlog.appendChild(message);
-  });
+  let chapters = document.querySelectorAll(".chapter");
+  let totalDuration = document.querySelector(".totalduration");
+  // console.log("chapters: ", chapters);
+  let reversedChapters = Array.from(chapters).reverse();
+  chapters.forEach((chapter) => chapter.remove());
+  // console.log("reversedChapters: ", reversedChapters);
+
+  let reversedChaptersHTML = reversedChapters
+    .map((chapter) => chapter.outerHTML)
+    .join("");
+  totalDuration.insertAdjacentHTML("afterend", reversedChaptersHTML);
+
+  // Динамическое название кнопки
   let button = document.querySelector('[onclick="chapterReverse()"]');
   button.textContent = isReversed ? "Сначала старое" : "Сначала новое";
   isReversed = !isReversed;
+  console.log("isReversed = !isReversed;");
 }
+
+// function chapterReverse() {
+//   var chatlog = document.getElementById("chatlog");
+//   var messages = Array.from(chatlog.children);
+//   messages.reverse();
+//   while (chatlog.firstChild) {
+//     chatlog.removeChild(chatlog.firstChild);
+//   }
+//   messages.forEach(function (message) {
+//     chatlog.appendChild(message);
+//   });
+// }
 
 function removeEmptyLines() {
   var bodyHtml = document.body.innerHTML;
@@ -1271,7 +1289,6 @@ function deleteElementUnderCursor() {
     }
   });
 }
-
 
 function togglePaperClass() {
   const elementsUnderCursor = document.querySelectorAll(":hover");
