@@ -1164,14 +1164,25 @@ function convertLoglineToTranscript(loglineElement) {
   const hours = ("0" + timestamp.getUTCHours()).slice(-2);
   const minutes = ("0" + timestamp.getUTCMinutes()).slice(-2);
   const formattedTimestamp = formattedDate + " " + hours + ":" + minutes;
-  let playerName = loglineElement.querySelector(".player").textContent.trim();
-  playerName = playerName.slice(0, -1);
+  let playerName = loglineElement.querySelector(".player");
+  console.log("playerName: ", playerName);
   loglineElement.setAttribute("timestamp", timestamp.toISOString());
-
+  playerName.remove();
   loglineElement.textContent = loglineElement.textContent.replace(
     /^.+([Зз]апись|\d\d[:.]\d\d)[,.!: ]/g,
     ""
   );
+  console.log("playerName: ", playerName);
+  if (
+    loglineElement.classList.contains("say") ||
+    loglineElement.classList.contains("yell") ||
+    loglineElement.classList.contains("virt")
+  ) {
+    playerName = playerName.textContent.slice(0, -2);
+  } else {
+    playerName = playerName.textContent.slice(0, -1);
+  }
+  console.log("playerName: ", playerName);
 
   const transcriptRecordHTML = `
     <div class="record">
