@@ -1,4 +1,4 @@
-console.log("26-02-2024");
+console.log("toggleSelectionCSS");
 
 combineDelay = 2 * 1000;
 
@@ -1771,7 +1771,7 @@ function updateTimeAndActors() {
   gatherPlayersAndInsert();
 }
 
-function toggleHighlight() {
+function toggleSelectionCSS() {
   var styleLink = document.querySelector("link.selection.style");
   styleLink.disabled = !styleLink.disabled;
 }
