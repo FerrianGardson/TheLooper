@@ -1,13 +1,13 @@
 .remove {
-  background: #ff000047;
+  background: #ff000047!important;
 }
 
 .start_wrap {
-  background: green;
+  background: green!important;
 }
 
 .finish_wrap {
-  background: red;
+  background: red!important;
 }
 
 .virt > .emote,
@@ -18,4 +18,8 @@
 .content > .logline:not(.selected, .paper, :hover, .remove) {
   opacity: 0.5;
   filter: saturate(0);
+}
+
+.virt {
+  color: var(--whisper);
 }
