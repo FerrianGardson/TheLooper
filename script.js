@@ -144,6 +144,7 @@ npcNames = {
 function formatHTML() {
   console.log("mergeLoglinesWithSameTimestamp();");
   mergeLoglinesWithSameTimestamp();
+  throw new Error("Скрипт прерван");
   console.log("cleanText();");
   cleanText();
   console.log("splitSessions();");
@@ -242,6 +243,7 @@ function importTxt(text) {
   formatHTML();
 }
 function mergeLoglinesWithSameTimestamp() {
+  console.log("Запуск");
   // Объявляем переменные для хранения предыдущего и текущего значения timestamp и содержимого
   let oldTimestamp = "";
   let timestamp = "";
@@ -255,15 +257,23 @@ function mergeLoglinesWithSameTimestamp() {
   // Проходимся по каждому элементу
   loglines.forEach((logline) => {
     timestamp = logline.getAttribute("timestamp");
+    // console.log("timestamp: ", timestamp);
     content = logline.textContent;
+    // console.log("content: ", content);
 
-    if (timestamp === oldTimestamp) {
+    if (oldTimestamp === "") {
+      console.log("Начало");
+      oldTimestamp = timestamp;
+      oldContent = content;
+      oldLogline = logline;
+    } else if (timestamp === oldTimestamp) {
+      console.log("Совпадение");
       oldLogline.textContent += " " + content;
       logline.remove();
-      console.log("content: ", content);
     }
   });
 }
+
 
 function splitSessions() {
   console.log("splitSessions");
@@ -1904,7 +1914,6 @@ function toggleSelectionCSS() {
     console.log("Ссылка на стили не найдена.");
   }
 }
-
 
 function gatherPlayersAndInsert() {
   const totalPlayers = document.querySelector(".totalduration > .players");
