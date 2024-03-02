@@ -1,4 +1,5 @@
 console.log("Main");
+console.log("toggleSelectionCSS");
 
 combineDelay = 5 * 1000;
 hoursBetweenSessions = 1;
@@ -1894,17 +1895,16 @@ function updateAll() {
 }
 
 function toggleSelectionCSS() {
-  var styleLinks = document.querySelectorAll("link.style.Selection");
-  styleLinks.forEach((styleLink) => {
-    console.log("styleLink:", styleLink);
-    if (styleLink) {
-      styleLink.disabled = !styleLink.disabled;
-      console.log("styleLink.disabled:", styleLink.disabled);
-    } else {
-      console.log("Ссылка на стили не найдена.");
-    }
-  });
+  var styleLink = document.querySelector("link.style.selection");
+  console.log("styleLink:", styleLink);
+  if (styleLink) {
+    styleLink.disabled = !styleLink.disabled;
+    console.log("styleLink.disabled:", styleLink.disabled);
+  } else {
+    console.log("Ссылка на стили не найдена.");
+  }
 }
+
 
 function gatherPlayersAndInsert() {
   const totalPlayers = document.querySelector(".totalduration > .players");
