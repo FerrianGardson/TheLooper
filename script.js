@@ -1,4 +1,4 @@
-console.log("Ветка Мейн с рабочим виртом");
+console.log("Main");
 
 combineDelay = 5 * 1000;
 hoursBetweenSessions = 1;
@@ -1893,10 +1893,18 @@ function updateAll() {
   addColumnToPlayers();
 }
 
-function toggleHighlight() {
-  var styleLink = document.querySelectorAll(".selection.style");
-  styleLink.disabled = !styleLink.disabled;
+function toggleSelectionCSS() {
+  var styleLink = document.querySelector("link.selection.style");
+  console.log("styleLink:", styleLink);
+  if (styleLink) {
+    styleLink.disabled = !styleLink.disabled;
+    console.log("styleLink.disabled:", styleLink.disabled);
+  } else {
+    console.log("Ссылка на стили не найдена.");
+  }
 }
+
+
 
 function gatherPlayersAndInsert() {
   const totalPlayers = document.querySelector(".totalduration > .players");
