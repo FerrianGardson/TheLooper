@@ -892,9 +892,9 @@ function selectAll() {
 }
 
 function debug() {
-  console.log("Дебаг")
+  console.log("Дебаг");
   combineDelay = 24 * 60 * 1000;
-  combineSay("say")
+  combineSay("say");
 }
 
 function calculateTotalDuration() {
@@ -1894,17 +1894,17 @@ function updateAll() {
 }
 
 function toggleSelectionCSS() {
-  var styleLink = document.querySelector("link.selection.style");
-  console.log("styleLink:", styleLink);
-  if (styleLink) {
-    styleLink.disabled = !styleLink.disabled;
-    console.log("styleLink.disabled:", styleLink.disabled);
-  } else {
-    console.log("Ссылка на стили не найдена.");
-  }
+  var styleLinks = document.querySelectorAll("link.style.Selection");
+  styleLinks.forEach((styleLink) => {
+    console.log("styleLink:", styleLink);
+    if (styleLink) {
+      styleLink.disabled = !styleLink.disabled;
+      console.log("styleLink.disabled:", styleLink.disabled);
+    } else {
+      console.log("Ссылка на стили не найдена.");
+    }
+  });
 }
-
-
 
 function gatherPlayersAndInsert() {
   const totalPlayers = document.querySelector(".totalduration > .players");
