@@ -1,6 +1,6 @@
-console.log("Main");
+console.log("main");
 console.log("toggleSelectionCSS");
-console.log("Деплой");
+console.log("mergeLoglinesWithSameTimestamp");
 
 combineDelay = 5 * 1000;
 hoursBetweenSessions = 1;
@@ -145,7 +145,7 @@ npcNames = {
 function formatHTML() {
   console.log("mergeLoglinesWithSameTimestamp();");
   mergeLoglinesWithSameTimestamp();
-  throw new Error("Скрипт прерван");
+  // throw new Error("Скрипт прерван");
   console.log("cleanText();");
   cleanText();
   console.log("splitSessions();");
@@ -243,6 +243,7 @@ function importTxt(text) {
   }
   formatHTML();
 }
+
 function mergeLoglinesWithSameTimestamp() {
   console.log("Запуск");
   // Объявляем переменные для хранения предыдущего и текущего значения timestamp и содержимого
@@ -274,7 +275,6 @@ function mergeLoglinesWithSameTimestamp() {
     }
   });
 }
-
 
 function splitSessions() {
   console.log("splitSessions");
