@@ -2,6 +2,7 @@ console.log("Ветка Мейн с рабочим виртом");
 
 combineDelay = 5 * 1000;
 hoursBetweenSessions = 1;
+showtimestamps = false;
 
 let searchWithinCollapsed = true;
 let chapterCollapseStatus = searchWithinCollapsed
@@ -115,7 +116,7 @@ npcNames = {
   Лекарь: true,
   Священник: true,
   Дробитель: true,
-  Богач: true,
+  Нищий: true,
   Богач: true,
   Богач: true,
   Богач: true,
@@ -140,6 +141,8 @@ npcNames = {
 };
 
 function formatHTML() {
+  console.log("mergeLoglinesWithSameTimestamp();");
+  mergeLoglinesWithSameTimestamp();
   console.log("cleanText();");
   cleanText();
   console.log("splitSessions();");
@@ -150,10 +153,10 @@ function formatHTML() {
   scrollToStart();
   console.log("combineFunctions();");
   combineFunctions();
-  console.log("updateTimeAndActors();");
-  updateTimeAndActors();
   console.log("findLoglinesAndConvertToTranscript();");
   findLoglinesAndConvertToTranscript();
+  console.log("updateAll();");
+  updateAll();
   console.log("chapterReverse();");
   chapterReverse();
   //postClear();
@@ -230,57 +233,36 @@ function importTxt(text) {
       p.className = "logline";
       p.textContent = loglineBody;
       chatlog.appendChild(p);
-      console.log("timestamp: ", timestamp);
+      if (showtimestamps) {
+        console.log("timestamp: ", timestamp);
+      }
     }
   }
-  mergeLoglinesWithSameTimestamp();
-  throw new Error("Скрипт прерван");
   formatHTML();
 }
 function mergeLoglinesWithSameTimestamp() {
   // Объявляем переменные для хранения предыдущего и текущего значения timestamp и содержимого
   let oldTimestamp = "";
-  let newTimestamp = "";
+  let timestamp = "";
   let oldContent = "";
-  let newContent = "";
-  let oldLogline = "";
-  let newLogline = "";
+  let content = "";
+  let oldLogline = null;
 
   // Получаем все элементы <p> с классом .logline
   const loglines = document.querySelectorAll("p.logline");
 
   // Проходимся по каждому элементу
   loglines.forEach((logline) => {
-    // Создаем копию текущего элемента
-    newLogline = logline.cloneNode(true);
+    timestamp = logline.getAttribute("timestamp");
+    content = logline.textContent;
 
-    // Получаем значение атрибута timestamp текущего элемента
-    newTimestamp = logline.getAttribute("timestamp");
-    // Получаем текстовое содержимое текущего элемента и удаляем пробельные символы в начале и в конце
-    newContent = logline.textContent.trim();
-
-    // Проверяем, пусты ли предыдущее значение timestamp и содержимое
-    if (oldTimestamp === "" || oldContent === "") {
-      console.log("Пусто");
-    } else if (oldTimestamp === newTimestamp) {
-      // Если значения timestamp совпадают, объединяем содержимое
-      console.log("Совпадение", oldContent + " + " + newContent);
-      newContent = oldContent + " " + newContent;
-
-      // Удаляем предыдущий элемент, так как он уже объединен
-      oldLogline.parentElement.removeChild(oldLogline);
+    if (timestamp === oldTimestamp) {
+      oldLogline.textContent += " " + content;
+      logline.remove();
+      console.log("content: ", content);
     }
-
-    // Выводим информацию для отладки
-    console.log("Меняю", oldLogline, newLogline);
-
-    // Обновляем значения предыдущего timestamp и содержимого
-    oldTimestamp = newTimestamp;
-    oldContent = newContent;
-    oldLogline = newLogline;
   });
 }
-
 
 function splitSessions() {
   console.log("splitSessions");
@@ -484,7 +466,7 @@ function cleanText() {
   ); // Системные сообщения, начинаются со служебных символов
 
   chatlogHTML = chatlogHTML.replace(
-    /<p.*[А-Я][а-я-]+?\s(is|действие|получил|атакует,|кажется,|приглашается|\(|атакует|уже состоит|вступает|исключается|смотрит|преклоняет|рассказывает|is Away|получает|не имеет ауры|does not wish|к вам|смотрит на вас|кивает вам|смотрит на вас|ставит|добавлено|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*?<\/p>\n/g,
+    /<p.*[А-Я][а-я-]+?\s(is|действие|проводит проверку готовности.|показывает, что готов|получил|атакует,|кажется,|приглашается|\(|атакует|уже состоит|вступает|исключается|смотрит|преклоняет|рассказывает|is Away|получает|не имеет ауры|does not wish|к вам|смотрит на вас|кивает вам|смотрит на вас|ставит|добавлено|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*?<\/p>\n/g,
     ""
   ); // Игрок %ООС-действие%
 
@@ -585,7 +567,7 @@ function combineFunctions() {
 function combineSay(spanType) {
   resetSay();
 
-  var elements = document.querySelectorAll("div.chapter p.logline");
+  var elements = document.querySelectorAll(".content > p.logline");
   var length = elements.length;
 
   for (var i = 0; i < length; i++) {
@@ -910,12 +892,9 @@ function selectAll() {
 }
 
 function debug() {
-  // Удаляем класс .collapsed у всех элементов с этим классом
-  const collapsedElements = document.querySelectorAll(".collapsed");
-  collapsedElements.forEach((element) => {
-    element.classList.remove("collapsed");
-  });
-  document.querySelector('link[href="selection.css"]').disabled = true;
+  console.log("Дебаг")
+  combineDelay = 24 * 60 * 1000;
+  combineSay("say")
 }
 
 function calculateTotalDuration() {
@@ -1420,7 +1399,7 @@ function deleteBefore() {
     .forEach((element) => element.remove());
 
   // Обновление времени и актеров
-  updateTimeAndActors();
+  updateAll();
 }
 
 function divideChapter() {
@@ -1470,8 +1449,8 @@ function divideChapter() {
   migratingLoglines = [];
 
   // Обновляем время и актеров только для текущего .chapter и нового .chapter
-  updateTimeAndActors(currentChapter);
-  updateTimeAndActors(currentChapter.previousElementSibling);
+  updateAll(currentChapter);
+  updateAll(currentChapter.previousElementSibling);
 }
 
 function deleteAfter() {
@@ -1509,7 +1488,7 @@ function deleteAfter() {
     .forEach((element) => element.remove());
 
   // Обновление времени и актеров
-  updateTimeAndActors();
+  updateAll();
 }
 
 let wrapping = false;
@@ -1873,7 +1852,7 @@ function ShortNames() {
   });
 }
 
-function updateTimeAndActors() {
+function updateAll() {
   console.log("Апдейт");
   const actorsDivs = document.querySelectorAll("div.actors");
   actorsDivs.forEach((actorsDiv) => {
@@ -1915,7 +1894,7 @@ function updateTimeAndActors() {
 }
 
 function toggleHighlight() {
-  var styleLink = document.querySelector("link.selection.style");
+  var styleLink = document.querySelectorAll(".selection.style");
   styleLink.disabled = !styleLink.disabled;
 }
 
