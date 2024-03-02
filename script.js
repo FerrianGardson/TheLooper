@@ -1895,8 +1895,15 @@ function updateAll() {
 
 function toggleSelectionCSS() {
   var styleLink = document.querySelector("link.selection.style");
-  styleLink.disabled = !styleLink.disabled;
+  console.log("styleLink:", styleLink);
+  if (styleLink) {
+    styleLink.disabled = !styleLink.disabled;
+    console.log("styleLink.disabled:", styleLink.disabled);
+  } else {
+    console.log("Ссылка на стили не найдена.");
+  }
 }
+
 
 
 function gatherPlayersAndInsert() {
