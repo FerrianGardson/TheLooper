@@ -1,5 +1,6 @@
 console.log("Main");
 console.log("toggleSelectionCSS");
+console.log("Деплой");
 
 combineDelay = 5 * 1000;
 hoursBetweenSessions = 1;
