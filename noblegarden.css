@@ -1230,3 +1230,14 @@ span.yell {
   font-weight: bold;
   text-transform: uppercase;
 }
+
+.yell .say {
+  text-transform: uppercase;
+  color: var(--red);
+  font-weight: bold;
+}
+
+.totalduration {
+  padding: 2rem;
+  margin-bottom: -4rem;
+}

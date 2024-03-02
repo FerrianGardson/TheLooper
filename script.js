@@ -14,7 +14,7 @@ playerData = [
   ["Роуз", "hunter", "Арчибальд Роуз"],
   ["Аммель", "mage", "Рэдрик Аммель"],
   ["Маларон", "priest", "Мал’арон Берёзовый Лист"],
-  ["Ананита", "rogue", "Ананита Астор"],
+  ["Ананита", "hunter", "Ананита Астор"],
   ["Сырорезка", "yellow", "Джули"],
   ["Санриэль", "mage", "Санриэль Рассветный Луч"],
   ["Дерек", "hunter", "Дерек Кларк"],
@@ -113,8 +113,8 @@ npcNames = {
   Нешрешшс: true,
   Охотница: true,
   Лекарь: true,
-  Богач: true,
-  Богач: true,
+  Священник: true,
+  Дробитель: true,
   Богач: true,
   Богач: true,
   Богач: true,
@@ -233,8 +233,54 @@ function importTxt(text) {
       console.log("timestamp: ", timestamp);
     }
   }
+  mergeLoglinesWithSameTimestamp();
+  throw new Error("Скрипт прерван");
   formatHTML();
 }
+function mergeLoglinesWithSameTimestamp() {
+  // Объявляем переменные для хранения предыдущего и текущего значения timestamp и содержимого
+  let oldTimestamp = "";
+  let newTimestamp = "";
+  let oldContent = "";
+  let newContent = "";
+  let oldLogline = "";
+  let newLogline = "";
+
+  // Получаем все элементы <p> с классом .logline
+  const loglines = document.querySelectorAll("p.logline");
+
+  // Проходимся по каждому элементу
+  loglines.forEach((logline) => {
+    // Создаем копию текущего элемента
+    newLogline = logline.cloneNode(true);
+
+    // Получаем значение атрибута timestamp текущего элемента
+    newTimestamp = logline.getAttribute("timestamp");
+    // Получаем текстовое содержимое текущего элемента и удаляем пробельные символы в начале и в конце
+    newContent = logline.textContent.trim();
+
+    // Проверяем, пусты ли предыдущее значение timestamp и содержимое
+    if (oldTimestamp === "" || oldContent === "") {
+      console.log("Пусто");
+    } else if (oldTimestamp === newTimestamp) {
+      // Если значения timestamp совпадают, объединяем содержимое
+      console.log("Совпадение", oldContent + " + " + newContent);
+      newContent = oldContent + " " + newContent;
+
+      // Удаляем предыдущий элемент, так как он уже объединен
+      oldLogline.parentElement.removeChild(oldLogline);
+    }
+
+    // Выводим информацию для отладки
+    console.log("Меняю", oldLogline, newLogline);
+
+    // Обновляем значения предыдущего timestamp и содержимого
+    oldTimestamp = newTimestamp;
+    oldContent = newContent;
+    oldLogline = newLogline;
+  });
+}
+
 
 function splitSessions() {
   console.log("splitSessions");
@@ -1226,7 +1272,7 @@ document.addEventListener("keydown", function (event) {
     deleteBefore();
   } else if (["]", "ъ"].includes(event.key) && event.ctrlKey && event.altKey) {
     deleteAfter();
-  } else if (event.key === "ArrowRight") {
+  } else if (event.altKey && event.key === "ArrowRight") {
     pasteImg();
   } else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
     moveElement(event);
@@ -1237,18 +1283,16 @@ document.addEventListener("keydown", function (event) {
     }
   } else if (["[", "х"].includes(event.key)) {
     startWrap();
-  } else if (["s", "ы"].includes(event.key)) {
-    finishWrap("spoiler");
   } else if (["]", "ъ"].includes(event.key)) {
     finishWrap("paper");
-  } else if (["]", "ъ"].includes(event.key) && event.ctrlKey) {
+  } else if (["s", "ы"].includes(event.key)) {
+    finishWrap("spoiler");
+  } else if (event.key === "-") {
     finishWrap("remove");
   } else if (event.key === "/") {
     divideChapter();
   } else if (event.key === "*") {
     WrapToDiv();
-  } else if (event.key === "-") {
-    finishWrap("remove");
   } else if (event.key === "d") {
     debug();
   } else if (event.key === "+") {
@@ -1607,45 +1651,53 @@ function finishWrap(className) {
 }
 
 function pasteImg() {
-  const elementsUnderCursor = document.querySelectorAll(":hover");
+  const elementUnderCursor = document.querySelector(".content :hover");
 
-  for (const element of elementsUnderCursor) {
-    const loglineElement = element.closest("p.logline");
+  if (elementUnderCursor) {
+    const imgDiv = document.createElement("div");
+    imgDiv.className = "paper img";
 
-    if (loglineElement) {
-      const imgDiv = document.createElement("div");
-      imgDiv.className = "paper img";
-
-      const imgElement = document.createElement("img");
-      imgElement.src = "POSTIMAGE";
-      imgDiv.appendChild(imgElement);
-      loglineElement.insertAdjacentElement("afterend", imgDiv);
-
-      break;
-    }
+    const imgElement = document.createElement("img");
+    imgElement.src = "POSTIMAGE";
+    imgDiv.appendChild(imgElement);
+    elementUnderCursor.insertAdjacentElement("beforebegin", imgDiv);
   }
 }
 
 function pasteText() {
-  const elementsUnderCursor = document.querySelectorAll(":hover");
+  const elementUnderCursor = document.querySelector(".content :hover");
 
-  for (const element of elementsUnderCursor) {
-    const loglineElement = element.closest("p.logline");
+  if (elementUnderCursor) {
+    const textDiv = document.createElement("div");
+    textDiv.className = "paper";
 
-    if (loglineElement) {
-      const paperDiv = document.createElement("div");
-      paperDiv.className = "paper selected";
-
-      const textElement = document.createElement("p");
-      textElement.textContent = "Текст для вставки";
-
-      paperDiv.appendChild(textElement);
-      loglineElement.insertAdjacentElement("beforebegin", paperDiv);
-
-      break;
-    }
+    const textElement = document.createElement("p");
+    textElement.textContent = "Текст для вставки";
+    textDiv.appendChild(textElement);
+    elementUnderCursor.insertAdjacentElement("beforebegin", textDiv);
   }
 }
+
+// function pasteText() {
+//   const elementsUnderCursor = document.querySelectorAll(".content :hover");
+
+//   for (const element of elementsUnderCursor) {
+//     const loglineElement = element.closest("p.logline");
+
+//     if (loglineElement) {
+//       const paperDiv = document.createElement("div");
+//       paperDiv.className = "paper selected";
+
+//       const textElement = document.createElement("p");
+//       textElement.textContent = "Текст для вставки";
+
+//       paperDiv.appendChild(textElement);
+//       loglineElement.insertAdjacentElement("beforebegin", paperDiv);
+
+//       break;
+//     }
+//   }
+// }
 
 const uniquePlayers = new Set();
 function createPlayerItem(playerName) {
@@ -1854,12 +1906,12 @@ function updateTimeAndActors() {
   gatherPlayersAndInsert();
   console.log("addCommaAndDotToPlayerList();");
   addCommaAndDotToPlayerList();
-  console.log("addColumnToPlayers();");
-  addColumnToPlayers();
-  console.log("addSpaceToEmotePlayers();");
-  addSpaceToEmotePlayers();
   console.log("gatherPlayersAndInsert();");
   gatherPlayersAndInsert();
+  console.log("addSpaceToEmotePlayers();");
+  addSpaceToEmotePlayers();
+  console.log("addColumnToPlayers();");
+  addColumnToPlayers();
 }
 
 function toggleHighlight() {
