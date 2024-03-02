@@ -1894,9 +1894,12 @@ function updateAll() {
 }
 
 function toggleHighlight() {
-  var styleLink = document.querySelectorAll(".selection.style");
-  styleLink.disabled = !styleLink.disabled;
+  var styleLinks = document.querySelectorAll("link.style.Selection");
+  styleLinks.forEach(styleLink => {
+    styleLink.disabled = !styleLink.disabled;
+  });
 }
+
 
 function gatherPlayersAndInsert() {
   const totalPlayers = document.querySelector(".totalduration > .players");
