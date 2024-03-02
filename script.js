@@ -1,4 +1,4 @@
-console.log("Ветка Мейн с рабочим виртом");
+console.log("toggleSelectionCSS");
 
 combineDelay = 5 * 1000;
 hoursBetweenSessions = 1;
@@ -1893,11 +1893,9 @@ function updateAll() {
   addColumnToPlayers();
 }
 
-function toggleHighlight() {
-  var styleLinks = document.querySelectorAll("link.style.Selection");
-  styleLinks.forEach(styleLink => {
-    styleLink.disabled = !styleLink.disabled;
-  });
+function toggleSelectionCSS() {
+  var styleLink = document.querySelector("link.selection.style");
+  styleLink.disabled = !styleLink.disabled;
 }
 
 
