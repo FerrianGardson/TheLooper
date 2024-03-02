@@ -1772,7 +1772,7 @@ function updateTimeAndActors() {
 }
 
 function toggleHighlight() {
-  var styleLink = document.querySelector("link.selection.style");
+  var styleLink = document.querySelector("link.style.Selection");
   styleLink.disabled = !styleLink.disabled;
 }
 
