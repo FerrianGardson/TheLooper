@@ -1,8 +1,5 @@
-console.log("main");
-console.log("toggleSelectionCSS");
-console.log("mergeLoglinesWithSameTimestamp");
-console.log('деплой 3:29 03.03.24');
-toggleSelectionCSS()
+console.log("recombine");
+toggleSelectionCSS();
 
 combineDelay = 5 * 1000;
 hoursBetweenSessions = 1;
@@ -1289,9 +1286,9 @@ document.addEventListener("keydown", function (event) {
   } else if (event.key === "d") {
     debug();
   } else if (event.key === "+") {
-    // combineDelay = 999999999;
-    // combineFunctions();
     recombineFunction("say");
+  } else if (event.key === ",") {
+    testing();
   }
 });
 
@@ -2259,9 +2256,90 @@ function toggleCollapse(event) {
 }
 
 function recombineFunction(spanClass) {
-loglines = document.querySelectorAll(spanClass)
-console.log('loglines: ', loglines);
+  function update(logline, player, content) {
+    prevLogline = logline;
+    prevPlayer = player;
+    prevContent = content;
+    // show();
+  }
+
+  function drop(logline) {
+    prevPlayer = "";
+    prevContent = "";
+    prevLogline = logline;
+    // console.log("Данные сброшены");
+  }
+
+  function show() {
+    console.log("player: ", player.textContent);
+    console.log("prevPlayer: ", prevPlayer.textContent);
+    console.log("content: ", content);
+    console.log("prevContent: ", prevContent);
+    console.log("prevLogline: ", prevLogline.textContent);
+    // console.log("Данные сброшены");
+  }
+
+  let loglines = document.querySelectorAll(`p.logline:not(.paper)`);
+  console.log(`Всего найдено элементов: ${loglines.length}`);
+
+  let player;
+  let prevPlayer;
+  let content;
+  let prevContent;
+  let prevLogline;
+  let counter = 1;
+  let combined = [];
+  let combining;
+
+  for (let i = 0; i < loglines.length; i++) {
+    let logline = loglines[i];
+    if (!logline.classList.contains("say")) {
+      drop();
+      continue;
+    }
+    player = logline.querySelector("span.player");
+    content = logline.querySelector("span.say");
+    // console.log("logline: ", logline);
+    // console.log("content: ", content);
+
+    if (!prevPlayer || !prevLogline || !prevContent) {
+      update(logline, player, content);
+      continue;
+    }
+
+    if (player.textContent === prevPlayer.textContent) {
+      if (!combining) {
+        prevLogline.classList.add("start_wrap","selected");
+        combined.push(content);
+        combining = true;
+        console.log("combining: ", combining);
+      } else {
+        // console.log("combined: ", combined);
+        combined.push(content);
+        prevLogline.remove()
+
+        // counter++;
+        // console.log("counter: ", counter);
+        // if (counter === 5) {
+        //   break;
+        // }
+      }
+    }
+
+    if (combining && player.textContent != prevPlayer.textContent) {
+      combining = false;
+      console.log("combining: ", combining);
+      prevLogline.classList.add("finish_wrap","selected");
+      combined.forEach((element) => {
+        prevLogline.appendChild(element);
+      });
+      combined = [];
+    }
+
+    update(logline, player, content);
+  }
 }
 
-
-
+function testing() {
+  console.log("Тест");
+}
