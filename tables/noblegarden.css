@@ -271,7 +271,7 @@ body .post > .figure.wp-block-body {
 .post h4,
 .post h5,
 .post h6 {
-  font-family: var(--header)!important;
+  font-family: var(--header);
   font-weight: bold !important;
   color: var(--header-color) !important;
   line-height: 1.2em !important;
@@ -632,7 +632,8 @@ ul#redactor-toolbar-0 {
 
 .post h3 {
   margin-bottom: 1rem;
-  font-size: 2rem!important;
+  font-family: var(--header);
+  font-size: 2rem;
 }
 
 .paper > img {
@@ -674,11 +675,16 @@ ul#redactor-toolbar-0 {
 .players > li,
 .npc > li,
 .totalplayers > li {
+  /* display: inline-block; */
+  /* margin-right: 0.3em; */
+  /* font-weight: bold; */
 }
 
 .player {
   background: none;
   font-weight: bold;
+  display: inline;
+  /* text-wrap: pretty; */
 }
 
 ul.npc > li {
@@ -689,9 +695,10 @@ ul.npc > li:hover {
   opacity: 1;
 }
 
-.actors, .players, .npc, li.player {
-  display: inline!important;
-  flex-wrap: wrap!important;
+.players,
+.npc {
+  display: inline;
+  flex-wrap: wrap;
 }
 
 p.logline {
@@ -1165,7 +1172,7 @@ span.say {
 }
 
 .paper * {
-  text-shadow: 1px 1px 2px black;
+  text-shadow: 1px 1px 10px black;
 }
 
 .story span.player {
@@ -1198,7 +1205,7 @@ span.say {
 
 .totalduration {
   padding: 2rem;
-  margin-bottom: -6rem;
+  margin-bottom: -5rem;
 }
 
 .emote > .speech {
@@ -1217,9 +1224,8 @@ p.logline.emote > .emote {
   color: var(--emote);
 }
 
-.story, .story + .story {
-  margin-right: 0.5em!important;
-  display: inline;
+.story + .story {
+  margin-top: -1rem;
 }
 
 span.yell {
@@ -1228,38 +1234,21 @@ span.yell {
   text-transform: uppercase;
 }
 
-.yell .say {
-  text-transform: uppercase;
-  color: var(--red);
-  font-weight: bold;
-}
 
-.totalduration {
-  padding: 2rem;
-  margin-bottom: -4rem;
-}
-
-.no-margin * {
-  margin: 0!important;
-  display: inline;
-}
-
-.no-margin p+p {
-    margin-left: 0.5rem!important;
-}
-
-span.say + span.say {
+.player + .player, .npc {
     margin-left: 0.5em;
 }
 
-span.comma + span.comma {
-    display: none;
+.story, .story + .story {
+    display: inline;
 }
 
-span.dot + span.dot {
-    display: none;
+.story + .story, .say + .say, .emote + .emote, .yell + .yell {
+    margin-left: 0.3em;
 }
 
-.player + .player {
-  margin-left: 0.5em;
+.yell > .say {
+    color: var(--red);
+    font-weight: bold;
+    text-transform: uppercase;
 }
