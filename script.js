@@ -1,4 +1,4 @@
-console.log("recombine");
+// console.log("recombine");
 toggleSelectionCSS();
 
 combineDelay = 5 * 1000;
@@ -27,6 +27,12 @@ playerData = [
   ["Кариночка", "demon-hunter", "Карина"],
   ["Пачек", "warrior", "Офелия Пачек"],
   ["Шенн", "shaman", "Шенн Вельт"],
+  ["Ангорд", "warrior", "Ангорд Ганар"],
+  ["Гермейнхауртер", "warrior", "Гермейнроутер Семестос"],
+  ["Кирке", "warrior", "Кирке"],
+  ["Ашира", "priest", "Ашира Фраймс"],
+  ["Паулина", "priest", "Паулина Санчес"],
+
 ];
 
 randomColors = [
@@ -142,24 +148,24 @@ npcNames = {
 };
 
 function formatHTML() {
-  console.log("mergeLoglinesWithSameTimestamp();");
+  // console.log("mergeLoglinesWithSameTimestamp();");
   mergeLoglinesWithSameTimestamp();
   // throw new Error("Скрипт прерван");
-  console.log("cleanText();");
+  // console.log("cleanText();");
   cleanText();
-  console.log("splitSessions();");
+  // console.log("splitSessions();");
   splitSessions();
-  console.log("wrapChapters();");
+  // console.log("wrapChapters();");
   wrapChapters();
-  console.log("scrollToStart();");
+  // console.log("scrollToStart();");
   scrollToStart();
-  console.log("combineFunctions();");
+  // console.log("combineFunctions();");
   combineFunctions();
-  console.log("findLoglinesAndConvertToTranscript();");
+  // console.log("findLoglinesAndConvertToTranscript();");
   findLoglinesAndConvertToTranscript();
-  console.log("updateAll();");
+  // console.log("updateAll();");
   updateAll();
-  console.log("chapterReverse();");
+  // console.log("chapterReverse();");
   chapterReverse();
   //postClear();
   // $(".logline.story span.player").remove();
@@ -236,7 +242,7 @@ function importTxt(text) {
       p.textContent = loglineBody;
       chatlog.appendChild(p);
       if (showtimestamps) {
-        console.log("timestamp: ", timestamp);
+        // console.log("timestamp: ", timestamp);
       }
     }
   }
@@ -244,7 +250,7 @@ function importTxt(text) {
 }
 
 function mergeLoglinesWithSameTimestamp() {
-  console.log("Запуск");
+  // console.log("Запуск");
   // Объявляем переменные для хранения предыдущего и текущего значения timestamp и содержимого
   let oldTimestamp = "";
   let timestamp = "";
@@ -258,17 +264,17 @@ function mergeLoglinesWithSameTimestamp() {
   // Проходимся по каждому элементу
   loglines.forEach((logline) => {
     timestamp = logline.getAttribute("timestamp");
-    // console.log("timestamp: ", timestamp);
+    console.log("timestamp: ", timestamp);
     content = logline.textContent;
-    // console.log("content: ", content);
+    console.log("content: ", content);
 
     if (oldTimestamp === "") {
-      console.log("Начало");
+      // console.log("Начало");
       oldTimestamp = timestamp;
       oldContent = content;
       oldLogline = logline;
     } else if (timestamp === oldTimestamp) {
-      console.log("Совпадение");
+      // console.log("Совпадение");
       oldLogline.textContent += " " + content;
       logline.remove();
     }
@@ -276,7 +282,7 @@ function mergeLoglinesWithSameTimestamp() {
 }
 
 function splitSessions() {
-  console.log("splitSessions");
+  // console.log("splitSessions");
   const paragraphs = document.querySelectorAll("p.logline");
   let prevTimestamp = null;
   paragraphs.forEach((paragraph) => {
@@ -289,9 +295,9 @@ function splitSessions() {
           timeDifference > hoursBetweenSessions * 60 * 60 * 1000 ||
           timeDifference < 0
         ) {
-          console.log(
-            "if (timeDifference > 1 * 60 * 60 * 1000 || timeDifference < 0) {"
-          );
+          // console.log(
+          //   "if (timeDifference > 1 * 60 * 60 * 1000 || timeDifference < 0) {"
+          // );
           const dateHeader = document.createElement("h2");
           dateHeader.className = "date";
           const formattedDate = getFormattedDate(timestamp);
@@ -299,7 +305,7 @@ function splitSessions() {
           paragraph.parentNode.insertBefore(dateHeader, paragraph);
         }
       } else {
-        console.log('  const dateHeader = document.createElement("h2");');
+        // console.log('  const dateHeader = document.createElement("h2");');
         const dateHeader = document.createElement("h2");
         dateHeader.className = "date";
         const formattedDate = getFormattedDate(timestamp);
@@ -307,7 +313,7 @@ function splitSessions() {
         paragraph.parentNode.insertBefore(dateHeader, paragraph);
       }
       if (!paragraph.textContent.trim()) {
-        console.log("if (!paragraph.textContent.trim()) {");
+        // console.log("if (!paragraph.textContent.trim()) {");
         paragraph.remove();
         return;
       }
@@ -317,7 +323,7 @@ function splitSessions() {
 }
 
 function getFormattedDate(timestamp) {
-  console.log("getFormattedDate" + timestamp);
+  // console.log("getFormattedDate" + timestamp);
   const date = new Date(timestamp);
   const monthNames = [
     "января",
@@ -338,7 +344,7 @@ function getFormattedDate(timestamp) {
 }
 
 function padZero(number) {
-  console.log("padZero" + number);
+  // console.log("padZero" + number);
   return number.toString().padStart(2, "0");
 }
 
@@ -354,7 +360,7 @@ function insertContentDiv(contentDiv, nextElement) {
 }
 
 function wrapChapters() {
-  console.log("Начало выполнения функции wrapChapters()");
+  // console.log("Начало выполнения функции wrapChapters()");
 
   const chatlog = document.querySelector("#chatlog");
   if (!chatlog) {
@@ -368,20 +374,20 @@ function wrapChapters() {
     return;
   }
 
-  console.log(`Найдено ${dates.length} элементов h2.date.`);
+  // console.log(`Найдено ${dates.length} элементов h2.date.`);
 
   let chapters = [];
 
   for (const date of dates) {
-    console.log("for (const date of dates) {");
+    // console.log("for (const date of dates) {");
     let nextElement = date.nextElementSibling;
     const chapterElements = [date];
     let firstPTimestamp = null;
 
     while (nextElement && nextElement.tagName === "P") {
-      console.log('while (nextElement && nextElement.tagName === "P") {');
+      // console.log('while (nextElement && nextElement.tagName === "P") {');
       if (!firstPTimestamp) {
-        console.log("if (!firstPTimestamp) {");
+        // console.log("if (!firstPTimestamp) {");
         firstPTimestamp = nextElement.getAttribute("timestamp");
       }
       chapterElements.push(nextElement);
@@ -396,7 +402,7 @@ function wrapChapters() {
     chapters.push(chapterDiv);
   }
 
-  console.log(`Создано ${chapters.length} глав.`);
+  // console.log(`Создано ${chapters.length} глав.`);
 
   chatlog.innerHTML = "";
   chatlog.append(...chapters);
@@ -416,7 +422,7 @@ function wrapChapters() {
     chapter.appendChild(contentContainer);
   });
 
-  console.log("Функция wrapChapters() завершена успешно.");
+  // console.log("Функция wrapChapters() завершена успешно.");
 }
 
 function collapseChapters() {
@@ -559,7 +565,7 @@ function cleanText() {
 }
 
 function combineFunctions() {
-  // console.log("combineFunctions");
+  console.log("combineFunctions");
   combineSay("emote");
   combineSay("say");
   combineSay("yell");
@@ -903,20 +909,20 @@ function selectAll() {
 }
 
 function debug() {
-  console.log("Дебаг");
+  // console.log("Дебаг");
   combineDelay = 24 * 60 * 1000;
   combineSay("say");
 }
 
 function calculateTotalDuration() {
-  // console.log("Начинаем подсчет общей продолжительности...");
+  console.log("Начинаем подсчет общей продолжительности...");
 
   // Удаляем существующий элемент .totalduration, если он есть
   const existingTotalDuration = document.querySelector(
     "#chatlog .totalduration"
   );
   if (existingTotalDuration) {
-    // console.log("Удаляем существующую общую продолжительность...");
+    console.log("Удаляем существующую общую продолжительность...");
     existingTotalDuration.remove();
   }
 
@@ -928,18 +934,18 @@ function calculateTotalDuration() {
 
   durationElements.forEach((element) => {
     const durationText = element.getAttribute("duration");
-    // console.log(`Найдена продолжительность: ${durationText}`);
+    console.log(`Найдена продолжительность: ${durationText}`);
     const [hours, minutes] = durationText.split(":").map(Number);
-    // console.log(`Часы: ${hours}, Минуты: ${minutes}`);
+    console.log(`Часы: ${hours}, Минуты: ${minutes}`);
     totalMinutes += hours * 60 + minutes;
   });
 
-  // console.log(`Общая продолжительность в минутах: ${totalMinutes}`);
+  console.log(`Общая продолжительность в минутах: ${totalMinutes}`);
 
   const totalHours = Math.floor(totalMinutes / 60);
   const remainingMinutes = totalMinutes % 60;
 
-  // console.log( `Общее количество часов: ${totalHours}, Оставшиеся минуты: ${remainingMinutes}` );
+  console.log( `Общее количество часов: ${totalHours}, Оставшиеся минуты: ${remainingMinutes}` );
 
   const totalDurationHeading = document.createElement("h2");
   totalDurationHeading.textContent = `Всего наиграно ${totalHours}ч ${remainingMinutes}мин`;
@@ -949,10 +955,10 @@ function calculateTotalDuration() {
   totalDurationChapter.appendChild(totalDurationHeading);
 
   const chatlog = document.querySelector("#chatlog");
-  // console.log("Вставляем общую продолжительность в начало #chatlog...");
+  console.log("Вставляем общую продолжительность в начало #chatlog...");
   chatlog.insertBefore(totalDurationChapter, chatlog.firstChild);
 
-  // console.log( "Общая продолжительность успешно вычислена и добавлена на страницу." );
+  console.log( "Общая продолжительность успешно вычислена и добавлена на страницу." );
 }
 
 function removeCollapsedChapters() {
@@ -974,10 +980,10 @@ var isReversed = true;
 function chapterReverse() {
   let chapters = document.querySelectorAll(".chapter");
   let totalDuration = document.querySelector(".totalduration");
-  // console.log("chapters: ", chapters);
+  console.log("chapters: ", chapters);
   let reversedChapters = Array.from(chapters).reverse();
   chapters.forEach((chapter) => chapter.remove());
-  // console.log("reversedChapters: ", reversedChapters);
+  console.log("reversedChapters: ", reversedChapters);
 
   let reversedChaptersHTML = reversedChapters
     .map((chapter) => chapter.outerHTML)
@@ -988,7 +994,7 @@ function chapterReverse() {
   let button = document.querySelector('[onclick="chapterReverse()"]');
   button.textContent = isReversed ? "Сначала старое" : "Сначала новое";
   isReversed = !isReversed;
-  console.log("isReversed = !isReversed;");
+  // console.log("isReversed = !isReversed;");
 }
 
 // function chapterReverse() {
@@ -1083,13 +1089,13 @@ function rearrangeChapters() {
       hoveredElement.insertAdjacentHTML("afterend", newChapterHTML);
 
       // Выводим сообщение о выполнении
-      // console.log("HTML-код успешно вставлен после hoveredElement.");
+      console.log("HTML-код успешно вставлен после hoveredElement.");
     }
   });
 }
 
 function removeUnselectedLoglines() {
-  // console.log("Удаляю ненужные строки");
+  console.log("Удаляю ненужные строки");
 
   // Находим все .chapter, которые не .collapsed
   const chapters = document.querySelectorAll(".chapter:not(.collapsed)");
@@ -1158,9 +1164,9 @@ function calculateTimeDifference() {
   localDifference = localOffset / 60;
   moscowDifference = localDifference + 3;
   serverDifference = localDifference + 1;
-  // console.log( "Разница между вашим местным временем и UTC (в часах):", localDifference );
-  // console.log( "Разница между вашим местным временем и московским временем (в часах):", moscowDifference );
-  // console.log( "Разница между вашим местным временем и серверным временем (в часах):", serverDifference );
+  console.log( "Разница между вашим местным временем и UTC (в часах):", localDifference );
+  console.log( "Разница между вашим местным временем и московским временем (в часах):", moscowDifference );
+  console.log( "Разница между вашим местным временем и серверным временем (в часах):", serverDifference );
 }
 
 function processTimestamp() {
@@ -1168,14 +1174,14 @@ function processTimestamp() {
 
   const timestampValue = chapter.getAttribute("timestamp");
 
-  // console.log("Введенный таймштамп:", timestampValue);
+  console.log("Введенный таймштамп:", timestampValue);
 
   const dateObject = new Date(timestampValue);
   const hours = ("0" + dateObject.getUTCHours()).slice(-2);
   const minutes = ("0" + dateObject.getUTCMinutes()).slice(-2);
   const formattedTimestamp = hours + ":" + minutes;
 
-  // console.log("Отформатированный таймштамп:", formattedTimestamp);
+  console.log("Отформатированный таймштамп:", formattedTimestamp);
 }
 
 function convertLoglineToTranscript(loglineElement) {
@@ -1201,14 +1207,14 @@ function convertLoglineToTranscript(loglineElement) {
   const minutes = ("0" + timestamp.getUTCMinutes()).slice(-2);
   const formattedTimestamp = formattedDate + " " + hours + ":" + minutes;
   let playerName = loglineElement.querySelector(".player");
-  console.log("playerName: ", playerName);
+  // console.log("playerName: ", playerName);
   loglineElement.setAttribute("timestamp", timestamp.toISOString());
   playerName.remove();
   loglineElement.textContent = loglineElement.textContent.replace(
     /^.+([Зз]апись|\d\d[:.]\d\d)[,.!: ]/g,
     ""
   );
-  console.log("playerName: ", playerName);
+  // console.log("playerName: ", playerName);
   if (
     loglineElement.classList.contains("say") ||
     loglineElement.classList.contains("yell") ||
@@ -1218,7 +1224,7 @@ function convertLoglineToTranscript(loglineElement) {
   } else {
     playerName = playerName.textContent.slice(0, -1);
   }
-  console.log("playerName: ", playerName);
+  // console.log("playerName: ", playerName);
 
   const transcriptRecordHTML = `
     <div class="record">
@@ -1380,7 +1386,7 @@ function deleteBefore() {
 
   hover.forEach((element) => {
     if (element.tagName.toLowerCase() === "h2") {
-      // console.log("Под курсором h2.date");
+      console.log("Под курсором h2.date");
       const closestChapter = element.closest(".chapter");
       if (closestChapter) {
         let sibling = closestChapter.previousElementSibling;
@@ -1390,7 +1396,7 @@ function deleteBefore() {
         }
       }
     } else {
-      // console.log("Под курсором .content > :hover");
+      console.log("Под курсором .content > :hover");
       const contentContainer = element.closest(".content");
       if (!contentContainer) return; // Пропускаем, если элемент не находится в контейнере .content
 
@@ -1428,7 +1434,7 @@ function divideChapter() {
   });
 
   // Озвучиваем в консоль содержимое массива
-  //// console.log("Migrating Loglines:", migratingLoglines);
+  // console.log("Migrating Loglines:", migratingLoglines);
 
   // Находим ближайший родительский .chapter
   const currentChapter = hoveredElements[0].closest(".chapter");
@@ -1469,7 +1475,7 @@ function deleteAfter() {
 
   hover.forEach((element) => {
     if (element.tagName.toLowerCase() === "h2") {
-      // console.log("Под курсором h2.date");
+      console.log("Под курсором h2.date");
       const closestChapter = element.closest(".chapter");
       if (closestChapter) {
         let sibling = closestChapter.nextElementSibling;
@@ -1479,7 +1485,7 @@ function deleteAfter() {
         }
       }
     } else {
-      // console.log("Под курсором .content > :hover");
+      console.log("Под курсором .content > :hover");
       const contentContainer = element.closest(".content");
       if (!contentContainer) return; // Пропускаем, если элемент не находится в контейнере .content
 
@@ -1505,7 +1511,7 @@ function deleteAfter() {
 let wrapping = false;
 
 function startWrap() {
-  console.log("startWrap");
+  // console.log("startWrap");
   wrapping = true;
   const contentChild = document.querySelector(".content .logline:hover");
   if (contentChild) {
@@ -1518,7 +1524,7 @@ function startWrap() {
 }
 
 function removeRed() {
-  console.log("removeRed()");
+  // console.log("removeRed()");
   let toRemove = document.querySelectorAll(".remove");
   toRemove.forEach((element) => {
     element.remove();
@@ -1526,39 +1532,39 @@ function removeRed() {
 }
 
 function finishWrap(className) {
-  console.log("finishWrap called with className:", className);
+  // console.log("finishWrap called with className:", className);
 
   if (wrapping == true) {
-    console.log("Wrapping is set to true.");
+    // console.log("Wrapping is set to true.");
 
     const contentChild = document.querySelector(".content .logline:hover");
     if (contentChild) {
-      console.log("contentChild found:", contentChild);
+      // console.log("contentChild found:", contentChild);
 
       document.querySelectorAll(".content .finish_wrap").forEach((element) => {
         element.classList.remove("finish_wrap");
-        console.log("finish_wrap removed from element:", element);
+        // console.log("finish_wrap removed from element:", element);
       });
 
       contentChild.classList.add("finish_wrap");
-      console.log("finish_wrap added to element:", contentChild);
+      // console.log("finish_wrap added to element:", contentChild);
 
       WrapToDiv();
     }
 
     function WrapToDiv() {
-      console.log("WrapToDiv function called.");
+      // console.log("WrapToDiv function called.");
 
       const elementsUnderCursor = document.querySelectorAll(
         ".content .logline:hover"
       );
 
       for (const element of elementsUnderCursor) {
-        console.log("Processing element:", element);
+        // console.log("Processing element:", element);
 
         const contentChild = element.closest("div.content");
         if (!contentChild) {
-          console.log("No contentChild found. Skipping.");
+          // console.log("No contentChild found. Skipping.");
           continue;
         }
 
@@ -1568,14 +1574,14 @@ function finishWrap(className) {
         finishWrap.classList.remove("finish_wrap");
 
         if (!startWrap || !finishWrap) {
-          console.log(
-            "Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv."
-          );
+          // console.log(
+          //   "Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv."
+          // );
           return;
         }
 
-        console.log("startWrap:", startWrap);
-        console.log("finishWrap:", finishWrap);
+        // console.log("startWrap:", startWrap);
+        // console.log("finishWrap:", finishWrap);
 
         const siblings = Array.from(contentChild.children);
         let isWrapping = false;
@@ -1588,35 +1594,35 @@ function finishWrap(className) {
             spoilerDiv.appendChild(startWrap.cloneNode(true));
 
             // После строки 1541
-            console.log("startWrap content:", startWrap.innerHTML);
-            console.log("finishWrap content:", finishWrap.innerHTML);
+            // console.log("startWrap content:", startWrap.innerHTML);
+            // console.log("finishWrap content:", finishWrap.innerHTML);
 
-            console.log(
-              "SpoilerDiv content before removing startWrap and finishWrap:",
-              spoilerDiv.innerHTML
-            );
+            // console.log(
+            //   "SpoilerDiv content before removing startWrap and finishWrap:",
+            //   spoilerDiv.innerHTML
+            // );
 
             continue;
           }
 
           if (sibling === finishWrap) {
             spoilerDiv.appendChild(finishWrap.cloneNode(true));
-            console.log("finishWrap cloned and appended to spoilerDiv.");
+            // console.log("finishWrap cloned and appended to spoilerDiv.");
             break;
           }
 
           if (isWrapping) {
             const clonedSibling = sibling.cloneNode(true);
             spoilerDiv.appendChild(clonedSibling);
-            console.log("Sibling cloned and appended to spoilerDiv.");
+            // console.log("Sibling cloned and appended to spoilerDiv.");
             sibling.remove();
           }
         }
 
         startWrap.parentNode.insertBefore(spoilerDiv, startWrap.nextSibling);
 
-        console.log("SpoilerDiv inserted after startWrap:", spoilerDiv);
-        console.log("Removing startWrap and finishWrap.");
+        // console.log("SpoilerDiv inserted after startWrap:", spoilerDiv);
+        // console.log("Removing startWrap and finishWrap.");
 
         if (className === "spoiler") {
           const spoilerDesc = document.createElement("h1");
@@ -1626,10 +1632,10 @@ function finishWrap(className) {
             spoilerDesc,
             spoilerDiv.nextSibling
           );
-          console.log("SpoilerDesc added after spoilerDiv.");
+          // console.log("SpoilerDesc added after spoilerDiv.");
         }
         if (className === "remove") {
-          console.log("Removing red elements.");
+          // console.log("Removing red elements.");
           removeRed();
         }
         startWrap.remove();
@@ -1864,7 +1870,7 @@ function ShortNames() {
 }
 
 function updateAll() {
-  console.log("Апдейт");
+  // console.log("Апдейт");
   const actorsDivs = document.querySelectorAll("div.actors");
   actorsDivs.forEach((actorsDiv) => {
     actorsDiv.remove();
@@ -1876,42 +1882,42 @@ function updateAll() {
     span.remove();
   });
   colorindex = 0;
-  console.log("removePlayersWithDungeonMasterNames();");
+  // console.log("removePlayersWithDungeonMasterNames();");
   removePlayersWithDungeonMasterNames();
-  console.log("ShortNames();");
+  // console.log("ShortNames();");
   ShortNames();
-  console.log("playerList();");
+  // console.log("playerList();");
   playerList();
-  console.log("colorizePlayers();");
+  // console.log("colorizePlayers();");
   colorizePlayers();
-  console.log("FullNames();");
+  // console.log("FullNames();");
   FullNames();
-  console.log("addTimeToChapter();");
+  // console.log("addTimeToChapter();");
   addTimeToChapter();
-  console.log("synchronizePlayerColors();");
+  // console.log("synchronizePlayerColors();");
   synchronizePlayerColors();
-  console.log("calculateTotalDuration();");
+  // console.log("calculateTotalDuration();");
   calculateTotalDuration();
-  console.log("gatherPlayersAndInsert();");
+  // console.log("gatherPlayersAndInsert();");
   gatherPlayersAndInsert();
-  console.log("addCommaAndDotToPlayerList();");
+  // console.log("addCommaAndDotToPlayerList();");
   addCommaAndDotToPlayerList();
-  console.log("gatherPlayersAndInsert();");
+  // console.log("gatherPlayersAndInsert();");
   gatherPlayersAndInsert();
-  console.log("addSpaceToEmotePlayers();");
+  // console.log("addSpaceToEmotePlayers();");
   addSpaceToEmotePlayers();
-  console.log("addColumnToPlayers();");
+  // console.log("addColumnToPlayers();");
   addColumnToPlayers();
 }
 
 function toggleSelectionCSS() {
   var styleLink = document.querySelector("link.style.selection");
-  console.log("styleLink:", styleLink);
+  // console.log("styleLink:", styleLink);
   if (styleLink) {
     styleLink.disabled = !styleLink.disabled;
-    console.log("styleLink.disabled:", styleLink.disabled);
+    // console.log("styleLink.disabled:", styleLink.disabled);
   } else {
-    console.log("Ссылка на стили не найдена.");
+    // console.log("Ссылка на стили не найдена.");
   }
 }
 
@@ -1921,11 +1927,11 @@ function gatherPlayersAndInsert() {
     totalPlayers.remove();
   }
 
-  // // console.log("Начинаем сбор всех игроков и их вставку...");
+  // console.log("Начинаем сбор всех игроков и их вставку...");
 
   // Собираем все элементы .players > li со всей страницы
   const allPlayers = document.querySelectorAll(".players > li");
-  // // console.log(`Найдено ${allPlayers.length} игроков.`);
+  // console.log(`Найдено ${allPlayers.length} игроков.`);
 
   // Проходимся по каждому элементу и удаляем все <span> из его содержимого
   allPlayers.forEach((player) => {
@@ -1953,9 +1959,9 @@ function gatherPlayersAndInsert() {
       playersUl,
       totalDurationChapter.lastChild
     );
-    // // console.log( "Все игроки успешно собраны и вставлены в начало общей продолжительности." );
+    // console.log( "Все игроки успешно собраны и вставлены в начало общей продолжительности." );
   } else {
-    // // console.log( "Элемент div.totalduration не найден. Не удалось вставить игроков." );
+    // console.log( "Элемент div.totalduration не найден. Не удалось вставить игроков." );
   }
 }
 
@@ -2035,17 +2041,17 @@ let addWords = [];
 function logFilter() {
   // Получаем значение из поля ввода
   keywordsInput = document.getElementById("keywordsInput").value;
-  console.log("keywordsInput: ", keywordsInput);
+  // console.log("keywordsInput: ", keywordsInput);
 
   // Если три содержит .virt, то запускается функция searchVirt
   if (keywordsInput.includes(".virt")) {
-    console.log("Если содержит .virt, то запускается функция searchVirt");
+    // console.log("Если содержит .virt, то запускается функция searchVirt");
     searchVirt();
   }
 
   // Если пусто, то развыделяем всё
   if (keywordsInput.trim() === "") {
-    console.log("Если пусто, то развыделяем всё");
+    // console.log("Если пусто, то развыделяем всё");
     const selectedElements = document.querySelectorAll(".selected");
     selectedElements.forEach((element) => {
       element.classList.remove("selected");
@@ -2056,7 +2062,7 @@ function logFilter() {
 
   // Если инпут прежний, делаем скролл
   if (keywordsInput === oldKeywordsInput) {
-    console.log("Если инпут прежний, делаем скролл");
+    // console.log("Если инпут прежний, делаем скролл");
     scrollToNextSelected();
     return;
   }
@@ -2067,9 +2073,9 @@ function logFilter() {
   // Фильтруем массив ключевых слов, извлекая "анти-слова"
   addWords = keywordsArray.filter((keyword) => {
     if (keyword.startsWith("-")) {
-      console.log('if (keyword.startsWith("-")) {');
+      // console.log('if (keyword.startsWith("-")) {');
       removeWords.push(keyword.substring(1)); // Добавляем "анти-слово" в массив removeWords
-      console.log("removeWords: ", removeWords);
+      // console.log("removeWords: ", removeWords);
       return false; // Возвращаем false, чтобы слово не попало в основной массив ключевых слов
     } else {
       return true; // Возвращаем true для обычных ключевых слов
@@ -2077,55 +2083,14 @@ function logFilter() {
   });
 
   // Выводим основной массив ключевых слов в консоль
-  // console.log("Keywords:", addWords);
+  console.log("Keywords:", addWords);
 
   if (addWords.length > 0) {
     // Перебираем каждое ключевое слово из массива addWords
     addWords.forEach((keyword) => {
       // Приводим ключевое слово к нижнему регистру
       const lowerKeyword = keyword.toLowerCase();
-      // console.log("Keyword:", lowerKeyword);
-
-      // Выбираем все главы, которые не свернуты
-      const chapters = document.querySelectorAll(chapterCollapseStatus);
-      // console.log("Chapters:", chapters);
-
-      // Перебираем каждую главу
-      chapters.forEach((chapter) => {
-        // Выбираем все спаны с классом "logline" внутри контента главы
-        const contentSpans = chapter.querySelectorAll(".content > .logline");
-        // console.log("Content Spans:", contentSpans);
-
-        // Перебираем каждый спан внутри контента
-        contentSpans.forEach((span) => {
-          // Получаем текст из спана и приводим его к нижнему регистру
-          const textContent = span.textContent.toLowerCase();
-          // // console.log("Span Text Content:", textContent);
-
-          // Проверяем, содержит ли текст ключевое слово
-          if (textContent.includes(lowerKeyword)) {
-            // console.log("Keyword found in:", span);
-            // Если содержит, добавляем класс "selected" к спану
-            span.classList.add("selected");
-          }
-        });
-      });
-    });
-    addWords = [];
-  }
-
-  // Сворачиваем все главы на случай, если там не окажется находок
-  collapseChapters();
-
-  // Выводим массив "анти-слов" в консоль
-  // console.log("Remove words:", removeWords);
-
-  if (removeWords.length > 0) {
-    // Перебираем каждое "анти-слово" из массива removeWords
-    removeWords.forEach((removeWord) => {
-      // Приводим "анти-слово" к нижнему регистру
-      const lowerRemoveWord = removeWord.toLowerCase();
-      console.log("Remove word:", lowerRemoveWord);
+      console.log("Keyword:", lowerKeyword);
 
       // Выбираем все главы, которые не свернуты
       const chapters = document.querySelectorAll(chapterCollapseStatus);
@@ -2143,9 +2108,50 @@ function logFilter() {
           const textContent = span.textContent.toLowerCase();
           // console.log("Span Text Content:", textContent);
 
+          // Проверяем, содержит ли текст ключевое слово
+          if (textContent.includes(lowerKeyword)) {
+            console.log("Keyword found in:", span);
+            // Если содержит, добавляем класс "selected" к спану
+            span.classList.add("selected");
+          }
+        });
+      });
+    });
+    addWords = [];
+  }
+
+  // Сворачиваем все главы на случай, если там не окажется находок
+  collapseChapters();
+
+  // Выводим массив "анти-слов" в консоль
+  console.log("Remove words:", removeWords);
+
+  if (removeWords.length > 0) {
+    // Перебираем каждое "анти-слово" из массива removeWords
+    removeWords.forEach((removeWord) => {
+      // Приводим "анти-слово" к нижнему регистру
+      const lowerRemoveWord = removeWord.toLowerCase();
+      // console.log("Remove word:", lowerRemoveWord);
+
+      // Выбираем все главы, которые не свернуты
+      const chapters = document.querySelectorAll(chapterCollapseStatus);
+      // console.log("Chapters:", chapters);
+
+      // Перебираем каждую главу
+      chapters.forEach((chapter) => {
+        // Выбираем все спаны с классом "logline" внутри контента главы
+        const contentSpans = chapter.querySelectorAll(".content > .logline");
+        // console.log("Content Spans:", contentSpans);
+
+        // Перебираем каждый спан внутри контента
+        contentSpans.forEach((span) => {
+          // Получаем текст из спана и приводим его к нижнему регистру
+          const textContent = span.textContent.toLowerCase();
+          console.log("Span Text Content:", textContent);
+
           // Проверяем, содержит ли текст "анти-слово"
           if (textContent.includes(lowerRemoveWord)) {
-            console.log("Remove word found in:", span);
+            // console.log("Remove word found in:", span);
             // Если содержит, удаляем класс "selected" у спана
             span.classList.remove("selected");
           }
@@ -2162,27 +2168,27 @@ function logFilter() {
 }
 
 function searchVirt() {
-  console.log("Searching for .virt elements...");
+  // console.log("Searching for .virt elements...");
 
   // Снимаем selected со всех классов
   const selectedElements = document.querySelectorAll(".selected");
   selectedElements.forEach((element) => {
     element.classList.remove("selected");
   });
-  console.log("Removed .selected class from all elements.");
+  // console.log("Removed .selected class from all elements.");
 
   // Находим все элементы p.virt и добавляем им класс .selected
   const virtElements = document.querySelectorAll("p.virt");
   virtElements.forEach((element) => {
     element.classList.add("selected");
   });
-  console.log("Added .selected class to all .virt elements.");
+  // console.log("Added .selected class to all .virt elements.");
 
   // Составляем список индексов всех элементов p.virt
   const indexes = Array.from(virtElements).map((element) => {
     return Array.from(element.parentNode.children).indexOf(element);
   });
-  console.log("Indexes of .virt elements:", indexes);
+  // console.log("Indexes of .virt elements:", indexes);
 
   // Скроллим к первому элементу p.virt
   if (indexes.length > 0) {
@@ -2190,9 +2196,9 @@ function searchVirt() {
       top: virtElements[0].offsetTop - window.innerHeight / 2,
       behavior: "smooth",
     });
-    console.log("Scrolled to the first .virt element.");
+    // console.log("Scrolled to the first .virt element.");
   } else {
-    console.log("No .virt elements found.");
+    // console.log("No .virt elements found.");
   }
   openselectedChapters();
   removeCollapsedChapters();
@@ -2221,14 +2227,14 @@ function scrollToNextSelected() {
 
   // Прокручиваем к следующему элементу
   const totalSelected = selectedElements.length - 1;
-  console.log(`Общий индекс: ${totalSelected}, Текущая позиция: ${index}`);
-  console.log("selectedElements: ", selectedElements);
+  // console.log(`Общий индекс: ${totalSelected}, Текущая позиция: ${index}`);
+  // console.log("selectedElements: ", selectedElements);
   selectedElements[index].scrollIntoView({
     behavior: "smooth",
     block: "start",
   });
   // selectedElements = null;
-  // console.log("selectedElements: ", selectedElements);
+  console.log("selectedElements: ", selectedElements);
 }
 
 function postClear() {
@@ -2255,6 +2261,10 @@ function toggleCollapse(event) {
   }
 }
 
+function testing() {
+  // console.log("Тест");
+}
+
 function recombineFunction(spanClass) {
   function update(logline, player, content) {
     prevLogline = logline;
@@ -2267,22 +2277,22 @@ function recombineFunction(spanClass) {
     prevPlayer = "";
     prevContent = "";
     prevLogline = logline;
-    // console.log("Данные сброшены");
+    console.log("Данные сброшены");
   }
 
   function show() {
-    console.log("player: ", player.textContent);
-    console.log("prevPlayer: ", prevPlayer.textContent);
-    console.log("content: ", content);
-    console.log("prevContent: ", prevContent);
-    console.log("prevLogline: ", prevLogline.textContent);
+    // console.log("player: ", player.textContent);
+    // console.log("prevPlayer: ", prevPlayer.textContent);
+    // console.log("content: ", content);
+    // console.log("prevContent: ", prevContent);
+    // console.log("prevLogline: ", prevLogline.textContent);
   }
 
   // Закончились функции, пошла основная
   let loglines = document.querySelectorAll(
     `.chapter:hover p.logline:not(.paper)`
   );
-  console.log(`Всего найдено элементов: ${loglines.length}`);
+  // console.log(`Всего найдено элементов: ${loglines.length}`);
 
   // Переменные
   let player;
@@ -2290,7 +2300,7 @@ function recombineFunction(spanClass) {
   let content;
   let prevContent;
   let prevLogline;
-  let counter = 1;
+  let counter = 0;
   let combined = [];
   let combining;
   let starter;
@@ -2321,6 +2331,7 @@ function recombineFunction(spanClass) {
     if (player.textContent === prevPlayer.textContent) {
       if (!combining) {
         starter = prevLogline;
+        starter.classList.add("start_wrap", "selected");
         combined.push(prevContent);
         combined.push(content);
         combining = true;
@@ -2332,26 +2343,37 @@ function recombineFunction(spanClass) {
     }
 
     // Игрок изменился
-    if (combining && player.textContent != prevPlayer.textContent) {
+    if (combining && prevPlayer.textContent != player.textContent) {
+      // console.log(
+      //   "Игрок изменился с " +
+      //     prevPlayer.textContent +
+      //     " на " +
+      //     player.textContent
+      // );
+
       combining = false;
-      console.log("combining: ", combining);
+      // console.log("combining: ", combining);
 
       // Подцикл; Перебираем массив combined и добавляем каждый элемент в конец prevLogline
       combined.forEach((element, index) => {
         starter.appendChild(element);
+        prevLogline.remove();
+
         // Добавляем элемент span для пробела после элемента, кроме последнего
         if (index < combined.length - 1) {
-          prevLogline.appendChild(space.cloneNode(true));
+          starter.appendChild(space.cloneNode(true));
         }
       });
-      starter.classList.add("start_wrap", "selected");
+
       combined = [];
+      counter++;
+      // console.log("counter: ", counter);
+      show();
+      if (counter === 3) {
+        break;
+      }
     }
 
     update(logline, player, content);
   }
-}
-
-function testing() {
-  console.log("Тест");
 }
