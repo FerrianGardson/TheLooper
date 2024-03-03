@@ -745,15 +745,15 @@ function scrollSave(element) {
 }
 
 function scrollToSaved() {
-  document.querySelector(".scroll").scrollIntoView();
-  window.scrollBy(
-    0,
-    -(document.querySelector(".nav")?.getBoundingClientRect()?.height || 0) - 32
-  );
+  const targetElement = document.querySelector(".scroll");
+  if (targetElement) {
+    scrollToCenter(targetElement); // Изменение здесь
+  }
   document
     .querySelectorAll(".scroll")
     .forEach((element) => element.classList.remove("scroll"));
 }
+
 
 function scrollToStart() {
   window.scrollTo({
@@ -2169,10 +2169,7 @@ function searchVirt() {
 
   // Скроллим к первому элементу p.virt
   if (indexes.length > 0) {
-    window.scrollTo({
-      top: virtElements[0].offsetTop - window.innerHeight / 2,
-      behavior: "smooth",
-    });
+    scrollToCenter(virtElements[0]); // Изменение здесь
     // // console.log("Scrolled to the first .virt element.");
   } else {
     // // console.log("No .virt elements found.");
@@ -2187,7 +2184,7 @@ let selectedElements = document.querySelectorAll(".selected");
 
 function scrollToNextSelected() {
   // Находим все элементы с классом "selected"
-  selectedElements = document.querySelectorAll(".selected");
+  const selectedElements = document.querySelectorAll(".selected");
 
   // Если нет выбранных элементов или их количество меньше двух, прерываем выполнение функции
   if (!selectedElements || selectedElements.length < 2) {
@@ -2203,15 +2200,7 @@ function scrollToNextSelected() {
   }
 
   // Прокручиваем к следующему элементу
-  const totalSelected = selectedElements.length - 1;
-  // // console.log(`Общий индекс: ${totalSelected}, Текущая позиция: ${index}`);
-  // // console.log("selectedElements: ", selectedElements);
-  selectedElements[index].scrollIntoView({
-    behavior: "smooth",
-    block: "start",
-  });
-  // selectedElements = null;
-  // console.log("selectedElements: ", selectedElements);
+  scrollToCenter(selectedElements[index]);
 }
 
 function postClear() {
@@ -2355,6 +2344,15 @@ function recombineFunction(spanClass) {
   }
 }
 
+function scrollToCenter(targetElement) {
+  const scrollOptions = {
+    top: targetElement.offsetTop - window.innerHeight / 2,
+    behavior: "smooth",
+  };
+
+  window.scrollTo(scrollOptions);
+}
+
 function mergeTimestamps() {
   console.log("Запускаюсь");
   let line;
@@ -2383,19 +2381,19 @@ function mergeTimestamps() {
     }
 
     // Совпадение или конец массива
-    if (timestamp === prevStamp || i === lines.length - 1) {
+    if (timestamp === prevStamp) {
       console.log("Совпадение", i);
       starter = prevLine;
       starter.classList.add("start_wrap", "selected");
       startEmote = starter.querySelector("span.emote").textContent;
       console.log("startEmote, emote: ", startEmote, emote);
-
       line.classList.add("remove", "selected");
       // line.remove();
     } else {
       console.log("Несовпадение");
       prevLine = line;
       prevStamp = timestamp;
+      starter = "";
     }
 
     if (i === lines.length - 1) {
