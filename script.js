@@ -10,6 +10,15 @@ let chapterCollapseStatus = searchWithinCollapsed
   ? ".chapter"
   : ".chapter:not(.collapsed)";
 
+const dash = document.createElement("span");
+dashSpan.classList.add("dash");
+dashSpan.textContent = " — ";
+
+// Пробел
+const space = document.createElement("span");
+space.classList.add("space");
+space.textContent = " ";
+
 playerData = [
   ["Фэрриан", "rogue", "Фэрриан Гардсон"],
   ["Малет", "shaman", "Малет Трант"],
@@ -32,7 +41,6 @@ playerData = [
   ["Кирке", "warrior", "Кирке"],
   ["Ашира", "priest", "Ашира Фраймс"],
   ["Паулина", "priest", "Паулина Санчес"],
-
 ];
 
 randomColors = [
@@ -945,7 +953,9 @@ function calculateTotalDuration() {
   const totalHours = Math.floor(totalMinutes / 60);
   const remainingMinutes = totalMinutes % 60;
 
-  console.log( `Общее количество часов: ${totalHours}, Оставшиеся минуты: ${remainingMinutes}` );
+  console.log(
+    `Общее количество часов: ${totalHours}, Оставшиеся минуты: ${remainingMinutes}`
+  );
 
   const totalDurationHeading = document.createElement("h2");
   totalDurationHeading.textContent = `Всего наиграно ${totalHours}ч ${remainingMinutes}мин`;
@@ -958,7 +968,9 @@ function calculateTotalDuration() {
   console.log("Вставляем общую продолжительность в начало #chatlog...");
   chatlog.insertBefore(totalDurationChapter, chatlog.firstChild);
 
-  console.log( "Общая продолжительность успешно вычислена и добавлена на страницу." );
+  console.log(
+    "Общая продолжительность успешно вычислена и добавлена на страницу."
+  );
 }
 
 function removeCollapsedChapters() {
@@ -1164,9 +1176,18 @@ function calculateTimeDifference() {
   localDifference = localOffset / 60;
   moscowDifference = localDifference + 3;
   serverDifference = localDifference + 1;
-  console.log( "Разница между вашим местным временем и UTC (в часах):", localDifference );
-  console.log( "Разница между вашим местным временем и московским временем (в часах):", moscowDifference );
-  console.log( "Разница между вашим местным временем и серверным временем (в часах):", serverDifference );
+  console.log(
+    "Разница между вашим местным временем и UTC (в часах):",
+    localDifference
+  );
+  console.log(
+    "Разница между вашим местным временем и московским временем (в часах):",
+    moscowDifference
+  );
+  console.log(
+    "Разница между вашим местным временем и серверным временем (в часах):",
+    serverDifference
+  );
 }
 
 function processTimestamp() {
@@ -2304,10 +2325,6 @@ function recombineFunction(spanClass) {
   let combined = [];
   let combining;
   let starter;
-  // Пробел
-  const space = document.createElement("span");
-  space.classList.add("space");
-  space.textContent = " ";
 
   // Цикл
   for (let i = 0; i < loglines.length; i++) {
@@ -2331,19 +2348,23 @@ function recombineFunction(spanClass) {
     if (player.textContent === prevPlayer.textContent) {
       if (!combining) {
         starter = prevLogline;
-        starter.classList.add("start_wrap", "selected");
+        // starter.classList.add("start_wrap", "selected");
+        starter.classList.add("selected");
         combined.push(prevContent);
         combined.push(content);
         combining = true;
       } else {
         combined.push(content);
-        prevLogline.classList.add("remove", "selected");
+        // prevLogline.classList.add("remove", "selected");
         prevLogline.remove();
       }
     }
 
     // Игрок изменился
-    if (combining && prevPlayer.textContent != player.textContent) {
+    if (
+      (combining && prevPlayer.textContent != player.textContent) ||
+      i === loglines.length - 1
+    ) {
       // console.log(
       //   "Игрок изменился с " +
       //     prevPlayer.textContent +
@@ -2366,12 +2387,12 @@ function recombineFunction(spanClass) {
       });
 
       combined = [];
-      counter++;
+      // counter++;
       // console.log("counter: ", counter);
-      show();
-      if (counter === 3) {
-        break;
-      }
+      // show();
+      // if (counter === 3) {
+      //   break;
+      // }
     }
 
     update(logline, player, content);
