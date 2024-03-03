@@ -157,11 +157,11 @@ npcNames = {
 };
 
 function formatHTML() {
-  // console.log("mergeTimestamps();");
-  // mergeTimestamps();
-  // throw new Error("Скрипт прерван");
   // // console.log("cleanText();");
   cleanText();
+  // console.log("mergeTimestamps();");
+  mergeTimestamps();
+  // throw new Error("Скрипт прерван");
   // // console.log("splitSessions();");
   splitSessions();
   // // console.log("wrapChapters();");
@@ -256,38 +256,6 @@ function importTxt(text) {
     }
   }
   formatHTML();
-}
-
-function mergeTimestamps() {
-  // // console.log("Запуск");
-  // Объявляем переменные для хранения предыдущего и текущего значения timestamp и содержимого
-  let oldTimestamp = "";
-  let timestamp = "";
-  let oldContent = "";
-  let content = "";
-  let oldLogline = null;
-
-  // Получаем все элементы <p> с классом .logline
-  const loglines = document.querySelectorAll("p.logline");
-
-  // Проходимся по каждому элементу
-  loglines.forEach((logline) => {
-    timestamp = logline.getAttribute("timestamp");
-    // console.log("timestamp: ", timestamp);
-    content = logline.textContent;
-    // console.log("content: ", content);
-
-    if (oldTimestamp === "") {
-      // // console.log("Начало");
-      oldTimestamp = timestamp;
-      oldContent = content;
-      oldLogline = logline;
-    } else if (timestamp === oldTimestamp) {
-      // // console.log("Совпадение");
-      oldLogline.textContent += " " + content;
-      logline.remove();
-    }
-  });
 }
 
 function splitSessions() {
@@ -2384,5 +2352,54 @@ function recombineFunction(spanClass) {
     }
 
     update(logline, player, content);
+  }
+}
+
+function mergeTimestamps() {
+  console.log("Запускаюсь");
+  let line;
+  let prevLine;
+  let timestamp;
+  let prevStamp;
+  let combo = [];
+  let starter = null;
+  let startEmote;
+  let emote;
+
+  const lines = document.querySelectorAll(".logline.emote");
+  // console.log("lines: ", lines);
+
+  for (let i = 0; i < lines.length; i++) {
+    line = lines[i];
+    emote = line.querySelector("span.emote").textContent;
+    timestamp = line.getAttribute("timestamp");
+
+    // Начало
+    if (!prevLine) {
+      console.log("Начало");
+      prevLine = line;
+      prevStamp = timestamp;
+      continue;
+    }
+
+    // Совпадение или конец массива
+    if (timestamp === prevStamp || i === lines.length - 1) {
+      console.log("Совпадение", i);
+      starter = prevLine;
+      starter.classList.add("start_wrap", "selected");
+      startEmote = starter.querySelector("span.emote").textContent;
+      console.log("startEmote, emote: ", startEmote, emote);
+
+      line.classList.add("remove", "selected");
+      // line.remove();
+    } else {
+      console.log("Несовпадение");
+      prevLine = line;
+      prevStamp = timestamp;
+    }
+
+    if (i === lines.length - 1) {
+      console.log("Конец");
+    }
   }
 }
