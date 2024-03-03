@@ -442,3 +442,15 @@ input[type="checkbox"] {width: 1rem;}
 .remove {
   background: #ff000047!important;
 }
+
+.post > div > div.subkeys {
+  margin:0;
+  margin-left:2em;
+  border-image:none!important;
+  background:none!important;
+  border: 2px solid white;
+  padding: 1rem;
+  width: fit-content;
+  border-top: 0px;
+  border-right: 0px;
+  }

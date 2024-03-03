@@ -2,6 +2,8 @@
 
 .start_wrap {
   background: green!important;
+  opacity: 1!important;
+  filter: none!important;
 }
 
 .finish_wrap {

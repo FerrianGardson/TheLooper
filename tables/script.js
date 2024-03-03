@@ -1,4 +1,4 @@
-console.log("recombine, mergeTimestamps");
+console.log("recombine");
 toggleSelectionCSS();
 
 combineDelay = 5 * 1000;
@@ -20,7 +20,7 @@ const space = document.createElement("span");
 space.classList.add("space");
 space.textContent = " ";
 
-playerData = [
+const playerData = [
   ["Фэрриан", "rogue", "Фэрриан Гардсон"],
   ["Малет", "shaman", "Малет Трант"],
   ["Роуз", "hunter", "Арчибальд Роуз"],
@@ -39,12 +39,17 @@ playerData = [
   ["Шенн", "shaman", "Шенн Вельт"],
   ["Ангорд", "warrior", "Ангорд Ганар"],
   ["Гермейнхауртер", "warrior", "Гермейнроутер Семестос"],
-  ["Кирке", "warrior", "Кирке"],
+  ["Кирке", "warrior", "Гюнтер Кирке"],
   ["Ашира", "priest", "Ашира Фраймс"],
   ["Паулина", "priest", "Паулина Санчес"],
 ];
 
-randomColors = [
+const npcData = [
+  ["Рыцарь-лейтенант Сиглим Сталекрут", "yellow", "Сиглим Сталекрут"],
+  ["Дробитель", "death-knight", "Дробитель"],
+];
+
+const randomColors = [
   "demon-hunter",
   "warlock",
   "monk",
@@ -88,7 +93,7 @@ randomColors = [
   "random-19",
 ];
 
-npcNames = {
+const npcNames = {
   Гнолл: true,
   Баззерс: true,
   Охранник: true,
@@ -101,7 +106,6 @@ npcNames = {
   Повар: true,
   Бармен: true,
   Разнорабочий: true,
-  "Дерек Кларк": true,
   Мурлок: true,
   Жрица: true,
   Извозчик: true,
@@ -160,7 +164,7 @@ function formatHTML() {
   // // console.log("cleanText();");
   cleanText();
   // console.log("mergeTimestamps();");
-  mergeTimestamps();
+  // mergeTimestamps();
   // throw new Error("Скрипт прерван");
   // // console.log("splitSessions();");
   splitSessions();
@@ -460,7 +464,7 @@ function cleanText() {
   ); // Системные сообщения, начинаются со служебных символов
 
   chatlogHTML = chatlogHTML.replace(
-    /<p.*[А-Я][а-я-]+?\s(is|действие|проводит проверку готовности.|показывает, что готов|получил|атакует,|кажется,|приглашается|\(|атакует|уже состоит|вступает|исключается|смотрит|преклоняет|рассказывает|is Away|получает|не имеет ауры|does not wish|к вам|смотрит на вас|кивает вам|смотрит на вас|ставит|добавлено|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*?<\/p>\n/g,
+    /<p.*[А-Я][а-я-]+?\s(is|действие|отправлен|разжалован|разжалует|повышен|проводит проверку готовности.|показывает [А-я]+\, что готов\!|получил|атакует,|кажется,|приглашается|\(|атакует|уже состоит|вступает|исключается|смотрит|преклоняет|рассказывает|is Away|получает|не имеет ауры|does not wish|к вам|смотрит на вас|кивает вам|смотрит на вас|ставит|добавлено|создает|засыпает|ложится|предлагает|умирает|отклоняет|установлено|получил|устанавливает вам|находится в|производит|ложится|похоже, навеселе|кажется, понемногу трезвеет|желает видеть вас|пытается помешать побегу|уже состоит в группе|проваливает попытку побега|\+ \d = \d|теряет все свои очки здоровья и выбывает из битвы|пропускает ход|выходит|выполняет действие|входит|присоединяется|выбрасывает|,\s\похоже,\s\навеселе|становится|покидает).*?<\/p>\n/g,
     ""
   ); // Игрок %ООС-действие%
 
@@ -753,7 +757,6 @@ function scrollToSaved() {
     .querySelectorAll(".scroll")
     .forEach((element) => element.classList.remove("scroll"));
 }
-
 
 function scrollToStart() {
   window.scrollTo({
@@ -1235,17 +1238,17 @@ function findLoglinesAndConvertToTranscript() {
 document.addEventListener("keydown", function (event) {
   if (event.key === "Enter" && event.target.id === "keywordsInput") {
     logFilter();
-  } else if (event.key === "Delete") {
+  } else if (!wrapping && event.key === "Delete") {
     deleteElementUnderCursor();
   } else if (event.key === "p" || event.key === "з") {
     togglePaperClass();
-  } else if (event.altKey && event.key === "ArrowLeft") {
+  } else if (event.key === "ArrowLeft") {
     pasteText();
-  } else if (["[", "х"].includes(event.key) && event.ctrlKey && event.altKey) {
+  } else if (["[", "х"].includes(event.key) && event.ctrlKey) {
     deleteBefore();
-  } else if (["]", "ъ"].includes(event.key) && event.ctrlKey && event.altKey) {
+  } else if (["]", "ъ"].includes(event.key) && event.ctrlKey) {
     deleteAfter();
-  } else if (event.altKey && event.key === "ArrowRight") {
+  } else if (event.key === "ArrowRight") {
     pasteImg();
   } else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
     moveElement(event);
@@ -1256,16 +1259,17 @@ document.addEventListener("keydown", function (event) {
     }
   } else if (["[", "х"].includes(event.key)) {
     startWrap();
-  } else if (["]", "ъ"].includes(event.key)) {
+  } else if (wrapping && ["]", "ъ"].includes(event.key)) {
     finishWrap("paper");
-  } else if (["s", "ы"].includes(event.key)) {
+  } else if ([wrapping && "s", "ы"].includes(event.key)) {
     finishWrap("spoiler");
-  } else if (event.key === "-") {
+  } else if (wrapping && event.key === "Delete") {
     finishWrap("remove");
+  } else if (wrapping && event.key === "Enter") {
+    finishWrap("no-margin");
   } else if (event.key === "/") {
     divideChapter();
   } else if (event.key === "*") {
-    WrapToDiv();
   } else if (event.key === "d") {
     debug();
   } else if (event.key === "+") {
@@ -1304,7 +1308,7 @@ function toggleSelectedClass() {
 function deleteElementUnderCursor() {
   const elementsUnderCursor = document.querySelectorAll(":hover");
   elementsUnderCursor.forEach((element) => {
-    const loglineParent = element.closest(".logline");
+    const loglineParent = element.closest(".content > *");
     const dateHeadingParent = element.closest("h2.date");
 
     if (loglineParent) {
@@ -1859,6 +1863,7 @@ function updateAll() {
     span.remove();
   });
   colorindex = 0;
+
   // // console.log("removePlayersWithDungeonMasterNames();");
   removePlayersWithDungeonMasterNames();
   // // console.log("ShortNames();");
@@ -1877,14 +1882,12 @@ function updateAll() {
   calculateTotalDuration();
   // // console.log("gatherPlayersAndInsert();");
   gatherPlayersAndInsert();
-  // // console.log("addCommaAndDotToPlayerList();");
-  addCommaAndDotToPlayerList();
-  // // console.log("gatherPlayersAndInsert();");
-  gatherPlayersAndInsert();
   // // console.log("addSpaceToEmotePlayers();");
   addSpaceToEmotePlayers();
   // // console.log("addColumnToPlayers();");
   addColumnToPlayers();
+  // // console.log("addCommaAndDotToPlayerList();");
+  addCommaAndDotToPlayerList();
 }
 
 function toggleSelectionCSS() {
@@ -1899,7 +1902,7 @@ function toggleSelectionCSS() {
 }
 
 function gatherPlayersAndInsert() {
-  const totalPlayers = document.querySelector(".totalduration > .players");
+  const totalPlayers = document.querySelector(".totalduration > .actors > .players");
   if (totalPlayers) {
     totalPlayers.remove();
   }
@@ -1916,13 +1919,13 @@ function gatherPlayersAndInsert() {
   });
   const totalUniquePlayers = removeDuplicates(allPlayers);
   // Создаем элемент div.players
-  const playersUl = document.createElement("ul");
-  playersUl.classList.add("players");
+  const actorsUI = document.createElement("div");
+  actorsUI.classList.add("actors");
 
   // Перебираем найденные игроки и добавляем их в ul.players
 
   totalUniquePlayers.forEach((player) => {
-    playersUl.appendChild(player);
+    actorsUI.appendChild(player);
   });
 
   // Находим элемент div.totalduration
@@ -1933,7 +1936,7 @@ function gatherPlayersAndInsert() {
   if (totalDurationChapter) {
     // Вставляем ul.players в начало div.totalduration
     totalDurationChapter.insertBefore(
-      playersUl,
+      actorsUI,
       totalDurationChapter.lastChild
     );
     // // console.log( "Все игроки успешно собраны и вставлены в начало общей продолжительности." );
@@ -1973,8 +1976,13 @@ function colorizePlayers() {
     if (playerInfo) {
       colorClass = playerInfo[1];
     } else {
-      colorClass = randomColors[colorindex % randomColors.length];
-      colorindex++;
+      const npcInfo = npcData.find((npc) => npc[0] === playerName);
+      if (npcInfo) {
+        colorClass = npcInfo[1];
+      } else {
+        colorClass = randomColors[colorindex % randomColors.length];
+        colorindex++;
+      }
     }
 
     span.classList.add(colorClass);
@@ -1982,7 +1990,7 @@ function colorizePlayers() {
 }
 
 const dungeonMasterMap = new Map([
-  // ["Фг", true],
+  ["Фг", true],
   ["Кей", true],
   ["Минор", true],
   ["Эдита", true],
@@ -2255,9 +2263,7 @@ function recombineFunction(spanClass) {
   }
 
   // Закончились функции, пошла основная
-  let loglines = document.querySelectorAll(
-    `.chapter:hover p.logline:not(.paper)`
-  );
+  let loglines = document.querySelectorAll(`.content > .logline:not(.paper)`);
   // // console.log(`Всего найдено элементов: ${loglines.length}`);
 
   // Переменные
@@ -2353,51 +2359,51 @@ function scrollToCenter(targetElement) {
   window.scrollTo(scrollOptions);
 }
 
-function mergeTimestamps() {
-  console.log("Запускаюсь");
-  let line;
-  let prevLine;
-  let timestamp;
-  let prevStamp;
-  let combo = [];
-  let starter = null;
-  let startEmote;
-  let emote;
+// function mergeTimestamps() {
+//   console.log("Запускаюсь");
+//   let line;
+//   let prevLine;
+//   let timestamp;
+//   let prevStamp;
 
-  const lines = document.querySelectorAll(".logline.emote");
-  // console.log("lines: ", lines);
+//   const lines = document.querySelectorAll(".logline.emote");
+//   // console.log("lines: ", lines);
 
-  for (let i = 0; i < lines.length; i++) {
-    line = lines[i];
-    emote = line.querySelector("span.emote").textContent;
-    timestamp = line.getAttribute("timestamp");
+//   for (let i = 0; i < lines.length; i++) {
+//     line = lines[i];
+//     emote = line.querySelector("span.emote").textContent;
+//     timestamp = line.getAttribute("timestamp");
 
-    // Начало
-    if (!prevLine) {
-      console.log("Начало");
-      prevLine = line;
-      prevStamp = timestamp;
-      continue;
-    }
+//     // Начало
+//     if (!prevLine) {
+//       console.log("Начало");
+//       prevLine = line;
+//       prevStamp = timestamp;
+//       continue;
+//     }
 
-    // Совпадение или конец массива
-    if (timestamp === prevStamp) {
-      console.log("Совпадение", i);
-      starter = prevLine;
-      starter.classList.add("start_wrap", "selected");
-      startEmote = starter.querySelector("span.emote").textContent;
-      console.log("startEmote, emote: ", startEmote, emote);
-      line.classList.add("remove", "selected");
-      // line.remove();
-    } else {
-      console.log("Несовпадение");
-      prevLine = line;
-      prevStamp = timestamp;
-      starter = "";
-    }
+//     // Совпадение или конец массива
+//     if (timestamp === prevStamp) {
+//       console.log("Совпадение", timestamp + " бьёт с " + prevStamp, line);
+//       let starter = prevLine;
+//       starter.classList.add("start_wrap", "selected");
+//       let startEmote = starter.querySelector("span.emote").textContent;
+//       let emote
+//       console.log("startEmote, emote: ", startEmote, emote);
+//       line.classList.add("remove", "selected");
+//       // line.remove();
+//     } else {
+//       console.log("Несовпадение");
 
-    if (i === lines.length - 1) {
-      console.log("Конец");
-    }
-  }
-}
+//       //Обновление
+//       prevLine = line;
+//       prevStamp = timestamp;
+//       starter = "";
+//     }
+
+//     //Конец
+//     if (i === lines.length - 1) {
+//       console.log("Конец");
+//     }
+//   }
+// }

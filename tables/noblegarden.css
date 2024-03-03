@@ -271,7 +271,7 @@ body .post > .figure.wp-block-body {
 .post h4,
 .post h5,
 .post h6 {
-  font-family: var(--header);
+  font-family: var(--header)!important;
   font-weight: bold !important;
   color: var(--header-color) !important;
   line-height: 1.2em !important;
@@ -632,8 +632,7 @@ ul#redactor-toolbar-0 {
 
 .post h3 {
   margin-bottom: 1rem;
-  font-family: var(--header);
-  font-size: 2rem;
+  font-size: 2rem!important;
 }
 
 .paper > img {
@@ -675,13 +674,11 @@ ul#redactor-toolbar-0 {
 .players > li,
 .npc > li,
 .totalplayers > li {
-  display: inline-block;
-  margin-right: 0.3em;
-  font-weight: bold;
 }
 
 .player {
   background: none;
+  font-weight: bold;
 }
 
 ul.npc > li {
@@ -692,10 +689,9 @@ ul.npc > li:hover {
   opacity: 1;
 }
 
-.players,
-.npc {
-  display: inline;
-  flex-wrap: wrap;
+.actors, .players, .npc, li.player {
+  display: inline!important;
+  flex-wrap: wrap!important;
 }
 
 p.logline {
@@ -1169,7 +1165,7 @@ span.say {
 }
 
 .paper * {
-  text-shadow: 1px 1px black;
+  text-shadow: 1px 1px 2px black;
 }
 
 .story span.player {
@@ -1221,8 +1217,9 @@ p.logline.emote > .emote {
   color: var(--emote);
 }
 
-.story + .story {
-  margin-top: -1rem;
+.story, .story + .story {
+  margin-right: 0.5em!important;
+  display: inline;
 }
 
 span.yell {
@@ -1240,4 +1237,29 @@ span.yell {
 .totalduration {
   padding: 2rem;
   margin-bottom: -4rem;
+}
+
+.no-margin * {
+  margin: 0!important;
+  display: inline;
+}
+
+.no-margin p+p {
+    margin-left: 0.5rem!important;
+}
+
+span.say + span.say {
+    margin-left: 0.5em;
+}
+
+span.comma + span.comma {
+    display: none;
+}
+
+span.dot + span.dot {
+    display: none;
+}
+
+.player + .player {
+  margin-left: 0.5em;
 }
