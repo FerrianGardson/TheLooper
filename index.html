@@ -8,37 +8,37 @@
     <link
       class="local style base"
       rel="stylesheet"
-      href="./base.css"
+      href="./tables/base.css"
       type="text/css"
     />
     <link
       class="local style noblegarden"
       rel="stylesheet"
-      href="./noblegarden.css"
+      href="./tables/noblegarden.css"
       type="text/css"
     />
 
     <link
       class="local style sixthtroop"
       rel="stylesheet"
-      href="./sixthtroop.css"
+      href="./tables/sixthtroop.css"
       type="text/css"
       disabled
     />
     <link
       class="local style cheesecutter"
       rel="stylesheet"
-      href="./cheesecutter.css"
+      href="./tables/cheesecutter.css"
       type="text/css"
       disabled
     />
     <link
       class="local style selection"
       rel="stylesheet"
-      href="./selection.css"
+      href="./tables/selection.css"
       type="text/css"
+      disabled
     />
-    <!-- <script src="https://cbipope3ka.github.io/TheLooper/script.js" class="external style" type="text/javascript" disabled></script> -->
   </head>
 
   <body style="margin: 0; height: 100vh; overflow: hidden">
@@ -97,9 +97,9 @@
           ><button
             onclick="toggleChapters()"
             class="tooltip hide"
-            tooltip="Свернуть или развернуть все главы, чтобы целиком пройтись по тексту или только пробежаться по верхам в поисках нужного отыгрыша."
+            tooltip="Развернуть или свернуть все главы, чтобы целиком пройтись по тексту или только пробежаться по верхам в поисках нужного отыгрыша."
           >
-            Свернуть</button
+            Развернуть</button
           ><button
             onclick="toggleSelectionCSS()"
             class="tooltip hide"
@@ -227,8 +227,11 @@
 
     <div class="post" style="display: none">
       <div class="paper controls">
-        <h3 class="">Управление</h3>
-        <p><span class="key">ЛКМ</span> — выделить строку / снять выделение.</p>
+        <h3>Управление</h3>
+        <p>
+          <span class="key">ЛКМ</span> — выделить строку / снять выделение в
+          режиме (Вид — Подсветка).
+        </p>
         <p>
           <span class="key">DEL</span> — удалить строку, картинку или главу.
         </p>
@@ -246,26 +249,35 @@
         <p>
           <span class="key">↓</span> — переместить объект под курсором вниз.
         </p>
+        <p><span class="key">p</span> — вклеить реплику на обычную бумагу.</p>
         <p>
           <span class="key">m</span> — сделать вырезку с тайштампом, как при
           репликах со слова «Запись».
         </p>
-        <p><span class="key">+</span> — объединить чатбоксы.</p>
+        <p>
+          <span class="key">+</span> — объединить чатбоксы, если это не до конца
+          произошло автоматом.
+        </p>
         <p><span class="key">/</span> — разделить главу на две разные.</p>
         <p class="">
-          <span class="key">[</span><span class="key">]</span> — сделать важную
-          вырезку из строк между нажатиями.
+          <span class="key">[</span> — начать выделение отрывка для
+          использование с клавишами ниже.
         </p>
-        <p>
-          <span class="key">Alt</span>+<span class="key">[</span
-          ><span class="key">]</span> — то же самое, но наоборот поместить
-          нудятину под спойлер.
-        </p>
-        <p>
-          <span class="key">Ctrl</span>+<span class="key">[</span
-          ><span class="key">]</span> — обрезать все абзацы / главы до
-          указанного абзаца / главы.<br />
-        </p>
+
+        <div class="subkeys">
+          <p class="">
+            <span class="key">]</span>&nbsp;— обернуть в бумажную вырезку.
+          </p>
+          <p class="">
+            <span class="key">S</span>&nbsp;— спрятать отрывок под спойлер.
+          </p>
+          <p class="">
+            <span class="key">DEL</span>&nbsp;— удалить выбранный участок.
+          </p>
+          <p class="">
+            <span class="key">Enter</span>&nbsp;— объединить чатбоксы NPC.
+          </p>
+        </div>
       </div>
       <div>
         <div>
@@ -1971,7 +1983,7 @@
         });
       }
     </script>
-    <script src="script.js" class="local style"></script>
+    <script src="./tables/script.js" class="local style"></script>
     <!--     <script
       src="https://cbipope3ka.github.io/TheLooper/script.js"
       class="external style"
