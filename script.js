@@ -1,4 +1,4 @@
-// console.log("recombine");
+console.log("recombine, mergeTimestamps");
 toggleSelectionCSS();
 
 combineDelay = 5 * 1000;
@@ -157,8 +157,8 @@ npcNames = {
 };
 
 function formatHTML() {
-  // console.log("mergeLoglinesWithSameTimestamp();");
-  mergeLoglinesWithSameTimestamp();
+  console.log("mergeTimestamps();");
+  // mergeTimestamps();
   // throw new Error("Скрипт прерван");
   // console.log("cleanText();");
   cleanText();
