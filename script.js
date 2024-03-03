@@ -1999,7 +1999,7 @@ function colorizePlayers() {
 }
 
 const dungeonMasterMap = new Map([
-  ["Фг", true],
+  // ["Фг", true],
   ["Кей", true],
   ["Минор", true],
   ["Эдита", true],
@@ -2276,12 +2276,15 @@ function recombineFunction(spanClass) {
     console.log("content: ", content);
     console.log("prevContent: ", prevContent);
     console.log("prevLogline: ", prevLogline.textContent);
-    // console.log("Данные сброшены");
   }
 
-  let loglines = document.querySelectorAll(`p.logline:not(.paper)`);
+  // Закончились функции, пошла основная
+  let loglines = document.querySelectorAll(
+    `.chapter:hover p.logline:not(.paper)`
+  );
   console.log(`Всего найдено элементов: ${loglines.length}`);
 
+  // Переменные
   let player;
   let prevPlayer;
   let content;
@@ -2290,49 +2293,58 @@ function recombineFunction(spanClass) {
   let counter = 1;
   let combined = [];
   let combining;
+  let starter;
+  // Пробел
+  const space = document.createElement("span");
+  space.classList.add("space");
+  space.textContent = " ";
 
+  // Цикл
   for (let i = 0; i < loglines.length; i++) {
     let logline = loglines[i];
+
+    // Пропускаем неподходящий тип реплик
     if (!logline.classList.contains("say")) {
       drop();
       continue;
     }
+
     player = logline.querySelector("span.player");
     content = logline.querySelector("span.say");
-    // console.log("logline: ", logline);
-    // console.log("content: ", content);
 
     if (!prevPlayer || !prevLogline || !prevContent) {
       update(logline, player, content);
       continue;
     }
 
+    // Игрок совпадает
     if (player.textContent === prevPlayer.textContent) {
       if (!combining) {
-        prevLogline.classList.add("start_wrap","selected");
+        starter = prevLogline;
+        combined.push(prevContent);
         combined.push(content);
         combining = true;
-        console.log("combining: ", combining);
       } else {
-        // console.log("combined: ", combined);
         combined.push(content);
-        prevLogline.remove()
-
-        // counter++;
-        // console.log("counter: ", counter);
-        // if (counter === 5) {
-        //   break;
-        // }
+        prevLogline.classList.add("remove", "selected");
+        prevLogline.remove();
       }
     }
 
+    // Игрок изменился
     if (combining && player.textContent != prevPlayer.textContent) {
       combining = false;
       console.log("combining: ", combining);
-      prevLogline.classList.add("finish_wrap","selected");
-      combined.forEach((element) => {
-        prevLogline.appendChild(element);
+
+      // Подцикл; Перебираем массив combined и добавляем каждый элемент в конец prevLogline
+      combined.forEach((element, index) => {
+        starter.appendChild(element);
+        // Добавляем элемент span для пробела после элемента, кроме последнего
+        if (index < combined.length - 1) {
+          prevLogline.appendChild(space.cloneNode(true));
+        }
       });
+      starter.classList.add("start_wrap", "selected");
       combined = [];
     }
 
