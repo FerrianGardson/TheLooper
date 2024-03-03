@@ -1,4 +1,4 @@
-console.log("recombine");
+console.log("main, 03-03-2024");
 toggleSelectionCSS();
 
 combineDelay = 5 * 1000;
