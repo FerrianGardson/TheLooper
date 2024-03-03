@@ -10,9 +10,10 @@ let chapterCollapseStatus = searchWithinCollapsed
   ? ".chapter"
   : ".chapter:not(.collapsed)";
 
-const dash = document.createElement("span");
-dashSpan.classList.add("dash");
-dashSpan.textContent = " — ";
+let dash = document.createElement("span");
+dash.classList.add("dash");
+dash.textContent = " — ";
+dash = dash.outerHTML;
 
 // Пробел
 const space = document.createElement("span");
