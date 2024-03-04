@@ -2159,7 +2159,10 @@ function logFilter() {
   keywordsInput = "";
   // Разворачиваем все главы с найденными словами
   openselectedChapters();
-  // removeCollapsedChapters();
+  scrollToNextSelected();
+  removeCollapsedChapters();
+
+
 }
 
 function searchVirt() {

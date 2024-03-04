@@ -1226,10 +1226,7 @@ span.yell {
   margin-left: 0.5em;
 }
 
-.story + .story,
-.say + .say,
-.emote + .emote,
-.yell + .yell {
+.story + .story, span.say + span.say, .emote + .emote, .yell + .yell {
   margin-left: 0.3em;
 }
 
