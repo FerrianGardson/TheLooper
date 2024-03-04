@@ -672,19 +672,10 @@ ul#redactor-toolbar-0 {
   font-weight: initial;
 }
 
-.players > li,
-.npc > li,
-.totalplayers > li {
-  /* display: inline-block; */
-  /* margin-right: 0.3em; */
-  /* font-weight: bold; */
-}
-
 .player {
   background: none;
   font-weight: bold;
   display: inline;
-  /* text-wrap: pretty; */
 }
 
 ul.npc > li {
@@ -1224,31 +1215,23 @@ p.logline.emote > .emote {
   color: var(--emote);
 }
 
-.story + .story {
-  margin-top: -1rem;
-}
-
 span.yell {
   color: var(--red);
   font-weight: bold;
   text-transform: uppercase;
 }
 
-
-.player + .player, .npc {
-    margin-left: 0.5em;
+.player + .player,
+.npc {
+  margin-left: 0.5em;
 }
 
-.story, .story + .story {
-    display: inline;
-}
-
-.story + .story, .say + .say, .emote + .emote, .yell + .yell {
-    margin-left: 0.3em;
+.story + .story, span.say + span.say, .emote + .emote, .yell + .yell {
+  margin-left: 0.3em;
 }
 
 .yell > .say {
-    color: var(--red);
-    font-weight: bold;
-    text-transform: uppercase;
+  color: var(--red);
+  font-weight: bold;
+  text-transform: uppercase;
 }

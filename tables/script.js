@@ -1274,6 +1274,7 @@ document.addEventListener("keydown", function (event) {
     debug();
   } else if (event.key === "+") {
     recombineFunction("say");
+    recombineFunction("story");
   } else if (event.key === ",") {
     testing();
   }
@@ -1893,14 +1894,16 @@ function updateAll() {
 }
 
 function toggleSelectionCSS() {
-/*   var styleLink = document.querySelector("link.style.selection");
+  var styleLink = document.querySelector("link.style.selection");
   if (styleLink) {
     styleLink.disabled = !styleLink.disabled;
-  } */
+  }
 }
 
 function gatherPlayersAndInsert() {
-  const totalPlayers = document.querySelector(".totalduration > .actors > .players");
+  const totalPlayers = document.querySelector(
+    ".totalduration > .actors > .players"
+  );
   if (totalPlayers) {
     totalPlayers.remove();
   }
@@ -1933,10 +1936,7 @@ function gatherPlayersAndInsert() {
 
   if (totalDurationChapter) {
     // Вставляем ul.players в начало div.totalduration
-    totalDurationChapter.insertBefore(
-      actorsUI,
-      totalDurationChapter.lastChild
-    );
+    totalDurationChapter.insertBefore(actorsUI, totalDurationChapter.lastChild);
     // // console.log( "Все игроки успешно собраны и вставлены в начало общей продолжительности." );
   } else {
     // // console.log( "Элемент div.totalduration не найден. Не удалось вставить игроков." );
@@ -2013,28 +2013,24 @@ function removePlayersWithDungeonMasterNames() {
   });
 }
 
-// Попытка восстановить старый фильтр по ключевым словам
-
-let keywordsInput = document.getElementById("keywordsInput").value;
-let oldKeywordsInput = "";
-let keywordsArray = [];
-let removeWords = [];
-let addWords = [];
-
 function logFilter() {
-  // Получаем значение из поля ввода
-  keywordsInput = document.getElementById("keywordsInput").value;
-  // // console.log("keywordsInput: ", keywordsInput);
+  let keywordsInput = document.getElementById("keywordsInput").value;
+  let oldKeywordsInput = "";
+  let keywordsArray = [];
+  let removeWords = [];
+  let addWords = [];
+  let regex = /"([^"]+)"|([^,]+)/g;
+  let match;
+
+  console.log("keywordsInput: ", keywordsInput);
 
   // Если три содержит .virt, то запускается функция searchVirt
   if (keywordsInput.includes(".virt")) {
-    // // console.log("Если содержит .virt, то запускается функция searchVirt");
     searchVirt();
   }
 
   // Если пусто, то развыделяем всё
   if (keywordsInput.trim() === "") {
-    // // console.log("Если пусто, то развыделяем всё");
     const selectedElements = document.querySelectorAll(".selected");
     selectedElements.forEach((element) => {
       element.classList.remove("selected");
@@ -2045,28 +2041,44 @@ function logFilter() {
 
   // Если инпут прежний, делаем скролл
   if (keywordsInput === oldKeywordsInput) {
-    // // console.log("Если инпут прежний, делаем скролл");
     scrollToNextSelected();
     return;
   }
 
-  // Разделяем введенные значения по запятым
-  keywordsArray = keywordsInput.split(",").map((keyword) => keyword.trim());
+  // Разделяем введенные значения по запятым с учетом слов в кавычках
 
-  // Фильтруем массив ключевых слов, извлекая "анти-слова"
-  addWords = keywordsArray.filter((keyword) => {
-    if (keyword.startsWith("-")) {
-      // // console.log('if (keyword.startsWith("-")) {');
-      removeWords.push(keyword.substring(1)); // Добавляем "анти-слово" в массив removeWords
-      // // console.log("removeWords: ", removeWords);
-      return false; // Возвращаем false, чтобы слово не попало в основной массив ключевых слов
+  // Обрабатываем слова в кавычках, удаляя кавычки
+  keywordsArray = keywordsArray.map((keyword) => {
+    // Если слово заключено в кавычки, удаляем кавычки
+    if (keyword.startsWith('"') && keyword.endsWith('"')) {
+      return keyword.slice(1, -1); // Удаляем кавычки из слова
     } else {
-      return true; // Возвращаем true для обычных ключевых слов
+      return keyword; // Возвращаем слово без изменений
     }
   });
 
+  while ((match = regex.exec(keywordsInput)) !== null) {
+    // Выбираем слово из кавычек, если оно есть, иначе выбираем слово без кавычек
+    const word = match[1] || match[2];
+    // Добавляем слово в массив ключевых слов
+    keywordsArray.push(word.trim());
+  }
+
+  console.log("keywordsArray: ", keywordsArray);
+
+  // Фильтруем массив ключевых слов, извлекая "анти-слова"
+  addWords = keywordsArray.filter((keyword) => {
+    // Если ключевое слово начинается с "-", считаем его "анти-словом"
+    if (keyword.startsWith("-")) {
+      removeWords.push(keyword.substring(1)); // Добавляем "анти-слово" в массив removeWords
+      return false; // Возвращаем false, чтобы слово не попало в основной массив ключевых слов
+    } else {
+      return true;
+    } // Возвращаем true для обычных ключевых слов
+  });
+
   // Выводим основной массив ключевых слов в консоль
-  // console.log("Keywords:", addWords);
+  console.log("Keywords:", addWords);
 
   if (addWords.length > 0) {
     // Перебираем каждое ключевое слово из массива addWords
@@ -2147,7 +2159,10 @@ function logFilter() {
   keywordsInput = "";
   // Разворачиваем все главы с найденными словами
   openselectedChapters();
+  scrollToNextSelected();
   removeCollapsedChapters();
+
+
 }
 
 function searchVirt() {
@@ -2249,20 +2264,10 @@ function recombineFunction(spanClass) {
     prevPlayer = "";
     prevContent = "";
     prevLogline = logline;
-    // console.log("Данные сброшены");
-  }
-
-  function show() {
-    // // console.log("player: ", player.textContent);
-    // // console.log("prevPlayer: ", prevPlayer.textContent);
-    // // console.log("content: ", content);
-    // // console.log("prevContent: ", prevContent);
-    // // console.log("prevLogline: ", prevLogline.textContent);
   }
 
   // Закончились функции, пошла основная
   let loglines = document.querySelectorAll(`.content > .logline:not(.paper)`);
-  // // console.log(`Всего найдено элементов: ${loglines.length}`);
 
   // Переменные
   let player;
@@ -2280,7 +2285,7 @@ function recombineFunction(spanClass) {
     let logline = loglines[i];
 
     // Пропускаем неподходящий тип реплик
-    if (!logline.classList.contains("say")) {
+    if (!logline.classList.contains(spanClass)) {
       drop();
       continue;
     }
@@ -2297,15 +2302,15 @@ function recombineFunction(spanClass) {
     if (player.textContent === prevPlayer.textContent) {
       if (!combining) {
         starter = prevLogline;
-        // starter.classList.add("start_wrap", "selected");
+        starter.classList.add("start_wrap", "selected");
         starter.classList.add("selected");
         combined.push(prevContent);
         combined.push(content);
         combining = true;
       } else {
         combined.push(content);
-        // prevLogline.classList.add("remove", "selected");
-        prevLogline.remove();
+        prevLogline.classList.add("remove", "selected");
+        // prevLogline.remove();
       }
     }
 
@@ -2314,20 +2319,13 @@ function recombineFunction(spanClass) {
       (combining && prevPlayer.textContent != player.textContent) ||
       i === loglines.length - 1
     ) {
-      // // console.log(
-      //   "Игрок изменился с " +
-      //     prevPlayer.textContent +
-      //     " на " +
-      //     player.textContent
-      // );
-
       combining = false;
-      // // console.log("combining: ", combining);
 
       // Подцикл; Перебираем массив combined и добавляем каждый элемент в конец prevLogline
       combined.forEach((element, index) => {
         starter.appendChild(element);
-        prevLogline.remove();
+        // prevLogline.classList.add("remove", "selected");
+        // prevLogline.remove();
 
         // Добавляем элемент span для пробела после элемента, кроме последнего
         if (index < combined.length - 1) {
@@ -2336,12 +2334,6 @@ function recombineFunction(spanClass) {
       });
 
       combined = [];
-      // counter++;
-      // // console.log("counter: ", counter);
-      // show();
-      // if (counter === 3) {
-      //   break;
-      // }
     }
 
     update(logline, player, content);
