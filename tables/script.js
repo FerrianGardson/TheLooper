@@ -2157,6 +2157,8 @@ function logFilter() {
   openselectedChapters();
   scrollToNextSelected();
   removeCollapsedChapters();
+
+
 }
 
 function searchVirt() {
