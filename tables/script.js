@@ -1894,10 +1894,10 @@ function updateAll() {
 }
 
 function toggleSelectionCSS() {
-/*   var styleLink = document.querySelector("link.style.selection");
+  var styleLink = document.querySelector("link.style.selection");
   if (styleLink) {
     styleLink.disabled = !styleLink.disabled;
-  } */
+  }
 }
 
 function gatherPlayersAndInsert() {
