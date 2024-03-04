@@ -2015,28 +2015,24 @@ function removePlayersWithDungeonMasterNames() {
 
 // Попытка восстановить старый фильтр по ключевым словам
 
-let keywordsInput = document.getElementById("keywordsInput").value;
-let oldKeywordsInput = "";
-let keywordsArray = [];
-let removeWords = [];
-let addWords = [];
-let newAddWords = [];
-let regex = /"([^"]+)"|([^,]+)/g;
-
 function logFilter() {
-  // Получаем значение из поля ввода
-  keywordsInput = document.getElementById("keywordsInput").value;
-  // // console.log("keywordsInput: ", keywordsInput);
+  let keywordsInput = document.getElementById("keywordsInput").value;
+  let oldKeywordsInput = "";
+  let keywordsArray = [];
+  let removeWords = [];
+  let addWords = [];
+  let newAddWords = [];
+  let regex = /"([^"]+)"|([^,]+)/g;
+
+  console.log("keywordsInput: ", keywordsInput);
 
   // Если три содержит .virt, то запускается функция searchVirt
   if (keywordsInput.includes(".virt")) {
-    // // console.log("Если содержит .virt, то запускается функция searchVirt");
     searchVirt();
   }
 
   // Если пусто, то развыделяем всё
   if (keywordsInput.trim() === "") {
-    // // console.log("Если пусто, то развыделяем всё");
     const selectedElements = document.querySelectorAll(".selected");
     selectedElements.forEach((element) => {
       element.classList.remove("selected");
@@ -2047,13 +2043,13 @@ function logFilter() {
 
   // Если инпут прежний, делаем скролл
   if (keywordsInput === oldKeywordsInput) {
-    // // console.log("Если инпут прежний, делаем скролл");
     scrollToNextSelected();
     return;
   }
 
   // Разделяем введенные значения по запятым
   keywordsArray = keywordsInput.split(",").map((keyword) => keyword.trim());
+  console.log('keywordsArray: ', keywordsArray);
 
   // Фильтруем массив ключевых слов, извлекая "анти-слова"
   addWords = keywordsArray.filter((keyword) => {
