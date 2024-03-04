@@ -2013,16 +2013,14 @@ function removePlayersWithDungeonMasterNames() {
   });
 }
 
-// Попытка восстановить старый фильтр по ключевым словам
-
 function logFilter() {
   let keywordsInput = document.getElementById("keywordsInput").value;
   let oldKeywordsInput = "";
   let keywordsArray = [];
   let removeWords = [];
   let addWords = [];
-  let newAddWords = [];
   let regex = /"([^"]+)"|([^,]+)/g;
+  let match;
 
   console.log("keywordsInput: ", keywordsInput);
 
@@ -2047,9 +2045,26 @@ function logFilter() {
     return;
   }
 
-  // Разделяем введенные значения по запятым
-  keywordsArray = keywordsInput.split(",").map((keyword) => keyword.trim());
-  console.log('keywordsArray: ', keywordsArray);
+  // Разделяем введенные значения по запятым с учетом слов в кавычках
+
+  // Обрабатываем слова в кавычках, удаляя кавычки
+  keywordsArray = keywordsArray.map((keyword) => {
+    // Если слово заключено в кавычки, удаляем кавычки
+    if (keyword.startsWith('"') && keyword.endsWith('"')) {
+      return keyword.slice(1, -1); // Удаляем кавычки из слова
+    } else {
+      return keyword; // Возвращаем слово без изменений
+    }
+  });
+
+  while ((match = regex.exec(keywordsInput)) !== null) {
+    // Выбираем слово из кавычек, если оно есть, иначе выбираем слово без кавычек
+    const word = match[1] || match[2];
+    // Добавляем слово в массив ключевых слов
+    keywordsArray.push(word.trim());
+  }
+
+  console.log("keywordsArray: ", keywordsArray);
 
   // Фильтруем массив ключевых слов, извлекая "анти-слова"
   addWords = keywordsArray.filter((keyword) => {
