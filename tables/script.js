@@ -1391,6 +1391,8 @@ function deleteBefore() {
       }
     }
   });
+
+  scrollToCenter(targetElement);
   // Удаление всех элементов с классом .chapter.remove из #chatlog
   document
     .querySelectorAll("#chatlog > .chapter.remove")
@@ -1891,14 +1893,10 @@ function updateAll() {
 }
 
 function toggleSelectionCSS() {
-  var styleLink = document.querySelector("link.style.selection");
-  // // console.log("styleLink:", styleLink);
+/*   var styleLink = document.querySelector("link.style.selection");
   if (styleLink) {
     styleLink.disabled = !styleLink.disabled;
-    // // console.log("styleLink.disabled:", styleLink.disabled);
-  } else {
-    // // console.log("Ссылка на стили не найдена.");
-  }
+  } */
 }
 
 function gatherPlayersAndInsert() {
