@@ -2250,20 +2250,10 @@ function recombineFunction(spanClass) {
     prevPlayer = "";
     prevContent = "";
     prevLogline = logline;
-    // console.log("Данные сброшены");
-  }
-
-  function show() {
-    // // console.log("player: ", player.textContent);
-    // // console.log("prevPlayer: ", prevPlayer.textContent);
-    // // console.log("content: ", content);
-    // // console.log("prevContent: ", prevContent);
-    // // console.log("prevLogline: ", prevLogline.textContent);
   }
 
   // Закончились функции, пошла основная
   let loglines = document.querySelectorAll(`.content > .logline:not(.paper)`);
-  // // console.log(`Всего найдено элементов: ${loglines.length}`);
 
   // Переменные
   let player;
@@ -2298,15 +2288,15 @@ function recombineFunction(spanClass) {
     if (player.textContent === prevPlayer.textContent) {
       if (!combining) {
         starter = prevLogline;
-        // starter.classList.add("start_wrap", "selected");
+        starter.classList.add("start_wrap", "selected");
         starter.classList.add("selected");
         combined.push(prevContent);
         combined.push(content);
         combining = true;
       } else {
         combined.push(content);
-        // prevLogline.classList.add("remove", "selected");
-        prevLogline.remove();
+        prevLogline.classList.add("remove", "selected");
+        // prevLogline.remove();
       }
     }
 
@@ -2315,20 +2305,13 @@ function recombineFunction(spanClass) {
       (combining && prevPlayer.textContent != player.textContent) ||
       i === loglines.length - 1
     ) {
-      // // console.log(
-      //   "Игрок изменился с " +
-      //     prevPlayer.textContent +
-      //     " на " +
-      //     player.textContent
-      // );
-
       combining = false;
-      // // console.log("combining: ", combining);
 
       // Подцикл; Перебираем массив combined и добавляем каждый элемент в конец prevLogline
       combined.forEach((element, index) => {
         starter.appendChild(element);
-        prevLogline.remove();
+        // prevLogline.classList.add("remove", "selected");
+        // prevLogline.remove();
 
         // Добавляем элемент span для пробела после элемента, кроме последнего
         if (index < combined.length - 1) {
@@ -2337,12 +2320,7 @@ function recombineFunction(spanClass) {
       });
 
       combined = [];
-      // counter++;
-      // // console.log("counter: ", counter);
-      // show();
-      // if (counter === 3) {
-      //   break;
-      // }
+
     }
 
     update(logline, player, content);
