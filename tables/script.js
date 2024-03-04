@@ -1901,7 +1901,9 @@ function toggleSelectionCSS() {
 }
 
 function gatherPlayersAndInsert() {
-  const totalPlayers = document.querySelector(".totalduration > .actors > .players");
+  const totalPlayers = document.querySelector(
+    ".totalduration > .actors > .players"
+  );
   if (totalPlayers) {
     totalPlayers.remove();
   }
@@ -1934,10 +1936,7 @@ function gatherPlayersAndInsert() {
 
   if (totalDurationChapter) {
     // Вставляем ul.players в начало div.totalduration
-    totalDurationChapter.insertBefore(
-      actorsUI,
-      totalDurationChapter.lastChild
-    );
+    totalDurationChapter.insertBefore(actorsUI, totalDurationChapter.lastChild);
     // // console.log( "Все игроки успешно собраны и вставлены в начало общей продолжительности." );
   } else {
     // // console.log( "Элемент div.totalduration не найден. Не удалось вставить игроков." );
@@ -2021,6 +2020,8 @@ let oldKeywordsInput = "";
 let keywordsArray = [];
 let removeWords = [];
 let addWords = [];
+let newAddWords = [];
+let regex = /"([^"]+)"|([^,]+)/g;
 
 function logFilter() {
   // Получаем значение из поля ввода
@@ -2056,18 +2057,17 @@ function logFilter() {
 
   // Фильтруем массив ключевых слов, извлекая "анти-слова"
   addWords = keywordsArray.filter((keyword) => {
+    // Если ключевое слово начинается с "-", считаем его "анти-словом"
     if (keyword.startsWith("-")) {
-      // // console.log('if (keyword.startsWith("-")) {');
       removeWords.push(keyword.substring(1)); // Добавляем "анти-слово" в массив removeWords
-      // // console.log("removeWords: ", removeWords);
       return false; // Возвращаем false, чтобы слово не попало в основной массив ключевых слов
     } else {
-      return true; // Возвращаем true для обычных ключевых слов
-    }
+      return true;
+    } // Возвращаем true для обычных ключевых слов
   });
 
   // Выводим основной массив ключевых слов в консоль
-  // console.log("Keywords:", addWords);
+  console.log("Keywords:", addWords);
 
   if (addWords.length > 0) {
     // Перебираем каждое ключевое слово из массива addWords
@@ -2148,7 +2148,7 @@ function logFilter() {
   keywordsInput = "";
   // Разворачиваем все главы с найденными словами
   openselectedChapters();
-  removeCollapsedChapters();
+  // removeCollapsedChapters();
 }
 
 function searchVirt() {
@@ -2320,7 +2320,6 @@ function recombineFunction(spanClass) {
       });
 
       combined = [];
-
     }
 
     update(logline, player, content);
