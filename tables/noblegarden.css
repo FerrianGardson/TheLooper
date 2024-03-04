@@ -1225,7 +1225,6 @@ p.logline.emote > .emote {
 }
 
 .story + .story {
-  margin-top: -1rem;
 }
 
 span.yell {
@@ -1240,7 +1239,7 @@ span.yell {
 }
 
 .story, .story + .story {
-    display: inline;
+    /* display: inline; */
 }
 
 .story + .story, .say + .say, .emote + .emote, .yell + .yell {

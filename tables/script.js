@@ -1274,6 +1274,7 @@ document.addEventListener("keydown", function (event) {
     debug();
   } else if (event.key === "+") {
     recombineFunction("say");
+    recombineFunction("story");
   } else if (event.key === ",") {
     testing();
   }
@@ -2280,7 +2281,7 @@ function recombineFunction(spanClass) {
     let logline = loglines[i];
 
     // Пропускаем неподходящий тип реплик
-    if (!logline.classList.contains("say")) {
+    if (!logline.classList.contains(spanClass)) {
       drop();
       continue;
     }
