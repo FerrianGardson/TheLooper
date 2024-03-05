@@ -1226,7 +1226,7 @@ span.yell {
   margin-left: 0.5em;
 }
 
-.story + .story, span.say + span.say, span.emote + span.emote, span.yell + span.yell {
+.no-margin > p+p {
   margin-left: 0.3em;
 }
 
@@ -1234,4 +1234,16 @@ span.yell {
   color: var(--red);
   font-weight: bold;
   text-transform: uppercase;
+}
+
+p.logline.emote > .player {
+  font-weight: unset;
+}
+
+.no-margin > p {
+    display: inline;
+}
+
+.no-display {
+  display: none!important;
 }

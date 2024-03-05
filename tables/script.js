@@ -46,7 +46,9 @@ const playerData = [
 
 const npcData = [
   ["Рыцарь-лейтенант Сиглим Сталекрут", "yellow", "Сиглим Сталекрут"],
+  ["Фэрриан Гардсон", "rogue", "Фэрри"],
   ["Дробитель", "death-knight", "Дробитель"],
+  ["Сэр Сэмьюэл Лексон", "demon-hunter", "Сэр Сэмьюэл Дж. Лексон"],
 ];
 
 const randomColors = [
@@ -1274,7 +1276,6 @@ document.addEventListener("keydown", function (event) {
     debug();
   } else if (event.key === "+") {
     recombineFunction("say");
-    recombineFunction("story");
   } else if (event.key === ",") {
     testing();
   }
@@ -2161,8 +2162,6 @@ function logFilter() {
   openselectedChapters();
   scrollToNextSelected();
   removeCollapsedChapters();
-
-
 }
 
 function searchVirt() {
@@ -2310,11 +2309,16 @@ function recombineFunction(spanClass) {
       } else {
         combined.push(content);
         prevLogline.classList.add("remove", "selected");
+        console.log("combined: ", combined);
         // prevLogline.remove();
       }
+
+      console.log("starter: ", starter.textContent);
+
+
     }
 
-    // Игрок изменился
+    // Игрок изменился или случился конец списка
     if (
       (combining && prevPlayer.textContent != player.textContent) ||
       i === loglines.length - 1
@@ -2324,8 +2328,6 @@ function recombineFunction(spanClass) {
       // Подцикл; Перебираем массив combined и добавляем каждый элемент в конец prevLogline
       combined.forEach((element, index) => {
         starter.appendChild(element);
-        // prevLogline.classList.add("remove", "selected");
-        // prevLogline.remove();
 
         // Добавляем элемент span для пробела после элемента, кроме последнего
         if (index < combined.length - 1) {
@@ -2335,6 +2337,13 @@ function recombineFunction(spanClass) {
 
       combined = [];
     }
+
+    // Костыль для удаления пустых игроков
+    document
+      .querySelectorAll("p.logline.say:not(:has(span.say))")
+      .forEach((element) => {
+        element.remove();
+      });
 
     update(logline, player, content);
   }
