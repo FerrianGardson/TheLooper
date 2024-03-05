@@ -1235,3 +1235,16 @@ span.yell {
   font-weight: bold;
   text-transform: uppercase;
 }
+
+p.logline.emote > .player {
+  font-weight: unset;
+  color: unset;
+}
+
+.no-margin > p {
+    display: inline;
+}
+
+.no-display {
+  display: none!important;
+}

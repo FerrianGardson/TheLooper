@@ -46,6 +46,7 @@ const playerData = [
 
 const npcData = [
   ["Рыцарь-лейтенант Сиглим Сталекрут", "yellow", "Сиглим Сталекрут"],
+  ["Фэрриан Гардсон", "rogue", "Фэрриан Гардсон"],
   ["Дробитель", "death-knight", "Дробитель"],
 ];
 
@@ -165,6 +166,7 @@ function formatHTML() {
   cleanText();
   // console.log("mergeTimestamps();");
   // mergeTimestamps();
+  replacePlayerNames(npcData);
   // throw new Error("Скрипт прерван");
   // // console.log("splitSessions();");
   splitSessions();
@@ -181,8 +183,6 @@ function formatHTML() {
   // // console.log("chapterReverse();");
   chapterReverse();
   //postClear();
-  // $(".logline.story span.player").remove();
-  //throw new Error("Скрипт прерван");
 }
 
 async function handleTxtFile(file) {
@@ -538,7 +538,6 @@ function cleanText() {
 
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
-  //throw new Error("Скрипт прерван");
 
   document
     .querySelectorAll("#chatlog p:empty")
@@ -1869,14 +1868,10 @@ function updateAll() {
 
   // // console.log("removePlayersWithDungeonMasterNames();");
   removePlayersWithDungeonMasterNames();
-  // // console.log("ShortNames();");
-  ShortNames();
   // // console.log("playerList();");
   playerList();
   // // console.log("colorizePlayers();");
   colorizePlayers();
-  // // console.log("FullNames();");
-  FullNames();
   // // console.log("addTimeToChapter();");
   addTimeToChapter();
   // // console.log("synchronizePlayerColors();");
@@ -1963,24 +1958,25 @@ function removeDuplicates(array) {
   return Array.from(uniquePlayers);
 }
 
-let colorindex = 0;
 function colorizePlayers() {
+  let colorindex = 0;
   const playerSpans = document.querySelectorAll(".actors .player");
   playerSpans.forEach((span) => {
     const playerName = span.textContent.trim();
     let colorClass;
 
     const playerInfo = playerData.find((player) => player[0] === playerName);
-    if (playerInfo) {
-      colorClass = playerInfo[1];
-    } else {
-      const npcInfo = npcData.find((npc) => npc[0] === playerName);
+    const npcInfo = npcData.find((npc) => npc[0] === playerName);
+
+    if (npcInfo) {
       if (npcInfo) {
         colorClass = npcInfo[1];
       } else {
         colorClass = randomColors[colorindex % randomColors.length];
         colorindex++;
       }
+    } else if (playerInfo) {
+      colorClass = playerInfo[1];
     }
 
     span.classList.add(colorClass);
@@ -2397,3 +2393,18 @@ function scrollToCenter(targetElement) {
 //     }
 //   }
 // }
+
+function replacePlayerNames(npcData) {
+  const playerElements = document.querySelectorAll(".player");
+
+  playerElements.forEach((playerElement) => {
+    const playerName = playerElement.textContent.trim();
+
+    npcData.forEach((npc) => {
+      if (playerName === npc[0]) {
+        playerElement.textContent = npc[2];
+        playerElement.classList.add(npc[1]);
+      }
+    });
+  });
+}
