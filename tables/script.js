@@ -20,6 +20,13 @@ const space = document.createElement("span");
 space.classList.add("space");
 space.textContent = " ";
 
+const npcData = [
+  ["Рыцарь-лейтенант Сиглим Сталекрут", "yellow", "Сиглим Сталекрут"],
+  ["Фэрриан Гардсон", "rogue", "Фэрриан Гардсон"],
+  ["Дробитель", "death-knight", "Дробитель"],
+  ["Сэр Сэмьюэл Лексон", "demon-hunter", "Сэр Сэмьюэл Дж. Лексон"],
+];
+
 const playerData = [
   ["Фэрриан", "rogue", "Фэрриан Гардсон"],
   ["Малет", "shaman", "Малет Трант"],
@@ -42,13 +49,6 @@ const playerData = [
   ["Кирке", "warrior", "Гюнтер Кирке"],
   ["Ашира", "priest", "Ашира Фраймс"],
   ["Паулина", "priest", "Паулина Санчес"],
-];
-
-const npcData = [
-  ["Рыцарь-лейтенант Сиглим Сталекрут", "yellow", "Сиглим Сталекрут"],
-  ["Фэрриан Гардсон", "rogue", "Фэрриан Гардсон"],
-  ["Дробитель", "death-knight", "Дробитель"],
-  ["Сэр Сэмьюэл Лексон", "demon-hunter", "Сэр Сэмьюэл Дж. Лексон"],
 ];
 
 const randomColors = [
@@ -165,10 +165,6 @@ const npcNames = {
 function formatHTML() {
   // // console.log("cleanText();");
   cleanText();
-  // console.log("mergeTimestamps();");
-  // mergeTimestamps();
-  replacePlayerNames(npcData);
-  // throw new Error("Скрипт прерван");
   // // console.log("splitSessions();");
   splitSessions();
   // // console.log("wrapChapters();");
@@ -1824,34 +1820,6 @@ function addCommaAndDotToPlayerList() {
   });
 }
 
-function FullNames() {
-  const actorPlayers = document.querySelectorAll(".chapter .player");
-
-  actorPlayers.forEach((actorPlayer) => {
-    const playerName = actorPlayer.textContent.trim();
-
-    const playerInfo = playerData.find((info) => info[0] === playerName);
-    if (playerInfo) {
-      actorPlayer.textContent = playerInfo[2];
-    } else {
-    }
-  });
-}
-
-function ShortNames() {
-  const actorPlayers = document.querySelectorAll(".chapter .player");
-
-  actorPlayers.forEach((actorPlayer) => {
-    const playerName = actorPlayer.textContent.trim();
-
-    const playerInfo = playerData.find((info) => info[2] === playerName);
-    if (playerInfo) {
-      actorPlayer.textContent = playerInfo[0];
-    } else {
-    }
-  });
-}
-
 function updateAll() {
   // // console.log("Апдейт");
   const actorsDivs = document.querySelectorAll("div.actors");
@@ -1870,8 +1838,7 @@ function updateAll() {
   removePlayersWithDungeonMasterNames();
   // // console.log("playerList();");
   playerList();
-  // // console.log("colorizePlayers();");
-  colorizePlayers();
+  processPlayerNames();
   // // console.log("addTimeToChapter();");
   addTimeToChapter();
   // // console.log("synchronizePlayerColors();");
@@ -1956,31 +1923,6 @@ function removeDuplicates(array) {
 
   // Преобразуем набор обратно в массив элементов
   return Array.from(uniquePlayers);
-}
-
-function colorizePlayers() {
-  let colorindex = 0;
-  const playerSpans = document.querySelectorAll(".actors .player");
-  playerSpans.forEach((span) => {
-    const playerName = span.textContent.trim();
-    let colorClass;
-
-    const playerInfo = playerData.find((player) => player[0] === playerName);
-    const npcInfo = npcData.find((npc) => npc[0] === playerName);
-
-    if (npcInfo) {
-      if (npcInfo) {
-        colorClass = npcInfo[1];
-      } else {
-        colorClass = randomColors[colorindex % randomColors.length];
-        colorindex++;
-      }
-    } else if (playerInfo) {
-      colorClass = playerInfo[1];
-    }
-
-    span.classList.add(colorClass);
-  });
 }
 
 const dungeonMasterMap = new Map([
@@ -2157,8 +2099,6 @@ function logFilter() {
   openselectedChapters();
   scrollToNextSelected();
   removeCollapsedChapters();
-
-
 }
 
 function searchVirt() {
@@ -2353,66 +2293,32 @@ function scrollToCenter(targetElement) {
   window.scrollTo(scrollOptions);
 }
 
-// function mergeTimestamps() {
-//   console.log("Запускаюсь");
-//   let line;
-//   let prevLine;
-//   let timestamp;
-//   let prevStamp;
+function processPlayerNames() {
+  // Получаем все элементы span.player
+  const playerSpans = document.querySelectorAll(
+    ".say > .player, .actors .player"
+  );
 
-//   const lines = document.querySelectorAll(".logline.emote");
-//   // console.log("lines: ", lines);
+  // Проходимся по каждому элементу
+  playerSpans.forEach((span) => {
+    const playerName = span.textContent.trim(); // Получаем текстовое содержимое элемента
+    let colorClass; // Переменная для цветового класса
 
-//   for (let i = 0; i < lines.length; i++) {
-//     line = lines[i];
-//     emote = line.querySelector("span.emote").textContent;
-//     timestamp = line.getAttribute("timestamp");
-
-//     // Начало
-//     if (!prevLine) {
-//       console.log("Начало");
-//       prevLine = line;
-//       prevStamp = timestamp;
-//       continue;
-//     }
-
-//     // Совпадение или конец массива
-//     if (timestamp === prevStamp) {
-//       console.log("Совпадение", timestamp + " бьёт с " + prevStamp, line);
-//       let starter = prevLine;
-//       starter.classList.add("start_wrap", "selected");
-//       let startEmote = starter.querySelector("span.emote").textContent;
-//       let emote
-//       console.log("startEmote, emote: ", startEmote, emote);
-//       line.classList.add("remove", "selected");
-//       // line.remove();
-//     } else {
-//       console.log("Несовпадение");
-
-//       //Обновление
-//       prevLine = line;
-//       prevStamp = timestamp;
-//       starter = "";
-//     }
-
-//     //Конец
-//     if (i === lines.length - 1) {
-//       console.log("Конец");
-//     }
-//   }
-// }
-
-function replacePlayerNames(npcData) {
-  const playerElements = document.querySelectorAll(".player");
-
-  playerElements.forEach((playerElement) => {
-    const playerName = playerElement.textContent.trim();
-
-    npcData.forEach((npc) => {
-      if (playerName === npc[0]) {
-        playerElement.textContent = npc[2];
-        playerElement.classList.add(npc[1]);
+    // Поиск имени в npcData
+    const npcInfo = npcData.find((npc) => npc[0] === playerName);
+    if (npcInfo) {
+      span.textContent = npcInfo[2]; // Заменяем текстовое содержимое на полное имя из npcData
+      colorClass = npcInfo[1]; // Получаем цветовой класс из npcData
+    } else {
+      // Поиск имени в playerData, если не найдено в npcData
+      const playerInfo = playerData.find((player) => player[0] === playerName);
+      if (playerInfo) {
+        colorClass = playerInfo[1]; // Получаем цветовой класс из playerData
+        span.textContent = playerInfo[2];
       }
-    });
+    }
+
+    // Добавляем цветовой класс к элементу span.player
+    span.classList.add(colorClass);
   });
 }
