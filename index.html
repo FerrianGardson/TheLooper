@@ -1983,47 +1983,5 @@
         </div>
       </div>
     </div>
-
-    <div class="footer"></div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!--     <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
-      integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/transliteration@2.0.0/dist/transliteration.min.js"></script> -->
-    <script>
-      function toggleStylesheet(className) {
-        const styleLinks = document.querySelectorAll(`.style.${className}`);
-        styleLinks.forEach((link) => {
-          if (link.disabled) {
-            link.disabled = false;
-          } else {
-            link.disabled = true;
-          }
-        });
-      }
-
-      function toggleExternalLinks() {
-        const localStyles = document.querySelectorAll(".local.style");
-        const externalStyles = document.querySelectorAll(".external.style");
-
-        localStyles.forEach((style) => {
-          style.disabled = true;
-        });
-
-        externalStyles.forEach((style) => {
-          style.disabled = false;
-        });
-      }
-    </script>
-    <script src="./tables/script.js" class="local style"></script>
-    <!--     <script
-      src="https://ferriangardson.github.io/TheLooper/tables/script.js"
-      class="external style"
-      disabled
-    ></script> -->
   </body>
 </html>
