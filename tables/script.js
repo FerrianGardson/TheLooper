@@ -9,18 +9,7 @@ function formatHTML() {
 }
 
 function updateAll() {
-  const actorsDivs = document.querySelectorAll("div.actors");
-  actorsDivs.forEach((actorsDiv) => {
-    actorsDiv.remove();
-  });
-  const spans = document.querySelectorAll(
-    "span.comma, span.dot, span.space, span.column"
-  );
-  spans.forEach((span) => {
-    span.remove();
-  });
-  colorindex = 0;
-
+  removeActorsAndSymbols();
   removePlayersWithDungeonMasterNames();
   playerList();
   removeChaptersIfFewPlayers();
@@ -32,19 +21,21 @@ function updateAll() {
   addSpaceToEmotePlayers();
   addColumnToPlayers();
   addCommaAndDotToPlayerList();
+  combineFunctions();
+  // recombineFunctions();
 }
 
 function combineFunctions() {
   combineSay("emote");
   combineSay("say");
+  combineSay("virt");
   combineSay("yell");
   combineSay("story");
-  combineSay("virt");
-  sayToEmote();
-  thirdPerson("emote", "say");
-  thirdPerson("virt", "say");
+  //sayToEmote();
+  virtToSay();
   removeDashes();
-  // virtToSay();
+  // thirdPerson("emote", "say");
+  // thirdPerson("virt", "say");
   // emoteToSay();
   // thirdPerson("say", "emote");
   // thirdPerson("yell", "emote");
@@ -54,7 +45,7 @@ console.log("main, 03-03-2024");
 toggleSelectionCSS();
 
 let combineDelay = 5 * 1000;
-let hoursBetweenSessions = 1;
+let hoursBetweenSessions = 0.5;
 let showtimestamps = false;
 
 let searchWithinCollapsed = true;
@@ -284,7 +275,7 @@ function importTxt(text) {
       p.textContent = loglineBody;
       chatlog.appendChild(p);
       if (showtimestamps) {
-            }
+      }
     }
   }
   formatHTML();
@@ -303,7 +294,7 @@ function splitSessions() {
           timeDifference > hoursBetweenSessions * 60 * 60 * 1000 ||
           timeDifference < 0
         ) {
-                  //   "if (timeDifference > 1 * 60 * 60 * 1000 || timeDifference < 0) {"
+          //   "if (timeDifference > 1 * 60 * 60 * 1000 || timeDifference < 0) {"
           // );
           const dateHeader = document.createElement("h2");
           dateHeader.className = "date";
@@ -312,14 +303,14 @@ function splitSessions() {
           paragraph.parentNode.insertBefore(dateHeader, paragraph);
         }
       } else {
-              const dateHeader = document.createElement("h2");
+        const dateHeader = document.createElement("h2");
         dateHeader.className = "date";
         const formattedDate = getFormattedDate(timestamp);
         dateHeader.innerHTML = `<span class="title">Запись</span> <span class="day">${formattedDate}</span>`;
         paragraph.parentNode.insertBefore(dateHeader, paragraph);
       }
       if (!paragraph.textContent.trim()) {
-              paragraph.remove();
+        paragraph.remove();
         return;
       }
       prevTimestamp = currentTimestamp;
@@ -363,7 +354,6 @@ function insertContentDiv(contentDiv, nextElement) {
 }
 
 function wrapChapters() {
-
   const chatlog = document.querySelector("#chatlog");
   if (!chatlog) {
     console.error("Элемент #chatlog не найден.");
@@ -376,17 +366,16 @@ function wrapChapters() {
     return;
   }
 
-
   let chapters = [];
 
   for (const date of dates) {
-      let nextElement = date.nextElementSibling;
+    let nextElement = date.nextElementSibling;
     const chapterElements = [date];
     let firstPTimestamp = null;
 
     while (nextElement && nextElement.tagName === "P") {
-          if (!firstPTimestamp) {
-              firstPTimestamp = nextElement.getAttribute("timestamp");
+      if (!firstPTimestamp) {
+        firstPTimestamp = nextElement.getAttribute("timestamp");
       }
       chapterElements.push(nextElement);
       nextElement = nextElement.nextElementSibling;
@@ -399,7 +388,6 @@ function wrapChapters() {
     chapterDiv.append(...chapterElements);
     chapters.push(chapterDiv);
   }
-
 
   chatlog.innerHTML = "";
   chatlog.append(...chapters);
@@ -418,7 +406,6 @@ function wrapChapters() {
 
     chapter.appendChild(contentContainer);
   });
-
 }
 
 function collapseChapters() {
@@ -560,6 +547,38 @@ function cleanText() {
 }
 
 function combineSay(spanType) {
+  function saveCurrentValues(element, spanType) {
+    currentLogline = element;
+    currentTimeStamp = element.getAttribute("timestamp");
+    currentPlayerElement = element.querySelector("span.player");
+    currentSayElement = element.querySelector(`span.${spanType}`);
+    currentPlayer = currentPlayerElement
+      ? currentPlayerElement.textContent
+      : "";
+    currentSay = currentSayElement ? currentSayElement.textContent : "";
+  }
+
+  function updatePreviousValues() {
+    previousSay = currentSay;
+    previousPlayer = currentPlayer;
+    previousLogline = currentLogline;
+    previousTimeStamp = currentTimeStamp;
+  }
+
+  function resetSay() {
+    currentPlayer = "";
+    currentSay = "";
+    currentLogline = "";
+    currentTimeStamp = "";
+    previousPlayer = "";
+    previousSay = "";
+    previousLogline = "";
+    previousTimeStamp = "";
+    combinedSay = "";
+    currentPlayerElement = "";
+    currentSayElement = "";
+  }
+
   resetSay();
 
   var elements = document.querySelectorAll(".content > p.logline");
@@ -604,37 +623,6 @@ function combineSay(spanType) {
     currentSayElement = "";
     currentPlayerElement = "";
     continue;
-  }
-  function saveCurrentValues(element, spanType) {
-    currentLogline = element;
-    currentTimeStamp = element.getAttribute("timestamp");
-    currentPlayerElement = element.querySelector("span.player");
-    currentSayElement = element.querySelector(`span.${spanType}`);
-    currentPlayer = currentPlayerElement
-      ? currentPlayerElement.textContent
-      : "";
-    currentSay = currentSayElement ? currentSayElement.textContent : "";
-  }
-
-  function updatePreviousValues() {
-    previousSay = currentSay;
-    previousPlayer = currentPlayer;
-    previousLogline = currentLogline;
-    previousTimeStamp = currentTimeStamp;
-  }
-
-  function resetSay() {
-    currentPlayer = "";
-    currentSay = "";
-    currentLogline = "";
-    currentTimeStamp = "";
-    previousPlayer = "";
-    previousSay = "";
-    previousLogline = "";
-    previousTimeStamp = "";
-    combinedSay = "";
-    currentPlayerElement = "";
-    currentSayElement = "";
   }
 }
 
@@ -886,8 +874,6 @@ function selectAll() {
 }
 
 function debug() {
-  combineDelay = 24 * 60 * 1000;
-  combineSay("say");
 }
 
 function calculateTotalDuration() {
@@ -1504,32 +1490,27 @@ function removeRed() {
 }
 
 function finishWrap(className) {
-
   if (wrapping == true) {
-  
     const contentChild = document.querySelector(".content .logline:hover");
     if (contentChild) {
-    
       document.querySelectorAll(".content .finish_wrap").forEach((element) => {
         element.classList.remove("finish_wrap");
-            });
+      });
 
       contentChild.classList.add("finish_wrap");
-    
+
       WrapToDiv();
     }
 
     function WrapToDiv() {
-    
       const elementsUnderCursor = document.querySelectorAll(
         ".content .logline:hover"
       );
 
       for (const element of elementsUnderCursor) {
-      
         const contentChild = element.closest("div.content");
         if (!contentChild) {
-                  continue;
+          continue;
         }
 
         const startWrap = contentChild.querySelector(".start_wrap");
@@ -1538,12 +1519,11 @@ function finishWrap(className) {
         finishWrap.classList.remove("finish_wrap");
 
         if (!startWrap || !finishWrap) {
-                  //   "Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv."
+          //   "Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv."
           // );
           return;
         }
 
-            
         const siblings = Array.from(contentChild.children);
         let isWrapping = false;
         const spoilerDiv = document.createElement("div");
@@ -1555,8 +1535,8 @@ function finishWrap(className) {
             spoilerDiv.appendChild(startWrap.cloneNode(true));
 
             // После строки 1541
-                    
-                      //   "SpoilerDiv content before removing startWrap and finishWrap:",
+
+            //   "SpoilerDiv content before removing startWrap and finishWrap:",
             //   spoilerDiv.innerHTML
             // );
 
@@ -1565,19 +1545,18 @@ function finishWrap(className) {
 
           if (sibling === finishWrap) {
             spoilerDiv.appendChild(finishWrap.cloneNode(true));
-                      break;
+            break;
           }
 
           if (isWrapping) {
             const clonedSibling = sibling.cloneNode(true);
             spoilerDiv.appendChild(clonedSibling);
-                      sibling.remove();
+            sibling.remove();
           }
         }
 
         startWrap.parentNode.insertBefore(spoilerDiv, startWrap.nextSibling);
 
-            
         if (className === "spoiler") {
           const spoilerDesc = document.createElement("h1");
           spoilerDesc.classList.add("spoiler_desc");
@@ -1586,9 +1565,9 @@ function finishWrap(className) {
             spoilerDesc,
             spoilerDiv.nextSibling
           );
-                }
+        }
         if (className === "remove") {
-                  removeRed();
+          removeRed();
         }
         startWrap.remove();
         finishWrap.remove();
@@ -1808,7 +1787,6 @@ function gatherPlayersAndInsert() {
     totalPlayers.remove();
   }
 
-
   // Собираем все элементы .players > li со всей страницы
   const allPlayers = document.querySelectorAll(".players > li");
 
@@ -1835,8 +1813,8 @@ function gatherPlayersAndInsert() {
   if (totalDurationChapter) {
     // Вставляем ul.players в начало div.totalduration
     totalDurationChapter.insertBefore(actorsUI, totalDurationChapter.lastChild);
-    } else {
-    }
+  } else {
+  }
 }
 
 function removeDuplicates(array) {
@@ -1973,7 +1951,7 @@ function logFilter() {
         contentSpans.forEach((span) => {
           // Получаем текст из спана и приводим его к нижнему регистру
           const textContent = span.textContent.toLowerCase();
-        
+
           // Проверяем, содержит ли текст ключевое слово
           if (textContent.includes(lowerKeyword)) {
             // console.log("Keyword found in:", span);
@@ -1997,15 +1975,15 @@ function logFilter() {
     removeWords.forEach((removeWord) => {
       // Приводим "анти-слово" к нижнему регистру
       const lowerRemoveWord = removeWord.toLowerCase();
-    
+
       // Выбираем все главы, которые не свернуты
       const chapters = document.querySelectorAll(chapterCollapseStatus);
-    
+
       // Перебираем каждую главу
       chapters.forEach((chapter) => {
         // Выбираем все спаны с классом "logline" внутри контента главы
         const contentSpans = chapter.querySelectorAll(".content > .logline");
-      
+
         // Перебираем каждый спан внутри контента
         contentSpans.forEach((span) => {
           // Получаем текст из спана и приводим его к нижнему регистру
@@ -2014,7 +1992,7 @@ function logFilter() {
 
           // Проверяем, содержит ли текст "анти-слово"
           if (textContent.includes(lowerRemoveWord)) {
-                      // Если содержит, удаляем класс "selected" у спана
+            // Если содержит, удаляем класс "selected" у спана
             span.classList.remove("selected");
           }
         });
@@ -2031,7 +2009,6 @@ function logFilter() {
 }
 
 function searchVirt() {
-
   // Снимаем selected со всех классов
   const selectedElements = document.querySelectorAll(".selected");
   selectedElements.forEach((element) => {
@@ -2052,8 +2029,8 @@ function searchVirt() {
   // Скроллим к первому элементу p.virt
   if (indexes.length > 0) {
     scrollToCenter(virtElements[0]); // Изменение здесь
-    } else {
-    }
+  } else {
+  }
   openselectedChapters();
   removeCollapsedChapters();
   removeUnselectedLoglines();
@@ -2107,8 +2084,7 @@ function toggleCollapse(event) {
   }
 }
 
-function testing() {
-}
+function testing() {}
 
 function recombineFunction(spanClass) {
   function update(logline, player, content) {
@@ -2270,4 +2246,20 @@ function removeChaptersIfFewPlayers() {
       }
     }
   });
+}
+
+function removeActorsAndSymbols() {
+  const actorsDivs = document.querySelectorAll("div.actors");
+  actorsDivs.forEach((actorsDiv) => {
+    actorsDiv.remove();
+  });
+
+  const spans = document.querySelectorAll(
+    "span.comma, span.dot, span.space, span.column"
+  );
+  spans.forEach((span) => {
+    span.remove();
+  });
+
+  colorindex = 0;
 }
