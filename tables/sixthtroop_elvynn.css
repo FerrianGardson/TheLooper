@@ -14,17 +14,11 @@ a:hover {
 
 body {
   --background-color: #00000000;
-  --background-image: url(
-  https://i.postimg.cc/sXmXD5pn/image.png);
-  --background-image: url(
-  https://i.postimg.cc/sXmXD5pn/image.png);
-    --background-image: url(
-  https://i.postimg.cc/W1L800V4/2024-03-05-135846.png);
-  --post-color: #24334f;
-  --post-image: url(
-  https://i.imgur.com/EXNQ8cT.png);
-  --frame: url(
-  https://i.postimg.cc/YqJzfHgv/4.png);
+  --background-image: url(https://i.postimg.cc/VsbyHZm3/Wo-WScrn-Shot-020424-142836.png);
+  --background-image: url(https://i.postimg.cc/sXmXD5pn/image.png);
+  --post-color: #0e2a61;
+  --post-image: url(https://i.imgur.com/EXNQ8cT.png);
+  --frame: url(https://i.postimg.cc/YqJzfHgv/4.png);
   --info: #00000070;
   --header-color: #ffd100;
   --link: #ffd100;

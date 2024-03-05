@@ -2306,16 +2306,21 @@ function processPlayerNames() {
 
     // Поиск имени в npcData
     const npcInfo = npcData.find((npc) => npc[0] === playerName);
+    const playerInfo = playerData.find((player) => player[0] === playerName);
     if (npcInfo) {
       span.textContent = npcInfo[2]; // Заменяем текстовое содержимое на полное имя из npcData
       colorClass = npcInfo[1]; // Получаем цветовой класс из npcData
+    }
+    // Поиск имени в playerData, если не найдено в npcData
+    else if (playerInfo) {
+      colorClass = playerInfo[1]; // Получаем цветовой класс из playerData
+      span.textContent = playerInfo[2];
     } else {
-      // Поиск имени в playerData, если не найдено в npcData
-      const playerInfo = playerData.find((player) => player[0] === playerName);
-      if (playerInfo) {
-        colorClass = playerInfo[1]; // Получаем цветовой класс из playerData
-        span.textContent = playerInfo[2];
-      }
+      // Генерируем случайный индекс для выбора случайного цвета из массива randomColors
+      const randomIndex = Math.floor(Math.random() * randomColors.length);
+      colorClass = randomColors[randomIndex]; // Выбираем случайный цвет из массива randomColors
+      span.textContent = playerName; // Оставляем имя игрока без изменений
+      randomColors.splice(randomIndex, 1); // Удаляем выбранный цвет из массива randomColors, чтобы он не использовался повторно
     }
 
     // Добавляем цветовой класс к элементу span.player

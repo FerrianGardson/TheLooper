@@ -546,7 +546,38 @@
         </div>
       </div>
     </div>
-    <script src="./tables/script.js"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+      function toggleStylesheet(className) {
+        const styleLinks = document.querySelectorAll(`.style.${className}`);
+        styleLinks.forEach((link) => {
+          if (link.disabled) {
+            link.disabled = false;
+          } else {
+            link.disabled = true;
+          }
+        });
+      }
+
+      function toggleExternalLinks() {
+        const localStyles = document.querySelectorAll(".local.style");
+        const externalStyles = document.querySelectorAll(".external.style");
+
+        localStyles.forEach((style) => {
+          style.disabled = true;
+        });
+
+        externalStyles.forEach((style) => {
+          style.disabled = false;
+        });
+      }
+    </script>
+    <script src="./tables/script.js"></script>
+    <!-- <script
+      src="https://ferriangardson.github.io/TheLooper/tables/script.js"
+      class="external"
+      disabled
+    ></script> -->
   </body>
 </html>
