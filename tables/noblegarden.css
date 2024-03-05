@@ -1238,6 +1238,7 @@ span.yell {
 
 p.logline.emote > .player {
   font-weight: unset;
+  color: unset;
 }
 
 .no-margin > p {
