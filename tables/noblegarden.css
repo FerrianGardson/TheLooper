@@ -690,6 +690,9 @@ ul.npc > li:hover {
 .npc {
   display: inline;
   flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.5rem;
 }
 
 p.logline {
@@ -1188,6 +1191,10 @@ span.say {
 
 .actors {
   margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 0.5rem;
 }
 
 .totalduration.chapter {
@@ -1223,7 +1230,7 @@ span.yell {
 
 .player + .player,
 .npc {
-  margin-left: 0.5em;
+  /* margin-left: 0.5em; */
 }
 
 .no-margin > p+p {

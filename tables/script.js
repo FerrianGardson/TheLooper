@@ -149,6 +149,16 @@ const npcData = [
   ["Ваггат"],
   ["Пехотинец"],
   ["Глашатай"],
+  ["Глашатай"],
+  ["Глашатай"],
+  ["Глашатай"],
+  ["Глашатай"],
+  ["Глашатай"],
+  ["Глашатай"],
+  ["Глашатай"],
+  ["Глашатай"],
+  ["Глашатай"],
+  ["Глашатай"],
 ];
 
 const randomColors = [
@@ -1459,7 +1469,6 @@ function divideChapter() {
   console.log("divideChapter finish");
 }
 
-
 let wrapping = false;
 
 function startWrap() {
@@ -1619,6 +1628,8 @@ function createPlayerItem(playerName) {
 }
 
 function playerList() {
+  console.log("Функция playerList начата");
+
   // Получаем все элементы с классом "content"
   const contents = document.querySelectorAll(".content");
 
@@ -1647,17 +1658,15 @@ function playerList() {
       const playerName = player.textContent.trim(); // Получаем имя игрока
 
       // Если имя игрока уникально и он не является NPC
-      if (!uniquePlayers.has(playerName) && !npcData[playerName]) {
+      if (!uniquePlayers.has(playerName) && !npcData.find((npc) => npc.includes(playerName)) && !playerData.find((player) => player.includes(playerName)) && playerName.indexOf("-") === -1 && playerName.indexOf(" ") === -1) {
         // Если у игрока одна часть имени, добавляем его в список игроков
-        if (playerName.indexOf(" ") === -1 && playerName.indexOf("-") === -1) {
-          playerList.appendChild(createPlayerItem(playerName));
-        } else {
-          // Если у игрока более одной части имени, он считается NPC и добавляется в соответствующий список
-          npcList.appendChild(createPlayerItem(playerName));
-        }
-        // Добавляем имя игрока в список уникальных имен
-        uniquePlayers.add(playerName);
+        playerList.appendChild(createPlayerItem(playerName));
+      } else {
+        // Если у игрока более одной части имени, он считается NPC и добавляется в соответствующий список
+        npcList.appendChild(createPlayerItem(playerName));
       }
+      // Добавляем имя игрока в список уникальных имен
+      uniquePlayers.add(playerName);
     });
 
     // Добавляем списки игроков и NPC в общий контейнер
@@ -1667,7 +1676,10 @@ function playerList() {
     // Очищаем список уникальных имен перед переходом к следующему "content"
     uniquePlayers.clear();
   });
+
+  console.log("Функция playerList завершена");
 }
+
 
 const talkingPlayer = ".say > .player, .yell > .player, .virt > .player";
 
