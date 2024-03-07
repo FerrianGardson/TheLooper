@@ -26,12 +26,13 @@ function updateAll() {
 }
 
 function combineFunctions() {
+  console.log("CombineFunctions");
   combineSay("emote");
   combineSay("say");
   combineSay("virt");
   combineSay("yell");
   combineSay("story");
-  //sayToEmote();
+  sayToEmote();
   virtToSay();
   removeDashes();
   // thirdPerson("emote", "say");
@@ -39,6 +40,7 @@ function combineFunctions() {
   // emoteToSay();
   // thirdPerson("say", "emote");
   // thirdPerson("yell", "emote");
+  console.log("End");
 }
 
 console.log("main, 03-03-2024");
@@ -861,7 +863,9 @@ function selectAll() {
   isAllSellected = !isAllSellected;
 }
 
-function debug() {}
+function debug() {
+  combineFunctions();
+}
 
 function calculateTotalDuration() {
   // console.log("Начинаем подсчет общей продолжительности...");
@@ -1210,9 +1214,9 @@ document.addEventListener("keydown", function (event) {
   } else if (event.key === "ArrowLeft") {
     pasteText();
   } else if (["[", "х"].includes(event.key) && event.ctrlKey) {
-    deleteBefore();
+    deleteElements("before");
   } else if (["]", "ъ"].includes(event.key) && event.ctrlKey) {
-    deleteAfter();
+    deleteElements("after");
   } else if (event.key === "ArrowRight") {
     pasteImg();
   } else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
@@ -1238,7 +1242,11 @@ document.addEventListener("keydown", function (event) {
   } else if (event.key === "d") {
     debug();
   } else if (event.key === "+") {
+    console.log("RecombineFunctions");
     recombineFunction("say");
+    recombineFunction("yell");
+    recombineFunction("story");
+    console.log("End");
   } else if (event.key === ",") {
     testing();
   }
@@ -1327,44 +1335,52 @@ function moveElement(event) {
   });
 }
 
-function deleteBefore() {
+function deleteElements(position) {
   const hover = document.querySelectorAll(".content > :hover, h2.date:hover");
 
   hover.forEach((element) => {
     if (element.tagName.toLowerCase() === "h2") {
-      // console.log("Под курсором h2.date");
       const closestChapter = element.closest(".chapter");
       if (closestChapter) {
-        let sibling = closestChapter.previousElementSibling;
+        let sibling;
+        if (position === "before") {
+          sibling = closestChapter.previousElementSibling;
+        } else if (position === "after") {
+          sibling = closestChapter.nextElementSibling;
+        }
+
         while (sibling && sibling.tagName !== "H2") {
           sibling.classList.add("remove");
-          sibling = sibling.previousElementSibling;
+          if (position === "before") {
+            sibling = sibling.previousElementSibling;
+          } else if (position === "after") {
+            sibling = sibling.nextElementSibling;
+          }
         }
       }
     } else {
-      // console.log("Под курсором .content > :hover");
       const contentContainer = element.closest(".content");
-      if (!contentContainer) return; // Пропускаем, если элемент не находится в контейнере .content
+      if (!contentContainer) return;
 
       const targetElement = element;
+      let currentElement;
+      if (position === "before") {
+        currentElement = targetElement.previousElementSibling;
+      } else if (position === "after") {
+        currentElement = targetElement.nextElementSibling;
+      }
 
-      let currentElement = targetElement.previousElementSibling;
       while (currentElement) {
         const siblingToRemove = currentElement;
-        currentElement = currentElement.previousElementSibling;
+        if (position === "before") {
+          currentElement = currentElement.previousElementSibling;
+        } else if (position === "after") {
+          currentElement = currentElement.nextElementSibling;
+        }
         siblingToRemove.remove();
       }
     }
   });
-
-  scrollToCenter(targetElement);
-  // Удаление всех элементов с классом .chapter.remove из #chatlog
-  document
-    .querySelectorAll("#chatlog > .chapter.remove")
-    .forEach((element) => element.remove());
-
-  // Обновление времени и актеров
-  updateAll();
 }
 
 function divideChapter() {
@@ -1415,44 +1431,6 @@ function divideChapter() {
   // Обновляем время и актеров только для текущего .chapter и нового .chapter
   updateAll(currentChapter);
   updateAll(currentChapter.previousElementSibling);
-}
-
-function deleteAfter() {
-  const hover = document.querySelectorAll(".content > :hover, h2.date:hover");
-
-  hover.forEach((element) => {
-    if (element.tagName.toLowerCase() === "h2") {
-      // console.log("Под курсором h2.date");
-      const closestChapter = element.closest(".chapter");
-      if (closestChapter) {
-        let sibling = closestChapter.nextElementSibling;
-        while (sibling && sibling.id !== "chatlog") {
-          sibling.classList.add("remove");
-          sibling = sibling.nextElementSibling;
-        }
-      }
-    } else {
-      // console.log("Под курсором .content > :hover");
-      const contentContainer = element.closest(".content");
-      if (!contentContainer) return; // Пропускаем, если элемент не находится в контейнере .content
-
-      const targetElement = element;
-
-      let currentElement = targetElement.nextElementSibling;
-      while (currentElement) {
-        const siblingToRemove = currentElement;
-        currentElement = currentElement.nextElementSibling;
-        siblingToRemove.remove();
-      }
-    }
-  });
-  // Удаление всех элементов с классом .chapter.remove из #chatlog
-  document
-    .querySelectorAll("#chatlog > .chapter.remove")
-    .forEach((element) => element.remove());
-
-  // Обновление времени и актеров
-  updateAll();
 }
 
 let wrapping = false;
@@ -2081,6 +2059,7 @@ function recombineFunction(spanClass) {
 
   // Закончились функции, пошла основная
   let loglines = document.querySelectorAll(`.content > .logline:not(.paper)`);
+  console.log("loglines: ", loglines);
 
   // Переменные
   let player;
@@ -2123,6 +2102,7 @@ function recombineFunction(spanClass) {
       } else {
         combined.push(content);
         prevLogline.classList.add("remove", "selected");
+        logline.classList.add("remove", "selected");
         console.log("combined: ", combined);
         // prevLogline.remove();
       }
@@ -2159,6 +2139,7 @@ function recombineFunction(spanClass) {
 
     update(logline, player, content);
   }
+  removeRed();
 }
 
 function scrollToCenter(targetElement) {
@@ -2172,7 +2153,9 @@ function scrollToCenter(targetElement) {
 
 function processPlayerNames() {
   // Получаем все элементы span.player
-  const playerSpans = document.querySelectorAll(".say > .player, .actors .player");
+  const playerSpans = document.querySelectorAll(
+    ".say > .player, .actors .player"
+  );
 
   // Проходимся по каждому элементу
   playerSpans.forEach((span) => {
@@ -2200,7 +2183,6 @@ function processPlayerNames() {
     span.classList.add(colorClass);
   });
 }
-
 
 function removeChaptersIfFewPlayers() {
   // Получаем все элементы .chapter
