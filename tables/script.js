@@ -63,13 +63,6 @@ const space = document.createElement("span");
 space.classList.add("space");
 space.textContent = " ";
 
-const npcData = [
-  ["Рыцарь-лейтенант Сиглим Сталекрут", "yellow", "Сиглим Сталекрут"],
-  ["Фэрриан Гардсон", "rogue", "Фэрриан Гардсон"],
-  ["Дробитель", "death-knight", "Дробитель"],
-  ["Сэр Сэмьюэл Лексон", "demon-hunter", "Сэр Сэмьюэл Дж. Лексон"],
-];
-
 const playerData = [
   ["Фэрриан", "rogue", "Фэрриан Гардсон"],
   ["Малет", "shaman", "Малет Трант"],
@@ -82,8 +75,9 @@ const playerData = [
   ["Дерек", "hunter", "Дерек Кларк"],
   ["Кэролай", "priest", "Кэролай Эстер"],
   ["Сахаджи", "shaman", "Сахаджи"],
-  ["Думитру", "druid", "Думитру Феликс Цимитяну"],
+  ["Думитру", "druid", "Думитру"],
   ["Каторжник", "warrior", "Рой Редвуд"],
+  ["Хофманн", "warrior", "Карл Хофманн"],
   ["Кариночка", "demon-hunter", "Карина"],
   ["Пачек", "warrior", "Офелия Пачек"],
   ["Шенн", "shaman", "Шенн Вельт"],
@@ -92,6 +86,67 @@ const playerData = [
   ["Кирке", "warrior", "Гюнтер Кирке"],
   ["Ашира", "priest", "Ашира Фраймс"],
   ["Паулина", "priest", "Паулина Санчес"],
+  ["Сью", "red", "Сью Блэкрич"],
+  ["Хейвинд", "red", "Сью Блэкрич"],
+];
+
+const npcData = [
+  ["Рыцарь-лейтенант Сиглим Сталекрут", "yellow", "Сиглим Сталекрут"],
+  ["Дробитель", "death-knight", "Дробитель"],
+  ["Сэр Сэмьюэл Лексон", "demon-hunter", "Сэр Сэмьюэл Дж. Лексон"],
+  ["Фэрриан Гардсон", "rogue", "Фэрриан Гардсон"],
+  ["Рядовой Равенхольт", "shaman"],
+  ["Гнолл"],
+  ["Баззерс"],
+  ["Охранник"],
+  ["Стражник"],
+  ["Богачка"],
+  ["Богач"],
+  ["Рыбак"],
+  ["Бедняк"],
+  ["Рыболов"],
+  ["Повар"],
+  ["Бармен"],
+  ["Разнорабочий"],
+  ["Мурлок"],
+  ["Жрица"],
+  ["Извозчик"],
+  ["Ветроплет"],
+  ["Пирожок"],
+  ["Надсмотрщик"],
+  ["Вызыватель"],
+  ["Горнорабочий"],
+  ["Надзиратель"],
+  ["Шахтер"],
+  ["Сторож"],
+  ["Головорез"],
+  ["Стрелок"],
+  ["Почтальон"],
+  ["Дундосик"],
+  ["Инженер"],
+  ["Заступник"],
+  ["Дозорный"],
+  ["Хильда"],
+  ["Охранитель"],
+  ["Охотник"],
+  ["Хобгоблин"],
+  ["Посетительница"],
+  ["Посетитель"],
+  ["Кожевник"],
+  ["Нешрешшс"],
+  ["Охотница"],
+  ["Лекарь"],
+  ["Священник"],
+  ["Дробитель"],
+  ["Нищий"],
+  ["Медведь"],
+  ["Мадибус"],
+  ["Тейлзер"],
+  ["Ребенок"],
+  ["Ребёнок"],
+  ["Ваггат"],
+  ["Пехотинец"],
+  ["Глашатай"],
 ];
 
 const randomColors = [
@@ -137,73 +192,6 @@ const randomColors = [
   "random-18",
   "random-19",
 ];
-
-const npcNames = {
-  Гнолл: true,
-  Баззерс: true,
-  Охранник: true,
-  Стражник: true,
-  Богачка: true,
-  Богач: true,
-  Рыбак: true,
-  Бедняк: true,
-  Рыболов: true,
-  Повар: true,
-  Бармен: true,
-  Разнорабочий: true,
-  Мурлок: true,
-  Жрица: true,
-  Извозчик: true,
-  Ветроплет: true,
-  Пирожок: true,
-  Надсмотрщик: true,
-  Вызыватель: true,
-  Горнорабочий: true,
-  Надзиратель: true,
-  Шахтер: true,
-  Сторож: true,
-  Головорез: true,
-  Стрелок: true,
-  Почтальон: true,
-  Дундосик: true,
-  Инженер: true,
-  Заступник: true,
-  Дозорный: true,
-  Хильда: true,
-  Охранитель: true,
-  Охотник: true,
-  Хобгоблин: true,
-  Посетительница: true,
-  Посетитель: true,
-  Кожевник: true,
-  Нешрешшс: true,
-  Охотница: true,
-  Лекарь: true,
-  Священник: true,
-  Дробитель: true,
-  Нищий: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-};
 
 async function handleTxtFile(file) {
   chatlog.innerHTML = "";
@@ -873,8 +861,7 @@ function selectAll() {
   isAllSellected = !isAllSellected;
 }
 
-function debug() {
-}
+function debug() {}
 
 function calculateTotalDuration() {
   // console.log("Начинаем подсчет общей продолжительности...");
@@ -1663,7 +1650,7 @@ function playerList() {
       const playerName = player.textContent.trim(); // Получаем имя игрока
 
       // Если имя игрока уникально и он не является NPC
-      if (!uniquePlayers.has(playerName) && !npcNames[playerName]) {
+      if (!uniquePlayers.has(playerName) && !npcData[playerName]) {
         // Если у игрока одна часть имени, добавляем его в список игроков
         if (playerName.indexOf(" ") === -1 && playerName.indexOf("-") === -1) {
           playerList.appendChild(createPlayerItem(playerName));
@@ -2185,7 +2172,7 @@ function recombineFunction(spanClass) {
 function scrollToCenter(targetElement) {
   const scrollOptions = {
     top: targetElement.offsetTop - window.innerHeight / 2,
-    behavior: "smooth",
+    // behavior: "smooth",
   };
 
   window.scrollTo(scrollOptions);
@@ -2193,26 +2180,23 @@ function scrollToCenter(targetElement) {
 
 function processPlayerNames() {
   // Получаем все элементы span.player
-  const playerSpans = document.querySelectorAll(
-    ".say > .player, .actors .player"
-  );
+  const playerSpans = document.querySelectorAll(".say > .player, .actors .player");
 
   // Проходимся по каждому элементу
   playerSpans.forEach((span) => {
     const playerName = span.textContent.trim(); // Получаем текстовое содержимое элемента
     let colorClass; // Переменная для цветового класса
 
-    // Поиск имени в npcData
-    const npcInfo = npcData.find((npc) => npc[0] === playerName);
-    const playerInfo = playerData.find((player) => player[0] === playerName);
+    // Поиск информации о NPC по имени игрока в npcData
+    const npcInfo = npcData.find((npc) => {
+      return npc[0] === playerName || npc[2] === playerName;
+    });
+
     if (npcInfo) {
-      span.textContent = npcInfo[2]; // Заменяем текстовое содержимое на полное имя из npcData
+      // Если есть второй столбец, берем второе значение, иначе первое
+      const npcName = npcInfo[2] ? npcInfo[2] : npcInfo[0];
+      span.textContent = npcName; // Заменяем текстовое содержимое на полное имя из npcData
       colorClass = npcInfo[1]; // Получаем цветовой класс из npcData
-    }
-    // Поиск имени в playerData, если не найдено в npcData
-    else if (playerInfo) {
-      colorClass = playerInfo[1]; // Получаем цветовой класс из playerData
-      span.textContent = playerInfo[2];
     } else {
       const randomIndex = colorindex % randomColors.length; // Получаем индекс цвета с помощью остатка от деления
       colorClass = randomColors[randomIndex]; // Выбираем случайный цвет из массива randomColors
@@ -2224,6 +2208,7 @@ function processPlayerNames() {
     span.classList.add(colorClass);
   });
 }
+
 
 function removeChaptersIfFewPlayers() {
   // Получаем все элементы .chapter
