@@ -9,24 +9,26 @@ function formatHTML() {
 }
 
 function updateAll() {
+  console.log("!!! updateAll started");
   removeActorsAndSymbols();
-  removePlayersWithDungeonMasterNames();
+  // removePlayersWithDungeonMasterNames();
   playerList();
-  // removeChaptersIfFewPlayers();
   processPlayerNames();
-  addTimeToChapter();
   synchronizePlayerColors();
+  // gatherPlayersAndInsert();
+  addTimeToChapter();
   calculateTotalDuration();
-  gatherPlayersAndInsert();
   addSpaceToEmotePlayers();
   addColumnToPlayers();
   addCommaAndDotToPlayerList();
   combineFunctions();
+  removeChaptersIfFewPlayers();
   // recombineFunctions();
+  console.log("updateAll finished");
 }
 
 function combineFunctions() {
-  console.log("CombineFunctions");
+  console.log("combineFunctions started");
   combineSay("emote");
   combineSay("say");
   combineSay("virt");
@@ -34,13 +36,13 @@ function combineFunctions() {
   combineSay("story");
   sayToEmote();
   virtToSay();
+  emoteToSay();
   removeDashes();
   // thirdPerson("emote", "say");
   // thirdPerson("virt", "say");
-  // emoteToSay();
   // thirdPerson("say", "emote");
   // thirdPerson("yell", "emote");
-  console.log("End");
+  console.log("combineFunctions finished");
 }
 
 console.log("main, 03-03-2024");
