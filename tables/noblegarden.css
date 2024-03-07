@@ -687,8 +687,8 @@ ul.npc > li:hover {
 }
 
 .players,
-.npc {
-  display: inline;
+.npcs {
+  /* display: inline; */
   flex-wrap: wrap;
   display: flex;
   flex-direction: row;
@@ -1191,10 +1191,12 @@ span.say {
 
 .actors {
   margin-bottom: 1rem;
+  /* display: block; */
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
   column-gap: 0.5rem;
+  width: 100%;
+  flex-direction: row;
 }
 
 .totalduration.chapter {
@@ -1228,12 +1230,7 @@ span.yell {
   text-transform: uppercase;
 }
 
-.player + .player,
-.npc {
-  /* margin-left: 0.5em; */
-}
-
-.no-margin > p+p {
+.no-margin > p + p {
   margin-left: 0.3em;
 }
 
@@ -1249,9 +1246,33 @@ p.logline.emote > .player {
 }
 
 .no-margin > p {
-    display: inline;
+  display: inline;
 }
 
 .no-display {
-  display: none!important;
+  display: none !important;
+}
+
+.npcs li {
+  opacity: 0.25;
+}
+
+.npcs li:hover {
+  opacity: 1;
+}
+
+.npcs li {
+  opacity: 0.25;
+}
+
+.npcs li:hover {
+  opacity: 1;
+}
+
+.npcs li {
+  opacity: 0.25;
+}
+
+.npcs li:hover {
+  opacity: 1;
 }

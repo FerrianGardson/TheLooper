@@ -1628,58 +1628,76 @@ function createPlayerItem(playerName) {
 }
 
 function playerList() {
-  console.log("Функция playerList начата");
+  // Функция для добавления игрока в список игроков
+  function addPlayer(name, playerList, uniquePlayers) {
+    const listItem = document.createElement("li");
+    listItem.textContent = name;
+    listItem.classList.add("player");
+    playerList.appendChild(listItem);
+    uniquePlayers.add(name);
+  }
 
-  // Получаем все элементы с классом "content"
-  const contents = document.querySelectorAll(".content");
+  // Функция для добавления NPC в список NPC
+  function addNPC(name, npcList, uniquePlayers) {
+    const listItem = document.createElement("li");
+    listItem.textContent = name;
+    listItem.classList.add("player");
+    npcList.appendChild(listItem);
+    uniquePlayers.add(name);
+  }
 
-  // Перебираем каждый элемент "content"
-  contents.forEach((content) => {
-    // Получаем всех игроков внутри текущего "content"
-    const players = content.querySelectorAll(talkingPlayer);
+  // Находим все главы
+  const chapters = document.querySelectorAll(".chapter");
 
-    // Создаем элементы для игроков и NPC
-    const actorsDiv = document.createElement("div"); // Общий контейнер для всех актеров
-    const playerList = document.createElement("ul"); // Список игроков
-    const npcList = document.createElement("ul"); // Список NPC
+  // Проходимся по каждой главе
+  chapters.forEach((chapter) => {
+    // Находим все контенты в главе
+    const contents = chapter.querySelectorAll(".content");
 
-    // Добавляем классы к спискам игроков и NPC
-    playerList.classList.add("players");
-    npcList.classList.add("npc");
+    // Проходимся по каждому контенту
+    contents.forEach((content) => {
+      // Создаем обертку для актеров
+      const actorsDiv = document.createElement("div");
+      actorsDiv.classList.add("actors");
+      chapter.insertBefore(actorsDiv, content);
 
-    // Добавляем класс к общему контейнеру
-    actorsDiv.classList.add("actors");
+      // Создаем список игроков и NPC
+      const playerList = document.createElement("ul");
+      playerList.classList.add("players");
+      actorsDiv.appendChild(playerList);
 
-    // Вставляем общий контейнер перед текущим "content"
-    content.parentNode.insertBefore(actorsDiv, content);
+      const npcList = document.createElement("ul");
+      npcList.classList.add("npcs");
+      actorsDiv.appendChild(npcList);
 
-    // Перебираем всех игроков в текущем "content"
-    players.forEach((player) => {
-      const playerName = player.textContent.trim(); // Получаем имя игрока
+      // Создаем множество для хранения уникальных имен игроков и NPC
+      const uniquePlayers = new Set();
 
-      // Если имя игрока уникально и он не является NPC
-      if (!uniquePlayers.has(playerName) && !npcData.find((npc) => npc.includes(playerName)) && !playerData.find((player) => player.includes(playerName)) && playerName.indexOf("-") === -1 && playerName.indexOf(" ") === -1) {
-        // Если у игрока одна часть имени, добавляем его в список игроков
-        playerList.appendChild(createPlayerItem(playerName));
-      } else {
-        // Если у игрока более одной части имени, он считается NPC и добавляется в соответствующий список
-        npcList.appendChild(createPlayerItem(playerName));
-      }
-      // Добавляем имя игрока в список уникальных имен
-      uniquePlayers.add(playerName);
+      // Находим всех игроков в текущем контенте
+      const playerSpans = content.querySelectorAll(talkingPlayer);
+
+      // Проходимся по каждому игроку
+      playerSpans.forEach((playerSpan) => {
+        const name = playerSpan.textContent.trim();
+        // Проверяем, не было ли уже добавлено такое имя
+        if (!uniquePlayers.has(name)) {
+          // Проверяем, является ли игрок игроком персонажа или NPC
+          if (playerData.some((player) => player.includes(name))) {
+            addPlayer(name, playerList, uniquePlayers);
+          } else if (npcData.some((npc) => npc.includes(name))) {
+            addNPC(name, npcList, uniquePlayers);
+          } else if (!name.includes(" ") && !name.includes("-")) {
+            // Если имя не содержит пробелы и тире, считаем его игроком
+            addPlayer(name, playerList, uniquePlayers);
+          } else {
+            // В противном случае считаем его NPC
+            addNPC(name, npcList, uniquePlayers);
+          }
+        }
+      });
     });
-
-    // Добавляем списки игроков и NPC в общий контейнер
-    actorsDiv.appendChild(playerList);
-    actorsDiv.appendChild(npcList);
-
-    // Очищаем список уникальных имен перед переходом к следующему "content"
-    uniquePlayers.clear();
   });
-
-  console.log("Функция playerList завершена");
 }
-
 
 const talkingPlayer = ".say > .player, .yell > .player, .virt > .player";
 
