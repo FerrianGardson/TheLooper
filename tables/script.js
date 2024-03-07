@@ -2076,17 +2076,22 @@ function scrollToNextSelected() {
 
 function postClear() {
   // Создаем массив со значениями, которые мы хотим удалить
-  const valuesToRemove = ["Существу", "Настой удачи", "Другое значение"];
+  const valuesToRemove = [
+    "Вы получаете предмет:",
+    "Существу",
+    "Настой удачи",
+    "Другое значение",
+  ];
 
-  // Находим все элементы <p> с классом logline
-  const loglines = document.querySelectorAll("p.logline");
+  // Находим все элементы с классом "logline"
+  const loglines = document.querySelectorAll(".logline");
 
-  // Перебираем найденные элементы
-  loglines.forEach((element) => {
-    // Проверяем, содержит ли значение элемента одно из значений для удаления
-    if (valuesToRemove.includes(element.textContent.trim())) {
-      // Если содержит одно из указанных значений, удаляем элемент
-      element.remove();
+  // Проходимся по каждому элементу
+  loglines.forEach((logline) => {
+    // Проверяем, содержит ли элемент хотя бы одно из значений для удаления
+    if (valuesToRemove.some((value) => logline.textContent.includes(value))) {
+      // Удаляем элемент, если текст соответствует хотя бы одному из значений
+      logline.remove();
     }
   });
 }
