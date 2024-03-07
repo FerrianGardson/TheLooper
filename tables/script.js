@@ -12,7 +12,7 @@ function updateAll() {
   removeActorsAndSymbols();
   removePlayersWithDungeonMasterNames();
   playerList();
-  removeChaptersIfFewPlayers();
+  // removeChaptersIfFewPlayers();
   processPlayerNames();
   addTimeToChapter();
   synchronizePlayerColors();
@@ -1384,35 +1384,63 @@ function deleteElements(position) {
 }
 
 function divideChapter() {
+  console.log("divideChapter start");
+
+  // Получаем все элементы, над которыми произведено наведение, внутри .content
   const hoveredElements = document.querySelectorAll(".content > :hover");
+
+  // Проверяем, есть ли наведенные элементы
+  if (hoveredElements.length === 0) {
+    console.error("Не найдено наведенных элементов.");
+    return;
+  }
+
+  // Массив для хранения строк HTML, которые будут перемещены в новую главу
   let migratingLoglines = [];
 
+  // Перебираем каждый наведенный элемент
   hoveredElements.forEach((element) => {
+    // Проверяем, является ли элемент класса "logline"
+    if (!element.classList.contains("logline")) {
+      console.warn("Наведенный элемент не является логлайном.");
+      return;
+    }
+
+    // Перемещаем все предыдущие элементы до первого наведенного элемента
     let currentElement = element.previousElementSibling;
     while (currentElement) {
-      migratingLoglines.unshift(currentElement.outerHTML);
+      migratingLoglines.unshift(currentElement.outerHTML); // Добавляем HTML-строку в начало массива
       const siblingToRemove = currentElement;
       currentElement = currentElement.previousElementSibling;
-      siblingToRemove.remove();
+      siblingToRemove.remove(); // Удаляем текущий элемент
     }
   });
 
-  // Озвучиваем в консоль содержимое массива
+  // Проверяем, найдены ли элементы для перемещения
+  if (migratingLoglines.length === 0) {
+    console.error("Не найдены логлайны для перемещения.");
+    return;
+  }
 
-  // Находим ближайший родительский .chapter
+  // Находим родительскую главу для наведенных элементов
   const currentChapter = hoveredElements[0].closest(".chapter");
+  if (!currentChapter) {
+    console.error("Не найдена глава для наведенных элементов.");
+    return;
+  }
 
-  // Копируем заголовок и актеров текущего .chapter
+  // Создаем заголовок для новой главы, добавляя знак "+" к существующему заголовку
   const chapterHeader = currentChapter
     .querySelector("h2.date")
-    .outerHTML.replace(/(<span class="title">.*)(<\/span>)/, "$1 +$2");
+    .outerHTML.replace(/(<span class="title">.*?)(<\/span>)/, "$1 +$2");
 
-  // Получаем timestamp первого logline в текущем .chapter
-  const firstLoglineTimestamp = currentChapter
-    .querySelector(".logline")
-    .getAttribute("timestamp");
+  // Находим первый элемент класса "logline" в текущей главе
+  const firstLogline = currentChapter.querySelector(".logline");
+  const firstLoglineTimestamp = firstLogline
+    ? firstLogline.getAttribute("timestamp")
+    : "";
 
-  // Создаем новый .chapter с атрибутом timestamp от первого logline
+  // Формируем HTML для новой главы, включая заголовок и перемещенные элементы
   const newChapterHTML = `
     <div class="chapter" timestamp="${firstLoglineTimestamp}">
       ${chapterHeader}
@@ -1422,16 +1450,15 @@ function divideChapter() {
     </div>
   `;
 
-  // Вставляем новый .chapter перед текущим
+  // Вставляем HTML новой главы перед текущей главой
   currentChapter.insertAdjacentHTML("beforebegin", newChapterHTML);
 
-  // Очищаем массив
+  // Очищаем массив, чтобы избежать повторного использования элементов
   migratingLoglines = [];
 
-  // Обновляем время и актеров только для текущего .chapter и нового .chapter
-  updateAll(currentChapter);
-  updateAll(currentChapter.previousElementSibling);
+  console.log("divideChapter finish");
 }
+
 
 let wrapping = false;
 
