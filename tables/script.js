@@ -1,3 +1,5 @@
+// Главные функции
+
 function formatHTML() {
   cleanText();
   splitSessions();
@@ -11,20 +13,28 @@ function formatHTML() {
 function updateAll() {
   console.log("!!! updateAll started");
   removeActorsAndSymbols();
-  // removePlayersWithDungeonMasterNames();
+  removePlayersWithDungeonMasterNames();
   playerList();
-  processPlayerNames();
+  gatherPlayersAndInsert();
   synchronizePlayerColors();
-  // gatherPlayersAndInsert();
   addTimeToChapter();
   calculateTotalDuration();
   addSpaceToEmotePlayers();
   addColumnToPlayers();
   addCommaAndDotToPlayerList();
   combineFunctions();
-  removeChaptersIfFewPlayers();
+  // removeChaptersIfFewPlayers();
   // recombineFunctions();
   console.log("updateAll finished");
+}
+function updateTime() {
+  console.log("!!! updateTime started");
+  removeActorsAndSymbols();
+  playerList();
+  addTimeToChapter();
+  calculateTotalDuration();
+  // recombineFunctions();
+  console.log("updateTime finished");
 }
 
 function combineFunctions() {
@@ -48,14 +58,19 @@ function combineFunctions() {
 console.log("main, 03-03-2024");
 toggleSelectionCSS();
 
+// Настройки
+
 let combineDelay = 5 * 1000;
 let hoursBetweenSessions = 0.5;
 let showtimestamps = false;
-
-let searchWithinCollapsed = true;
+let searchWithinCollapsed = false;
 let chapterCollapseStatus = searchWithinCollapsed
   ? ".chapter"
   : ".chapter:not(.collapsed)";
+let removeCollapsedFlag = false;
+let showTimestampsFlag = true;
+
+// Тире
 
 let dash = document.createElement("span");
 dash.classList.add("dash");
@@ -67,6 +82,7 @@ const space = document.createElement("span");
 space.classList.add("space");
 space.textContent = " ";
 
+// Игроки
 const playerData = [
   ["Фэрриан", "rogue", "Фэрриан Гардсон"],
   ["Малет", "shaman", "Малет Трант"],
@@ -94,6 +110,7 @@ const playerData = [
   ["Хейвинд", "red", "Сью Блэкрич"],
 ];
 
+// Неписи
 const npcData = [
   ["Рыцарь-лейтенант Сиглим Сталекрут", "yellow", "Сиглим Сталекрут"],
   ["Дробитель", "death-knight", "Дробитель"],
@@ -150,7 +167,7 @@ const npcData = [
   ["Ребёнок"],
   ["Ваггат"],
   ["Пехотинец"],
-  ["Глашатай"],
+  ["Сорорестраза"],
   ["Глашатай"],
   ["Глашатай"],
   ["Глашатай"],
@@ -163,6 +180,7 @@ const npcData = [
   ["Глашатай"],
 ];
 
+// Цвета
 const randomColors = [
   "demon-hunter",
   "warlock",
@@ -206,6 +224,8 @@ const randomColors = [
   "random-18",
   "random-19",
 ];
+
+// Код
 
 async function handleTxtFile(file) {
   chatlog.innerHTML = "";
@@ -276,7 +296,8 @@ function importTxt(text) {
       p.className = "logline";
       p.textContent = loglineBody;
       chatlog.appendChild(p);
-      if (showtimestamps) {
+      if (showTimestampsFlag == true) {
+        console.log("timestamp: ", timestamp);
       }
     }
   }
@@ -1393,6 +1414,7 @@ function deleteElements(position) {
       }
     }
   });
+  removeRed();
 }
 
 function divideChapter() {
@@ -1631,21 +1653,50 @@ function createPlayerItem(playerName) {
 
 function playerList() {
   // Функция для добавления игрока в список игроков
-  function addPlayer(name, playerList, uniquePlayers) {
-    const listItem = document.createElement("li");
-    listItem.textContent = name;
-    listItem.classList.add("player");
-    playerList.appendChild(listItem);
-    uniquePlayers.add(name);
+
+  function addPlayer(
+    name,
+    playerList,
+    uniquePlayers,
+    playerColorClass,
+    randomColors
+  ) {
+    if (!uniquePlayers.has(name)) {
+      const playerDataIndex = playerData.findIndex(
+        (player) => player[0] === name
+      );
+      const updatedName =
+        playerDataIndex !== -1 ? playerData[playerDataIndex][2] : name;
+      const listItem = document.createElement("li");
+      listItem.textContent = updatedName;
+      listItem.classList.add("player");
+      if (playerDataIndex !== -1) {
+        listItem.classList.add(playerData[playerDataIndex][1]);
+      } else {
+        const randomColorIndex = Math.floor(
+          Math.random() * randomColors.length
+        );
+        listItem.classList.add(randomColors[randomColorIndex]);
+      }
+      playerList.appendChild(listItem);
+      uniquePlayers.add(name);
+    } else {
+      console.log(`Игрок "${name}" уже существует в списке.`);
+    }
   }
 
   // Функция для добавления NPC в список NPC
+
   function addNPC(name, npcList, uniquePlayers) {
-    const listItem = document.createElement("li");
-    listItem.textContent = name;
-    listItem.classList.add("player");
-    npcList.appendChild(listItem);
-    uniquePlayers.add(name);
+    if (!uniquePlayers.has(name)) {
+      const listItem = document.createElement("li");
+      listItem.textContent = name;
+      listItem.classList.add("player");
+      npcList.appendChild(listItem);
+      uniquePlayers.add(name);
+    } else {
+      console.log(`Игрок "${name}" уже существует в списке.`);
+    }
   }
 
   // Находим все главы
@@ -1681,18 +1732,39 @@ function playerList() {
       // Проходимся по каждому игроку
       playerSpans.forEach((playerSpan) => {
         const name = playerSpan.textContent.trim();
-        // Проверяем, не было ли уже добавлено такое имя
+
         if (!uniquePlayers.has(name)) {
-          // Проверяем, является ли игрок игроком персонажа или NPC
-          if (playerData.some((player) => player.includes(name))) {
-            addPlayer(name, playerList, uniquePlayers);
-          } else if (npcData.some((npc) => npc.includes(name))) {
+          const playerDataIndex = playerData.findIndex(
+            (player) => player[0] === name
+          );
+          const isPlayer = playerDataIndex !== -1;
+          const isNPC = npcData.some((npc) => npc.includes(name));
+
+          if (isPlayer) {
+            console.log(`Имя "${name}" найдено в списке игроков.`);
+            addPlayer(
+              name,
+              playerList,
+              uniquePlayers,
+              playerData[playerDataIndex][1],
+              randomColors
+            );
+          } else if (isNPC) {
+            console.log(`Имя "${name}" найдено в списке NPC.`);
             addNPC(name, npcList, uniquePlayers);
           } else if (!name.includes(" ") && !name.includes("-")) {
-            // Если имя не содержит пробелы и тире, считаем его игроком
-            addPlayer(name, playerList, uniquePlayers);
+            console.log(
+              `Имя "${name}" не содержит пробелов и тире, считаем игроком`
+            );
+            addPlayer(
+              name,
+              playerList,
+              uniquePlayers,
+              "default-player-color",
+              randomColors
+            );
           } else {
-            // В противном случае считаем его NPC
+            console.log(`Имя "${name}"  содержит пробелов и тире, считаем NPC`);
             addNPC(name, npcList, uniquePlayers);
           }
         }
@@ -2021,7 +2093,9 @@ function logFilter() {
   // Разворачиваем все главы с найденными словами
   openselectedChapters();
   scrollToNextSelected();
-  removeCollapsedChapters();
+  if ((removeCollapsedFlag = true)) {
+    removeCollapsedChapters();
+  }
 }
 
 function searchVirt() {
@@ -2215,37 +2289,20 @@ function scrollToCenter(targetElement) {
   window.scrollTo(scrollOptions);
 }
 
-function processPlayerNames() {
-  // Получаем все элементы span.player
-  const playerSpans = document.querySelectorAll(
-    ".say > .player, .actors .player"
-  );
-
-  // Проходимся по каждому элементу
-  playerSpans.forEach((span) => {
-    const playerName = span.textContent.trim(); // Получаем текстовое содержимое элемента
-    let colorClass; // Переменная для цветового класса
-
-    // Поиск информации о NPC по имени игрока в npcData
-    const npcInfo = npcData.find((npc) => {
-      return npc[0] === playerName || npc[2] === playerName;
-    });
-
-    if (npcInfo) {
-      // Если есть второй столбец, берем второе значение, иначе первое
-      const npcName = npcInfo[2] ? npcInfo[2] : npcInfo[0];
-      span.textContent = npcName; // Заменяем текстовое содержимое на полное имя из npcData
-      colorClass = npcInfo[1]; // Получаем цветовой класс из npcData
-    } else {
-      const randomIndex = colorindex % randomColors.length; // Получаем индекс цвета с помощью остатка от деления
-      colorClass = randomColors[randomIndex]; // Выбираем случайный цвет из массива randomColors
-      span.textContent = playerName; // Оставляем имя игрока без изменений
-      colorindex++; // Увеличиваем индекс для следующего цвета
-    }
-
-    // Добавляем цветовой класс к элементу span.player
-    span.classList.add(colorClass);
+function removeActorsAndSymbols() {
+  const actorsDivs = document.querySelectorAll("div.actors");
+  actorsDivs.forEach((actorsDiv) => {
+    actorsDiv.remove();
   });
+
+  const spans = document.querySelectorAll(
+    "span.comma, span.dot, span.space, span.column"
+  );
+  spans.forEach((span) => {
+    span.remove();
+  });
+
+  colorindex = 0;
 }
 
 function removeChaptersIfFewPlayers() {
@@ -2269,20 +2326,4 @@ function removeChaptersIfFewPlayers() {
       }
     }
   });
-}
-
-function removeActorsAndSymbols() {
-  const actorsDivs = document.querySelectorAll("div.actors");
-  actorsDivs.forEach((actorsDiv) => {
-    actorsDiv.remove();
-  });
-
-  const spans = document.querySelectorAll(
-    "span.comma, span.dot, span.space, span.column"
-  );
-  spans.forEach((span) => {
-    span.remove();
-  });
-
-  colorindex = 0;
 }
