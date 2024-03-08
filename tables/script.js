@@ -55,11 +55,12 @@ function combineFunctions() {
   console.log("combineFunctions finished");
 }
 
-console.log("main, 03-03-2024");
-toggleSelectionCSS();
+
 
 // Настройки
 
+console.log("testing2, 09-03-2024");
+// toggleSelectionCSS();
 let combineDelay = 5 * 1000;
 let hoursBetweenSessions = 0.5;
 let showtimestamps = false;
@@ -68,7 +69,7 @@ let chapterCollapseStatus = searchWithinCollapsed
   ? ".chapter"
   : ".chapter:not(.collapsed)";
 let removeCollapsedFlag = false;
-let showTimestampsFlag = true;
+let showTimestampsFlag = false;
 
 // Тире
 
@@ -1808,25 +1809,36 @@ function addSpaceToEmotePlayers() {
 }
 
 function synchronizePlayerColors() {
+  console.log("**Синхронизация цветовых классов игроков:**");
+
   const chapters = document.querySelectorAll("div.chapter");
 
   const playerColorMap = new Map();
 
   chapters.forEach((chapter) => {
+    console.log(`**Глава:** ${chapter.textContent.trim()}`);
+
     const actorsPlayers = chapter.querySelectorAll(".actors li.player");
 
+    console.log(`**Список актеров:**`);
     actorsPlayers.forEach((actorPlayer) => {
       const playerName = actorPlayer.textContent.trim();
       const secondClass = Array.from(actorPlayer.classList)[1];
 
+      console.log(`  - ${playerName}: ${secondClass}`);
       playerColorMap.set(playerName, secondClass);
     });
 
     const contentPlayers = chapter.querySelectorAll(".content .player");
+    console.log(`**Игроки в контенте:**`);
     contentPlayers.forEach((contentPlayer) => {
       const playerName = contentPlayer.textContent.trim();
 
       const secondClass = playerColorMap.get(playerName);
+
+      console.log(
+        `  - ${playerName}: ${secondClass ? secondClass : "не найден"}`
+      );
 
       if (secondClass) {
         // Удаление всех имеющихся классов у игрока
@@ -1834,6 +1846,8 @@ function synchronizePlayerColors() {
       }
     });
   });
+
+  console.log("**Синхронизация завершена.**");
 }
 
 function addCommaAndDotToPlayerList() {
