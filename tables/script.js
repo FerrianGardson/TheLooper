@@ -55,8 +55,6 @@ function combineFunctions() {
   console.log("combineFunctions finished");
 }
 
-
-
 // Настройки
 
 console.log("testing2, 09-03-2024");
@@ -1655,6 +1653,25 @@ function createPlayerItem(playerName) {
 function playerList() {
   // Функция для добавления игрока в список игроков
 
+  function replacePlayerText() {
+    const contentElements = document.querySelectorAll(".content");
+
+    for (const content of contentElements) {
+      const players = content.querySelectorAll(".player");
+      for (const player of players) {
+        const playerName = player.textContent.trim();
+        const playerDataEntry = playerData.find(
+          (data) => data[0] === playerName
+        );
+        if (playerDataEntry) {
+          player.textContent = playerDataEntry[2];
+        }
+      }
+    }
+  }
+
+  replacePlayerText();
+
   function addPlayer(
     name,
     playerList,
@@ -1690,9 +1707,13 @@ function playerList() {
 
   function addNPC(name, npcList, uniquePlayers) {
     if (!uniquePlayers.has(name)) {
+      const color =
+        npcData.find((npc) => npc.includes(name))?.[1] ||
+        randomColors[Math.floor(Math.random() * randomColors.length)];
+
       const listItem = document.createElement("li");
       listItem.textContent = name;
-      listItem.classList.add("player");
+      listItem.classList.add("player", color);
       npcList.appendChild(listItem);
       uniquePlayers.add(name);
     } else {
@@ -1810,14 +1831,10 @@ function addSpaceToEmotePlayers() {
 
 function synchronizePlayerColors() {
   console.log("**Синхронизация цветовых классов игроков:**");
-
   const chapters = document.querySelectorAll("div.chapter");
-
   const playerColorMap = new Map();
 
   chapters.forEach((chapter) => {
-    console.log(`**Глава:** ${chapter.textContent.trim()}`);
-
     const actorsPlayers = chapter.querySelectorAll(".actors li.player");
 
     console.log(`**Список актеров:**`);
