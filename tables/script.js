@@ -13,10 +13,8 @@ function formatHTML() {
 function updateAll() {
   console.log("!!! updateAll started");
   removeActorsAndSymbols();
-  removePlayersWithDungeonMasterNames();
   playerList();
-  gatherPlayersAndInsert();
-  synchronizePlayerColors();
+  fullNames();
   addTimeToChapter();
   calculateTotalDuration();
   addSpaceToEmotePlayers();
@@ -167,7 +165,7 @@ const npcData = [
   ["Ваггат"],
   ["Пехотинец"],
   ["Сорорестраза"],
-  ["Глашатай"],
+  ["Всадник"],
   ["Глашатай"],
   ["Глашатай"],
   ["Глашатай"],
@@ -1642,157 +1640,12 @@ function pasteText() {
 //   }
 // }
 
-const uniquePlayers = new Set();
+
 function createPlayerItem(playerName) {
   const playerItem = document.createElement("li");
   playerItem.textContent = playerName;
   playerItem.classList.add("player");
   return playerItem;
-}
-
-function playerList() {
-  // Функция для добавления игрока в список игроков
-
-  function replacePlayerText() {
-    const contentElements = document.querySelectorAll(".content");
-
-    for (const content of contentElements) {
-      const players = content.querySelectorAll(".player");
-      for (const player of players) {
-        const playerName = player.textContent.trim();
-        const playerDataEntry = playerData.find(
-          (data) => data[0] === playerName
-        );
-        if (playerDataEntry) {
-          player.textContent = playerDataEntry[2];
-        }
-      }
-    }
-  }
-
-  replacePlayerText();
-
-  function addPlayer(
-    name,
-    playerList,
-    uniquePlayers,
-    playerColorClass,
-    randomColors
-  ) {
-    if (!uniquePlayers.has(name)) {
-      const playerDataIndex = playerData.findIndex(
-        (player) => player[0] === name
-      );
-      const updatedName =
-        playerDataIndex !== -1 ? playerData[playerDataIndex][2] : name;
-      const listItem = document.createElement("li");
-      listItem.textContent = updatedName;
-      listItem.classList.add("player");
-      if (playerDataIndex !== -1) {
-        listItem.classList.add(playerData[playerDataIndex][1]);
-      } else {
-        const randomColorIndex = Math.floor(
-          Math.random() * randomColors.length
-        );
-        listItem.classList.add(randomColors[randomColorIndex]);
-      }
-      playerList.appendChild(listItem);
-      uniquePlayers.add(name);
-    } else {
-      console.log(`Игрок "${name}" уже существует в списке.`);
-    }
-  }
-
-  // Функция для добавления NPC в список NPC
-
-  function addNPC(name, npcList, uniquePlayers) {
-    if (!uniquePlayers.has(name)) {
-      const color =
-        npcData.find((npc) => npc.includes(name))?.[1] ||
-        randomColors[Math.floor(Math.random() * randomColors.length)];
-
-      const listItem = document.createElement("li");
-      listItem.textContent = name;
-      listItem.classList.add("player", color);
-      npcList.appendChild(listItem);
-      uniquePlayers.add(name);
-    } else {
-      console.log(`Игрок "${name}" уже существует в списке.`);
-    }
-  }
-
-  // Находим все главы
-  const chapters = document.querySelectorAll(".chapter");
-
-  // Проходимся по каждой главе
-  chapters.forEach((chapter) => {
-    // Находим все контенты в главе
-    const contents = chapter.querySelectorAll(".content");
-
-    // Проходимся по каждому контенту
-    contents.forEach((content) => {
-      // Создаем обертку для актеров
-      const actorsDiv = document.createElement("div");
-      actorsDiv.classList.add("actors");
-      chapter.insertBefore(actorsDiv, content);
-
-      // Создаем список игроков и NPC
-      const playerList = document.createElement("ul");
-      playerList.classList.add("players");
-      actorsDiv.appendChild(playerList);
-
-      const npcList = document.createElement("ul");
-      npcList.classList.add("npcs");
-      actorsDiv.appendChild(npcList);
-
-      // Создаем множество для хранения уникальных имен игроков и NPC
-      const uniquePlayers = new Set();
-
-      // Находим всех игроков в текущем контенте
-      const playerSpans = content.querySelectorAll(talkingPlayer);
-
-      // Проходимся по каждому игроку
-      playerSpans.forEach((playerSpan) => {
-        const name = playerSpan.textContent.trim();
-
-        if (!uniquePlayers.has(name)) {
-          const playerDataIndex = playerData.findIndex(
-            (player) => player[0] === name
-          );
-          const isPlayer = playerDataIndex !== -1;
-          const isNPC = npcData.some((npc) => npc.includes(name));
-
-          if (isPlayer) {
-            console.log(`Имя "${name}" найдено в списке игроков.`);
-            addPlayer(
-              name,
-              playerList,
-              uniquePlayers,
-              playerData[playerDataIndex][1],
-              randomColors
-            );
-          } else if (isNPC) {
-            console.log(`Имя "${name}" найдено в списке NPC.`);
-            addNPC(name, npcList, uniquePlayers);
-          } else if (!name.includes(" ") && !name.includes("-")) {
-            console.log(
-              `Имя "${name}" не содержит пробелов и тире, считаем игроком`
-            );
-            addPlayer(
-              name,
-              playerList,
-              uniquePlayers,
-              "default-player-color",
-              randomColors
-            );
-          } else {
-            console.log(`Имя "${name}"  содержит пробелов и тире, считаем NPC`);
-            addNPC(name, npcList, uniquePlayers);
-          }
-        }
-      });
-    });
-  });
 }
 
 const talkingPlayer = ".say > .player, .yell > .player, .virt > .player";
@@ -1829,44 +1682,6 @@ function addSpaceToEmotePlayers() {
   });
 }
 
-function synchronizePlayerColors() {
-  console.log("**Синхронизация цветовых классов игроков:**");
-  const chapters = document.querySelectorAll("div.chapter");
-  const playerColorMap = new Map();
-
-  chapters.forEach((chapter) => {
-    const actorsPlayers = chapter.querySelectorAll(".actors li.player");
-
-    console.log(`**Список актеров:**`);
-    actorsPlayers.forEach((actorPlayer) => {
-      const playerName = actorPlayer.textContent.trim();
-      const secondClass = Array.from(actorPlayer.classList)[1];
-
-      console.log(`  - ${playerName}: ${secondClass}`);
-      playerColorMap.set(playerName, secondClass);
-    });
-
-    const contentPlayers = chapter.querySelectorAll(".content .player");
-    console.log(`**Игроки в контенте:**`);
-    contentPlayers.forEach((contentPlayer) => {
-      const playerName = contentPlayer.textContent.trim();
-
-      const secondClass = playerColorMap.get(playerName);
-
-      console.log(
-        `  - ${playerName}: ${secondClass ? secondClass : "не найден"}`
-      );
-
-      if (secondClass) {
-        // Удаление всех имеющихся классов у игрока
-        contentPlayer.className = "player " + secondClass;
-      }
-    });
-  });
-
-  console.log("**Синхронизация завершена.**");
-}
-
 function addCommaAndDotToPlayerList() {
   const actorsDivs = document.querySelectorAll("div.actors");
 
@@ -1898,89 +1713,7 @@ function toggleSelectionCSS() {
   }
 }
 
-function gatherPlayersAndInsert() {
-  const totalPlayers = document.querySelector(
-    ".totalduration > .actors > .players"
-  );
-  if (totalPlayers) {
-    totalPlayers.remove();
-  }
 
-  // Собираем все элементы .players > li со всей страницы
-  const allPlayers = document.querySelectorAll(".players > li");
-
-  // Проходимся по каждому элементу и удаляем все <span> из его содержимого
-  allPlayers.forEach((player) => {
-    player.innerHTML = player.innerHTML.replace(/<span[^>]*>.*?<\/span>/g, "");
-  });
-  const totalUniquePlayers = removeDuplicates(allPlayers);
-  // Создаем элемент div.players
-  const actorsUI = document.createElement("div");
-  actorsUI.classList.add("actors");
-
-  // Перебираем найденные игроки и добавляем их в ul.players
-
-  totalUniquePlayers.forEach((player) => {
-    actorsUI.appendChild(player);
-  });
-
-  // Находим элемент div.totalduration
-  const totalDurationChapter = document.querySelector(
-    "#chatlog .totalduration"
-  );
-
-  if (totalDurationChapter) {
-    // Вставляем ul.players в начало div.totalduration
-    totalDurationChapter.insertBefore(actorsUI, totalDurationChapter.lastChild);
-  } else {
-  }
-}
-
-function removeDuplicates(array) {
-  // Создаем набор уникальных элементов для определения уникальности
-  const uniquePlayers = new Set();
-
-  // Добавляем элементы в набор
-  array.forEach((player) => {
-    const playerName = player.textContent.trim();
-    const existingPlayer = Array.from(uniquePlayers).find(
-      (item) => item.textContent.trim() === playerName
-    );
-
-    if (!existingPlayer) {
-      uniquePlayers.add(player.cloneNode(true)); // Клонируем элемент и добавляем его в набор
-    }
-  });
-
-  // Преобразуем набор обратно в массив элементов
-  return Array.from(uniquePlayers);
-}
-
-const dungeonMasterMap = new Map([
-  ["Фг", true],
-  ["Кей", true],
-  ["Минор", true],
-  ["Эдита", true],
-  ["Кей", true],
-  ["Кей", true],
-  ["Кей", true],
-  ["Кей", true],
-  ["Кей", true],
-  ["Кей", true],
-  ["Кей", true],
-  ["Кей", true],
-]);
-
-// Функция для удаления всех игроков с именами ДМов
-function removePlayersWithDungeonMasterNames() {
-  const players = document.querySelectorAll(".player");
-  players.forEach((player) => {
-    const playerName = player.textContent.trim();
-    if (dungeonMasterMap.has(playerName)) {
-      player.remove();
-    }
-  });
-}
 
 function logFilter() {
   let keywordsInput = document.getElementById("keywordsInput").value;
@@ -2358,3 +2091,55 @@ function removeChaptersIfFewPlayers() {
     }
   });
 }
+
+
+function fullNames() {
+  const players = document.querySelectorAll(".player");
+  for (const player of players) {
+    const playerName = player.textContent.trim();
+    const playerDataEntry = playerData.find((data) => data[0] === playerName);
+    if (playerDataEntry) {
+      player.textContent = playerDataEntry[2];
+    }
+  }
+  console.log('Фамилии заменены');
+}
+
+function playerList() {
+  // Набор для хранения всех имен
+  const uniqueList = new Set();
+
+  // Получение всех элементов .player в .content
+  const players = document.querySelectorAll(".content span.player");
+
+  // Добавление имен в набор
+  for (const player of players) {
+    const playerName = player.textContent.trim();
+    uniqueList.add(playerName);
+  }
+
+  console.log('uniqueList: ', uniqueList);
+  // Фильтрация игроков
+  const playerNames = [...uniqueList].filter((playerName) => {
+    return playerData.some((player) => player[0] === playerName);
+  });
+ 
+  // Отображение списка игроков
+  console.log("Список игроков:");
+  for (const playerName of playerNames) {
+    console.log(`- ${playerName}`);
+  }
+
+  // Фильтрация NPC
+  const npcNames = [...uniqueList].filter((playerName) => {
+    return npcData.some((npc) => npc.name === playerName);
+  });
+
+  // Отображение списка NPC
+  console.log("Список NPC:");
+  for (const npcName of npcNames) {
+    console.log(`- ${npcName}`);
+  }
+}
+
+
