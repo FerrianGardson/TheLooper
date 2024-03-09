@@ -35,6 +35,7 @@ function updateAll() {
   combineFunctions();
   gatherUniquePlayersAndInsert();
   removeDoublesAtTotalActors();
+  synchronizePlayerColors()
   fullNames();
   addPunctuation();
   // removeChaptersIfFewPlayers();
@@ -2263,4 +2264,33 @@ function removeDoublesAtTotalActors() {
   }
 
   colorizeList("players");
+}
+
+function synchronizePlayerColors() {
+  const chapters = document.querySelectorAll("div.chapter");
+
+  const playerColorMap = new Map();
+
+  chapters.forEach((chapter) => {
+    const actorsPlayers = chapter.querySelectorAll(".actors .player");
+
+    actorsPlayers.forEach((actorPlayer) => {
+      const playerName = actorPlayer.textContent.trim();
+      const secondClass = Array.from(actorPlayer.classList)[1];
+
+      playerColorMap.set(playerName, secondClass);
+    });
+
+    const contentPlayers = chapter.querySelectorAll(".content .player");
+    contentPlayers.forEach((contentPlayer) => {
+      const playerName = contentPlayer.textContent.trim();
+
+      const secondClass = playerColorMap.get(playerName);
+
+      if (secondClass) {
+        // Удаление всех имеющихся классов у игрока
+        contentPlayer.className = "player " + secondClass;
+      }
+    });
+  });
 }
