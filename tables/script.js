@@ -38,6 +38,7 @@ function updateAll() {
   addColumnToPlayers();
   addCommaAndDotToPlayerList();
   combineFunctions();
+  gatherUniquePlayersAndInsert()
   // removeChaptersIfFewPlayers();
   // recombineFunctions();
   console.log("updateAll finished");
@@ -2197,3 +2198,34 @@ function removeDuplicateNPCs() {
     }
   }
 }
+
+function gatherUniquePlayersAndInsert() {
+  // Создаем сет uniquePlayers для хранения уникальных игроков
+  const uniquePlayers = new Set();
+
+  // Собираем все элементы .players > .player
+  const allPlayers = document.querySelectorAll(".players .player");
+
+  // Добавляем копию каждого элемента в сет, если он еще не существует
+  allPlayers.forEach((player) => {
+    uniquePlayers.add(player.cloneNode(true));
+  });
+
+  // Озвучиваем количество уникальных игроков
+  console.log(`Найдено ${uniquePlayers.size} уникальных игроков`);
+
+  // Создаем элемент div.players
+  const playersUI = document.createElement("div");
+  playersUI.classList.add("players");
+
+  // Перебираем сет uniquePlayers и добавляем элементы в div.players
+  for (const player of uniquePlayers) {
+    playersUI.appendChild(player);
+  }
+
+  // Вставляем div.players в .totalduration
+  const totalDuration = document.querySelector(".totalduration");
+  totalDuration.appendChild(playersUI);
+}
+
+
