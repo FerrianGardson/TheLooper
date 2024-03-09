@@ -28,6 +28,8 @@ function updateAll() {
   console.log("!!! updateAll started");
   removeActorsAndSymbols();
   playerList();
+  colorizeList("players");
+  colorizeList("npcs");
   fullNames();
   addTimeToChapter();
   calculateTotalDuration();
@@ -2157,40 +2159,25 @@ function playerList() {
     // Вставка .actors
     chapter.querySelector("h2.date").after(actors);
   }
-  colorizePlayers()
-  colorizeNPCs()
 }
 
-function colorizePlayers() {
-  const players = document.querySelectorAll(".players .player");
-
-  for (const player of players) {
-    const playerName = player.textContent.trim();
-    const playerInfo = playerData.find((player) => player[0] === playerName);
-
-    if (playerInfo && playerInfo[1]) {
-      player.classList.add(playerInfo[1]);
-    }
-  }
-}
-
-function colorizeNPCs() {
-  const npcs = document.querySelectorAll(".npcs .player");
+function colorizeList(listType) {
+  const elements = document.querySelectorAll(`.${listType} .player`);
   let colorIndex = 0;
 
-  for (const npc of npcs) {
-    const npcName = npc.textContent.trim();
-    const npcInfo = npcData.find((npc) => npc[0] === npcName);
+  for (const element of elements) {
+    const name = element.textContent.trim();
+    const data = listType === "players" ? playerData : npcData; // Выбор данных по типу списка
+    const info = data.find((item) => item[0] === name);
 
-    if (npcInfo && npcInfo[1]) {
-      npc.classList.add(npcInfo[1]);
+    if (info && info[1]) {
+      element.classList.add(info[1]);
     } else {
       const randomColor = randomColors[colorIndex++];
       if (colorIndex === randomColors.length) {
         colorIndex = 0;
       }
-      npc.classList.add(randomColor);
+      element.classList.add(randomColor);
     }
   }
 }
-
