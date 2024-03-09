@@ -31,6 +31,7 @@ function updateAll() {
   colorizeList("players");
   colorizeList("npcs");
   fullNames();
+  removeDuplicateNPCs();
   addTimeToChapter();
   calculateTotalDuration();
   addSpaceToEmotePlayers();
@@ -167,7 +168,6 @@ let npcData = [
   ["Пехотинец"],
   ["Сорорестраза"],
   ["Всадник"],
-  ["Глашатай"],
   ["Глашатай"],
   ["Глашатай"],
   ["Глашатай"],
@@ -2107,7 +2107,7 @@ function playerList() {
     const uniquePlayerList = new Set();
 
     // Получение всех элементов .player в .content
-    const players = chapter.querySelectorAll(".content span.player");
+    const players = chapter.querySelectorAll(talkingPlayer);
 
     // Добавление имен игроков в набор
     for (const player of players) {
@@ -2178,6 +2178,20 @@ function colorizeList(listType) {
         colorIndex = 0;
       }
       element.classList.add(randomColor);
+    }
+  }
+}
+
+function removeDuplicateNPCs() {
+  const npcs = document.querySelectorAll(".npcs .player");
+  const players = Array.from(document.querySelectorAll(".players .player")); // Преобразовать NodeList в массив
+
+  for (const npc of npcs) {
+    const npcName = npc.textContent.trim();
+    const player = players.find((player) => player.textContent.trim() === npcName);
+
+    if (player) {
+      npc.parentNode.removeChild(npc);
     }
   }
 }
