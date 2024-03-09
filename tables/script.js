@@ -2148,9 +2148,7 @@ function playerList() {
       } else {
         console.log(`${playerName} не найден ни в playerData, ни в npcData`);
       }
-      
     }
-  
 
     // Добавление списков в .actors
     actors.appendChild(playersList);
@@ -2159,4 +2157,40 @@ function playerList() {
     // Вставка .actors
     chapter.querySelector("h2.date").after(actors);
   }
+  colorizePlayers()
+  colorizeNPCs()
 }
+
+function colorizePlayers() {
+  const players = document.querySelectorAll(".players .player");
+
+  for (const player of players) {
+    const playerName = player.textContent.trim();
+    const playerInfo = playerData.find((player) => player[0] === playerName);
+
+    if (playerInfo && playerInfo[1]) {
+      player.classList.add(playerInfo[1]);
+    }
+  }
+}
+
+function colorizeNPCs() {
+  const npcs = document.querySelectorAll(".npcs .player");
+  let colorIndex = 0;
+
+  for (const npc of npcs) {
+    const npcName = npc.textContent.trim();
+    const npcInfo = npcData.find((npc) => npc[0] === npcName);
+
+    if (npcInfo && npcInfo[1]) {
+      npc.classList.add(npcInfo[1]);
+    } else {
+      const randomColor = randomColors[colorIndex++];
+      if (colorIndex === randomColors.length) {
+        colorIndex = 0;
+      }
+      npc.classList.add(randomColor);
+    }
+  }
+}
+
