@@ -2148,7 +2148,9 @@ function playerList() {
       } else {
         console.log(`${playerName} не найден ни в playerData, ни в npcData`);
       }
+      
     }
+  
 
     // Добавление списков в .actors
     actors.appendChild(playersList);
