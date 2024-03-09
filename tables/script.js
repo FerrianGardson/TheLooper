@@ -1989,10 +1989,10 @@ function recombineFunction(spanClass) {
     let logline = loglines[i];
 
     // Пропускаем неподходящий тип реплик
-    if (!logline.classList.contains(spanClass)) {
+/*     if (!logline.classList.contains(spanClass)) {
       drop();
       continue;
-    }
+    } */
 
     player = logline.querySelector("span.player");
     content = logline.querySelector("span.say");
