@@ -30,18 +30,22 @@ function updateAll() {
   playerList();
   colorizeList("players");
   colorizeList("npcs");
-  fullNames();
-  removeDuplicateNPCs();
   addTimeToChapter();
   calculateTotalDuration();
-  addSpaceToEmotePlayers();
-  addColumnToPlayers();
-  addCommaAndDotToPlayerList();
   combineFunctions();
-  gatherUniquePlayersAndInsert()
+  gatherUniquePlayersAndInsert();
+  removeDoublesAtTotalActors();
+  fullNames();
+  addPunctuation();
   // removeChaptersIfFewPlayers();
   // recombineFunctions();
   console.log("updateAll finished");
+}
+
+function addPunctuation() {
+  addSpaceToEmotePlayers();
+  addColumnToPlayers();
+  addCommaAndDotToPlayerList();
 }
 function updateTime() {
   console.log("!!! updateTime started");
@@ -1244,8 +1248,10 @@ document.addEventListener("keydown", function (event) {
     pasteText();
   } else if (["[", "х"].includes(event.key) && event.ctrlKey) {
     deleteElements("before");
+    updateAll();
   } else if (["]", "ъ"].includes(event.key) && event.ctrlKey) {
     deleteElements("after");
+    updateAll();
   } else if (event.key === "ArrowRight") {
     pasteImg();
   } else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
@@ -1267,6 +1273,7 @@ document.addEventListener("keydown", function (event) {
     finishWrap("no-margin");
   } else if (event.key === "/") {
     divideChapter();
+    updateAll();
   } else if (event.key === "*") {
   } else if (event.key === "d") {
     debug();
@@ -1684,7 +1691,7 @@ function addCommaAndDotToPlayerList() {
   let actorsDivs = document.querySelectorAll("div.actors");
 
   actorsDivs.forEach((actorsDiv) => {
-    let actors = actorsDiv.querySelectorAll("li.player");
+    let actors = actorsDiv.querySelectorAll(".player");
     let lastActorindex = actors.length - 1;
 
     actors.forEach((actor, index) => {
@@ -2183,22 +2190,6 @@ function colorizeList(listType) {
   }
 }
 
-function removeDuplicateNPCs() {
-  const npcs = document.querySelectorAll(".npcs .player");
-  const players = Array.from(document.querySelectorAll(".players .player")); // Преобразовать NodeList в массив
-
-  for (const npc of npcs) {
-    const npcName = npc.textContent.trim();
-    const player = players.find(
-      (player) => player.textContent.trim() === npcName
-    );
-
-    if (player) {
-      npc.parentNode.removeChild(npc);
-    }
-  }
-}
-
 function gatherUniquePlayersAndInsert() {
   // Создаем сет uniquePlayers для хранения уникальных игроков
   const uniquePlayers = new Set();
@@ -2215,17 +2206,62 @@ function gatherUniquePlayersAndInsert() {
   console.log(`Найдено ${uniquePlayers.size} уникальных игроков`);
 
   // Создаем элемент div.players
-  const playersUI = document.createElement("div");
-  playersUI.classList.add("players");
+  const actorsUI = document.createElement("div");
+  actorsUI.classList.add("actors");
+
+  // Создаем элемент div.players
+  const subactorsUI = document.createElement("div");
+  actorsUI.classList.add("players");
 
   // Перебираем сет uniquePlayers и добавляем элементы в div.players
   for (const player of uniquePlayers) {
-    playersUI.appendChild(player);
+    actorsUI.appendChild(player);
   }
 
   // Вставляем div.players в .totalduration
   const totalDuration = document.querySelector(".totalduration");
-  totalDuration.appendChild(playersUI);
+  totalDuration.appendChild(actorsUI);
+  actorsUI.appendChild(subactorsUI);
 }
 
+function removeDoublesAtTotalActors() {
+  // Получаем элемент .totalduration .players
+  const playersElement = document.querySelector(".totalduration .players");
 
+  // Если он существует
+  if (playersElement) {
+    // Создаем пустой массив для хранения уникальных игроков
+    const uniquePlayers = [];
+
+    // Получаем все элементы .player
+    const allPlayers = playersElement.querySelectorAll(".player");
+
+    // Перебираем каждого игрока
+    allPlayers.forEach((player) => {
+      const playerName = player.textContent.trim();
+
+      // Проверяем, существует ли имя игрока в массиве
+      const playerExists = uniquePlayers.some(
+        (existingPlayer) => existingPlayer === playerName
+      );
+
+      // Если имя игрока не существует, добавляем его
+      if (!playerExists) {
+        uniquePlayers.push(playerName);
+      }
+    });
+
+    // Очищаем содержимое .totalduration .players
+    playersElement.innerHTML = "";
+
+    // Вставляем элементы из uniquePlayers
+    uniquePlayers.forEach((playerName) => {
+      const newPlayer = document.createElement("div");
+      newPlayer.classList.add("player");
+      newPlayer.textContent = playerName;
+      playersElement.appendChild(newPlayer);
+    });
+  }
+
+  colorizeList("players");
+}
