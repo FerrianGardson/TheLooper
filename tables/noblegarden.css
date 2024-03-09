@@ -1284,3 +1284,11 @@ p.logline.emote > .player {
 .paper.img.right {
   margin-top: 0;
 }
+
+.npcs > * {
+  opacity: 0.2;
+}
+
+.npcs > *:hover {
+  opacity: 1;
+}
