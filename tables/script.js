@@ -28,15 +28,14 @@ function updateAll() {
   console.log("!!! updateAll started");
   removeActorsAndSymbols();
   playerList();
-  colorizeList("players");
-  colorizeList("npcs");
+
   addTimeToChapter();
   calculateTotalDuration();
   combineFunctions();
   gatherUniquePlayersAndInsert();
   removeDoublesAtTotalActors();
-  synchronizePlayerColors()
-  fullNames();
+  synchronizePlayerColors();
+  // fullNames();
   addPunctuation();
   // removeChaptersIfFewPlayers();
   // recombineFunctions();
@@ -48,27 +47,18 @@ function addPunctuation() {
   addColumnToPlayers();
   addCommaAndDotToPlayerList();
 }
-function updateTime() {
-  console.log("!!! updateTime started");
-  removeActorsAndSymbols();
-  playerList();
-  addTimeToChapter();
-  calculateTotalDuration();
-  // recombineFunctions();
-  console.log("updateTime finished");
-}
 
 function combineFunctions() {
   console.log("combineFunctions started");
-  combineSay("emote");
   combineSay("say");
+  combineSay("emote");
   combineSay("virt");
-  combineSay("yell");
-  combineSay("story");
+  // combineSay("yell");
+  // combineSay("story");
   sayToEmote();
-  virtToSay();
   emoteToSay();
-  removeDashes();
+  virtToSay();
+  // removeDashes();
   // thirdPerson("emote", "say");
   // thirdPerson("virt", "say");
   // thirdPerson("say", "emote");
@@ -557,12 +547,14 @@ function cleanText() {
 
   // Прочее
 
-  chatlogHTML = chatlogHTML.replace(/[—–-]\s/g, "— "); // Тире в процессе
+  chatlogHTML = chatlogHTML.replace(/ [—–-]/g, " —"); // Тире в процессе
+  chatlogHTML = chatlogHTML.replace(/ - /g, " — "); // Тире
   chatlogHTML = chatlogHTML.replace(/\|\d+\-\d+\((.*?)\)/g, "$1"); // смотрит на |3-3(Халвиэль)
   chatlogHTML = chatlogHTML.replace(/\|[a-z]+/g, ""); // HEX-код
   chatlogHTML = chatlogHTML.replace(/say">\s*[—–-]\s*/g, 'say">'); // Тире в начале
   // chatlogHTML = chatlogHTML.replace(/\[Объявление рейду\].*?\: /g, ""); // Объявления рейду
   chatlogHTML = chatlogHTML.replace(/&nbsp;/g, " "); // &nbsp;
+  chatlogHTML = chatlogHTML.replace(/\.+/g, "…"); // …
 
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
@@ -1989,7 +1981,7 @@ function recombineFunction(spanClass) {
     let logline = loglines[i];
 
     // Пропускаем неподходящий тип реплик
-/*     if (!logline.classList.contains(spanClass)) {
+    /*     if (!logline.classList.contains(spanClass)) {
       drop();
       continue;
     } */
@@ -2114,7 +2106,6 @@ function fullNames() {
   // console.log("Фамилии заменены");
 }
 
-
 function playerList() {
   // Перебор всех элементов .chapter
   const chapters = document.querySelectorAll(".chapter");
@@ -2175,6 +2166,8 @@ function playerList() {
     // Вставка .actors
     chapter.querySelector("h2.date").after(actors);
   }
+  colorizeList("players");
+  colorizeList("npcs");
 }
 
 function colorizeList(listType) {
