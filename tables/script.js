@@ -565,24 +565,49 @@ function cleanText() {
 }
 
 function combineSay(spanType) {
+  // **Внутренние переменные**
+  let currentLogline;
+  let currentTimeStamp;
+  let currentPlayerElement;
+  let currentSayElement;
+  let currentPlayer;
+  let currentSay;
+
+  let previousSay = "";
+  let previousPlayer = "";
+  let previousLogline;
+  let previousTimeStamp;
+  let combinedSay = "";
+
+  // **Функции**
+
+  // **Сохранение текущих значений**
   function saveCurrentValues(element, spanType) {
     currentLogline = element;
     currentTimeStamp = element.getAttribute("timestamp");
     currentPlayerElement = element.querySelector("span.player");
     currentSayElement = element.querySelector(`span.${spanType}`);
-    currentPlayer = currentPlayerElement
-      ? currentPlayerElement.textContent
-      : "";
+    currentPlayer = currentPlayerElement ? currentPlayerElement.textContent : "";
     currentSay = currentSayElement ? currentSayElement.textContent : "";
+
+    console.log("**Сохранены текущие значения:**"); // Логирование сохраненных значений
+    console.log(`  Игрок: ${currentPlayer}`);
+    console.log(`  Сообщение: ${currentSay}`);
   }
 
+  // **Обновление предыдущих значений**
   function updatePreviousValues() {
     previousSay = currentSay;
     previousPlayer = currentPlayer;
     previousLogline = currentLogline;
     previousTimeStamp = currentTimeStamp;
+
+    console.log("**Обновлены предыдущие значения:**"); // Логирование обновленных значений
+    console.log(`  Игрок: ${previousPlayer}`);
+    console.log(`  Сообщение: ${previousSay}`);
   }
 
+  // **Сброс всех переменных**
   function resetSay() {
     currentPlayer = "";
     currentSay = "";
@@ -595,54 +620,79 @@ function combineSay(spanType) {
     combinedSay = "";
     currentPlayerElement = "";
     currentSayElement = "";
+
+    console.log("**Сброшены все переменные**"); // Логирование сброса
   }
 
+  // **Сброс перед обработкой**
   resetSay();
 
-  var elements = document.querySelectorAll(".content > p.logline");
-  var length = elements.length;
+  // **Получение элементов и их количество**
+  const elements = document.querySelectorAll(".content > p.logline");
+  const length = elements.length;
 
-  for (var i = 0; i < length; i++) {
-    var element = elements[i];
+  // **Цикл по элементам**
+  for (let i = 0; i < length; i++) {
+    const element = elements[i];
 
+    // **Пропуск элементов без нужного класса**
     if (!element.classList.contains(spanType)) {
       resetSay();
       continue;
     }
+
+    // **Сохранение значений из текущего элемента**
     saveCurrentValues(element, spanType);
+
+    // **Пропуск элементов без текста "say"**
     if (!currentSay) {
       continue;
     }
+
+    // **Пропуск, если нет предыдущего "say"**
     if (!previousSay) {
       updatePreviousValues();
       continue;
     }
 
-    if (currentPlayer != previousPlayer) {
+    // **Пропуск, если сменился игрок**
+    if (currentPlayer !== previousPlayer) {
       updatePreviousValues();
       continue;
     }
 
-    dt = Math.abs(
-      new Date(currentTimeStamp).getTime() -
-        new Date(previousTimeStamp).getTime()
+    // **Расчет разницы между метками времени**
+    const dt = Math.abs(
+      new Date(currentTimeStamp).getTime() - new Date(previousTimeStamp).getTime()
     );
+
+    // **Пропуск, если разница больше `combineDelay`**
     if (dt > combineDelay) {
       updatePreviousValues();
       continue;
     }
+
+    // **Объединение "say"**
     combinedSay = previousSay + " " + currentSay;
+
+    // **Обновление HTML-элемента**
     currentSayElement.textContent = combinedSay;
+
+    // **Удаление предыдущей строки лога**
     previousLogline.remove();
+
+    // **Обновление "предыдущих" значений**
     previousLogline = currentLogline;
     previousSay = combinedSay;
     previousPlayer = currentPlayer;
     previousTimeStamp = currentTimeStamp;
+
+    // **Очистка**
     currentSayElement = "";
     currentPlayerElement = "";
-    continue;
   }
 }
+
 
 function sayToEmote() {
   let say = "";
