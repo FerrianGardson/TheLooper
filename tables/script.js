@@ -1337,7 +1337,6 @@ function removeHovered() {
   });
 }
 
-
 function togglePaperClass() {
   let elementsUnderCursor = document.querySelectorAll(":hover");
   elementsUnderCursor.forEach((element) => {
@@ -2198,37 +2197,29 @@ function colorizeList(listType) {
 }
 
 function gatherUniquePlayersAndInsert() {
-  // Создаем сет uniquePlayers для хранения уникальных игроков
   const uniquePlayers = new Set();
 
-  // Собираем все элементы .players > .player
   const allPlayers = document.querySelectorAll(".players .player");
 
-  // Добавляем копию каждого элемента в сет, если он еще не существует
   allPlayers.forEach((player) => {
     uniquePlayers.add(player.cloneNode(true));
   });
 
-  // Озвучиваем количество уникальных игроков
   console.log(`Найдено ${uniquePlayers.size} уникальных игроков`);
 
-  // Создаем элемент div.players
-  const actorsUI = document.createElement("div");
-  actorsUI.classList.add("actors");
+  const actors = document.createElement("div");
+  actors.classList.add("actors");
 
-  // Создаем элемент div.players
-  const subactorsUI = document.createElement("div");
-  actorsUI.classList.add("players");
+  const players = document.createElement("div");
+  players.classList.add("players");
 
-  // Перебираем сет uniquePlayers и добавляем элементы в div.players
   for (const player of uniquePlayers) {
-    actorsUI.appendChild(player);
+    players.appendChild(player);
   }
 
-  // Вставляем div.players в .totalduration
   const totalDuration = document.querySelector(".totalduration");
-  totalDuration.appendChild(actorsUI);
-  actorsUI.appendChild(subactorsUI);
+  totalDuration.appendChild(actors);
+  actors.appendChild(players);
 }
 
 function removeDoublesAtTotalActors() {
