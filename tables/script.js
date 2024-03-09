@@ -2102,16 +2102,17 @@ function removeChaptersIfFewPlayers() {
 }
 
 function fullNames() {
-  let players = document.querySelectorAll(".player");
-  for (let player of players) {
-    let playerName = player.textContent.trim();
-    let playerDataEntry = playerData.find((data) => data[0] === playerName);
-    if (playerDataEntry) {
-      player.textContent = playerDataEntry[2];
-    }
-  }
-  console.log("Фамилии заменены");
+  // let players = document.querySelectorAll(".player");
+  // for (let player of players) {
+  //   let playerName = player.textContent.trim();
+  //   let playerDataEntry = playerData.find((data) => data[0] === playerName);
+  //   if (playerDataEntry) {
+  //     player.textContent = playerDataEntry[2];
+  //   }
+  // }
+  // console.log("Фамилии заменены");
 }
+
 
 function playerList() {
   // Перебор всех элементов .chapter
