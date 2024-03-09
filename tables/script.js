@@ -2188,7 +2188,9 @@ function removeDuplicateNPCs() {
 
   for (const npc of npcs) {
     const npcName = npc.textContent.trim();
-    const player = players.find((player) => player.textContent.trim() === npcName);
+    const player = players.find(
+      (player) => player.textContent.trim() === npcName
+    );
 
     if (player) {
       npc.parentNode.removeChild(npc);
