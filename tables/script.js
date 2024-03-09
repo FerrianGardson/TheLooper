@@ -1241,16 +1241,16 @@ document.addEventListener("keydown", function (event) {
   if (event.key === "Enter" && event.target.id === "keywordsInput") {
     logFilter();
   } else if (!wrapping && event.key === "Delete") {
-    deleteElementUnderCursor();
+    removeHovered();
   } else if (event.key === "p" || event.key === "з") {
     togglePaperClass();
   } else if (event.key === "ArrowLeft") {
     pasteText();
   } else if (["[", "х"].includes(event.key) && event.ctrlKey) {
-    deleteElements("before");
+    removeEverything("before");
     updateAll();
   } else if (["]", "ъ"].includes(event.key) && event.ctrlKey) {
-    deleteElements("after");
+    removeEverything("after");
     updateAll();
   } else if (event.key === "ArrowRight") {
     pasteImg();
@@ -1314,22 +1314,29 @@ function toggleSelectedClass() {
   });
 }
 
-function deleteElementUnderCursor() {
+function removeHovered() {
   let elementsUnderCursor = document.querySelectorAll(":hover");
   elementsUnderCursor.forEach((element) => {
-    let loglineParent = element.closest(".content > *");
-    let dateHeadingParent = element.closest("h2.date");
+    // Проверка на .player
+    if (element.matches(".player")) {
+      element.remove(); // Удаление .player
+    } else {
+      // Существующий код для других элементов:
+      let loglineParent = element.closest(".content > *");
+      let dateHeadingParent = element.closest("h2.date");
 
-    if (loglineParent) {
-      loglineParent.remove();
-    } else if (dateHeadingParent) {
-      let chapterParent = dateHeadingParent.closest(".chapter");
-      if (chapterParent) {
-        chapterParent.remove();
+      if (loglineParent) {
+        loglineParent.remove();
+      } else if (dateHeadingParent) {
+        let chapterParent = dateHeadingParent.closest(".chapter");
+        if (chapterParent) {
+          chapterParent.remove();
+        }
       }
     }
   });
 }
+
 
 function togglePaperClass() {
   let elementsUnderCursor = document.querySelectorAll(":hover");
@@ -1371,7 +1378,7 @@ function moveElement(event) {
   });
 }
 
-function deleteElements(position) {
+function removeEverything(position) {
   let hover = document.querySelectorAll(".content > :hover, h2.date:hover");
 
   hover.forEach((element) => {
