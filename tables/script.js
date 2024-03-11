@@ -58,7 +58,7 @@ function combineFunctions() {
   sayToEmote();
   emoteToSay();
   virtToSay();
-  // removeDashes();
+  removeDashes();
   // thirdPerson("emote", "say");
   // thirdPerson("virt", "say");
   // thirdPerson("say", "emote");
@@ -547,15 +547,14 @@ function cleanText() {
 
   // Прочее
 
-  chatlogHTML = chatlogHTML.replace(/ [—–-]/g, " —"); // Тире в процессе
-  chatlogHTML = chatlogHTML.replace(/ - /g, " — "); // Тире
+  chatlogHTML = chatlogHTML.replace(/[—–-] /g, "— "); // Тире в процессе
   chatlogHTML = chatlogHTML.replace(/\|\d+\-\d+\((.*?)\)/g, "$1"); // смотрит на |3-3(Халвиэль)
   chatlogHTML = chatlogHTML.replace(/\|[a-z]+/g, ""); // HEX-код
   chatlogHTML = chatlogHTML.replace(/say">\s*[—–-]\s*/g, 'say">'); // Тире в начале
   // chatlogHTML = chatlogHTML.replace(/\[Объявление рейду\].*?\: /g, ""); // Объявления рейду
   chatlogHTML = chatlogHTML.replace(/&nbsp;/g, " "); // &nbsp;
-  chatlogHTML = chatlogHTML.replace(/\.+/g, "…"); // …
-
+  chatlogHTML = chatlogHTML.replace(/\.\.+/g, "…"); // &nbsp;
+  
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
@@ -565,49 +564,24 @@ function cleanText() {
 }
 
 function combineSay(spanType) {
-  // **Внутренние переменные**
-  let currentLogline;
-  let currentTimeStamp;
-  let currentPlayerElement;
-  let currentSayElement;
-  let currentPlayer;
-  let currentSay;
-
-  let previousSay = "";
-  let previousPlayer = "";
-  let previousLogline;
-  let previousTimeStamp;
-  let combinedSay = "";
-
-  // **Функции**
-
-  // **Сохранение текущих значений**
   function saveCurrentValues(element, spanType) {
     currentLogline = element;
     currentTimeStamp = element.getAttribute("timestamp");
     currentPlayerElement = element.querySelector("span.player");
     currentSayElement = element.querySelector(`span.${spanType}`);
-    currentPlayer = currentPlayerElement ? currentPlayerElement.textContent : "";
+    currentPlayer = currentPlayerElement
+      ? currentPlayerElement.textContent
+      : "";
     currentSay = currentSayElement ? currentSayElement.textContent : "";
-
-    console.log("**Сохранены текущие значения:**"); // Логирование сохраненных значений
-    console.log(`  Игрок: ${currentPlayer}`);
-    console.log(`  Сообщение: ${currentSay}`);
   }
 
-  // **Обновление предыдущих значений**
   function updatePreviousValues() {
     previousSay = currentSay;
     previousPlayer = currentPlayer;
     previousLogline = currentLogline;
     previousTimeStamp = currentTimeStamp;
-
-    console.log("**Обновлены предыдущие значения:**"); // Логирование обновленных значений
-    console.log(`  Игрок: ${previousPlayer}`);
-    console.log(`  Сообщение: ${previousSay}`);
   }
 
-  // **Сброс всех переменных**
   function resetSay() {
     currentPlayer = "";
     currentSay = "";
@@ -620,79 +594,54 @@ function combineSay(spanType) {
     combinedSay = "";
     currentPlayerElement = "";
     currentSayElement = "";
-
-    console.log("**Сброшены все переменные**"); // Логирование сброса
   }
 
-  // **Сброс перед обработкой**
   resetSay();
 
-  // **Получение элементов и их количество**
-  const elements = document.querySelectorAll(".content > p.logline");
-  const length = elements.length;
+  var elements = document.querySelectorAll(".content > p.logline");
+  var length = elements.length;
 
-  // **Цикл по элементам**
-  for (let i = 0; i < length; i++) {
-    const element = elements[i];
+  for (var i = 0; i < length; i++) {
+    var element = elements[i];
 
-    // **Пропуск элементов без нужного класса**
     if (!element.classList.contains(spanType)) {
       resetSay();
       continue;
     }
-
-    // **Сохранение значений из текущего элемента**
     saveCurrentValues(element, spanType);
-
-    // **Пропуск элементов без текста "say"**
     if (!currentSay) {
       continue;
     }
-
-    // **Пропуск, если нет предыдущего "say"**
     if (!previousSay) {
       updatePreviousValues();
       continue;
     }
 
-    // **Пропуск, если сменился игрок**
-    if (currentPlayer !== previousPlayer) {
+    if (currentPlayer != previousPlayer) {
       updatePreviousValues();
       continue;
     }
 
-    // **Расчет разницы между метками времени**
-    const dt = Math.abs(
-      new Date(currentTimeStamp).getTime() - new Date(previousTimeStamp).getTime()
+    dt = Math.abs(
+      new Date(currentTimeStamp).getTime() -
+        new Date(previousTimeStamp).getTime()
     );
-
-    // **Пропуск, если разница больше `combineDelay`**
     if (dt > combineDelay) {
       updatePreviousValues();
       continue;
     }
-
-    // **Объединение "say"**
     combinedSay = previousSay + " " + currentSay;
-
-    // **Обновление HTML-элемента**
     currentSayElement.textContent = combinedSay;
-
-    // **Удаление предыдущей строки лога**
     previousLogline.remove();
-
-    // **Обновление "предыдущих" значений**
     previousLogline = currentLogline;
     previousSay = combinedSay;
     previousPlayer = currentPlayer;
     previousTimeStamp = currentTimeStamp;
-
-    // **Очистка**
     currentSayElement = "";
     currentPlayerElement = "";
+    continue;
   }
 }
-
 
 function sayToEmote() {
   let say = "";
@@ -1358,27 +1307,26 @@ function toggleSelectedClass() {
 }
 
 function removeHovered() {
-  let elementsUnderCursor = document.querySelectorAll(":hover");
-  elementsUnderCursor.forEach((element) => {
-    // Проверка на .player
-    if (element.matches(".player")) {
-      element.remove(); // Удаление .player
-    } else {
-      // Существующий код для других элементов:
-      let loglineParent = element.closest(".content > *");
-      let dateHeadingParent = element.closest("h2.date");
+  let elementUnderCursor = document.querySelector(".content :hover");
 
-      if (loglineParent) {
-        loglineParent.remove();
-      } else if (dateHeadingParent) {
-        let chapterParent = dateHeadingParent.closest(".chapter");
-        if (chapterParent) {
-          chapterParent.remove();
-        }
-      }
+  if (elementUnderCursor) {
+    let elementToRemove = elementUnderCursor;
+    console.log('elementToRemove: ', elementToRemove);
+
+    // Проверка, является ли elementUnderCursor одним из 4 классов
+    if (!elementToRemove.classList.contains("logline", "paper", "transcript", "no-margin")) {
+      // Если нет, то проверка его родителя
+      elementToRemove = elementToRemove.closest(".logline, .paper, .transcript, .no-margin");
     }
-  });
+
+    if (elementToRemove) {
+      // elementToRemove.remove();
+    }
+  }
 }
+
+
+
 
 function togglePaperClass() {
   let elementsUnderCursor = document.querySelectorAll(":hover");
@@ -1656,9 +1604,21 @@ function pasteImg() {
     let imgElement = document.createElement("img");
     imgElement.src = "POSTIMAGE";
     imgDiv.appendChild(imgElement);
-    elementUnderCursor.insertAdjacentElement("beforebegin", imgDiv);
+
+    // Определить тип элемента под курсором
+    let isPaper = elementUnderCursor.classList.contains("paper");
+    let isTranscript = elementUnderCursor.classList.contains("transcript");
+
+    // Вставить картинку в начало .paper или .transcript
+    if (isPaper || isTranscript) {
+      elementUnderCursor.insertAdjacentElement("afterbegin", imgDiv);
+    } else {
+      // Вставить картинку перед .paper или .transcript
+      elementUnderCursor.insertAdjacentElement("beforebegin", imgDiv);
+    }
   }
 }
+
 
 function pasteText() {
   let elementUnderCursor = document.querySelector(".content :hover");
