@@ -18,7 +18,6 @@ function formatHTML() {
   cleanText();
   splitSessions();
   wrapChapters();
-  findLoglinesAndConvertToTranscript();
   updateAll();
   chapterReverse();
   //postClear();
@@ -28,7 +27,6 @@ function updateAll() {
   console.log("!!! updateAll started");
   removeActorsAndSymbols();
   playerList();
-
   addTimeToChapter();
   calculateTotalDuration();
   combineFunctions();
@@ -63,6 +61,7 @@ function combineFunctions() {
   // thirdPerson("virt", "say");
   // thirdPerson("say", "emote");
   // thirdPerson("yell", "emote");
+  findLoglinesAndConvertToTranscript();
   console.log("combineFunctions finished");
 }
 
@@ -554,7 +553,7 @@ function cleanText() {
   // chatlogHTML = chatlogHTML.replace(/\[Объявление рейду\].*?\: /g, ""); // Объявления рейду
   chatlogHTML = chatlogHTML.replace(/&nbsp;/g, " "); // &nbsp;
   chatlogHTML = chatlogHTML.replace(/\.\.+/g, "…"); // &nbsp;
-  
+
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
 
@@ -1311,22 +1310,27 @@ function removeHovered() {
 
   if (elementUnderCursor) {
     let elementToRemove = elementUnderCursor;
-    console.log('elementToRemove: ', elementToRemove);
 
     // Проверка, является ли elementUnderCursor одним из 4 классов
-    if (!elementToRemove.classList.contains("logline", "paper", "transcript", "no-margin")) {
+    if (
+      !elementToRemove.classList.contains(
+        "logline",
+        "paper",
+        "transcript",
+        "no-margin"
+      )
+    ) {
       // Если нет, то проверка его родителя
-      elementToRemove = elementToRemove.closest(".logline, .paper, .transcript, .no-margin");
+      elementToRemove = elementToRemove.closest(
+        ".logline, .paper, .transcript, .no-margin"
+      );
     }
 
     if (elementToRemove) {
-      // elementToRemove.remove();
+      elementToRemove.remove();
     }
   }
 }
-
-
-
 
 function togglePaperClass() {
   let elementsUnderCursor = document.querySelectorAll(":hover");
@@ -1618,7 +1622,6 @@ function pasteImg() {
     }
   }
 }
-
 
 function pasteText() {
   let elementUnderCursor = document.querySelector(".content :hover");
