@@ -1,57 +1,71 @@
+// Настройки
+
+console.log("testing2, 09-03-2024");
+// toggleSelectionCSS();
+let combineDelay = 5 * 1000;
+let hoursBetweenSessions = 0.5;
+let showtimestamps = false;
+let searchWithinCollapsed = false;
+let chapterCollapseStatus = searchWithinCollapsed
+  ? ".chapter"
+  : ".chapter:not(.collapsed)";
+let removeCollapsedFlag = false;
+let showTimestampsFlag = true;
+
+// Главные функции
+
 function formatHTML() {
   cleanText();
   splitSessions();
   wrapChapters();
-  findLoglinesAndConvertToTranscript();
   updateAll();
   chapterReverse();
   //postClear();
 }
 
 function updateAll() {
+  console.log("!!! updateAll started");
   removeActorsAndSymbols();
-  removePlayersWithDungeonMasterNames();
   playerList();
-  removeChaptersIfFewPlayers();
-  processPlayerNames();
   addTimeToChapter();
-  synchronizePlayerColors();
   calculateTotalDuration();
-  gatherPlayersAndInsert();
+  combineFunctions();
+  gatherUniquePlayersAndInsert();
+  removeDoublesAtTotalActors();
+  synchronizePlayerColors();
+  // fullNames();
+  addPunctuation();
+  // removeChaptersIfFewPlayers();
+  // recombineFunctions();
+  console.log("updateAll finished");
+}
+
+function addPunctuation() {
   addSpaceToEmotePlayers();
   addColumnToPlayers();
   addCommaAndDotToPlayerList();
-  combineFunctions();
-  // recombineFunctions();
 }
 
 function combineFunctions() {
-  combineSay("emote");
+  console.log("combineFunctions started");
   combineSay("say");
+  combineSay("emote");
   combineSay("virt");
-  combineSay("yell");
-  combineSay("story");
-  //sayToEmote();
+  // combineSay("yell");
+  // combineSay("story");
+  sayToEmote();
+  emoteToSay();
   virtToSay();
   removeDashes();
   // thirdPerson("emote", "say");
   // thirdPerson("virt", "say");
-  // emoteToSay();
   // thirdPerson("say", "emote");
   // thirdPerson("yell", "emote");
+  findLoglinesAndConvertToTranscript();
+  console.log("combineFunctions finished");
 }
 
-console.log("main, 03-03-2024");
-toggleSelectionCSS();
-
-let combineDelay = 5 * 1000;
-let hoursBetweenSessions = 0.5;
-let showtimestamps = false;
-
-let searchWithinCollapsed = true;
-let chapterCollapseStatus = searchWithinCollapsed
-  ? ".chapter"
-  : ".chapter:not(.collapsed)";
+// Тире
 
 let dash = document.createElement("span");
 dash.classList.add("dash");
@@ -59,18 +73,12 @@ dash.textContent = " — ";
 dash = dash.outerHTML;
 
 // Пробел
-const space = document.createElement("span");
+let space = document.createElement("span");
 space.classList.add("space");
 space.textContent = " ";
 
-const npcData = [
-  ["Рыцарь-лейтенант Сиглим Сталекрут", "yellow", "Сиглим Сталекрут"],
-  ["Фэрриан Гардсон", "rogue", "Фэрриан Гардсон"],
-  ["Дробитель", "death-knight", "Дробитель"],
-  ["Сэр Сэмьюэл Лексон", "demon-hunter", "Сэр Сэмьюэл Дж. Лексон"],
-];
-
-const playerData = [
+// Игроки
+let playerData = [
   ["Фэрриан", "rogue", "Фэрриан Гардсон"],
   ["Малет", "shaman", "Малет Трант"],
   ["Роуз", "hunter", "Арчибальд Роуз"],
@@ -82,8 +90,9 @@ const playerData = [
   ["Дерек", "hunter", "Дерек Кларк"],
   ["Кэролай", "priest", "Кэролай Эстер"],
   ["Сахаджи", "shaman", "Сахаджи"],
-  ["Думитру", "druid", "Думитру Феликс Цимитяну"],
+  ["Думитру", "druid", "Думитру"],
   ["Каторжник", "warrior", "Рой Редвуд"],
+  ["Хофманн", "warrior", "Карл Хофманн"],
   ["Кариночка", "demon-hunter", "Карина"],
   ["Пачек", "warrior", "Офелия Пачек"],
   ["Шенн", "shaman", "Шенн Вельт"],
@@ -92,9 +101,79 @@ const playerData = [
   ["Кирке", "warrior", "Гюнтер Кирке"],
   ["Ашира", "priest", "Ашира Фраймс"],
   ["Паулина", "priest", "Паулина Санчес"],
+  ["Сью", "red", "Сью Блэкрич"],
+  ["Хейвинд", "red", "Сью Блэкрич"],
 ];
 
-const randomColors = [
+// Неписи
+let npcData = [
+  ["Рыцарь-лейтенант Сиглим Сталекрут", "yellow", "Сиглим Сталекрут"],
+  ["Дробитель", "death-knight", "Дробитель"],
+  ["Сэр Сэмьюэл Лексон", "demon-hunter", "Сэр Сэмьюэл Дж. Лексон"],
+  ["Рядовой Равенхольт", "shaman"],
+  ["Гнолл"],
+  ["Баззерс"],
+  ["Охранник"],
+  ["Стражник"],
+  ["Богачка"],
+  ["Богач"],
+  ["Рыбак"],
+  ["Бедняк"],
+  ["Рыболов"],
+  ["Повар"],
+  ["Бармен"],
+  ["Разнорабочий"],
+  ["Мурлок"],
+  ["Жрица"],
+  ["Извозчик"],
+  ["Ветроплет"],
+  ["Пирожок"],
+  ["Надсмотрщик"],
+  ["Вызыватель"],
+  ["Горнорабочий"],
+  ["Надзиратель"],
+  ["Шахтер"],
+  ["Сторож"],
+  ["Головорез"],
+  ["Стрелок"],
+  ["Почтальон"],
+  ["Дундосик"],
+  ["Инженер"],
+  ["Заступник"],
+  ["Дозорный"],
+  ["Хильда"],
+  ["Охранитель"],
+  ["Охотник"],
+  ["Хобгоблин"],
+  ["Посетительница"],
+  ["Посетитель"],
+  ["Кожевник"],
+  ["Нешрешшс"],
+  ["Охотница"],
+  ["Лекарь"],
+  ["Священник"],
+  ["Дробитель"],
+  ["Нищий"],
+  ["Медведь"],
+  ["Мадибус"],
+  ["Тейлзер"],
+  ["Ребенок"],
+  ["Ребёнок"],
+  ["Ваггат"],
+  ["Пехотинец"],
+  ["Сорорестраза"],
+  ["Всадник"],
+  ["Глашатай"],
+  ["Глашатай"],
+  ["Глашатай"],
+  ["Глашатай"],
+  ["Глашатай"],
+  ["Глашатай"],
+  ["Глашатай"],
+];
+
+// Цвета
+let randomColors = [
   "demon-hunter",
   "warlock",
   "monk",
@@ -138,87 +217,22 @@ const randomColors = [
   "random-19",
 ];
 
-const npcNames = {
-  Гнолл: true,
-  Баззерс: true,
-  Охранник: true,
-  Стражник: true,
-  Богачка: true,
-  Богач: true,
-  Рыбак: true,
-  Бедняк: true,
-  Рыболов: true,
-  Повар: true,
-  Бармен: true,
-  Разнорабочий: true,
-  Мурлок: true,
-  Жрица: true,
-  Извозчик: true,
-  Ветроплет: true,
-  Пирожок: true,
-  Надсмотрщик: true,
-  Вызыватель: true,
-  Горнорабочий: true,
-  Надзиратель: true,
-  Шахтер: true,
-  Сторож: true,
-  Головорез: true,
-  Стрелок: true,
-  Почтальон: true,
-  Дундосик: true,
-  Инженер: true,
-  Заступник: true,
-  Дозорный: true,
-  Хильда: true,
-  Охранитель: true,
-  Охотник: true,
-  Хобгоблин: true,
-  Посетительница: true,
-  Посетитель: true,
-  Кожевник: true,
-  Нешрешшс: true,
-  Охотница: true,
-  Лекарь: true,
-  Священник: true,
-  Дробитель: true,
-  Нищий: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-  Богач: true,
-};
+// Код
 
 async function handleTxtFile(file) {
   chatlog.innerHTML = "";
 
-  const text = await file.text();
+  let text = await file.text();
 
   importTxt(text);
 }
 
 async function handleHtmlFile(file) {
-  const htmlText = await file.text();
+  let htmlText = await file.text();
 
-  const parser = new DOMParser();
-  const htmlDocument = parser.parseFromString(htmlText, "text/html");
-  const newChatlog = htmlDocument.getElementById("chatlog");
+  let parser = new DOMParser();
+  let htmlDocument = parser.parseFromString(htmlText, "text/html");
+  let newChatlog = htmlDocument.getElementById("chatlog");
 
   if (newChatlog) {
     chatlog.innerHTML = newChatlog.innerHTML;
@@ -231,7 +245,7 @@ fileInputTxt = document.getElementById("file-input-txt");
 fileInputTxt.addEventListener("change", handleFileInput);
 
 function handleFileInput(event) {
-  const file = event.target.files[0];
+  let file = event.target.files[0];
 
   if (file) {
     if (file.name.endsWith(".txt")) {
@@ -247,12 +261,12 @@ function handleFileInput(event) {
 }
 
 function convertTimestamp(timestamp) {
-  const [date, time] = timestamp.split(" ");
-  const [month, day] = date.split("/");
-  const [hoursMinutesSeconds, milliseconds] = time.split(".");
-  const [hours, minutes, seconds] = hoursMinutesSeconds.split(":");
+  let [date, time] = timestamp.split(" ");
+  let [month, day] = date.split("/");
+  let [hoursMinutesSeconds, milliseconds] = time.split(".");
+  let [hours, minutes, seconds] = hoursMinutesSeconds.split(":");
 
-  const isoTimestamp = `${new Date().getFullYear()}-${month.padStart(
+  let isoTimestamp = `${new Date().getFullYear()}-${month.padStart(
     2,
     "0"
   )}-${day.padStart(2, "0")}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
@@ -261,20 +275,21 @@ function convertTimestamp(timestamp) {
 }
 
 function importTxt(text) {
-  const logLines = text.split("\n");
-  const chatlog = document.querySelector("#chatlog");
-  for (const line of logLines) {
+  let logLines = text.split("\n");
+  let chatlog = document.querySelector("#chatlog");
+  for (let line of logLines) {
     if (!/^\d+\/\d+\s+\d{2}:\d{2}:\d{2}\.\d{3}\s+/.test(line)) continue; // Пропускаем строки, не соответствующие формату временной метки
-    const timestampMatch = line.match(/^(\S+\s\S+)/);
-    const timestamp = timestampMatch ? timestampMatch[1] : "";
-    const loglineBody = line.replace(timestamp, "").trim();
+    let timestampMatch = line.match(/^(\S+\s\S+)/);
+    let timestamp = timestampMatch ? timestampMatch[1] : "";
+    let loglineBody = line.replace(timestamp, "").trim();
     if (timestamp) {
-      const p = document.createElement("p");
+      let p = document.createElement("p");
       p.setAttribute("timestamp", convertTimestamp(timestamp));
       p.className = "logline";
       p.textContent = loglineBody;
       chatlog.appendChild(p);
-      if (showtimestamps) {
+      if (showTimestampsFlag == true) {
+        console.log("timestamp: ", timestamp);
       }
     }
   }
@@ -282,30 +297,30 @@ function importTxt(text) {
 }
 
 function splitSessions() {
-  const paragraphs = document.querySelectorAll("p.logline");
+  let paragraphs = document.querySelectorAll("p.logline");
   let prevTimestamp = null;
   paragraphs.forEach((paragraph) => {
-    const timestamp = paragraph.getAttribute("timestamp");
+    let timestamp = paragraph.getAttribute("timestamp");
     if (timestamp) {
-      const currentTimestamp = new Date(timestamp);
+      let currentTimestamp = new Date(timestamp);
       if (prevTimestamp) {
-        const timeDifference = currentTimestamp - prevTimestamp;
+        let timeDifference = currentTimestamp - prevTimestamp;
         if (
           timeDifference > hoursBetweenSessions * 60 * 60 * 1000 ||
           timeDifference < 0
         ) {
           //   "if (timeDifference > 1 * 60 * 60 * 1000 || timeDifference < 0) {"
           // );
-          const dateHeader = document.createElement("h2");
+          let dateHeader = document.createElement("h2");
           dateHeader.className = "date";
-          const formattedDate = getFormattedDate(timestamp);
+          let formattedDate = getFormattedDate(timestamp);
           dateHeader.innerHTML = `<span class="title">Запись</span> <span class="day">${formattedDate}</span>`;
           paragraph.parentNode.insertBefore(dateHeader, paragraph);
         }
       } else {
-        const dateHeader = document.createElement("h2");
+        let dateHeader = document.createElement("h2");
         dateHeader.className = "date";
-        const formattedDate = getFormattedDate(timestamp);
+        let formattedDate = getFormattedDate(timestamp);
         dateHeader.innerHTML = `<span class="title">Запись</span> <span class="day">${formattedDate}</span>`;
         paragraph.parentNode.insertBefore(dateHeader, paragraph);
       }
@@ -319,8 +334,8 @@ function splitSessions() {
 }
 
 function getFormattedDate(timestamp) {
-  const date = new Date(timestamp);
-  const monthNames = [
+  let date = new Date(timestamp);
+  let monthNames = [
     "января",
     "февраля",
     "марта",
@@ -334,7 +349,7 @@ function getFormattedDate(timestamp) {
     "ноября",
     "декабря",
   ];
-  const formattedDate = `${date.getDate()} ${monthNames[date.getMonth()]}, `;
+  let formattedDate = `${date.getDate()} ${monthNames[date.getMonth()]}, `;
   return formattedDate;
 }
 
@@ -343,24 +358,24 @@ function padZero(number) {
 }
 
 function getTimeDifference(timestamp1, timestamp2) {
-  const date1 = new Date(timestamp1);
-  const date2 = new Date(timestamp2);
+  let date1 = new Date(timestamp1);
+  let date2 = new Date(timestamp2);
   return Math.abs(date2 - date1);
 }
 
 function insertContentDiv(contentDiv, nextElement) {
-  const container = nextElement ? nextElement.parentNode : document.body;
+  let container = nextElement ? nextElement.parentNode : document.body;
   container.insertBefore(contentDiv, nextElement);
 }
 
 function wrapChapters() {
-  const chatlog = document.querySelector("#chatlog");
+  let chatlog = document.querySelector("#chatlog");
   if (!chatlog) {
     console.error("Элемент #chatlog не найден.");
     return;
   }
 
-  const dates = chatlog.querySelectorAll("h2.date");
+  let dates = chatlog.querySelectorAll("h2.date");
   if (!dates.length) {
     console.error("Не найдены элементы h2.date.");
     return;
@@ -368,9 +383,9 @@ function wrapChapters() {
 
   let chapters = [];
 
-  for (const date of dates) {
+  for (let date of dates) {
     let nextElement = date.nextElementSibling;
-    const chapterElements = [date];
+    let chapterElements = [date];
     let firstPTimestamp = null;
 
     while (nextElement && nextElement.tagName === "P") {
@@ -381,7 +396,7 @@ function wrapChapters() {
       nextElement = nextElement.nextElementSibling;
     }
 
-    const chapterDiv = document.createElement("div");
+    let chapterDiv = document.createElement("div");
     chapterDiv.classList.add("chapter");
     chapterDiv.setAttribute("timestamp", firstPTimestamp);
     chapterDiv.classList.add("collapsed");
@@ -395,10 +410,10 @@ function wrapChapters() {
   chapters = document.querySelectorAll("div.chapter");
 
   chapters.forEach((chapter) => {
-    const contentContainer = document.createElement("div");
+    let contentContainer = document.createElement("div");
     contentContainer.classList.add("content");
 
-    const paragraphs = chapter.querySelectorAll("p");
+    let paragraphs = chapter.querySelectorAll("p");
 
     paragraphs.forEach((paragraph) => {
       contentContainer.appendChild(paragraph);
@@ -409,7 +424,7 @@ function wrapChapters() {
 }
 
 function collapseChapters() {
-  const chapters = document.querySelectorAll("div.chapter");
+  let chapters = document.querySelectorAll("div.chapter");
   chapters.forEach((chapter) => {
     chapter.classList.add("collapsed");
   });
@@ -417,7 +432,7 @@ function collapseChapters() {
 }
 
 function expandChapters() {
-  const chapters = document.querySelectorAll("div.chapter");
+  let chapters = document.querySelectorAll("div.chapter");
   chapters.forEach((chapter) => {
     chapter.classList.remove("collapsed");
   });
@@ -438,9 +453,9 @@ function toggleChapters() {
 }
 
 function renderChatLog(text) {
-  const chapters = divideChaptersByInterval(text);
-  for (const [chapterTitle, chapterLines] of Object.entries(chapters)) {
-    const chapter = createChapterElement(chapterTitle, chapterLines);
+  let chapters = divideChaptersByInterval(text);
+  for (let [chapterTitle, chapterLines] of Object.entries(chapters)) {
+    let chapter = createChapterElement(chapterTitle, chapterLines);
     chatlog.appendChild(chapter);
   }
   formatLog();
@@ -531,12 +546,13 @@ function cleanText() {
 
   // Прочее
 
-  chatlogHTML = chatlogHTML.replace(/[—–-]\s/g, "— "); // Тире в процессе
+  chatlogHTML = chatlogHTML.replace(/[—–-] /g, "— "); // Тире в процессе
   chatlogHTML = chatlogHTML.replace(/\|\d+\-\d+\((.*?)\)/g, "$1"); // смотрит на |3-3(Халвиэль)
   chatlogHTML = chatlogHTML.replace(/\|[a-z]+/g, ""); // HEX-код
   chatlogHTML = chatlogHTML.replace(/say">\s*[—–-]\s*/g, 'say">'); // Тире в начале
   // chatlogHTML = chatlogHTML.replace(/\[Объявление рейду\].*?\: /g, ""); // Объявления рейду
   chatlogHTML = chatlogHTML.replace(/&nbsp;/g, " "); // &nbsp;
+  chatlogHTML = chatlogHTML.replace(/\.\.+/g, "…"); // &nbsp;
 
   // Вывод для дебага
   document.getElementById("chatlog").innerHTML = chatlogHTML; // Вывод
@@ -690,11 +706,11 @@ function thirdPerson(firstClass, secondClass) {
 }
 
 function trimChapter(chapterElement) {
-  const paragraphs = chapterElement.find("p");
-  const selectedParagraphs = paragraphs.filter(".selected");
+  let paragraphs = chapterElement.find("p");
+  let selectedParagraphs = paragraphs.filter(".selected");
   if (selectedParagraphs.length > 0) {
-    const firstindex = paragraphs.index(selectedParagraphs.first());
-    const lastindex = paragraphs.index(selectedParagraphs.last());
+    let firstindex = paragraphs.index(selectedParagraphs.first());
+    let lastindex = paragraphs.index(selectedParagraphs.last());
     paragraphs.slice(0, firstindex).remove();
     paragraphs.slice(lastindex + 1).remove();
   }
@@ -702,13 +718,13 @@ function trimChapter(chapterElement) {
 }
 
 function removeShortChapters() {
-  const chapters = document.querySelectorAll(".chapter");
+  let chapters = document.querySelectorAll(".chapter");
   chapters.forEach((chapter) => {
-    const durationTimeSpan = chapter.querySelector(".durationtime");
+    let durationTimeSpan = chapter.querySelector(".durationtime");
     if (durationTimeSpan) {
-      const durationAttribute = durationTimeSpan.getAttribute("duration");
-      const [hours, minutes] = durationAttribute.split(":").map(Number);
-      const totalMinutes = hours * 60 + minutes;
+      let durationAttribute = durationTimeSpan.getAttribute("duration");
+      let [hours, minutes] = durationAttribute.split(":").map(Number);
+      let totalMinutes = hours * 60 + minutes;
       if (totalMinutes < 60) {
         chapter.remove();
       }
@@ -734,7 +750,7 @@ function scrollSave(element) {
 }
 
 function scrollToSaved() {
-  const targetElement = document.querySelector(".scroll");
+  let targetElement = document.querySelector(".scroll");
   if (targetElement) {
     scrollToCenter(targetElement); // Изменение здесь
   }
@@ -874,49 +890,48 @@ function selectAll() {
 }
 
 function debug() {
+  combineFunctions();
 }
 
 function calculateTotalDuration() {
   // console.log("Начинаем подсчет общей продолжительности...");
 
   // Удаляем существующий элемент .totalduration, если он есть
-  const existingTotalDuration = document.querySelector(
-    "#chatlog .totalduration"
-  );
+  let existingTotalDuration = document.querySelector("#chatlog .totalduration");
   if (existingTotalDuration) {
     // console.log("Удаляем существующую общую продолжительность...");
     existingTotalDuration.remove();
   }
 
-  const durationElements = document.querySelectorAll(
+  let durationElements = document.querySelectorAll(
     "#chatlog span.durationtime"
   );
 
   let totalMinutes = 0;
 
   durationElements.forEach((element) => {
-    const durationText = element.getAttribute("duration");
+    let durationText = element.getAttribute("duration");
     // console.log(`Найдена продолжительность: ${durationText}`);
-    const [hours, minutes] = durationText.split(":").map(Number);
+    let [hours, minutes] = durationText.split(":").map(Number);
     // console.log(`Часы: ${hours}, Минуты: ${minutes}`);
     totalMinutes += hours * 60 + minutes;
   });
 
   // console.log(`Общая продолжительность в минутах: ${totalMinutes}`);
 
-  const totalHours = Math.floor(totalMinutes / 60);
-  const remainingMinutes = totalMinutes % 60;
+  let totalHours = Math.floor(totalMinutes / 60);
+  let remainingMinutes = totalMinutes % 60;
 
   // console.log( `Общее количество часов: ${totalHours}, Оставшиеся минуты: ${remainingMinutes}` );
 
-  const totalDurationHeading = document.createElement("h2");
+  let totalDurationHeading = document.createElement("h2");
   totalDurationHeading.textContent = `Всего наиграно ${totalHours}ч ${remainingMinutes}мин`;
 
-  const totalDurationChapter = document.createElement("div");
+  let totalDurationChapter = document.createElement("div");
   totalDurationChapter.classList.add("totalduration");
   totalDurationChapter.appendChild(totalDurationHeading);
 
-  const chatlog = document.querySelector("#chatlog");
+  let chatlog = document.querySelector("#chatlog");
   // console.log("Вставляем общую продолжительность в начало #chatlog...");
   chatlog.insertBefore(totalDurationChapter, chatlog.firstChild);
 
@@ -976,7 +991,7 @@ function removeEmptyLines() {
   document.body.innerHTML = cleanedHtml;
 }
 function removeDashes() {
-  const loglines = document.querySelectorAll("p.logline");
+  let loglines = document.querySelectorAll("p.logline");
   loglines.forEach((element, index) => {
     element.innerHTML = element.innerHTML.replace(
       /"><span class="dash">— <\/span>/g,
@@ -989,21 +1004,21 @@ function removeDashes() {
   });
 }
 
-const keepGroupCheckbox = document.getElementById("keepGroupCheckbox");
+let keepGroupCheckbox = document.getElementById("keepGroupCheckbox");
 let keepGroup = true;
 
 keepGroupCheckbox.addEventListener("change", function () {
   keepGroup = this.checked;
 });
 
-const keepRaidCheckbox = document.getElementById("keepRaidCheckbox");
+let keepRaidCheckbox = document.getElementById("keepRaidCheckbox");
 let keepRaid = false;
 
 keepRaidCheckbox.addEventListener("change", function () {
   keepRaid = this.checked;
 });
 
-const keepRaidWarningCheckbox = document.getElementById(
+let keepRaidWarningCheckbox = document.getElementById(
   "keepRaidWarningCheckbox"
 );
 let keepRaidWarning = true;
@@ -1059,11 +1074,11 @@ function removeUnselectedLoglines() {
   // console.log("Удаляю ненужные строки");
 
   // Находим все .chapter, которые не .collapsed
-  const chapters = document.querySelectorAll(".chapter:not(.collapsed)");
+  let chapters = document.querySelectorAll(".chapter:not(.collapsed)");
 
   chapters.forEach((chapter) => {
     // Внутри каждого .chapter находим все p.logline, которые не .selected
-    const unselectedLoglines = chapter.querySelectorAll(
+    let unselectedLoglines = chapter.querySelectorAll(
       "p.logline:not(.selected):not(.paper):not(.transcript)"
     );
 
@@ -1075,38 +1090,38 @@ function removeUnselectedLoglines() {
 }
 
 function addTimeToChapter() {
-  const chapters = document.querySelectorAll(".chapter");
+  let chapters = document.querySelectorAll(".chapter");
   chapters.forEach((chapter) => {
-    const dateHeader = chapter.querySelector("h2.date");
-    const firstParagraph = chapter.querySelector("p[timestamp]:first-of-type");
-    const lastParagraph = chapter.querySelector("p[timestamp]:last-of-type");
+    let dateHeader = chapter.querySelector("h2.date");
+    let firstParagraph = chapter.querySelector("p[timestamp]:first-of-type");
+    let lastParagraph = chapter.querySelector("p[timestamp]:last-of-type");
 
     if (dateHeader && firstParagraph && lastParagraph) {
       dateHeader.querySelector(".starttime")?.remove();
       dateHeader.querySelector(".durationtime")?.remove();
 
-      const startTime = new Date(firstParagraph.getAttribute("timestamp"));
-      const endTime = new Date(lastParagraph.getAttribute("timestamp"));
-      const formatTime = (time) => {
-        const hours = String(time.getUTCHours()).padStart(2, "0");
-        const minutes = String(time.getUTCMinutes()).padStart(2, "0");
+      let startTime = new Date(firstParagraph.getAttribute("timestamp"));
+      let endTime = new Date(lastParagraph.getAttribute("timestamp"));
+      let formatTime = (time) => {
+        let hours = String(time.getUTCHours()).padStart(2, "0");
+        let minutes = String(time.getUTCMinutes()).padStart(2, "0");
         return `${hours}:${minutes}`;
       };
 
-      const startTimeString = formatTime(startTime);
+      let startTimeString = formatTime(startTime);
 
-      const durationTime = endTime - startTime;
-      const durationHours = Math.floor(durationTime / (1000 * 60 * 60));
-      const durationMinutes = Math.floor(
+      let durationTime = endTime - startTime;
+      let durationHours = Math.floor(durationTime / (1000 * 60 * 60));
+      let durationMinutes = Math.floor(
         (durationTime % (1000 * 60 * 60)) / (1000 * 60)
       );
 
-      const startTimeSpan = document.createElement("span");
+      let startTimeSpan = document.createElement("span");
       startTimeSpan.classList.add("starttime");
       startTimeSpan.textContent = startTimeString;
       dateHeader.appendChild(startTimeSpan);
 
-      const durationTimeSpan = document.createElement("span");
+      let durationTimeSpan = document.createElement("span");
       durationTimeSpan.classList.add("durationtime");
       durationTimeSpan.textContent = ` (${durationHours}ч ${durationMinutes}мин)`;
       durationTimeSpan.setAttribute(
@@ -1120,7 +1135,7 @@ function addTimeToChapter() {
 }
 
 function calculateTimeDifference() {
-  const now = new Date();
+  let now = new Date();
   localOffset = now.getTimezoneOffset();
   localDifference = localOffset / 60;
   moscowDifference = localDifference + 3;
@@ -1131,24 +1146,24 @@ function calculateTimeDifference() {
 }
 
 function processTimestamp() {
-  const chapter = document.querySelector(".chapter");
+  let chapter = document.querySelector(".chapter");
 
-  const timestampValue = chapter.getAttribute("timestamp");
+  let timestampValue = chapter.getAttribute("timestamp");
 
   // console.log("Введенный таймштамп:", timestampValue);
 
-  const dateObject = new Date(timestampValue);
-  const hours = ("0" + dateObject.getUTCHours()).slice(-2);
-  const minutes = ("0" + dateObject.getUTCMinutes()).slice(-2);
-  const formattedTimestamp = hours + ":" + minutes;
+  let dateObject = new Date(timestampValue);
+  let hours = ("0" + dateObject.getUTCHours()).slice(-2);
+  let minutes = ("0" + dateObject.getUTCMinutes()).slice(-2);
+  let formattedTimestamp = hours + ":" + minutes;
 
   // console.log("Отформатированный таймштамп:", formattedTimestamp);
 }
 
 function convertLoglineToTranscript(loglineElement) {
-  const timestamp = new Date(loglineElement.getAttribute("timestamp"));
-  const day = timestamp.getDate();
-  const monthNames = [
+  let timestamp = new Date(loglineElement.getAttribute("timestamp"));
+  let day = timestamp.getDate();
+  let monthNames = [
     "янв",
     "фев",
     "мар",
@@ -1162,11 +1177,11 @@ function convertLoglineToTranscript(loglineElement) {
     "ноя",
     "дек",
   ];
-  const monthindex = timestamp.getMonth();
-  const formattedDate = day + " " + monthNames[monthindex];
-  const hours = ("0" + timestamp.getUTCHours()).slice(-2);
-  const minutes = ("0" + timestamp.getUTCMinutes()).slice(-2);
-  const formattedTimestamp = formattedDate + " " + hours + ":" + minutes;
+  let monthindex = timestamp.getMonth();
+  let formattedDate = day + " " + monthNames[monthindex];
+  let hours = ("0" + timestamp.getUTCHours()).slice(-2);
+  let minutes = ("0" + timestamp.getUTCMinutes()).slice(-2);
+  let formattedTimestamp = formattedDate + " " + hours + ":" + minutes;
   let playerName = loglineElement.querySelector(".player");
   loglineElement.setAttribute("timestamp", timestamp.toISOString());
   playerName.remove();
@@ -1184,7 +1199,7 @@ function convertLoglineToTranscript(loglineElement) {
     playerName = playerName.textContent.slice(0, -1);
   }
 
-  const transcriptRecordHTML = `
+  let transcriptRecordHTML = `
     <div class="record">
       <p>Время<span>25 ОТП, ${formattedDate}, ${hours}:${minutes}</span></p>
       <p>Автор<span>${playerName}</span></p>
@@ -1192,7 +1207,7 @@ function convertLoglineToTranscript(loglineElement) {
     <span class="speech">${loglineElement.textContent.trim()}</span>
   `;
 
-  const transcriptElement = document.createElement("div");
+  let transcriptElement = document.createElement("div");
   transcriptElement.classList.add("transcript");
   transcriptElement.innerHTML = transcriptRecordHTML;
 
@@ -1204,7 +1219,7 @@ function convertLoglineToTranscript(loglineElement) {
 }
 
 function findLoglinesAndConvertToTranscript() {
-  const loglineElements = document.querySelectorAll("p.logline.say");
+  let loglineElements = document.querySelectorAll("p.logline.say");
 
   loglineElements.forEach((loglineElement) => {
     if (/запись/i.test(loglineElement.textContent)) {
@@ -1217,21 +1232,23 @@ document.addEventListener("keydown", function (event) {
   if (event.key === "Enter" && event.target.id === "keywordsInput") {
     logFilter();
   } else if (!wrapping && event.key === "Delete") {
-    deleteElementUnderCursor();
+    removeHovered();
   } else if (event.key === "p" || event.key === "з") {
     togglePaperClass();
   } else if (event.key === "ArrowLeft") {
     pasteText();
   } else if (["[", "х"].includes(event.key) && event.ctrlKey) {
-    deleteBefore();
+    removeEverything("before");
+    updateAll();
   } else if (["]", "ъ"].includes(event.key) && event.ctrlKey) {
-    deleteAfter();
+    removeEverything("after");
+    updateAll();
   } else if (event.key === "ArrowRight") {
     pasteImg();
   } else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
     moveElement(event);
   } else if (["m", "ь"].includes(event.key)) {
-    const hoveredLogline = document.querySelector(".logline:hover");
+    let hoveredLogline = document.querySelector(".logline:hover");
     if (hoveredLogline) {
       convertLoglineToTranscript(hoveredLogline);
     }
@@ -1247,11 +1264,16 @@ document.addEventListener("keydown", function (event) {
     finishWrap("no-margin");
   } else if (event.key === "/") {
     divideChapter();
+    updateAll();
   } else if (event.key === "*") {
   } else if (event.key === "d") {
     debug();
   } else if (event.key === "+") {
+    console.log("RecombineFunctions");
     recombineFunction("say");
+    recombineFunction("yell");
+    recombineFunction("story");
+    console.log("End");
   } else if (event.key === ",") {
     testing();
   }
@@ -1262,13 +1284,13 @@ document.addEventListener("click", function () {
 });
 
 function toggleSelectedClass() {
-  const elementsUnderCursor = document.querySelectorAll(":hover");
+  let elementsUnderCursor = document.querySelectorAll(":hover");
   elementsUnderCursor.forEach((element) => {
-    const loglineParent = element.closest(".logline");
-    const paperParent = element.closest(".paper");
-    const transcriptParent = element.closest(".transcript");
-    const playerParent = element.closest(".player");
-    const dateParent = element.closest(".chapter");
+    let loglineParent = element.closest(".logline");
+    let paperParent = element.closest(".paper");
+    let transcriptParent = element.closest(".transcript");
+    let playerParent = element.closest(".player");
+    let dateParent = element.closest(".chapter");
 
     if (
       dateParent &&
@@ -1283,25 +1305,35 @@ function toggleSelectedClass() {
   });
 }
 
-function deleteElementUnderCursor() {
-  const elementsUnderCursor = document.querySelectorAll(":hover");
-  elementsUnderCursor.forEach((element) => {
-    const loglineParent = element.closest(".content > *");
-    const dateHeadingParent = element.closest("h2.date");
+function removeHovered() {
+  let elementUnderCursor = document.querySelector(".content :hover");
 
-    if (loglineParent) {
-      loglineParent.remove();
-    } else if (dateHeadingParent) {
-      const chapterParent = dateHeadingParent.closest(".chapter");
-      if (chapterParent) {
-        chapterParent.remove();
-      }
+  if (elementUnderCursor) {
+    let elementToRemove = elementUnderCursor;
+
+    // Проверка, является ли elementUnderCursor одним из 4 классов
+    if (
+      !elementToRemove.classList.contains(
+        "logline",
+        "paper",
+        "transcript",
+        "no-margin"
+      )
+    ) {
+      // Если нет, то проверка его родителя
+      elementToRemove = elementToRemove.closest(
+        ".logline, .paper, .transcript, .no-margin"
+      );
     }
-  });
+
+    if (elementToRemove) {
+      elementToRemove.remove();
+    }
+  }
 }
 
 function togglePaperClass() {
-  const elementsUnderCursor = document.querySelectorAll(":hover");
+  let elementsUnderCursor = document.querySelectorAll(":hover");
   elementsUnderCursor.forEach((element) => {
     if (element.tagName === "P") {
       element.classList.toggle("paper");
@@ -1340,77 +1372,114 @@ function moveElement(event) {
   });
 }
 
-function deleteBefore() {
-  const hover = document.querySelectorAll(".content > :hover, h2.date:hover");
+function removeEverything(position) {
+  let hover = document.querySelectorAll(".content > :hover, h2.date:hover");
 
   hover.forEach((element) => {
     if (element.tagName.toLowerCase() === "h2") {
-      // console.log("Под курсором h2.date");
-      const closestChapter = element.closest(".chapter");
+      let closestChapter = element.closest(".chapter");
       if (closestChapter) {
-        let sibling = closestChapter.previousElementSibling;
+        let sibling;
+        if (position === "before") {
+          sibling = closestChapter.previousElementSibling;
+        } else if (position === "after") {
+          sibling = closestChapter.nextElementSibling;
+        }
+
         while (sibling && sibling.tagName !== "H2") {
           sibling.classList.add("remove");
-          sibling = sibling.previousElementSibling;
+          if (position === "before") {
+            sibling = sibling.previousElementSibling;
+          } else if (position === "after") {
+            sibling = sibling.nextElementSibling;
+          }
         }
       }
     } else {
-      // console.log("Под курсором .content > :hover");
-      const contentContainer = element.closest(".content");
-      if (!contentContainer) return; // Пропускаем, если элемент не находится в контейнере .content
+      let contentContainer = element.closest(".content");
+      if (!contentContainer) return;
 
-      const targetElement = element;
+      let targetElement = element;
+      let currentElement;
+      if (position === "before") {
+        currentElement = targetElement.previousElementSibling;
+      } else if (position === "after") {
+        currentElement = targetElement.nextElementSibling;
+      }
 
-      let currentElement = targetElement.previousElementSibling;
       while (currentElement) {
-        const siblingToRemove = currentElement;
-        currentElement = currentElement.previousElementSibling;
+        let siblingToRemove = currentElement;
+        if (position === "before") {
+          currentElement = currentElement.previousElementSibling;
+        } else if (position === "after") {
+          currentElement = currentElement.nextElementSibling;
+        }
         siblingToRemove.remove();
       }
     }
   });
-
-  scrollToCenter(targetElement);
-  // Удаление всех элементов с классом .chapter.remove из #chatlog
-  document
-    .querySelectorAll("#chatlog > .chapter.remove")
-    .forEach((element) => element.remove());
-
-  // Обновление времени и актеров
-  updateAll();
+  removeRed();
 }
 
 function divideChapter() {
-  const hoveredElements = document.querySelectorAll(".content > :hover");
+  console.log("divideChapter start");
+
+  // Получаем все элементы, над которыми произведено наведение, внутри .content
+  let hoveredElements = document.querySelectorAll(".content > :hover");
+
+  // Проверяем, есть ли наведенные элементы
+  if (hoveredElements.length === 0) {
+    console.error("Не найдено наведенных элементов.");
+    return;
+  }
+
+  // Массив для хранения строк HTML, которые будут перемещены в новую главу
   let migratingLoglines = [];
 
+  // Перебираем каждый наведенный элемент
   hoveredElements.forEach((element) => {
+    // Проверяем, является ли элемент класса "logline"
+    if (!element.classList.contains("logline")) {
+      console.warn("Наведенный элемент не является логлайном.");
+      return;
+    }
+
+    // Перемещаем все предыдущие элементы до первого наведенного элемента
     let currentElement = element.previousElementSibling;
     while (currentElement) {
-      migratingLoglines.unshift(currentElement.outerHTML);
-      const siblingToRemove = currentElement;
+      migratingLoglines.unshift(currentElement.outerHTML); // Добавляем HTML-строку в начало массива
+      let siblingToRemove = currentElement;
       currentElement = currentElement.previousElementSibling;
-      siblingToRemove.remove();
+      siblingToRemove.remove(); // Удаляем текущий элемент
     }
   });
 
-  // Озвучиваем в консоль содержимое массива
+  // Проверяем, найдены ли элементы для перемещения
+  if (migratingLoglines.length === 0) {
+    console.error("Не найдены логлайны для перемещения.");
+    return;
+  }
 
-  // Находим ближайший родительский .chapter
-  const currentChapter = hoveredElements[0].closest(".chapter");
+  // Находим родительскую главу для наведенных элементов
+  let currentChapter = hoveredElements[0].closest(".chapter");
+  if (!currentChapter) {
+    console.error("Не найдена глава для наведенных элементов.");
+    return;
+  }
 
-  // Копируем заголовок и актеров текущего .chapter
-  const chapterHeader = currentChapter
+  // Создаем заголовок для новой главы, добавляя знак "+" к существующему заголовку
+  let chapterHeader = currentChapter
     .querySelector("h2.date")
-    .outerHTML.replace(/(<span class="title">.*)(<\/span>)/, "$1 +$2");
+    .outerHTML.replace(/(<span class="title">.*?)(<\/span>)/, "$1 +$2");
 
-  // Получаем timestamp первого logline в текущем .chapter
-  const firstLoglineTimestamp = currentChapter
-    .querySelector(".logline")
-    .getAttribute("timestamp");
+  // Находим первый элемент класса "logline" в текущей главе
+  let firstLogline = currentChapter.querySelector(".logline");
+  let firstLoglineTimestamp = firstLogline
+    ? firstLogline.getAttribute("timestamp")
+    : "";
 
-  // Создаем новый .chapter с атрибутом timestamp от первого logline
-  const newChapterHTML = `
+  // Формируем HTML для новой главы, включая заголовок и перемещенные элементы
+  let newChapterHTML = `
     <div class="chapter" timestamp="${firstLoglineTimestamp}">
       ${chapterHeader}
       <div class="content">
@@ -1419,60 +1488,20 @@ function divideChapter() {
     </div>
   `;
 
-  // Вставляем новый .chapter перед текущим
+  // Вставляем HTML новой главы перед текущей главой
   currentChapter.insertAdjacentHTML("beforebegin", newChapterHTML);
 
-  // Очищаем массив
+  // Очищаем массив, чтобы избежать повторного использования элементов
   migratingLoglines = [];
 
-  // Обновляем время и актеров только для текущего .chapter и нового .chapter
-  updateAll(currentChapter);
-  updateAll(currentChapter.previousElementSibling);
-}
-
-function deleteAfter() {
-  const hover = document.querySelectorAll(".content > :hover, h2.date:hover");
-
-  hover.forEach((element) => {
-    if (element.tagName.toLowerCase() === "h2") {
-      // console.log("Под курсором h2.date");
-      const closestChapter = element.closest(".chapter");
-      if (closestChapter) {
-        let sibling = closestChapter.nextElementSibling;
-        while (sibling && sibling.id !== "chatlog") {
-          sibling.classList.add("remove");
-          sibling = sibling.nextElementSibling;
-        }
-      }
-    } else {
-      // console.log("Под курсором .content > :hover");
-      const contentContainer = element.closest(".content");
-      if (!contentContainer) return; // Пропускаем, если элемент не находится в контейнере .content
-
-      const targetElement = element;
-
-      let currentElement = targetElement.nextElementSibling;
-      while (currentElement) {
-        const siblingToRemove = currentElement;
-        currentElement = currentElement.nextElementSibling;
-        siblingToRemove.remove();
-      }
-    }
-  });
-  // Удаление всех элементов с классом .chapter.remove из #chatlog
-  document
-    .querySelectorAll("#chatlog > .chapter.remove")
-    .forEach((element) => element.remove());
-
-  // Обновление времени и актеров
-  updateAll();
+  console.log("divideChapter finish");
 }
 
 let wrapping = false;
 
 function startWrap() {
   wrapping = true;
-  const contentChild = document.querySelector(".content .logline:hover");
+  let contentChild = document.querySelector(".content .logline:hover");
   if (contentChild) {
     document.querySelectorAll(".content .start_wrap").forEach((element) => {
       element.classList.remove("start_wrap");
@@ -1490,115 +1519,118 @@ function removeRed() {
 }
 
 function finishWrap(className) {
-  if (wrapping == true) {
-    const contentChild = document.querySelector(".content .logline:hover");
-    if (contentChild) {
-      document.querySelectorAll(".content .finish_wrap").forEach((element) => {
-        element.classList.remove("finish_wrap");
-      });
+  if (!wrapping) return; // Если обёртка не начата, выходим
 
-      contentChild.classList.add("finish_wrap");
+  let contentChild = document.querySelector(".content .logline:hover");
+  if (!contentChild) return;
 
-      WrapToDiv();
+  let content = contentChild.closest("div.content");
+  if (!content) return;
+
+  let startWrap = content.querySelector(".start_wrap");
+  let finishWrap = content.querySelector(".finish_wrap");
+  if (!startWrap) return;
+
+  if (!finishWrap) {
+    // Если завёртывание ещё не завершено, добавляем класс и завершаем функцию
+    contentChild.classList.add("finish_wrap");
+    return;
+  }
+
+  startWrap.classList.remove("start_wrap");
+  finishWrap.classList.remove("finish_wrap");
+
+  let wrapperDiv = document.createElement("div");
+  wrapperDiv.classList.add(className);
+
+  let isWrapping = false;
+  let siblings = Array.from(content.children);
+
+  for (let sibling of siblings) {
+    if (sibling === startWrap) {
+      isWrapping = true;
+      // Клонируем начальный элемент обёртки и добавляем его в новую обёртку
+      wrapperDiv.appendChild(startWrap.cloneNode(true));
+      continue;
     }
 
-    function WrapToDiv() {
-      const elementsUnderCursor = document.querySelectorAll(
-        ".content .logline:hover"
-      );
+    if (sibling === finishWrap) {
+      // Клонируем конечный элемент обёртки и добавляем его в новую обёртку
+      wrapperDiv.appendChild(finishWrap.cloneNode(true));
+      break;
+    }
 
-      for (const element of elementsUnderCursor) {
-        const contentChild = element.closest("div.content");
-        if (!contentChild) {
-          continue;
-        }
-
-        const startWrap = contentChild.querySelector(".start_wrap");
-        const finishWrap = contentChild.querySelector(".finish_wrap");
-        startWrap.classList.remove("start_wrap");
-        finishWrap.classList.remove("finish_wrap");
-
-        if (!startWrap || !finishWrap) {
-          //   "Не удалось найти элемент начала или конца обёртки. Отмена операции WrapToDiv."
-          // );
-          return;
-        }
-
-        const siblings = Array.from(contentChild.children);
-        let isWrapping = false;
-        const spoilerDiv = document.createElement("div");
-        spoilerDiv.classList.add(className);
-
-        for (const sibling of siblings) {
-          if (sibling === startWrap) {
-            isWrapping = true;
-            spoilerDiv.appendChild(startWrap.cloneNode(true));
-
-            // После строки 1541
-
-            //   "SpoilerDiv content before removing startWrap and finishWrap:",
-            //   spoilerDiv.innerHTML
-            // );
-
-            continue;
-          }
-
-          if (sibling === finishWrap) {
-            spoilerDiv.appendChild(finishWrap.cloneNode(true));
-            break;
-          }
-
-          if (isWrapping) {
-            const clonedSibling = sibling.cloneNode(true);
-            spoilerDiv.appendChild(clonedSibling);
-            sibling.remove();
-          }
-        }
-
-        startWrap.parentNode.insertBefore(spoilerDiv, startWrap.nextSibling);
-
-        if (className === "spoiler") {
-          const spoilerDesc = document.createElement("h1");
-          spoilerDesc.classList.add("spoiler_desc");
-          spoilerDesc.textContent = "Наведитесь, чтобы раскрыть спойлер";
-          spoilerDiv.parentNode.insertBefore(
-            spoilerDesc,
-            spoilerDiv.nextSibling
-          );
-        }
-        if (className === "remove") {
-          removeRed();
-        }
-        startWrap.remove();
-        finishWrap.remove();
-        wrapping = false;
-      }
+    if (isWrapping) {
+      // Клонируем и добавляем соседние элементы между началом и концом обёртки
+      let clonedSibling = sibling.cloneNode(true);
+      wrapperDiv.appendChild(clonedSibling);
+      sibling.remove();
     }
   }
+
+  // Вставляем новую обёртку после начального элемента
+  startWrap.parentNode.insertBefore(wrapperDiv, startWrap.nextSibling);
+
+  // Добавляем описание спойлера, если класс равен "spoiler"
+  if (className === "spoiler") {
+    let spoilerDesc = document.createElement("h1");
+    spoilerDesc.classList.add("spoiler_desc");
+    spoilerDesc.textContent = "Наведитесь, чтобы раскрыть спойлер";
+    wrapperDiv.parentNode.insertBefore(spoilerDesc, wrapperDiv.nextSibling);
+  }
+
+  // Удаляем элементы с классом "remove"
+  if (className === "remove") {
+    removeRed();
+  }
+
+  // Удаляем все кроме первого элемента с классом "player"
+  if (className === "no-margin") {
+    console.log("wrapperDiv: ", wrapperDiv);
+    let players = wrapperDiv.querySelectorAll(".player");
+    for (let i = 1; i < players.length; i++) {
+      players[i].remove();
+    }
+  }
+
+  startWrap.remove();
+  finishWrap.remove();
+  wrapping = false; // Сбрасываем флаг обёртки
 }
 
 function pasteImg() {
-  const elementUnderCursor = document.querySelector(".content :hover");
+  let elementUnderCursor = document.querySelector(".content :hover");
 
   if (elementUnderCursor) {
-    const imgDiv = document.createElement("div");
+    let imgDiv = document.createElement("div");
     imgDiv.className = "paper img";
 
-    const imgElement = document.createElement("img");
+    let imgElement = document.createElement("img");
     imgElement.src = "POSTIMAGE";
     imgDiv.appendChild(imgElement);
-    elementUnderCursor.insertAdjacentElement("beforebegin", imgDiv);
+
+    // Определить тип элемента под курсором
+    let isPaper = elementUnderCursor.classList.contains("paper");
+    let isTranscript = elementUnderCursor.classList.contains("transcript");
+
+    // Вставить картинку в начало .paper или .transcript
+    if (isPaper || isTranscript) {
+      elementUnderCursor.insertAdjacentElement("afterbegin", imgDiv);
+    } else {
+      // Вставить картинку перед .paper или .transcript
+      elementUnderCursor.insertAdjacentElement("beforebegin", imgDiv);
+    }
   }
 }
 
 function pasteText() {
-  const elementUnderCursor = document.querySelector(".content :hover");
+  let elementUnderCursor = document.querySelector(".content :hover");
 
   if (elementUnderCursor) {
-    const textDiv = document.createElement("div");
+    let textDiv = document.createElement("div");
     textDiv.className = "paper";
 
-    const textElement = document.createElement("p");
+    let textElement = document.createElement("p");
     textElement.textContent = "Текст для вставки";
     textDiv.appendChild(textElement);
     elementUnderCursor.insertAdjacentElement("beforebegin", textDiv);
@@ -1606,16 +1638,16 @@ function pasteText() {
 }
 
 // function pasteText() {
-//   const elementsUnderCursor = document.querySelectorAll(".content :hover");
+//   let elementsUnderCursor = document.querySelectorAll(".content :hover");
 
-//   for (const element of elementsUnderCursor) {
-//     const loglineElement = element.closest("p.logline");
+//   for (let element of elementsUnderCursor) {
+//     let loglineElement = element.closest("p.logline");
 
 //     if (loglineElement) {
-//       const paperDiv = document.createElement("div");
+//       let paperDiv = document.createElement("div");
 //       paperDiv.className = "paper selected";
 
-//       const textElement = document.createElement("p");
+//       let textElement = document.createElement("p");
 //       textElement.textContent = "Текст для вставки";
 
 //       paperDiv.appendChild(textElement);
@@ -1626,75 +1658,23 @@ function pasteText() {
 //   }
 // }
 
-const uniquePlayers = new Set();
 function createPlayerItem(playerName) {
-  const playerItem = document.createElement("li");
+  let playerItem = document.createElement("li");
   playerItem.textContent = playerName;
   playerItem.classList.add("player");
   return playerItem;
 }
 
-function playerList() {
-  // Получаем все элементы с классом "content"
-  const contents = document.querySelectorAll(".content");
-
-  // Перебираем каждый элемент "content"
-  contents.forEach((content) => {
-    // Получаем всех игроков внутри текущего "content"
-    const players = content.querySelectorAll(talkingPlayer);
-
-    // Создаем элементы для игроков и NPC
-    const actorsDiv = document.createElement("div"); // Общий контейнер для всех актеров
-    const playerList = document.createElement("ul"); // Список игроков
-    const npcList = document.createElement("ul"); // Список NPC
-
-    // Добавляем классы к спискам игроков и NPC
-    playerList.classList.add("players");
-    npcList.classList.add("npc");
-
-    // Добавляем класс к общему контейнеру
-    actorsDiv.classList.add("actors");
-
-    // Вставляем общий контейнер перед текущим "content"
-    content.parentNode.insertBefore(actorsDiv, content);
-
-    // Перебираем всех игроков в текущем "content"
-    players.forEach((player) => {
-      const playerName = player.textContent.trim(); // Получаем имя игрока
-
-      // Если имя игрока уникально и он не является NPC
-      if (!uniquePlayers.has(playerName) && !npcNames[playerName]) {
-        // Если у игрока одна часть имени, добавляем его в список игроков
-        if (playerName.indexOf(" ") === -1 && playerName.indexOf("-") === -1) {
-          playerList.appendChild(createPlayerItem(playerName));
-        } else {
-          // Если у игрока более одной части имени, он считается NPC и добавляется в соответствующий список
-          npcList.appendChild(createPlayerItem(playerName));
-        }
-        // Добавляем имя игрока в список уникальных имен
-        uniquePlayers.add(playerName);
-      }
-    });
-
-    // Добавляем списки игроков и NPC в общий контейнер
-    actorsDiv.appendChild(playerList);
-    actorsDiv.appendChild(npcList);
-
-    // Очищаем список уникальных имен перед переходом к следующему "content"
-    uniquePlayers.clear();
-  });
-}
-
-const talkingPlayer = ".say > .player, .yell > .player, .virt > .player";
+let talkingPlayer = ".say > .player, .yell > .player, .virt > .player";
 
 function addColumnToPlayers() {
-  const contents = document.querySelectorAll(".content");
+  let contents = document.querySelectorAll(".content");
 
   contents.forEach((content) => {
-    const players = content.querySelectorAll(talkingPlayer);
+    let players = content.querySelectorAll(talkingPlayer);
 
     players.forEach((player) => {
-      const columnSpan = document.createElement("span");
+      let columnSpan = document.createElement("span");
       columnSpan.classList.add("column");
       columnSpan.textContent = ": ";
 
@@ -1704,13 +1684,13 @@ function addColumnToPlayers() {
 }
 
 function addSpaceToEmotePlayers() {
-  const contents = document.querySelectorAll(".content");
+  let contents = document.querySelectorAll(".content");
 
   contents.forEach((content) => {
-    const emotePlayers = content.querySelectorAll(".emote > .player");
+    let emotePlayers = content.querySelectorAll(".emote > .player");
 
     emotePlayers.forEach((player) => {
-      const spaceSpan = document.createElement("span");
+      let spaceSpan = document.createElement("span");
       spaceSpan.classList.add("space");
       spaceSpan.textContent = " ";
 
@@ -1719,51 +1699,22 @@ function addSpaceToEmotePlayers() {
   });
 }
 
-function synchronizePlayerColors() {
-  const chapters = document.querySelectorAll("div.chapter");
-
-  const playerColorMap = new Map();
-
-  chapters.forEach((chapter) => {
-    const actorsPlayers = chapter.querySelectorAll(".actors li.player");
-
-    actorsPlayers.forEach((actorPlayer) => {
-      const playerName = actorPlayer.textContent.trim();
-      const secondClass = Array.from(actorPlayer.classList)[1];
-
-      playerColorMap.set(playerName, secondClass);
-    });
-
-    const contentPlayers = chapter.querySelectorAll(".content .player");
-    contentPlayers.forEach((contentPlayer) => {
-      const playerName = contentPlayer.textContent.trim();
-
-      const secondClass = playerColorMap.get(playerName);
-
-      if (secondClass) {
-        // Удаление всех имеющихся классов у игрока
-        contentPlayer.className = "player " + secondClass;
-      }
-    });
-  });
-}
-
 function addCommaAndDotToPlayerList() {
-  const actorsDivs = document.querySelectorAll("div.actors");
+  let actorsDivs = document.querySelectorAll("div.actors");
 
   actorsDivs.forEach((actorsDiv) => {
-    const actors = actorsDiv.querySelectorAll("li.player");
-    const lastActorindex = actors.length - 1;
+    let actors = actorsDiv.querySelectorAll(".player");
+    let lastActorindex = actors.length - 1;
 
     actors.forEach((actor, index) => {
-      const commaSpan = document.createElement("span");
+      let commaSpan = document.createElement("span");
       commaSpan.classList.add("comma");
       commaSpan.textContent = ",";
       actor.appendChild(commaSpan);
 
       if (index === lastActorindex) {
         commaSpan.remove();
-        const dotSpan = document.createElement("span");
+        let dotSpan = document.createElement("span");
         dotSpan.classList.add("dot");
         dotSpan.textContent = ".";
         actor.appendChild(dotSpan);
@@ -1777,90 +1728,6 @@ function toggleSelectionCSS() {
   if (styleLink) {
     styleLink.disabled = !styleLink.disabled;
   }
-}
-
-function gatherPlayersAndInsert() {
-  const totalPlayers = document.querySelector(
-    ".totalduration > .actors > .players"
-  );
-  if (totalPlayers) {
-    totalPlayers.remove();
-  }
-
-  // Собираем все элементы .players > li со всей страницы
-  const allPlayers = document.querySelectorAll(".players > li");
-
-  // Проходимся по каждому элементу и удаляем все <span> из его содержимого
-  allPlayers.forEach((player) => {
-    player.innerHTML = player.innerHTML.replace(/<span[^>]*>.*?<\/span>/g, "");
-  });
-  const totalUniquePlayers = removeDuplicates(allPlayers);
-  // Создаем элемент div.players
-  const actorsUI = document.createElement("div");
-  actorsUI.classList.add("actors");
-
-  // Перебираем найденные игроки и добавляем их в ul.players
-
-  totalUniquePlayers.forEach((player) => {
-    actorsUI.appendChild(player);
-  });
-
-  // Находим элемент div.totalduration
-  const totalDurationChapter = document.querySelector(
-    "#chatlog .totalduration"
-  );
-
-  if (totalDurationChapter) {
-    // Вставляем ul.players в начало div.totalduration
-    totalDurationChapter.insertBefore(actorsUI, totalDurationChapter.lastChild);
-  } else {
-  }
-}
-
-function removeDuplicates(array) {
-  // Создаем набор уникальных элементов для определения уникальности
-  const uniquePlayers = new Set();
-
-  // Добавляем элементы в набор
-  array.forEach((player) => {
-    const playerName = player.textContent.trim();
-    const existingPlayer = Array.from(uniquePlayers).find(
-      (item) => item.textContent.trim() === playerName
-    );
-
-    if (!existingPlayer) {
-      uniquePlayers.add(player.cloneNode(true)); // Клонируем элемент и добавляем его в набор
-    }
-  });
-
-  // Преобразуем набор обратно в массив элементов
-  return Array.from(uniquePlayers);
-}
-
-const dungeonMasterMap = new Map([
-  ["Фг", true],
-  ["Кей", true],
-  ["Минор", true],
-  ["Эдита", true],
-  ["Кей", true],
-  ["Кей", true],
-  ["Кей", true],
-  ["Кей", true],
-  ["Кей", true],
-  ["Кей", true],
-  ["Кей", true],
-  ["Кей", true],
-]);
-
-// Функция для удаления всех игроков с именами ДМов
-function removePlayersWithDungeonMasterNames() {
-  const players = document.querySelectorAll(".player");
-  players.forEach((player) => {
-    const playerName = player.textContent.trim();
-    if (dungeonMasterMap.has(playerName)) {
-      player.remove();
-    }
-  });
 }
 
 function logFilter() {
@@ -1881,7 +1748,7 @@ function logFilter() {
 
   // Если пусто, то развыделяем всё
   if (keywordsInput.trim() === "") {
-    const selectedElements = document.querySelectorAll(".selected");
+    let selectedElements = document.querySelectorAll(".selected");
     selectedElements.forEach((element) => {
       element.classList.remove("selected");
       oldKeywordsInput = "";
@@ -1909,7 +1776,7 @@ function logFilter() {
 
   while ((match = regex.exec(keywordsInput)) !== null) {
     // Выбираем слово из кавычек, если оно есть, иначе выбираем слово без кавычек
-    const word = match[1] || match[2];
+    let word = match[1] || match[2];
     // Добавляем слово в массив ключевых слов
     keywordsArray.push(word.trim());
   }
@@ -1934,23 +1801,23 @@ function logFilter() {
     // Перебираем каждое ключевое слово из массива addWords
     addWords.forEach((keyword) => {
       // Приводим ключевое слово к нижнему регистру
-      const lowerKeyword = keyword.toLowerCase();
+      let lowerKeyword = keyword.toLowerCase();
       // console.log("Keyword:", lowerKeyword);
 
       // Выбираем все главы, которые не свернуты
-      const chapters = document.querySelectorAll(chapterCollapseStatus);
+      let chapters = document.querySelectorAll(chapterCollapseStatus);
       // console.log("Chapters:", chapters);
 
       // Перебираем каждую главу
       chapters.forEach((chapter) => {
         // Выбираем все спаны с классом "logline" внутри контента главы
-        const contentSpans = chapter.querySelectorAll(".content > .logline");
+        let contentSpans = chapter.querySelectorAll(".content > .logline");
         // console.log("Content Spans:", contentSpans);
 
         // Перебираем каждый спан внутри контента
         contentSpans.forEach((span) => {
           // Получаем текст из спана и приводим его к нижнему регистру
-          const textContent = span.textContent.toLowerCase();
+          let textContent = span.textContent.toLowerCase();
 
           // Проверяем, содержит ли текст ключевое слово
           if (textContent.includes(lowerKeyword)) {
@@ -1974,20 +1841,20 @@ function logFilter() {
     // Перебираем каждое "анти-слово" из массива removeWords
     removeWords.forEach((removeWord) => {
       // Приводим "анти-слово" к нижнему регистру
-      const lowerRemoveWord = removeWord.toLowerCase();
+      let lowerRemoveWord = removeWord.toLowerCase();
 
       // Выбираем все главы, которые не свернуты
-      const chapters = document.querySelectorAll(chapterCollapseStatus);
+      let chapters = document.querySelectorAll(chapterCollapseStatus);
 
       // Перебираем каждую главу
       chapters.forEach((chapter) => {
         // Выбираем все спаны с классом "logline" внутри контента главы
-        const contentSpans = chapter.querySelectorAll(".content > .logline");
+        let contentSpans = chapter.querySelectorAll(".content > .logline");
 
         // Перебираем каждый спан внутри контента
         contentSpans.forEach((span) => {
           // Получаем текст из спана и приводим его к нижнему регистру
-          const textContent = span.textContent.toLowerCase();
+          let textContent = span.textContent.toLowerCase();
           // console.log("Span Text Content:", textContent);
 
           // Проверяем, содержит ли текст "анти-слово"
@@ -2005,24 +1872,26 @@ function logFilter() {
   // Разворачиваем все главы с найденными словами
   openselectedChapters();
   scrollToNextSelected();
-  removeCollapsedChapters();
+  if ((removeCollapsedFlag = true)) {
+    removeCollapsedChapters();
+  }
 }
 
 function searchVirt() {
   // Снимаем selected со всех классов
-  const selectedElements = document.querySelectorAll(".selected");
+  let selectedElements = document.querySelectorAll(".selected");
   selectedElements.forEach((element) => {
     element.classList.remove("selected");
   });
 
   // Находим все элементы p.virt и добавляем им класс .selected
-  const virtElements = document.querySelectorAll("p.virt");
+  let virtElements = document.querySelectorAll("p.virt");
   virtElements.forEach((element) => {
     element.classList.add("selected");
   });
 
   // Составляем список индексов всех элементов p.virt
-  const indexes = Array.from(virtElements).map((element) => {
+  let indexes = Array.from(virtElements).map((element) => {
     return Array.from(element.parentNode.children).indexOf(element);
   });
 
@@ -2041,7 +1910,7 @@ let selectedElements = document.querySelectorAll(".selected");
 
 function scrollToNextSelected() {
   // Находим все элементы с классом "selected"
-  const selectedElements = document.querySelectorAll(".selected");
+  let selectedElements = document.querySelectorAll(".selected");
 
   // Если нет выбранных элементов или их количество меньше двух, прерываем выполнение функции
   if (!selectedElements || selectedElements.length < 2) {
@@ -2062,23 +1931,28 @@ function scrollToNextSelected() {
 
 function postClear() {
   // Создаем массив со значениями, которые мы хотим удалить
-  const valuesToRemove = ["Существу", "Настой удачи", "Другое значение"];
+  let valuesToRemove = [
+    "Вы получаете предмет:",
+    "Существу",
+    "Настой удачи",
+    "Другое значение",
+  ];
 
-  // Находим все элементы <p> с классом logline
-  const loglines = document.querySelectorAll("p.logline");
+  // Находим все элементы с классом "logline"
+  let loglines = document.querySelectorAll(".logline");
 
-  // Перебираем найденные элементы
-  loglines.forEach((element) => {
-    // Проверяем, содержит ли значение элемента одно из значений для удаления
-    if (valuesToRemove.includes(element.textContent.trim())) {
-      // Если содержит одно из указанных значений, удаляем элемент
-      element.remove();
+  // Проходимся по каждому элементу
+  loglines.forEach((logline) => {
+    // Проверяем, содержит ли элемент хотя бы одно из значений для удаления
+    if (valuesToRemove.some((value) => logline.textContent.includes(value))) {
+      // Удаляем элемент, если текст соответствует хотя бы одному из значений
+      logline.remove();
     }
   });
 }
 
 function toggleCollapse(event) {
-  const chapter = event.target.closest(".chapter");
+  let chapter = event.target.closest(".chapter");
   if (chapter) {
     chapter.classList.toggle("collapsed");
   }
@@ -2102,6 +1976,7 @@ function recombineFunction(spanClass) {
 
   // Закончились функции, пошла основная
   let loglines = document.querySelectorAll(`.content > .logline:not(.paper)`);
+  console.log("loglines: ", loglines);
 
   // Переменные
   let player;
@@ -2119,10 +1994,10 @@ function recombineFunction(spanClass) {
     let logline = loglines[i];
 
     // Пропускаем неподходящий тип реплик
-    if (!logline.classList.contains(spanClass)) {
+    /*     if (!logline.classList.contains(spanClass)) {
       drop();
       continue;
-    }
+    } */
 
     player = logline.querySelector("span.player");
     content = logline.querySelector("span.say");
@@ -2144,6 +2019,7 @@ function recombineFunction(spanClass) {
       } else {
         combined.push(content);
         prevLogline.classList.add("remove", "selected");
+        logline.classList.add("remove", "selected");
         console.log("combined: ", combined);
         // prevLogline.remove();
       }
@@ -2180,64 +2056,47 @@ function recombineFunction(spanClass) {
 
     update(logline, player, content);
   }
+  removeRed();
 }
 
 function scrollToCenter(targetElement) {
-  const scrollOptions = {
+  let scrollOptions = {
     top: targetElement.offsetTop - window.innerHeight / 2,
-    behavior: "smooth",
+    // behavior: "smooth",
   };
 
   window.scrollTo(scrollOptions);
 }
 
-function processPlayerNames() {
-  // Получаем все элементы span.player
-  const playerSpans = document.querySelectorAll(
-    ".say > .player, .actors .player"
-  );
-
-  // Проходимся по каждому элементу
-  playerSpans.forEach((span) => {
-    const playerName = span.textContent.trim(); // Получаем текстовое содержимое элемента
-    let colorClass; // Переменная для цветового класса
-
-    // Поиск имени в npcData
-    const npcInfo = npcData.find((npc) => npc[0] === playerName);
-    const playerInfo = playerData.find((player) => player[0] === playerName);
-    if (npcInfo) {
-      span.textContent = npcInfo[2]; // Заменяем текстовое содержимое на полное имя из npcData
-      colorClass = npcInfo[1]; // Получаем цветовой класс из npcData
-    }
-    // Поиск имени в playerData, если не найдено в npcData
-    else if (playerInfo) {
-      colorClass = playerInfo[1]; // Получаем цветовой класс из playerData
-      span.textContent = playerInfo[2];
-    } else {
-      const randomIndex = colorindex % randomColors.length; // Получаем индекс цвета с помощью остатка от деления
-      colorClass = randomColors[randomIndex]; // Выбираем случайный цвет из массива randomColors
-      span.textContent = playerName; // Оставляем имя игрока без изменений
-      colorindex++; // Увеличиваем индекс для следующего цвета
-    }
-
-    // Добавляем цветовой класс к элементу span.player
-    span.classList.add(colorClass);
+function removeActorsAndSymbols() {
+  let actorsDivs = document.querySelectorAll("div.actors");
+  actorsDivs.forEach((actorsDiv) => {
+    actorsDiv.remove();
   });
+
+  let spans = document.querySelectorAll(
+    "span.comma, span.dot, span.space, span.column"
+  );
+  spans.forEach((span) => {
+    span.remove();
+  });
+
+  colorindex = 0;
 }
 
 function removeChaptersIfFewPlayers() {
   // Получаем все элементы .chapter
-  const chapters = document.querySelectorAll(".chapter");
+  let chapters = document.querySelectorAll(".chapter");
 
   // Проходимся по каждому элементу .chapter
   chapters.forEach((chapter) => {
     // Находим родительский элемент .ul.players
-    const playerList = chapter.querySelector("ul.players");
+    let playerList = chapter.querySelector("ul.players");
 
     // Проверяем, есть ли список игроков в текущем .chapter
     if (playerList) {
       // Получаем всех игроков в текущем списке
-      const players = playerList.querySelectorAll("li.player");
+      let players = playerList.querySelectorAll("li.player");
 
       // Проверяем количество игроков
       if (players.length < 2) {
@@ -2248,18 +2107,196 @@ function removeChaptersIfFewPlayers() {
   });
 }
 
-function removeActorsAndSymbols() {
-  const actorsDivs = document.querySelectorAll("div.actors");
-  actorsDivs.forEach((actorsDiv) => {
-    actorsDiv.remove();
+function fullNames() {
+  // let players = document.querySelectorAll(".player");
+  // for (let player of players) {
+  //   let playerName = player.textContent.trim();
+  //   let playerDataEntry = playerData.find((data) => data[0] === playerName);
+  //   if (playerDataEntry) {
+  //     player.textContent = playerDataEntry[2];
+  //   }
+  // }
+  // console.log("Фамилии заменены");
+}
+
+function playerList() {
+  // Перебор всех элементов .chapter
+  const chapters = document.querySelectorAll(".chapter");
+  for (const chapter of chapters) {
+    // Создание набора уникальных имен
+    const uniquePlayerList = new Set();
+
+    // Получение всех элементов .player в .content
+    const players = chapter.querySelectorAll(talkingPlayer);
+
+    // Добавление имен игроков в набор
+    for (const player of players) {
+      const playerName = player.textContent.trim();
+      uniquePlayerList.add(playerName);
+    }
+
+    // Создание структуры .actors
+    const actors = document.createElement("div");
+    actors.classList.add("actors");
+
+    // Разделение на игроков и NPC
+    const playersList = document.createElement("div");
+    playersList.classList.add("players");
+    const npcsList = document.createElement("div");
+    npcsList.classList.add("npcs");
+
+    // Проверка имени игрока
+    for (const playerName of uniquePlayerList) {
+      const playerItem = document.createElement("div");
+      playerItem.classList.add("player");
+      playerItem.textContent = playerName;
+
+      let isPlayer = playerData.some((player) => player[0] === playerName);
+      let isNpc = !isPlayer && npcData.some((npc) => npc[0] === playerName);
+
+      // Дополнение:
+      if (!isPlayer && !isNpc) {
+        if (!/\s|-/.test(playerName)) {
+          isPlayer = true;
+        } else {
+          isNpc = true;
+        }
+      }
+
+      if (isPlayer) {
+        playersList.appendChild(playerItem);
+      } else if (isNpc) {
+        npcsList.appendChild(playerItem);
+      } else {
+        console.log(`${playerName} не найден ни в playerData, ни в npcData`);
+      }
+    }
+
+    // Добавление списков в .actors
+    actors.appendChild(playersList);
+    actors.appendChild(npcsList);
+
+    // Вставка .actors
+    chapter.querySelector("h2.date").after(actors);
+  }
+  colorizeList("players");
+  colorizeList("npcs");
+}
+
+function colorizeList(listType) {
+  const elements = document.querySelectorAll(`.${listType} .player`);
+  let colorIndex = 0;
+
+  for (const element of elements) {
+    const name = element.textContent.trim();
+    const data = listType === "players" ? playerData : npcData; // Выбор данных по типу списка
+    const info = data.find((item) => item[0] === name);
+
+    if (info && info[1]) {
+      element.classList.add(info[1]);
+    } else {
+      const randomColor = randomColors[colorIndex++];
+      if (colorIndex === randomColors.length) {
+        colorIndex = 0;
+      }
+      element.classList.add(randomColor);
+    }
+  }
+}
+
+function gatherUniquePlayersAndInsert() {
+  const uniquePlayers = new Set();
+
+  const allPlayers = document.querySelectorAll(".players .player");
+
+  allPlayers.forEach((player) => {
+    uniquePlayers.add(player.cloneNode(true));
   });
 
-  const spans = document.querySelectorAll(
-    "span.comma, span.dot, span.space, span.column"
-  );
-  spans.forEach((span) => {
-    span.remove();
-  });
+  console.log(`Найдено ${uniquePlayers.size} уникальных игроков`);
 
-  colorindex = 0;
+  const actors = document.createElement("div");
+  actors.classList.add("actors");
+
+  const players = document.createElement("div");
+  players.classList.add("players");
+
+  for (const player of uniquePlayers) {
+    players.appendChild(player);
+  }
+
+  const totalDuration = document.querySelector(".totalduration");
+  totalDuration.appendChild(actors);
+  actors.appendChild(players);
+}
+
+function removeDoublesAtTotalActors() {
+  // Получаем элемент .totalduration .players
+  const playersElement = document.querySelector(".totalduration .players");
+
+  // Если он существует
+  if (playersElement) {
+    // Создаем пустой массив для хранения уникальных игроков
+    const uniquePlayers = [];
+
+    // Получаем все элементы .player
+    const allPlayers = playersElement.querySelectorAll(".player");
+
+    // Перебираем каждого игрока
+    allPlayers.forEach((player) => {
+      const playerName = player.textContent.trim();
+
+      // Проверяем, существует ли имя игрока в массиве
+      const playerExists = uniquePlayers.some(
+        (existingPlayer) => existingPlayer === playerName
+      );
+
+      // Если имя игрока не существует, добавляем его
+      if (!playerExists) {
+        uniquePlayers.push(playerName);
+      }
+    });
+
+    // Очищаем содержимое .totalduration .players
+    playersElement.innerHTML = "";
+
+    // Вставляем элементы из uniquePlayers
+    uniquePlayers.forEach((playerName) => {
+      const newPlayer = document.createElement("div");
+      newPlayer.classList.add("player");
+      newPlayer.textContent = playerName;
+      playersElement.appendChild(newPlayer);
+    });
+  }
+
+  colorizeList("players");
+}
+
+function synchronizePlayerColors() {
+  const chapters = document.querySelectorAll("div.chapter");
+
+  const playerColorMap = new Map();
+
+  chapters.forEach((chapter) => {
+    const actorsPlayers = chapter.querySelectorAll(".actors .player");
+
+    actorsPlayers.forEach((actorPlayer) => {
+      const playerName = actorPlayer.textContent.trim();
+      const secondClass = Array.from(actorPlayer.classList)[1];
+
+      playerColorMap.set(playerName, secondClass);
+    });
+
+    const contentPlayers = chapter.querySelectorAll(".content .player");
+    contentPlayers.forEach((contentPlayer) => {
+      const playerName = contentPlayer.textContent.trim();
+
+      const secondClass = playerColorMap.get(playerName);
+
+      if (secondClass) {
+        // Удаление всех имеющихся классов у игрока
+        contentPlayer.className = "player " + secondClass;
+      }
+    });
+  });
 }

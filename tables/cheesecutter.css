@@ -226,7 +226,9 @@ p.titt.t_img {
   background-repeat: repeat-x;
   background-position-y: center;
   transform: rotate(-1deg);
-  margin-bottom: 3rem;
+  /* margin-bottom: 3rem; */
+  margin: 1.5rem 0;
+  /* margin-bottom: 1.5rem; */
 }
 
 .head_paper,
@@ -662,14 +664,16 @@ h2.date span.title {
 
 .paper.img.right {
   float: right;
-  transform: rotate(5deg);
+  transform: rotate(-5deg);
   background: none;
-  margin-left: 1rem;
+  margin-left: -5rem;
   margin-top: 1rem;
   text-align: right;
   position: relative;
   max-width: 50%;
   z-index: 2;
+  position: relative;
+  left: 7rem;
 }
 
 .wp-block.default.no-border.binded-chars {
@@ -702,7 +706,7 @@ h2.article-title {
 }
 
 p.logline {
-  margin: 1rem 0;
+  margin: 0.5rem 0;
   color: var(--emote);
   font-family: "mow6";
 }
@@ -736,8 +740,9 @@ p.logline {
   text-shadow: none;
   box-shadow: none;
   transform: rotate(3deg);
-  margin-bottom: 4rem;
-  margin-top: 4rem;
+  /* margin-bottom: 4rem; */
+  /* margin-top: 4rem; */
+  margin: 2rem 0;
 }
 
 .paper:not(.img) {
@@ -818,7 +823,7 @@ h2.date > span {
 }
 
 .paper + .transcript {
-  margin-top: -5rem;
+  /* margin-top: -5rem; */
 }
 
 .rleft {
@@ -889,3 +894,58 @@ div#comment-tree {
 .rright {
   transform: rotate(5deg)!important;
 }
+
+.rcenter {transform: rotate(1deg);}
+
+.transcript > .paper.img {
+    margin: 0;
+    margin-top: -2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    left: 3rem;
+    transform: rotate(5deg);
+}
+
+.paper p.logline {
+    margin: 0rem 0;
+}
+
+.content > .paper.img:not(.right, .left) {
+    width: 130%;
+    position: relative;
+    left: -15%;
+    transform: rotate(356deg);
+    margin: 4rem 0;
+}
+
+.rcenter {transform: rotate(1deg);}
+
+.transcript > .paper.img {
+    margin: 0;
+    margin-top: -2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    left: 3rem;
+    transform: rotate(5deg);
+}
+
+.paper p.logline {
+    margin: 0rem 0;
+}
+
+.content > .paper.img:not(.right, .left) {
+    width: 130%;
+    position: relative;
+    left: -15%;
+    transform: rotate(356deg);
+    margin: 4rem 0;
+}
+
+.paper > .paper {
+  box-shadow: 0 0 20px 20px #00000033;
+}
+
+body {
+--link: var(--orange);
+}
+
