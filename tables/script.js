@@ -20,7 +20,7 @@ function formatHTML() {
   wrapChapters();
   updateAll();
   chapterReverse();
-  //postClear();
+  postClear();
 }
 
 function updateAll() {
@@ -103,6 +103,8 @@ let playerData = [
   ["Паулина", "priest", "Паулина Санчес"],
   ["Сью", "red", "Сью Блэкрич"],
   ["Хейвинд", "red", "Сью Блэкрич"],
+  ["Хейвинд", "red", "Сью Блэкрич"],
+  ["Хейвинд", "red", "Сью Блэкрич"],
 ];
 
 // Неписи
@@ -113,7 +115,11 @@ let npcData = [
   ["Рядовой Равенхольт", "shaman"],
   ["Гнолл"],
   ["Баззерс"],
-  ["Охранник"],
+  ["Поганок"],
+  ["Мухоморий"],
+  ["Крыса"],
+  ["Медведь"],
+  ["Фг"],
   ["Стражник"],
   ["Богачка"],
   ["Богач"],
@@ -163,12 +169,12 @@ let npcData = [
   ["Пехотинец"],
   ["Сорорестраза"],
   ["Всадник"],
-  ["Глашатай"],
-  ["Глашатай"],
-  ["Глашатай"],
-  ["Глашатай"],
-  ["Глашатай"],
-  ["Глашатай"],
+  ["Ямщик"],
+  ["Кучер"],
+  ["Ворген"],
+  ["Незнакомец"],
+  ["Охотник"],
+  ["Мордоворот"],
   ["Глашатай"],
 ];
 
@@ -1306,30 +1312,26 @@ function toggleSelectedClass() {
 }
 
 function removeHovered() {
-  let elementUnderCursor = document.querySelector(".content :hover");
+  let elementsUnderCursor = document.querySelectorAll(":hover");
+  elementsUnderCursor.forEach((element) => {
+    // Проверка на .player
+    if (element.matches(".player")) {
+      element.remove(); // Удаление .player
+    } else {
+      // Существующий код для других элементов:
+      let loglineParent = element.closest(".content > *");
+      let dateHeadingParent = element.closest("h2.date");
 
-  if (elementUnderCursor) {
-    let elementToRemove = elementUnderCursor;
-
-    // Проверка, является ли elementUnderCursor одним из 4 классов
-    if (
-      !elementToRemove.classList.contains(
-        "logline",
-        "paper",
-        "transcript",
-        "no-margin"
-      )
-    ) {
-      // Если нет, то проверка его родителя
-      elementToRemove = elementToRemove.closest(
-        ".logline, .paper, .transcript, .no-margin"
-      );
+      if (loglineParent) {
+        loglineParent.remove();
+      } else if (dateHeadingParent) {
+        let chapterParent = dateHeadingParent.closest(".chapter");
+        if (chapterParent) {
+          chapterParent.remove();
+        }
+      }
     }
-
-    if (elementToRemove) {
-      elementToRemove.remove();
-    }
-  }
+  });
 }
 
 function togglePaperClass() {
@@ -1935,6 +1937,17 @@ function postClear() {
     "Вы получаете предмет:",
     "Существу",
     "Настой удачи",
+    "похоже, навеселе",
+    "кажется, понемногу трезвеет",
+    "NPC",
+    "Все готовы",
+    "Другое значение",
+    "Другое значение",
+    "Другое значение",
+    "Другое значение",
+    "Другое значение",
+    "Другое значение",
+    "Другое значение",
     "Другое значение",
   ];
 
