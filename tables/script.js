@@ -1228,15 +1228,30 @@ function findLoglinesAndConvertToTranscript() {
   });
 }
 
+// Горячие клавиши
 document.addEventListener("keydown", function (event) {
   if (event.key === "Enter" && event.target.id === "keywordsInput") {
     logFilter();
-  } else if (!wrapping && event.key === "Delete") {
+  }
+
+  // Возврат закладки
+  else if (["b", "и"].includes(event.key) && event.altKey) {
+    console.log("Возвращаюсь к закладке");
+    expandChapters();
+    scrollToBookmark();
+  }
+
+  // Поставить закладку
+  else if (event.key === "b" || event.key === "и") {
+    console.log("Ставлю закладку");
+    placeBookmark();
+  }
+
+  // Прочее
+  else if (!wrapping && event.key === "Delete") {
     removeHovered();
   } else if (event.key === "p" || event.key === "з") {
     togglePaperClass();
-  } else if (event.key === "b" || event.key === "и") {
-    bookMark();
   } else if (event.key === "ArrowLeft") {
     pasteText();
   } else if (["[", "х"].includes(event.key) && event.ctrlKey) {
@@ -1299,10 +1314,12 @@ function toggleSelectedClass() {
       (element.tagName === "H2" || element.matches("h2.date"))
     ) {
       dateParent.classList.toggle("collapsed");
+      console.log("Переключаю главу");
     }
 
     if (loglineParent || paperParent || transcriptParent || playerParent) {
       element.classList.toggle("selected");
+      console.log("Переключаю абзац");
     }
   });
 }
@@ -1339,14 +1356,17 @@ function togglePaperClass() {
   });
 }
 
-function bookMark() {
+function placeBookmark() {
   let elementsUnderCursor = document.querySelectorAll(".content :hover");
 
   elementsUnderCursor.forEach((element) => {
     if (element.nextElementSibling) {
-      const bookmarkElement = document.createElement('div');
-      bookmarkElement.classList.add('bookmark');
-      element.parentNode.insertBefore(bookmarkElement, element.nextElementSibling);
+      const bookmarkElement = document.createElement("div");
+      bookmarkElement.classList.add("bookmark");
+      element.parentNode.insertBefore(
+        bookmarkElement,
+        element.nextElementSibling
+      );
     }
   });
 }
@@ -1939,6 +1959,29 @@ function scrollToNextSelected() {
   scrollToCenter(selectedElements[index]);
 }
 
+function scrollToBookmark() {
+  // Находим все элементы с классом "bookmark"
+  let selectedElements = document.querySelectorAll(".bookmark");
+
+  // Если нет выбранных элементов, прерываем выполнение функции
+  if (!selectedElements) {
+    console.log('Не нашёл');
+    return;
+  }
+
+  // Увеличиваем индекс на 1
+  index++;
+
+  // Если индекс достиг конца массива, обнуляем его
+  if (index >= selectedElements.length) {
+    index = 0;
+    console.log('Обнуляю');
+  }
+
+  // Прокручиваем к следующему элементу
+  scrollToCenter(selectedElements[index]);
+}
+
 function postClear() {
   // Создаем массив со значениями, которые мы хотим удалить
   let valuesToRemove = [
@@ -1973,6 +2016,7 @@ function postClear() {
 }
 
 function toggleCollapse(event) {
+  console.log("Переключаю 1");
   let chapter = event.target.closest(".chapter");
   if (chapter) {
     chapter.classList.toggle("collapsed");
