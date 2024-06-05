@@ -1296,4 +1296,9 @@ p.logline.emote > .player {
   color: white !important;
   text-align: center;
   width: fit-content;
+  margin: 0 auto;
+}
+
+p+p {
+  margin-top: 0.5em;
 }

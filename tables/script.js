@@ -1,6 +1,6 @@
 // Настройки
 
-console.log("testing2, 09-03-2024");
+console.log("Добавил закладку, 05-06-2024");
 // toggleSelectionCSS();
 let combineDelay = 5 * 1000;
 let hoursBetweenSessions = 0.5;
@@ -51,16 +51,10 @@ function combineFunctions() {
   combineSay("say");
   combineSay("emote");
   combineSay("virt");
-  // combineSay("yell");
-  // combineSay("story");
   sayToEmote();
   emoteToSay();
   virtToSay();
   removeDashes();
-  // thirdPerson("emote", "say");
-  // thirdPerson("virt", "say");
-  // thirdPerson("say", "emote");
-  // thirdPerson("yell", "emote");
   findLoglinesAndConvertToTranscript();
   console.log("combineFunctions finished");
 }
@@ -500,7 +494,7 @@ function cleanText() {
 
   chatlogHTML = chatlogHTML.replace(/<p.*?>[А-я]+ шепчет:.*?<\/p>\n/g, ""); // Шепчет:
   chatlogHTML = chatlogHTML.replace(
-    /(<p.*?"logline)">(.*)\sговорит:\s(.*?)<\/p>\n/g,
+    /(<p.*?"logline)">(.*?)\sговорит:\s(.*?)<\/p>\n/g,
     '$1 say"><span class="player">$2</span><span class="say">$3</span></p>\n'
   ); // Говорит:
 
@@ -654,7 +648,7 @@ function sayToEmote() {
   for (let i = 0; i < say.length; i++) {
     let sayText = say[i].innerHTML;
     sayText = sayText.replace(
-      /([!?.,:])(\s—\s.*?[!?.,:](\s—\s|<\/span>))/g,
+      /([!?.,:…])(\s—\s.*?[!?.,:…](\s—\s|<\/span>))/g,
       '$1<span class="emote">$2</span>'
     );
     sayText = sayText.replace(
@@ -1241,6 +1235,8 @@ document.addEventListener("keydown", function (event) {
     removeHovered();
   } else if (event.key === "p" || event.key === "з") {
     togglePaperClass();
+  } else if (event.key === "b" || event.key === "и") {
+    bookMark();
   } else if (event.key === "ArrowLeft") {
     pasteText();
   } else if (["[", "х"].includes(event.key) && event.ctrlKey) {
@@ -1290,7 +1286,7 @@ document.addEventListener("click", function () {
 });
 
 function toggleSelectedClass() {
-  let elementsUnderCursor = document.querySelectorAll(":hover");
+  let elementsUnderCursor = document.querySelectorAll(".content :hover");
   elementsUnderCursor.forEach((element) => {
     let loglineParent = element.closest(".logline");
     let paperParent = element.closest(".paper");
@@ -1312,7 +1308,7 @@ function toggleSelectedClass() {
 }
 
 function removeHovered() {
-  let elementsUnderCursor = document.querySelectorAll(":hover");
+  let elementsUnderCursor = document.querySelectorAll(".content :hover");
   elementsUnderCursor.forEach((element) => {
     // Проверка на .player
     if (element.matches(".player")) {
@@ -1335,10 +1331,22 @@ function removeHovered() {
 }
 
 function togglePaperClass() {
-  let elementsUnderCursor = document.querySelectorAll(":hover");
+  let elementsUnderCursor = document.querySelectorAll(".content :hover");
   elementsUnderCursor.forEach((element) => {
     if (element.tagName === "P") {
       element.classList.toggle("paper");
+    }
+  });
+}
+
+function bookMark() {
+  let elementsUnderCursor = document.querySelectorAll(".content :hover");
+
+  elementsUnderCursor.forEach((element) => {
+    if (element.nextElementSibling) {
+      const bookmarkElement = document.createElement('div');
+      bookmarkElement.classList.add('bookmark');
+      element.parentNode.insertBefore(bookmarkElement, element.nextElementSibling);
     }
   });
 }
