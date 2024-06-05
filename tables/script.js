@@ -1361,6 +1361,11 @@ function placeBookmark() {
 
   elementsUnderCursor.forEach((element) => {
     if (element.nextElementSibling) {
+      let oldBookmarks = document.querySelectorAll(".bookmark");
+      oldBookmarks.forEach(function (bookmarkElement) {
+        bookmarkElement.remove();
+      });
+
       const bookmarkElement = document.createElement("div");
       bookmarkElement.classList.add("bookmark");
       element.parentNode.insertBefore(
@@ -1965,7 +1970,7 @@ function scrollToBookmark() {
 
   // Если нет выбранных элементов, прерываем выполнение функции
   if (!selectedElements) {
-    console.log('Не нашёл');
+    console.log("Не нашёл");
     return;
   }
 
@@ -1975,7 +1980,7 @@ function scrollToBookmark() {
   // Если индекс достиг конца массива, обнуляем его
   if (index >= selectedElements.length) {
     index = 0;
-    console.log('Обнуляю');
+    console.log("Обнуляю");
   }
 
   // Прокручиваем к следующему элементу
