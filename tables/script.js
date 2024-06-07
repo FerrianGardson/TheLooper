@@ -1301,7 +1301,7 @@ document.addEventListener("click", function () {
 });
 
 function toggleSelectedClass() {
-  let elementsUnderCursor = document.querySelectorAll(".content :hover");
+  let elementsUnderCursor = document.querySelectorAll(":hover");
   elementsUnderCursor.forEach((element) => {
     let loglineParent = element.closest(".logline");
     let paperParent = element.closest(".paper");
@@ -1325,7 +1325,7 @@ function toggleSelectedClass() {
 }
 
 function removeHovered() {
-  let elementsUnderCursor = document.querySelectorAll(".content :hover");
+  let elementsUnderCursor = document.querySelectorAll(":hover");
   elementsUnderCursor.forEach((element) => {
     // Проверка на .player
     if (element.matches(".player")) {
@@ -1348,7 +1348,7 @@ function removeHovered() {
 }
 
 function togglePaperClass() {
-  let elementsUnderCursor = document.querySelectorAll(".content :hover");
+  let elementsUnderCursor = document.querySelectorAll(":hover");
   elementsUnderCursor.forEach((element) => {
     if (element.tagName === "P") {
       element.classList.toggle("paper");
@@ -1357,7 +1357,7 @@ function togglePaperClass() {
 }
 
 function placeBookmark() {
-  let elementsUnderCursor = document.querySelectorAll(".content :hover");
+  let elementsUnderCursor = document.querySelectorAll(":hover");
 
   elementsUnderCursor.forEach((element) => {
     if (element.nextElementSibling) {
@@ -1634,7 +1634,7 @@ function finishWrap(className) {
 }
 
 function pasteImg() {
-  let elementUnderCursor = document.querySelector(".content :hover");
+  let elementUnderCursor = document.querySelector(":hover");
 
   if (elementUnderCursor) {
     let imgDiv = document.createElement("div");
@@ -1659,7 +1659,7 @@ function pasteImg() {
 }
 
 function pasteText() {
-  let elementUnderCursor = document.querySelector(".content :hover");
+  let elementUnderCursor = document.querySelector(":hover");
 
   if (elementUnderCursor) {
     let textDiv = document.createElement("div");
@@ -1673,7 +1673,7 @@ function pasteText() {
 }
 
 // function pasteText() {
-//   let elementsUnderCursor = document.querySelectorAll(".content :hover");
+//   let elementsUnderCursor = document.querySelectorAll(":hover");
 
 //   for (let element of elementsUnderCursor) {
 //     let loglineElement = element.closest("p.logline");
