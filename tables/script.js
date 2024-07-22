@@ -651,11 +651,10 @@ function sayToEmote() {
       /([!?.,:…])(\s—\s.*?[!?.,:…](\s—\s|<\/span>))/g,
       '$1<span class="emote">$2</span>'
     );
-    sayText = sayText.replace(
-      /<\/span><span class="say">\s*[—–-]\s*/g,
-      '</span><span class="say">'
-    );
-    say[i].innerHTML = sayText;
+    // sayText = sayText.replace(
+    //   /<\/span><span class="say">\s*[—–-]\s*/g,
+    //   '</span><span class="say">'
+    // );
     say[i].innerHTML = sayText;
   }
 }
@@ -1997,7 +1996,7 @@ function postClear() {
     "кажется, понемногу трезвеет",
     "NPC",
     "Все готовы",
-    "Другое значение",
+    "Полученный",
     "Другое значение",
     "Другое значение",
     "Другое значение",

@@ -1,0 +1,1243 @@
+/* Кастомные шрифты: */
+
+@font-face {
+    src: url("https://cdn.glitch.global/a5c42250-1d0c-4282-a0b8-b5da29f85db0/Morpheus%20Cyr.ttf?v=1701629126289");
+    font-family: "Morpheus";
+  }
+  
+  @font-face {
+    src: url("https://cdn.glitch.global/a400509b-3b32-45c4-9119-c4c2c4268fed/Medieval%20English.ttf?v=1682767950745");
+    font-family: "Medieval English";
+  }
+  
+  @font-face {
+    src: url("https://cdn.glitch.com/e4cffeea-a4e8-403a-9938-d212bfa86c8d%2FMinionProCapt.otf?v=1614586272022");
+    font-family: "Minion Pro Capt";
+  }
+  
+  @font-face {
+    src: url("https://cdn.glitch.com/a5c42250-1d0c-4282-a0b8-b5da29f85db0%2FMISTRAL.TTF?v=1580113058987");
+    font-family: "Mistral";
+  }
+  
+  @font-face {
+    src: url("https://cdn.glitch.global/a5c42250-1d0c-4282-a0b8-b5da29f85db0/Redonda-script-Two.ttf?v=1702226734268");
+    font-family: "Redonda";
+  }
+  
+  @font-face {
+    src: url("https://cdn.glitch.com/a5c42250-1d0c-4282-a0b8-b5da29f85db0%2FRDRLino-Regular.ttf?v=1627658531260");
+    font-family: "RDR";
+  }
+  
+  /* Шаблон (минималистичный) */
+  
+  body {
+    --background-color: #0000008c;
+    --background-image: url(
+    https://i.postimg.cc/CdThvZQ6/image.png);
+    --post-color: #000000bd;
+    --post-image-repeat: url(
+    https://i.postimg.cc/dt7gPNPP/image.png);
+    --post-image-non-repeat: none;
+    --frame: url(
+    https://i.postimg.cc/YqJzfHgv/4.png);
+    --frame-width: 28px;
+    --info: #ffffff0a;
+    --text: #ffffffd9;
+    --header-color: #ffffff;
+    --text-shadow: 3px 3px 2px #00000030;
+    --link: #00a6ff;
+    --hover: var(
+    --link);
+    --header: Morpheus;
+    --p: Minion Pro Capt;
+    --border: 3px solid #000000;
+    --shadow: 3px 3px 2px #00000085;
+    --shadow-inset: 0px 0px 50px -4px rgb(0 0 0) inset;
+    --shadow-big: 0px 0px 21px 21px rgb(0 0 0 / 27%);
+    --emote: var(
+    --orange);
+  }
+  
+  body.body-bg-8 {
+    background: var(--background-image) no-repeat fixed, #ffffff00;
+    background-size: cover;
+    background-blend-mode: screen;
+  }
+  
+  .wp-block.default.article.post.no-margin {
+    padding: 1.5rem !important;
+    color: var(--text) !important;
+    font-family: var(--p);
+    border-radius: 8px;
+    background: var(--post-image-non-repeat) top center no-repeat,
+      var(--post-image-repeat), var(--post-color) !important;
+    background-blend-mode: soft-light;
+  }
+  
+  .post {
+    font-size: 1.5rem;
+    line-height: 1.2em;
+  }
+  
+  .post * {
+    font-size: inherit !important;
+    text-shadow: inherit;
+    padding: 0;
+    line-height: inherit !important;
+    /* width: fit-content; */
+  }
+  
+  .bg-base-img:first-of-type {
+    background: none;
+  }
+  
+  .background,
+  .additional,
+  .testimonial {
+    display: none;
+  }
+  
+  .info-list > div > div {
+    width: fit-content;
+  }
+  
+  .post .info-list {
+    margin: 0 !important;
+    background: none !important;
+    min-height: fit-content;
+    width: fit-content;
+  }
+  
+  .col-md-9.left-block {
+    padding-right: 0 !important;
+    background: none;
+    width: 100%;
+  }
+  
+  body .post .ribbon-container {
+    position: absolute;
+    width: fit-content;
+    left: 0;
+    /* visibility: hidden; */
+    background: #e91b23;
+    /* padding-right: 1rem; */
+    margin-bottom: 0;
+    z-index: 1;
+  }
+  
+  .col-md-7.info-block {
+    font-size: 1em !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 0;
+    width: fit-content;
+    max-width: 410px;
+    /* margin-left: 2rem; */
+  }
+  
+  .col-md-12 {
+    width: 100%;
+  }
+  
+  p.article-subtitle.text-center,
+  .info-block .col-sm-4 span.item {
+    color: #ffffff;
+    /* font-weight: bold; */
+    margin-top: -1.8em;
+  }
+  
+  .post a {
+    color: var(--link)!important;
+    font-weight: bold !important;
+    text-decoration: none !important;
+    opacity: 0.75;
+  }
+  
+  .post a:hover {
+    color: var(--hover) !important;
+    opacity: 1;
+  }
+  
+  .post a * {
+    color: inherit !important;
+  }
+  
+  .post h2.article-title,
+  .post h1.article-title {
+    font-size: 4rem !important;
+    z-index: 1;
+    align-self: center;
+    overflow-wrap: anywhere;
+    text-align: center;
+    margin: 1em auto !important;
+  }
+  
+  p.article-subtitle {
+    font-size: 2rem!important;
+    line-height: 1em !important;
+    /* margin: 0.5em 0!important; */
+    align-self: center;
+    z-index: 1;
+    margin-top: -4rem;
+    opacity: 0.5;
+    font-weight: 100!important;
+    width: 100%;
+  }
+  
+  .post .category {
+    margin-bottom: 1rem !important;
+  }
+  
+  .post strong {
+    color: var(--header-color) !important;
+    /* color: white!important; */
+    /* font-weight: normal; */
+  }
+  
+  tag {
+    color: var(--text) !important;
+  }
+  
+  section.slice.slice-md.animate-hover-slide-3.bg-base-img.content.fr-view {
+    padding: 0;
+    border-radius: 8px !important;
+  }
+  
+  section.slice.slice-md.animate-hover-slide-3.bg-base-img.content.fr-view
+    > .wp-sectionn
+    > .container.auto {
+    padding: 0;
+    background: none;
+  }
+  
+  span.badge.like-num {
+    background: var(--link) !important;
+    font-size: 2.7rem !important;
+    padding: 0.5rem;
+    box-shadow: var(--shadow);
+    color: black;
+    text-shadow: none !important;
+    font-weight: bold;
+    font-family: "Roboto Condensed", arial;
+  }
+  
+  body .post > .figure.wp-block-body {
+    padding: 0 !important;
+  }
+  
+  .row {
+    margin: 0 !important;
+  }
+  
+  .sidebar {
+    margin-left: 1rem;
+  }
+  
+  /* Лайки */
+  
+  .post .likes .fa {
+    font-size: 2rem !important;
+    position: relative;
+    top: 4px;
+  }
+  
+  .post .likes {
+    /* position: absolute; */
+    /* top: 33px; */
+    /* right: 1em; */
+    margin-top: 0;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    /* display: block; */
+  }
+  
+  .meta-info {
+    margin: 0 !important;
+    margin-left: 1rem !important;
+    /* margin-bottom: 1rem !important; */
+    text-shadow: var(--shadow);
+  }
+  
+  /* Прочее */
+  
+  .post h1,
+  .post h2,
+  .post h3,
+  .post h4,
+  .post h5,
+  .post h6 {
+    font-family: var(--header);
+    font-weight: bold !important;
+    color: var(--header-color)!important;
+    line-height: 1.2em !important;
+    width: 100%;
+    text-shadow: var(--text-shadow);
+  }
+  
+  .my-html > * {
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .row.storyline {
+    background: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+  
+  .panel-heading {
+    background: none !important;
+    position: relative !important;
+    padding: 0 !important;
+    left: 0 !important;
+  }
+  
+  .panel.panel-default {
+    background: none;
+    border: none !important;
+  }
+  
+  .panel-body {
+    border: none !important;
+    padding-top: 5rem !important;
+  }
+  
+  .subsection {
+    margin-top: 0;
+  }
+  
+  /* Рамка */
+  
+  .post,
+  .post > div > div,
+  .binded-chars > div,
+  .col-md-5.image,
+  .frame {
+    border-image-repeat: repeat repeat !important;
+    border-image-source: var(--frame) !important;
+    border-image-slice: 80 !important;
+    border-image-width: var(--frame-width) !important;
+    border-radius: 16px;
+    background: var(--info) !important;
+    padding: 3rem !important;
+    box-shadow: var(--shadow-inset) !important;
+    margin: 2rem 0;
+  }
+  
+  .row.information-block,
+  .post .col-sm-10,
+  .post .col-sm-2,
+  .ribbon-left.red,
+  .post .binded-chars,
+  .wp-block.default.no-border.binded-chars > div,
+  .post > div > h2 + .row {
+    border-image: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    display: flex;
+    /* flex-direction: column; */
+    align-items: flex-start;
+    background: none !important;
+    min-height: fit-content;
+    /* width: 100%; */
+    flex-wrap: wrap;
+  }
+  
+  /* Прочее */
+  
+  .panel-body .col-sm-3 {
+    width: max-content;
+    margin-right: 1rem;
+  }
+  
+  .panel-body .col-sm-9 {
+    width: max-content;
+  }
+  
+  .panel-heading:not(:has(.collapsed)) {
+    position: relative;
+    top: 6rem;
+    padding-bottom: 2rem !important;
+    /* text-align: left; */
+    /* width: fit-content; */
+    /* left: -1rem !important; */
+  }
+  
+  .panel.panel-default:not(:has(.collapsed)) {
+    margin-top: -6rem;
+  }
+  
+  .binded-chars a {
+    /* margin-right: 0.25rem!important; */
+    width: fit-content;
+    filter: saturate(0);
+    order: 10;
+  }
+  
+  /* Ютьюб */
+  
+  .youtube {
+    width: 66px;
+    height: 44px;
+    border-radius: 16px;
+    position: absolute;
+    right: 0rem;
+    top: -5rem;
+    background: var(--link) !important;
+    overflow: hidden;
+    filter: saturate(2.5);
+  }
+  
+  /* Спойлеры */
+  
+  .spoiler {
+    overflow: hidden;
+    height: 2.3em;
+    cursor: pointer;
+  }
+  
+  .spoiler {
+    /* Webkit browsers (Chrome, Safari) */
+    -webkit-mask-image: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    -webkit-mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: top;
+  
+    /* Standard CSS for mask properties */
+    mask-image: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    mask-position: top;
+  }
+  
+  .spoiler:hover {
+    height: fit-content;
+    color: var(--text);
+    font-weight: normal;
+    cursor: unset;
+  }
+  
+  /* Подсказки, работающие путём вложения span.text вовнутрь span.hint */
+  
+  .hint {
+    display: inline;
+    color: var(--link);
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .hint > .text {
+    position: absolute;
+    min-width: 40em;
+    transition: all 0.3s;
+    visibility: hidden;
+    background: var(--info);
+    outline: var(--border);
+    padding: 1rem;
+    color: var(--text);
+    z-index: 1;
+    cursor: initial;
+    box-shadow: var(--shadow);
+    font-weight: normal;
+    max-width: 100vw;
+  }
+  
+  .hint:hover > .text,
+  hint > .text:hover {
+    visibility: visible;
+  }
+  
+  .figure.wp-block-body {
+    overflow: visible;
+  }
+  
+  .hint:hover {
+    color: var(--hover);
+  }
+  
+  ul#redactor-toolbar-2 {
+    z-index: 0;
+  }
+  
+  div.hint {
+    display: inline-block;
+  }
+  
+  .hint > .text * {
+    margin-bottom: 0.5rem !important;
+  }
+  
+  ul#redactor-toolbar-0 {
+    z-index: 0;
+  }
+  
+  /* Страница шрифтов */
+  
+  .fonts h2 {
+    font-family: inherit;
+    font-size: 2em !important;
+    margin-top: 1em !important;
+  }
+  
+  .fonts p {
+    font-size: inherit !important;
+    line-height: 1em !important;
+  }
+  
+  .fonts {
+    font-size: 2rem !important;
+    margin-top: 3em;
+    margin-bottom: 3em;
+  }
+  
+  .fonts div * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+  }
+  
+  .fonts {
+    font-size: 2rem !important;
+  }
+  
+  .fonts h2 {
+    font-size: 2em !important;
+  }
+  
+  /* Информация */
+  .row.information-block {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 0;
+    column-gap: 2rem;
+  }
+  
+  .ribbon-left.red {
+    display: block !important;
+    position: static !important;
+    padding: 1rem !important;
+    margin: 0 !important;
+    border-left: none;
+    /* height: 1rem!important; */
+  }
+  
+  .binded-chars .row > a {
+    margin: 0;
+  }
+  
+  .binded-chars .row {
+    display: block;
+  }
+  
+  /* Брейкпойнт */
+  
+  @media (max-width: 768px) {
+    .wp-block.default.no-border.shadow-5.portrait {
+      padding: 2rem !important;
+      font-size: 1rem !important;
+    }
+  
+    .wp-block.default.article.post.no-margin {
+      padding: 0 !important;
+    }
+  
+    .row.information-block {
+      display: flex;
+      justify-content: center;
+    }
+  
+    .my-html .half {
+      width: 100% !important;
+      margin-bottom: 1rem !important;
+    }
+  
+    .wp-block.default.no-border.shadow-5.description,
+    .wp-block.default.no-border.shadow-5.information,
+    div#accordionThree {
+      padding: 4rem !important;
+      margin: 2rem -2rem !important;
+    }
+  }
+  
+  /* Прочее */
+  
+  .redactor-editor {
+    background: #0000003d;
+  }
+  
+  a.spoiler_links {
+    display: block;
+    margin-top: 6rem;
+    font-size: 3rem !important;
+  }
+  
+  .previews img {
+    max-width: 221px !important;
+    margin-bottom: 1rem;
+    vertical-align: top !important;
+  }
+  
+  a[href="/storyline/16888"],
+  a[href="/article/17333"],
+  a[href="/article/22162"],
+  a[href="/storyline/17037"],
+  a[href="/storyline/17037"] {
+    display: none !important;
+  }
+  
+  .paper h2 {
+    font-family: var(--header);
+    /* margin-top: 1rem; */
+    margin-bottom: 0;
+    color: var(--text) !important;
+  }
+  
+  /* Отчёты */
+  
+  .half {
+    max-width: 50%;
+  }
+  
+  .chapter li {
+    display: inline-block;
+  }
+  
+  .paper img,
+  .article-image > img {
+    padding: 0 !important;
+    margin: 0 !important;
+    mix-blend-mode: luminosity;
+    /* Webkit browsers (Chrome, Safari) */
+    -webkit-mask-image: linear-gradient(
+      138deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.5) 25%,
+      rgba(255, 255, 255, 1) 50%,
+      rgba(255, 255, 255, 0.5) 75%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    -webkit-mask-size: 100%;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: top;
+  
+    /* Standard CSS for mask properties */
+    mask-image: linear-gradient(
+      138deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.5) 25%,
+      rgba(255, 255, 255, 1) 50%,
+      rgba(255, 255, 255, 0.5) 75%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    mask-size: 100%;
+    mask-repeat: no-repeat;
+    mask-position: top;
+  }
+  
+  .wp-block.default.testimonial.no-border.no-margin {
+    display: none;
+  }
+  
+  .wp-block.default.no-border.shadow-5.information {
+    display: none;
+  }
+  
+  .col-md-3.right-block {
+    display: none;
+  }
+  
+  .paper img.pencil {
+    mix-blend-mode: darken;
+    filter: contrast(1.5) brightness(0.5);
+  }
+  
+  /* Экземпляры */
+  
+  body {
+    --background-image: url(https://i.postimg.cc/L8GfktfK/80a7c7011b3cbfb133ffb47bb1822be1.jpg);
+    --link: var(--red);
+  }
+  
+  div[id="39533"] {
+    display: none;
+  }
+  
+  /* Отчёты */
+  
+  .paper,
+  .article-image {
+    background: url(https://i.postimg.cc/dt7gPNPP/image.png) top center,
+      linear-gradient(180deg, rgb(153 133 96) 0%, rgb(101 86 58) 100%) !important;
+    border-radius: 8px;
+    background-blend-mode: overlay;
+    overflow: hidden;
+    box-shadow: var(--shadow-inset);
+    padding: 2rem 2rem;
+    color: #ffffff;
+    border: 1px solid transparent;
+    text-shadow: var(--text-shadow);
+    margin-bottom: 1em !important;
+    font-family: "Medieval English";
+    font-size: 1.4rem;
+    line-height: 140%;
+    margin: 1rem 0;
+  }
+  
+  .paper > img {
+    mix-blend-mode: luminosity;
+    width: -webkit-fill-available;
+    vertical-align: bottom;
+  
+    -webkit-mask-image: linear-gradient(
+      138deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.5) 25%,
+      rgba(255, 255, 255, 1) 50%,
+      rgba(255, 255, 255, 0.5) 75%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    -webkit-mask-size: 100%;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: top;
+  
+    mask-image: linear-gradient(
+      138deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.5) 25%,
+      rgba(255, 255, 255, 1) 50%,
+      rgba(255, 255, 255, 0.5) 75%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    mask-size: 100%;
+    mask-repeat: no-repeat;
+    mask-position: top;
+  }
+  
+  .paper.img {
+    padding: 0;
+  }
+  
+  h3 {
+    /* margin-bottom: 1rem; */
+    /* font-family: var(--header); */
+  }
+  
+  .speech {
+    color: var(--text);
+  }
+  
+  .paper {
+    background: url(https://i.postimg.cc/dt7gPNPP/image.png) top center,
+      linear-gradient(180deg, rgb(153 133 96) 0%, rgb(101 86 58) 100%) !important;
+    border-radius: 8px;
+    background-blend-mode: overlay;
+    overflow: hidden;
+    box-shadow: var(--shadow-inset);
+    padding: 2rem 2rem;
+    color: #ffffff;
+    border: 1px solid transparent;
+    text-shadow: var(--text-shadow);
+    margin-bottom: 1em !important;
+    font-family: "Medieval English";
+    font-size: 1.4rem;
+    line-height: 140%;
+    margin: 1rem 0;
+  }
+  
+  .paper.img {
+    padding: 0;
+  }
+  
+  .post h3 {
+    margin-bottom: 1rem;
+    font-family: var(--header);
+  }
+  
+  .paper > img {
+    mix-blend-mode: luminosity;
+    width: -webkit-fill-available;
+    vertical-align: bottom;
+    padding: 0;
+  
+    -webkit-mask-image: linear-gradient(
+      138deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.5) 25%,
+      rgba(255, 255, 255, 1) 50%,
+      rgba(255, 255, 255, 0.5) 75%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    -webkit-mask-size: 100%;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: top;
+  
+    mask-image: linear-gradient(
+      138deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.5) 25%,
+      rgba(255, 255, 255, 1) 50%,
+      rgba(255, 255, 255, 0.5) 75%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    mask-size: 100%;
+    mask-repeat: no-repeat;
+    mask-position: top;
+  }
+  
+  .emote {
+    color: var(--emote);
+    text-transform: none;
+    font-weight: initial;
+  }
+  
+  .logline {
+    margin-bottom: 4px;
+  }
+  
+  .say > .player,
+  .virt > .player {
+    font-weight: bold;
+  }
+  
+  .yell span.speech,
+  .yell .player {
+    color: var(--red);
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  .players > li,
+  .npc > li {
+    display: inline-block;
+    margin-right: 0.3em;
+    font-weight: bold;
+  }
+  
+  .player {
+    background: none;
+  }
+  
+  ul.npc > li {
+    opacity: 0.25;
+  }
+  
+  ul.npc > li:hover {
+    opacity: 1;
+  }
+  
+  .players,
+  .npc {
+    display: inline-block;
+    flex-wrap: wrap;
+  }
+  
+  p.logline {
+    margin: 1rem 0;
+  }
+  
+  .virt > .emote {
+    color: var(--whisper) !important;
+  }
+  
+  .speech {
+    color: var(--text);
+  }
+  
+  :root {
+    --red: #dd403aff;
+    --green: #00ac48;
+    --blue: var(--blue-3);
+    --blue-1: #43c59eff;
+    --blue-2: #5398beff;
+    --blue-3: #0a74ec;
+    --yellow: #ffd914;
+    --orange: #f18f01ff;
+    --purple: var(--purple-1);
+    --purple-1: #4f4789ff;
+    --purple-2: #6420ff;
+    --purple-3: #ae5eff;
+    --whisper: #d361d3;
+    --grey: #808080;
+    --light-grey: #c2c2c2;
+    --dark-grey: #434343;
+    --black: #212121;
+    --border-color: rgba(255, 255, 255, 0.26);
+  }
+  
+  h2:not(:first-of-type) {
+    margin-top: 6em;
+  }
+  
+  .speech {
+    color: var(--text);
+  }
+  
+  .red {
+    color: var(--red);
+  }
+  .green {
+    color: var(--green);
+  }
+  .blue-1 {
+    color: var(--blue-1);
+  }
+  .blue-2 {
+    color: var(--blue-2);
+  }
+  .blue-3,
+  .blue {
+    color: var(--blue-3);
+  }
+  .yellow {
+    color: var(--yellow);
+  }
+  .orange {
+    color: var(--orange);
+  }
+  .purple-1,
+  .purple {
+    color: var(--purple-1);
+  }
+  .purple-2 {
+    color: var(--purple-2);
+  }
+  .purple-3 {
+    color: var(--purple-3);
+  }
+  
+  .binded-chars a > img {
+    margin: 0 !important;
+  }
+  
+  .binded-chars a:hover {
+    outline: 0.25rem solid var(--hover);
+    filter: none;
+  }
+  
+  .post h2 {
+    font-size: 2rem !important;
+    /* margin-top: 1em!important; */
+  }
+  
+  .article-image {
+    /* padding: 0; */
+    /* margin: 0 !important; */
+    /* width: fit-content; */
+  }
+  
+  /* Не удалять */
+  
+  .info .fg-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+  }
+  
+  .fg strong {
+    font-weight: bold !important;
+    color: var(--link) !important;
+  }
+  
+  .col-md-5.image {
+    width: fit-content;
+    /* padding: 0.4rem !important; */
+    padding: 0!important;
+  }
+  .wp-block.default.no-border.shadow-5.portrait {
+    margin-top: 0;
+  }
+  
+  .comment img {
+    width: fit-content !important;
+    margin: 1rem 0;
+  }
+  
+  .ribbon.light {
+      background: var(--info)!important;
+      color: white;
+      border: 0;
+      opacity: 0.5;
+      border-image: none!important;
+      border-radius: 0;
+      padding: 1rem!important;
+  }
+  
+  .ribbon span {
+      width: max-content;
+      font-weight: 100;
+  }
+  
+  .post a:visited {
+      /* opacity: 1!important; */
+      /* color: red!important; */
+  }
+  
+  [href="javascript:void()"] {
+      opacity: 1!important;
+      text-shadow: var(--shadow);
+  }
+  
+  .ribbon:before, .ribbon:after {
+      border: 0;
+  }
+  
+  
+  
+  
+  .row.information-block > .info-list {
+      display: none;
+  }
+  
+  /* Шестой взвод */
+  
+  body {
+      --background-color: #ffffffbf;
+      --background-image: url(
+      https://i.postimg.cc/VsbyHZm3/Wo-WScrn-Shot-020424-142836.png);
+      --post-color: #1c1c1c;
+      --post-image: url(
+      https://i.imgur.com/EXNQ8cT.png);
+      --frame: url(
+      https://i.postimg.cc/YqJzfHgv/4.png);
+      --info: #00000070;
+      --text: #ffffffd9;
+      --header-color: #ffd100;
+      --text-shadow: 3px 3px 9px black;
+      --link: #ffd100;
+      --hover: #ffe56e;
+      --header: Morpheus;
+      --p: Medieval English;
+      --border: 3px solid #000000;
+      --shadow: 0px 1px 3px 3px rgb(0 0 0 / 33%);
+      --emote: orange;
+  }
+  
+  .article-image {
+      order: -1;
+      /* margin: -17px!important; */
+      /* margin-top: -38px!important; */
+      /* border-radius: 0; */
+      /* mix-blend-mode: luminosity; */
+      /* background: url(https://i.postimg.cc/ZqgMxyDv/warcraft-alliance.gif)!important; */
+      /* background-size: cover!important; */
+      /* -webkit-mask-image: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%); */
+      /* -webkit-mask-size: 100%; */
+      /* -webkit-mask-repeat: no-repeat; */
+      /* -webkit-mask-position: top; */
+      /* margin-bottom: -19rem !important; */
+      /* min-height: 720px; */
+      margin: 0!important;
+      padding: 0!important;
+  }
+  
+  img#image {
+      /* visibility: hidden; */
+  }
+  
+  h1.article-title.text-center {
+      /* margin-top: -150px!important; */
+  }
+  
+  .wp-block.default.no-border.shadow-5.concept {
+      /* margin-top: 220px; */
+  }
+  
+  section.slice.slice-md.bg-base-img:first-of-type {}
+  
+  section.slice.slice-md.bg-base-img:nth-of-type(3) {
+      display: none;
+  }
+  
+  .cc-rank > img {
+      width: fit-content!important;
+      float: left!important;
+      margin-right: 6px!important;
+  }
+  
+  .cc-rank > h5 {
+      font-size: 16px!important;
+  }
+  
+  .concept > div > h2.block-title {
+      display: none;
+  }
+  
+  .fg-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: space-between;
+      margin: 2rem 0px!important;
+      flex-wrap: wrap;
+  }
+  
+  .my-html {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+  }
+  
+  .my-html li {
+      list-style: inside;
+  }
+  
+  .cc-ranks {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 1rem;
+  }
+  
+  
+  
+  .cc-rank p {
+      margin-left: 29px;
+      font-size: 20px!important;
+      line-height: 140%!important;
+  }
+  
+  .wp-block.default.no-border.shadow-5.rules {
+      display: none;
+  }
+  
+  .my-html img {
+      width: fit-content!important;
+  }
+  
+  .fg-row strong {
+      text-shadow: var(--text-shadow);
+  }
+  
+  @media (min-width: 426px) {
+  
+    .cc-rank {
+      max-width: 49%!important;
+  }
+  }
+  
+  p.logline {
+      font-family: 'Minion Pro Capt';
+  }
+  
+  /* Роуз */
+  
+  /* Женщины */
+  
+  [title="Леди Дайла "],
+  [title="Ди"],
+  [title="Халвиэль"],
+  [title="Чарния Грэйскейл"],
+  [title="Антуан Фокстрот"] {
+    background: #470053 !important;
+    order: 20!important;
+  }
+  
+  [title="Халвиэль"] {
+    /* order: -10; */
+  }
+  
+  /* Сослуживцы */
+  
+  [title="Тэрольф Сигурд"],
+  [title="Кейд Пэрридж"],
+  [title="Майкл Найт"],
+  [title="Терн Дженкинс"],
+  [title="Агний Сайлонсон"],
+  [title="Эдриан Пибоди"],
+  [title="Ниал Аерон"],
+  [title="Финра (Марксон) Сайлонсон"],
+  [title="Кевин Файги"],
+  [title="Викки Д`Эбервилль"],
+  [title="Джон Райнморн"],
+  [title="Сайдан Фолч"] {
+    background: #002053 !important;
+    order: 30!important;
+  }
+  
+  /* Друзья */
+  
+  [title="Кейд Пэрридж"],
+  [title="Агний Сайлонсон"],
+  [title="Эдриан Пибоди"] {
+    background: #ff9b00 !important;
+    order: 10!important;
+  }
+  
+  /* Мертвецы */
+  
+  [title="Леди Даймин Сноуфолл"],
+  [title="Хилнер Киллиоут"],
+  [title="Аннель Сноуфолл"],
+  [title="Леди Даймин Сноуфолл"],
+  [title="Хилнер Киллиоут"],
+  [title="Грегориус Спуриенус"],
+  [title="Рето Блэкшип"],
+  [title="Дориан - Салм Стингшир"],
+  [title="Аннель Сноуфолл"],
+  [title="Советник Тарлок "],
+  [title="Викки Д`Эбервилль"],
+  [title="Крах'Тул"],
+  [title="Келлена Алый Луч"],
+  [title="Эсбенн Медведь"],
+  [title="Коуч Дремлющий"],[title="Викки Д`Эбервилль"],
+  [title="Крах'Тул"],
+  [title="Келлена Алый Луч"],
+  [title="Эсбенн Медведь"],
+  [title="Коуч Дремлющий"] {
+    rotate: 120deg;
+    margin-right: -17px !important;
+    margin-top: -30px;
+    top: 15px;
+    left: 15px;
+    order: 60!important;
+  }
+  
+  body {
+      --background-color: #ffffffbf;
+      --background-image: url(
+      https://catherineasquithgallery.com/uploads/posts/2021-03/1614761890_20-p-goticheskii-fon-24.jpg);
+      --post-color: #1c1c1c;
+      --post-image: url(
+      https://i.imgur.com/EXNQ8cT.png);
+      --frame: url(
+      https://i.postimg.cc/YqJzfHgv/4.png);
+      --info: #00000070;
+      --text: #ffffffd9;
+      --header-color: #ffd100;
+      --text-shadow: 3px 3px 9px black;
+      --link: #ffd100;
+      --hover: #ffe56e;
+      --header: Morpheus;
+      --p: Medieval English;
+      --border: 3px solid #000000;
+      --shadow: 0px 1px 3px 3px rgb(0 0 0 / 33%);
+      --emote: orange;
+  }
+  
+  .info-list .col-sm-4 {
+      margin-right: 0.5rem;
+  }
+  
+  .binded-chars a:hover {
+      rotate: none!important;
+  }
+  
+  .binded-chars a:hover {
+      rotate: none;
+      margin-right: auto;
+      margin-top: auto;
+      top: 0;
+      left: 0;
+      order: inherit;
+  }
