@@ -851,7 +851,19 @@ function translit(word) {
 function exportHTML() {
   /*   removeCollapsedChapters(); */
   removeEmptyLines();
-  document.querySelector("div.paper.controls")?.remove();
+
+  // Сохраняем элементы для восстановления
+  const paperControls = document.querySelector("div.paper.controls");
+  const nav = document.querySelector("div.nav");
+  const post = document.querySelector("div.post");
+
+  // Создаем клонированные элементы, чтобы восстановить их позже
+  const paperControlsClone = paperControls?.cloneNode(true);
+  const navClone = nav?.cloneNode(true);
+
+  // Удаляем элементы
+  paperControls?.remove();
+  nav?.remove();
 
   var pageTitle = document.querySelector("h2.date");
   var fileName = pageTitle
@@ -871,6 +883,12 @@ function exportHTML() {
   document.body.appendChild(element);
   element.click();
   document.body.removeChild(element);
+
+  // Восстанавливаем элементы в конце функции
+  if (paperControlsClone && navClone) {
+    document.body.appendChild(navClone); // Вставляем nav обратно в тело документа
+    post.prepend(paperControlsClone); // Вставляем paperControls обратно в nav
+  }
 }
 
 var isAllSellected = false;
