@@ -437,7 +437,7 @@ input[type="checkbox"] {width: 1rem;}
 }
 
 .paper.controls {
-  margin-bottom: -10rem;
+  /* margin-bottom: -10rem; */
 }
 .remove {
   background: #ff000047!important;

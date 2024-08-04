@@ -33,7 +33,7 @@ function updateAll() {
   gatherUniquePlayersAndInsert();
   removeDoublesAtTotalActors();
   synchronizePlayerColors();
-  // fullNames();
+  fullNames();
   addPunctuation();
   // removeChaptersIfFewPlayers();
   // recombineFunctions();
@@ -79,7 +79,8 @@ let playerData = [
   ["Аммель", "mage", "Рэдрик Аммель"],
   ["Маларон", "priest", "Мал’арон Берёзовый Лист"],
   ["Ананита", "hunter", "Ананита Астор"],
-  ["Сырорезка", "yellow", "Джули"],
+  ["Сырорезка", "yellow", "Сырорезка"],
+  ["Пипперколс", "mage", "Пипперколс"],
   ["Санриэль", "mage", "Санриэль Рассветный Луч"],
   ["Дерек", "hunter", "Дерек Кларк"],
   ["Кэролай", "priest", "Кэролай Эстер"],
@@ -850,6 +851,7 @@ function translit(word) {
 function exportHTML() {
   /*   removeCollapsedChapters(); */
   removeEmptyLines();
+  document.querySelector("div.paper.controls")?.remove();
 
   var pageTitle = document.querySelector("h2.date");
   var fileName = pageTitle
@@ -1188,15 +1190,15 @@ function convertLoglineToTranscript(loglineElement) {
     /^.+([Зз]апись|\d\d[:.]\d\d)[,.!: ]/g,
     ""
   );
-  if (
-    loglineElement.classList.contains("say") ||
-    loglineElement.classList.contains("yell") ||
-    loglineElement.classList.contains("virt")
-  ) {
-    playerName = playerName.textContent.slice(0, -2);
-  } else {
-    playerName = playerName.textContent.slice(0, -1);
-  }
+  // if (
+  // loglineElement.classList.contains("say") ||
+  // loglineElement.classList.contains("yell") ||
+  // loglineElement.classList.contains("virt")
+  // ) {
+  // playerName = playerName.textContent.slice(0, -2);
+  // } else {
+  // playerName = playerName.textContent.slice(0, -1);
+  // }
 
   let transcriptRecordHTML = `
     <div class="record">
@@ -2177,15 +2179,35 @@ function removeChaptersIfFewPlayers() {
 }
 
 function fullNames() {
-  // let players = document.querySelectorAll(".player");
-  // for (let player of players) {
-  //   let playerName = player.textContent.trim();
-  //   let playerDataEntry = playerData.find((data) => data[0] === playerName);
-  //   if (playerDataEntry) {
-  //     player.textContent = playerDataEntry[2];
-  //   }
-  // }
-  // console.log("Фамилии заменены");
+  let players = document.querySelectorAll(".player");
+  // console.log("players", players);
+
+  for (let player of players) {
+    let playerName = player.textContent.trim();
+    // console.log("playerName", playerName);
+
+    // Проверка на наличие двоеточия в конце имени
+    // let hasColon = false;
+    // if (playerName.endsWith(":")) {
+    //   hasColon = true;
+    //   playerName = playerName.slice(0, -1); // Удаляем двоеточие
+    // }
+
+    let playerDataEntry = playerData.find((data) => data[0] === playerName);
+    if (playerDataEntry) {
+      player.textContent = playerDataEntry[2];
+      // console.log("player.textContent", player.textContent);
+
+      // Добавляем двоеточие обратно, если оно было
+      // if (hasColon) {
+      //   player.textContent += ": ";
+      // }
+      // else {
+      //   player.textContent += " ";
+      // }
+    }
+  }
+  console.log("Фамилии заменены");
 }
 
 function playerList() {
@@ -2368,4 +2390,9 @@ function synchronizePlayerColors() {
       }
     });
   });
+}
+
+function recolorizePlayers() {
+  colorizeList("players");
+  colorizeList("npcs");
 }

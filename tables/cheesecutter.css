@@ -949,3 +949,15 @@ body {
 --link: var(--orange);
 }
 
+.transcript:nth-of-type(2) {
+  transform: rotate(-5deg);
+  margin-bottom: 4rem;
+}
+
+.transcript {
+  margin-top: 3rem;
+}
+
+.paper.controls {
+  transform: rotate(0deg);
+}
