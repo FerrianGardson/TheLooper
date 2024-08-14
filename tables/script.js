@@ -6,11 +6,11 @@ let combineDelay = 5 * 1000;
 let hoursBetweenSessions = 0.5;
 let showtimestamps = false;
 let searchWithinCollapsed = false;
-let chapterCollapseStatus = searchWithinCollapsed
-  ? ".chapter"
-  : ".chapter:not(.collapsed)";
+// let chapterCollapseStatus = searchWithinCollapsed
+//   ? ".chapter"
+//   : ".chapter:not(.collapsed)";
 let removeCollapsedFlag = false;
-let showTimestampsFlag = true;
+let showTimestampsFlag = false;
 
 // Главные функции
 
@@ -1203,7 +1203,6 @@ function convertLoglineToTranscript(loglineElement) {
   let formattedTimestamp = formattedDate + " " + hours + ":" + minutes;
   let playerName = loglineElement.querySelector(".player");
   loglineElement.setAttribute("timestamp", timestamp.toISOString());
-  playerName.remove();
   loglineElement.textContent = loglineElement.textContent.replace(
     /^.+([Зз]апись|\d\d[:.]\d\d)[,.!: ]/g,
     ""
@@ -1243,9 +1242,12 @@ function findLoglinesAndConvertToTranscript() {
   loglineElements.forEach((loglineElement) => {
     if (/запись/i.test(loglineElement.textContent)) {
       convertLoglineToTranscript(loglineElement);
+    } else {
+      console.log("Слово 'запись' не найдено в этом элементе.");
     }
   });
 }
+
 
 // Горячие клавиши
 document.addEventListener("keydown", function (event) {
@@ -1802,7 +1804,7 @@ function logFilter() {
 
   // Если пусто, то развыделяем всё
   if (keywordsInput.trim() === "") {
-    let selectedElements = document.querySelectorAll(".selected");
+    const selectedElements = document.querySelectorAll(".selected");
     selectedElements.forEach((element) => {
       element.classList.remove("selected");
       oldKeywordsInput = "";
@@ -1830,7 +1832,7 @@ function logFilter() {
 
   while ((match = regex.exec(keywordsInput)) !== null) {
     // Выбираем слово из кавычек, если оно есть, иначе выбираем слово без кавычек
-    let word = match[1] || match[2];
+    const word = match[1] || match[2];
     // Добавляем слово в массив ключевых слов
     keywordsArray.push(word.trim());
   }
@@ -1855,23 +1857,23 @@ function logFilter() {
     // Перебираем каждое ключевое слово из массива addWords
     addWords.forEach((keyword) => {
       // Приводим ключевое слово к нижнему регистру
-      let lowerKeyword = keyword.toLowerCase();
+      const lowerKeyword = keyword.toLowerCase();
       // console.log("Keyword:", lowerKeyword);
 
       // Выбираем все главы, которые не свернуты
-      let chapters = document.querySelectorAll(chapterCollapseStatus);
+      const chapters = document.querySelectorAll(".chapter");
       // console.log("Chapters:", chapters);
 
       // Перебираем каждую главу
       chapters.forEach((chapter) => {
         // Выбираем все спаны с классом "logline" внутри контента главы
-        let contentSpans = chapter.querySelectorAll(".content > .logline");
+        const contentSpans = chapter.querySelectorAll(".content > .logline");
         // console.log("Content Spans:", contentSpans);
 
         // Перебираем каждый спан внутри контента
         contentSpans.forEach((span) => {
           // Получаем текст из спана и приводим его к нижнему регистру
-          let textContent = span.textContent.toLowerCase();
+          const textContent = span.textContent.toLowerCase();
 
           // Проверяем, содержит ли текст ключевое слово
           if (textContent.includes(lowerKeyword)) {
@@ -2143,6 +2145,13 @@ function recombineFunction(spanClass) {
         element.remove();
       });
 
+    // Костыль для удаления .start_wrap
+
+    const startWrapElements = document.querySelectorAll(".start_wrap");
+    startWrapElements.forEach((element) => {
+      element.classList.remove("start_wrap");
+    });
+
     update(logline, player, content);
   }
   removeRed();
@@ -2413,4 +2422,20 @@ function synchronizePlayerColors() {
 function recolorizePlayers() {
   colorizeList("players");
   colorizeList("npcs");
+}
+
+function dropSelected() {
+  // Находим все элементы с классом "selected" и "start_wrap"
+  const selectedElements = document.querySelectorAll(".selected");
+  const startWrapElements = document.querySelectorAll(".start_wrap");
+
+  // Создаем объединенный список элементов
+  const allElements = [...selectedElements, ...startWrapElements];
+
+  // Удаляем классы из всех найденных элементов
+  allElements.forEach((element) => {
+    element.classList.remove("selected", "start_wrap");
+  });
+
+  console.log('Классы "selected" и "start_wrap" удалены из элементов.');
 }
