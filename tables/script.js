@@ -1220,7 +1220,7 @@ function convertLoglineToTranscript(loglineElement) {
   let transcriptRecordHTML = `
     <div class="record">
       <p>Время<span>25 ОТП, ${formattedDate}, ${hours}:${minutes}</span></p>
-      <p>Автор<span>${playerName}</span></p>
+      <p>Автор<span>${playerName.textContent}</span></p>
     </div>
     <span class="speech">${loglineElement.textContent.trim()}</span>
   `;
