@@ -1204,9 +1204,9 @@ function convertLoglineToTranscript(loglineElement) {
   let playerName = loglineElement.querySelector(".player");
   loglineElement.setAttribute("timestamp", timestamp.toISOString());
   loglineElement.textContent = loglineElement.textContent.replace(
-    /^.+([Зз]апись|\d\d[:.]\d\d)[,.!: ]/g,
+    /^[\s\S]*?([Зз]апись|\d\d[:.]\d\d)[,.!: ]/,
     ""
-  );
+  );  
   // if (
   // loglineElement.classList.contains("say") ||
   // loglineElement.classList.contains("yell") ||
